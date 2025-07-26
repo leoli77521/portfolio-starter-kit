@@ -1,23 +1,35 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // 优先使用环境变量，如果没有则使用默认域名
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
-    : 'https://tolearn.blog'
+  const baseUrl = 'https://tolearn.blog'
   
-  return [
+  // 静态页面
+  const routes = [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'yearly' as const,
       priority: 1,
     },
     {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'monthly' as const,
       priority: 0.8,
     },
   ]
+
+  // 如果你有动态博客文章，类似这样添加：
+  const blogPosts = [
+    'spaces-vs-tabs',
+    'static-typing', 
+    'vim'
+  ].map(slug => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [...routes, ...blogPosts]
 }

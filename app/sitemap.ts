@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
 
-export const baseUrl = 'https://tolearn.blog'
+export const baseUrl = 'https://your-domain.com'
+
 
 export default function sitemap(): MetadataRoute.Sitemap {
   let blogs = getBlogPosts().map((post) => ({

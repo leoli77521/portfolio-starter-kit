@@ -49,6 +49,9 @@ export function generateMetadata({ params }): Metadata {
       description,
       images: [ogImage],
     },
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
   }
 }
 

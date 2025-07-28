@@ -1,8 +1,12 @@
 import { BlogPosts } from 'app/components/posts'
+import type { Metadata } from 'next'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Blog',
-  description: 'Read my blog.',
+  description: 'Read my thoughts on software development, design, and more.',
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default function Page() {

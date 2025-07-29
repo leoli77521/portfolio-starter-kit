@@ -11,15 +11,15 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
+    template: '%s | Vim Enthusiast Portfolio',
   },
-  description: 'This is my portfolio.',
+  description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
+    description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Vim Enthusiast Portfolio',
     locale: 'en_US',
     type: 'website',
   },

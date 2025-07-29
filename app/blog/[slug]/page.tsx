@@ -13,7 +13,21 @@ export async function generateStaticParams() {
 }
 
 export function generateMetadata({ params }): Metadata {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
+  const allPosts = getBlogPosts()
+  
+  // 首先尝试直接匹配
+  let post = allPosts.find((post) => post.slug === params.slug)
+  
+  // 如果直接匹配失败，尝试解码后匹配
+  if (!post) {
+    try {
+      const decodedSlug = decodeURIComponent(params.slug)
+      post = allPosts.find((post) => post.slug === decodedSlug)
+    } catch (e) {
+      // 解码失败，保持 post 为 undefined
+    }
+  }
+  
   if (!post) {
     return {}
   }
@@ -58,7 +72,20 @@ export function generateMetadata({ params }): Metadata {
 }
 
 export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
+  const allPosts = getBlogPosts()
+  
+  // 首先尝试直接匹配
+  let post = allPosts.find((post) => post.slug === params.slug)
+  
+  // 如果直接匹配失败，尝试解码后匹配
+  if (!post) {
+    try {
+      const decodedSlug = decodeURIComponent(params.slug)
+      post = allPosts.find((post) => post.slug === decodedSlug)
+    } catch (e) {
+      // 解码失败，保持 post 为 undefined
+    }
+  }
 
   if (!post) {
     notFound()

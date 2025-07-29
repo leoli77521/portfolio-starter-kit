@@ -28,6 +28,8 @@ export function generateMetadata({ params }): Metadata {
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
+  const encodedSlug = encodeURIComponent(post.slug)
+
   return {
     title,
     description,
@@ -36,7 +38,7 @@ export function generateMetadata({ params }): Metadata {
       description,
       type: 'article',
       publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}/blog/${encodedSlug}`,
       images: [
         {
           url: ogImage,
@@ -50,7 +52,7 @@ export function generateMetadata({ params }): Metadata {
       images: [ogImage],
     },
     alternates: {
-      canonical: `/blog/${post.slug}`,
+      canonical: `/blog/${encodedSlug}`,
     },
   }
 }
@@ -61,6 +63,8 @@ export default function Blog({ params }) {
   if (!post) {
     notFound()
   }
+
+  const encodedSlug = encodeURIComponent(post.slug)
 
   return (
     <section>
@@ -78,7 +82,7 @@ export default function Blog({ params }) {
             image: post.metadata.image
               ? `${baseUrl}${post.metadata.image}`
               : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
+            url: `${baseUrl}/blog/${encodedSlug}`,
             author: {
               '@type': 'Person',
               name: 'My Portfolio',

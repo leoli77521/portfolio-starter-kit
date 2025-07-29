@@ -43,7 +43,7 @@ function getMDXData(dir) {
 
     return {
       metadata,
-      slug: encodeURIComponent(slug),
+      slug,
       content,
     }
   })

@@ -15,6 +15,10 @@ export const metadata: Metadata = {
     template: '%s | Vim Enthusiast Portfolio',
   },
   description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
+  keywords: ['Vim', 'coding', 'portfolio', 'AI', 'SEO', 'web development', 'programming', 'tech blog'],
+  authors: [{ name: 'Vim Enthusiast Portfolio' }],
+  creator: 'Vim Enthusiast Portfolio',
+  publisher: 'Vim Enthusiast Portfolio',
   openGraph: {
     title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
     description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
@@ -22,6 +26,11 @@ export const metadata: Metadata = {
     siteName: 'Vim Enthusiast Portfolio',
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
+    description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
   },
   robots: {
     index: true,
@@ -36,6 +45,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
   },
 }
 
@@ -55,6 +67,10 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />

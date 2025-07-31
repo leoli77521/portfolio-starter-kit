@@ -3,9 +3,15 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Blog',
-  description: 'Read my thoughts on software development, design, and more.',
+  description: 'Read my thoughts on software development, AI, SEO, and web development best practices.',
+  keywords: ['blog', 'software development', 'AI', 'SEO', 'web development', 'programming'],
   alternates: {
     canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Blog - Vim Enthusiast Portfolio',
+    description: 'Read my thoughts on software development, AI, SEO, and web development best practices.',
+    type: 'website',
   },
 }
 

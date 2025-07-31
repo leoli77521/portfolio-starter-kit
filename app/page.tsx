@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Vim Enthusiast Portfolio - Explore coding insights, AI developments, and web development best practices.',
   keywords: ['portfolio', 'vim', 'coding', 'AI', 'web development', 'programming'],
   alternates: {
-    canonical: '/',
+    canonical: baseUrl,
   },
   openGraph: {
     title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',

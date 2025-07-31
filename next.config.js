@@ -32,14 +32,31 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
         ],
       },
     ]
   },
-  // 重定向配置
+  // 重定向配置 - 统一URL结构
   redirects: async () => {
     return [
-      // 可以在这里添加重定向规则
+      // 重定向 www 到非 www (如果需要)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.tolearn.blog' }],
+        destination: 'https://tolearn.blog/:path*',
+        permanent: true,
+      },
+      // 强制HTTPS重定向
+      {
+        source: '/:path*',
+        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
+        destination: 'https://tolearn.blog/:path*',
+        permanent: true,
+      },
     ]
   },
 }

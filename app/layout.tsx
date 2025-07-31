@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'Vim Enthusiast Portfolio' }],
   creator: 'Vim Enthusiast Portfolio',
   publisher: 'Vim Enthusiast Portfolio',
+  applicationName: 'Vim Enthusiast Portfolio',
+  referrer: 'origin-when-cross-origin',
+  colorScheme: 'dark light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' }
+  ],
   openGraph: {
     title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
     description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
@@ -26,29 +33,42 @@ export const metadata: Metadata = {
     siteName: 'Vim Enthusiast Portfolio',
     locale: 'en_US',
     type: 'website',
+    images: [{
+      url: `${baseUrl}/og-image.jpg`,
+      width: 1200,
+      height: 630,
+      alt: 'Vim Enthusiast Portfolio'
+    }]
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
     description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
+    images: [`${baseUrl}/og-image.jpg`],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: true,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
   alternates: {
-    canonical: '/',
+    canonical: baseUrl,
+    languages: {
+      'en-US': baseUrl,
+    },
   },
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
   },
+  category: 'technology',
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
@@ -68,8 +88,15 @@ export default function RootLayout({
       )}
     >
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Vim Portfolio" />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">

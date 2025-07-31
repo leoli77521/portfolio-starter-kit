@@ -47,15 +47,25 @@ export function generateMetadata({ params }): Metadata {
   return {
     title,
     description,
+    authors: [{ name: 'Vim Enthusiast Portfolio' }],
+    creator: 'Vim Enthusiast Portfolio',
+    publisher: 'Vim Enthusiast Portfolio',
+    category: 'technology',
     openGraph: {
       title,
       description,
       type: 'article',
       publishedTime,
+      modifiedTime: publishedTime,
+      authors: ['Vim Enthusiast Portfolio'],
+      section: 'Technology',
       url: `${baseUrl}/blog/${encodedSlug}`,
       images: [
         {
           url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: title,
         },
       ],
     },
@@ -64,9 +74,23 @@ export function generateMetadata({ params }): Metadata {
       title,
       description,
       images: [ogImage],
+      creator: '@vim_enthusiast',
     },
     alternates: {
-      canonical: `/blog/${encodedSlug}`,
+      canonical: `${baseUrl}/blog/${encodedSlug}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   }
 }
@@ -103,17 +127,42 @@ export default function Blog({ params }) {
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: post.metadata.title,
+            description: post.metadata.summary,
+            image: {
+              '@type': 'ImageObject',
+              url: post.metadata.image
+                ? `${baseUrl}${post.metadata.image}`
+                : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+              width: 1200,
+              height: 630
+            },
             datePublished: post.metadata.publishedAt,
             dateModified: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${baseUrl}${post.metadata.image}`
-              : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${encodedSlug}`,
             author: {
               '@type': 'Person',
-              name: 'My Portfolio',
+              name: 'Vim Enthusiast Portfolio',
+              url: baseUrl,
+              sameAs: [baseUrl]
             },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Vim Enthusiast Portfolio',
+              logo: {
+                '@type': 'ImageObject',
+                url: `${baseUrl}/logo.png`,
+                width: 150,
+                height: 150
+              }
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `${baseUrl}/blog/${encodedSlug}`
+            },
+            url: `${baseUrl}/blog/${encodedSlug}`,
+            wordCount: post.content.split(' ').length,
+            keywords: ['programming', 'technology', 'vim'],
+            articleSection: 'Technology',
+            inLanguage: 'en-US'
           }),
         }}
       />

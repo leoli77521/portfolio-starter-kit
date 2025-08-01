@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
+import { RelatedPosts } from 'app/components/related-posts'
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
@@ -42,24 +43,25 @@ export function generateMetadata({ params }): Metadata {
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
-  const encodedSlug = encodeURIComponent(post.slug)
+  // 使用一致的URL结构，不使用双重编码
+  const cleanSlug = post.slug
 
   return {
-    title,
-    description,
-    authors: [{ name: 'Vim Enthusiast Portfolio' }],
-    creator: 'Vim Enthusiast Portfolio',
-    publisher: 'Vim Enthusiast Portfolio',
-    category: 'technology',
+    title: `${title} - SEO优化技巧与策略分享`,
+    description: `${description} - ToLearn博客专业分享编程技术、AI洞察与SEO优化策略。`,
+    authors: [{ name: 'ToLearn Blog' }],
+    creator: 'ToLearn Blog',
+    publisher: 'ToLearn Blog',
+    category: '技术文章',
     openGraph: {
       title,
       description,
       type: 'article',
       publishedTime,
       modifiedTime: publishedTime,
-      authors: ['Vim Enthusiast Portfolio'],
-      section: 'Technology',
-      url: `${baseUrl}/blog/${encodedSlug}`,
+      authors: ['ToLearn Blog'],
+      section: '技术文章',
+      url: `${baseUrl}/blog/${cleanSlug}`,
       images: [
         {
           url: ogImage,
@@ -74,10 +76,10 @@ export function generateMetadata({ params }): Metadata {
       title,
       description,
       images: [ogImage],
-      creator: '@vim_enthusiast',
+      creator: '@tolearn_blog',
     },
     alternates: {
-      canonical: `${baseUrl}/blog/${encodedSlug}`,
+      canonical: `${baseUrl}/blog/${cleanSlug}`,
     },
     robots: {
       index: true,
@@ -115,7 +117,15 @@ export default function Blog({ params }) {
     notFound()
   }
 
-  const encodedSlug = encodeURIComponent(post.slug)
+  const cleanSlug = post.slug
+
+  // 准备相关文章数据
+  const relatedPostsData = allPosts.map(p => ({
+    slug: p.slug,
+    title: p.metadata.title,
+    summary: p.metadata.summary,
+    category: p.metadata.category
+  }))
 
   return (
     <section>
@@ -140,13 +150,13 @@ export default function Blog({ params }) {
             dateModified: post.metadata.publishedAt,
             author: {
               '@type': 'Person',
-              name: 'Vim Enthusiast Portfolio',
+              name: 'ToLearn Blog',
               url: baseUrl,
               sameAs: [baseUrl]
             },
             publisher: {
               '@type': 'Organization',
-              name: 'Vim Enthusiast Portfolio',
+              name: 'ToLearn Blog',
               logo: {
                 '@type': 'ImageObject',
                 url: `${baseUrl}/logo.png`,
@@ -156,16 +166,28 @@ export default function Blog({ params }) {
             },
             mainEntityOfPage: {
               '@type': 'WebPage',
-              '@id': `${baseUrl}/blog/${encodedSlug}`
+              '@id': `${baseUrl}/blog/${cleanSlug}`
             },
-            url: `${baseUrl}/blog/${encodedSlug}`,
+            url: `${baseUrl}/blog/${cleanSlug}`,
             wordCount: post.content.split(' ').length,
-            keywords: ['programming', 'technology', 'vim'],
-            articleSection: 'Technology',
+            keywords: ['编程技术', 'AI人工智能', 'SEO优化', 'Web开发', '技术分享'],
+            articleSection: '技术文章',
             inLanguage: 'en-US'
           }),
         }}
       />
+      
+      {/* 面包屑导航 */}
+      <nav className="mb-6 text-sm">
+        <ol className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
+          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">首页</a></li>
+          <li>/</li>
+          <li><a href="/blog" className="hover:text-blue-600 dark:hover:text-blue-400">技术博客</a></li>
+          <li>/</li>
+          <li className="text-neutral-900 dark:text-neutral-100">{post.metadata.title}</li>
+        </ol>
+      </nav>
+
       <h1 className="title font-semibold text-2xl tracking-tighter">
         {post.metadata.title}
       </h1>
@@ -173,10 +195,18 @@ export default function Blog({ params }) {
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(post.metadata.publishedAt)}
         </p>
+        {post.metadata.category && (
+          <span className="inline-block px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
+            {post.metadata.category}
+          </span>
+        )}
       </div>
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+
+      {/* 相关文章推荐 */}
+      <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
     </section>
   )
 }

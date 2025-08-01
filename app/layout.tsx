@@ -11,15 +11,15 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
-    template: '%s | Vim Enthusiast Portfolio',
+    default: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
+    template: '%s | ToLearn Blog',
   },
-  description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
-  keywords: ['Vim', 'coding', 'portfolio', 'AI', 'SEO', 'web development', 'programming', 'tech blog'],
-  authors: [{ name: 'Vim Enthusiast Portfolio' }],
-  creator: 'Vim Enthusiast Portfolio',
-  publisher: 'Vim Enthusiast Portfolio',
-  applicationName: 'Vim Enthusiast Portfolio',
+  description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
+  keywords: ['编程技术', 'AI人工智能', 'SEO优化', 'Web开发', '前端开发', '技术博客', 'JavaScript', 'React', 'Next.js'],
+  authors: [{ name: 'ToLearn Blog' }],
+  creator: 'ToLearn Blog',
+  publisher: 'ToLearn Blog',
+  applicationName: 'ToLearn Blog',
   referrer: 'origin-when-cross-origin',
   colorScheme: 'dark light',
   themeColor: [
@@ -27,23 +27,23 @@ export const metadata: Metadata = {
     { media: '(prefers-color-scheme: dark)', color: 'black' }
   ],
   openGraph: {
-    title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
-    description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
+    title: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
+    description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
     url: baseUrl,
-    siteName: 'Vim Enthusiast Portfolio',
-    locale: 'en_US',
+    siteName: 'ToLearn Blog',
+    locale: 'zh_CN',
     type: 'website',
     images: [{
       url: `${baseUrl}/og-image.jpg`,
       width: 1200,
       height: 630,
-      alt: 'Vim Enthusiast Portfolio'
+      alt: 'ToLearn Blog - 专业技术博客'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Vim Enthusiast Portfolio: Coding Insights & AI Blog',
-    description: 'Explore my portfolio showcasing my passion for Vim, static typing, and dark mode, alongside insights into AI and SEO.',
+    title: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
+    description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
     images: [`${baseUrl}/og-image.jpg`],
   },
   robots: {

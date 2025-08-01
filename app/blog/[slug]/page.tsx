@@ -47,12 +47,12 @@ export function generateMetadata({ params }): Metadata {
   const cleanSlug = post.slug
 
   return {
-    title: `${title} - SEO优化技巧与策略分享`,
-    description: `${description} - ToLearn博客专业分享编程技术、AI洞察与SEO优化策略。`,
+    title: `${title} - SEO Optimization Tips & Strategy Sharing`,
+    description: `${description} - ToLearn Blog professionally shares programming technology, AI insights & SEO optimization strategies.`,
     authors: [{ name: 'ToLearn Blog' }],
     creator: 'ToLearn Blog',
     publisher: 'ToLearn Blog',
-    category: '技术文章',
+    category: 'Technology Articles',
     openGraph: {
       title,
       description,
@@ -60,7 +60,7 @@ export function generateMetadata({ params }): Metadata {
       publishedTime,
       modifiedTime: publishedTime,
       authors: ['ToLearn Blog'],
-      section: '技术文章',
+      section: 'Technology Articles',
       url: `${baseUrl}/blog/${cleanSlug}`,
       images: [
         {
@@ -170,19 +170,19 @@ export default function Blog({ params }) {
             },
             url: `${baseUrl}/blog/${cleanSlug}`,
             wordCount: post.content.split(' ').length,
-            keywords: ['编程技术', 'AI人工智能', 'SEO优化', 'Web开发', '技术分享'],
-            articleSection: '技术文章',
+            keywords: ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development', 'tech sharing'],
+            articleSection: 'Technology Articles',
             inLanguage: 'en-US'
           }),
         }}
       />
       
-      {/* 面包屑导航 */}
+      {/* Breadcrumb navigation */}
       <nav className="mb-6 text-sm">
         <ol className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
-          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">首页</a></li>
+          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Home</a></li>
           <li>/</li>
-          <li><a href="/blog" className="hover:text-blue-600 dark:hover:text-blue-400">技术博客</a></li>
+          <li><a href="/blog" className="hover:text-blue-600 dark:hover:text-blue-400">Tech Blog</a></li>
           <li>/</li>
           <li className="text-neutral-900 dark:text-neutral-100">{post.metadata.title}</li>
         </ol>
@@ -205,7 +205,7 @@ export default function Blog({ params }) {
         <CustomMDX source={post.content} />
       </article>
 
-      {/* 相关文章推荐 */}
+      {/* Related articles recommendation */}
       <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
     </section>
   )

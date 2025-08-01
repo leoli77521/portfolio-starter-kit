@@ -3,15 +3,15 @@ import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata: Metadata = {
-  title: 'ToLearn博客 - 前沿技术分享与洞察',
-  description: '专业的编程技术博客，分享AI人工智能、SEO优化、Web开发最佳实践。深度技术文章，助力开发者提升技能与认知。',
-  keywords: ['技术博客', 'AI人工智能', 'SEO优化技巧', 'Web开发', '前端技术', '编程学习', '技术分享'],
+  title: 'ToLearn Blog - Cutting-Edge Tech Insights & Analysis',
+  description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
+  keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization tips', 'web development', 'frontend technology', 'programming learning', 'tech sharing'],
   alternates: {
     canonical: `${baseUrl}/blog`,
   },
   openGraph: {
-    title: 'ToLearn博客 - 前沿技术分享与洞察',
-    description: '专业的编程技术博客，分享AI人工智能、SEO优化、Web开发最佳实践。深度技术文章，助力开发者提升技能与认知。',
+    title: 'ToLearn Blog - Cutting-Edge Tech Insights & Analysis',
+    description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
     url: `${baseUrl}/blog`,
     type: 'website',
   },
@@ -27,8 +27,8 @@ export default function Page() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Blog',
-            name: 'ToLearn技术博客',
-            description: '专业的编程技术博客，分享AI人工智能、SEO优化、Web开发最佳实践。深度技术文章，助力开发者提升技能与认知。',
+            name: 'ToLearn Technology Blog',
+            description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
             url: `${baseUrl}/blog`,
             author: {
               '@type': 'Person',
@@ -46,11 +46,11 @@ export default function Page() {
               }
             },
             inLanguage: 'en-US',
-            keywords: ['技术博客', 'AI人工智能', 'SEO优化', 'Web开发', '编程技术', '前端开发']
+            keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization', 'web development', 'programming technology', 'frontend development']
           }),
         }}
       />
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">ToLearn 技术博客</h1>
+      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">ToLearn Technology Blog</h1>
       <BlogPosts />
     </section>
   )

@@ -11,11 +11,11 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
+    default: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
     template: '%s | ToLearn Blog',
   },
-  description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
-  keywords: ['编程技术', 'AI人工智能', 'SEO优化', 'Web开发', '前端开发', '技术博客', 'JavaScript', 'React', 'Next.js'],
+  description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
+  keywords: ['programming technology', 'artificial intelligence', 'SEO optimization', 'web development', 'frontend development', 'tech blog', 'JavaScript', 'React', 'Next.js'],
   authors: [{ name: 'ToLearn Blog' }],
   creator: 'ToLearn Blog',
   publisher: 'ToLearn Blog',
@@ -27,23 +27,23 @@ export const metadata: Metadata = {
     { media: '(prefers-color-scheme: dark)', color: 'black' }
   ],
   openGraph: {
-    title: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
-    description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
+    title: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
+    description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
     url: baseUrl,
     siteName: 'ToLearn Blog',
-    locale: 'zh_CN',
+    locale: 'en_US',
     type: 'website',
     images: [{
       url: `${baseUrl}/og-image.jpg`,
       width: 1200,
       height: 630,
-      alt: 'ToLearn Blog - 专业技术博客'
+      alt: 'ToLearn Blog - Professional Technology Blog'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ToLearn Blog - 专业的编程技术与AI洞察分享',
-    description: '专注于分享前沿编程技术、AI人工智能、SEO优化策略和Web开发最佳实践。深度技术文章，助力开发者成长。',
+    title: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
+    description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
     images: [`${baseUrl}/og-image.jpg`],
   },
   robots: {

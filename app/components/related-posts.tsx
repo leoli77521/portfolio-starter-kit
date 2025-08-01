@@ -26,7 +26,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
   return (
     <section className="mt-16 pt-8 border-t border-neutral-200 dark:border-neutral-800">
       <h2 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100">
-        相关技术文章
+        Related Technical Articles
       </h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {relatedPosts.map((post) => (
@@ -47,7 +47,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
               {post.summary}
             </p>
             <div className="mt-3 text-blue-600 dark:text-blue-400 text-sm font-medium">
-              阅读更多 →
+              Read more →
             </div>
           </Link>
         ))}
@@ -58,7 +58,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
           href="/blog" 
           className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
         >
-          查看所有技术文章 →
+          View All Technical Articles →
         </Link>
       </div>
     </section>

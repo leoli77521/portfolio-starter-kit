@@ -2,24 +2,24 @@ import Link from 'next/link'
 
 const navItems = {
   '/': {
-    name: '首页',
+    name: 'Home',
   },
   '/blog': {
-    name: '技术博客',
+    name: 'Tech Blog',
   },
 }
 
-// 重要文章的快速导航
+// Featured articles quick navigation
 const featuredArticles = [
   {
     href: '/blog/seo-optimization-guide',
-    name: 'SEO优化指南',
-    description: '网站优化完整教程'
+    name: 'SEO Guide',
+    description: 'Complete website optimization tutorial'
   },
   {
     href: '/blog/ai-revolution-finance', 
-    name: 'AI金融革命',
-    description: '人工智能改变金融'
+    name: 'AI Finance Revolution',
+    description: 'How AI is changing finance'
   }
 ]
 
@@ -46,9 +46,9 @@ export function Navbar() {
             })}
           </div>
 
-          {/* 热门文章快速导航 */}
+          {/* Featured articles quick navigation */}
           <div className="hidden md:block">
-            <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2 px-4">热门文章</h3>
+            <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2 px-4">Featured Articles</h3>
             <div className="space-y-1">
               {featuredArticles.map((article) => (
                 <Link

@@ -4,6 +4,7 @@ import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
+import { SocialShare } from 'app/components/SocialShare'
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
@@ -39,12 +40,13 @@ export function generateMetadata({ params }): Metadata {
     summary: description,
     image,
   } = post.metadata
-  let ogImage = image
+  const ogImage = image
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
   // 使用一致的URL结构，不使用双重编码
   const cleanSlug = post.slug
+  const fullUrl = `${baseUrl}/blog/${cleanSlug}`
 
   return {
     title: `${title} - SEO Optimization Tips & Strategy Sharing`,
@@ -61,7 +63,7 @@ export function generateMetadata({ params }): Metadata {
       modifiedTime: publishedTime,
       authors: ['ToLearn Blog'],
       section: 'Technology Articles',
-      url: `${baseUrl}/blog/${cleanSlug}`,
+      url: fullUrl,
       images: [
         {
           url: ogImage,
@@ -79,7 +81,7 @@ export function generateMetadata({ params }): Metadata {
       creator: '@tolearn_blog',
     },
     alternates: {
-      canonical: `${baseUrl}/blog/${cleanSlug}`,
+      canonical: fullUrl,
     },
     robots: {
       index: true,
@@ -204,6 +206,13 @@ export default function Blog({ params }) {
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+
+      {/* Social Share Component */}
+      <SocialShare 
+        title={post.metadata.title}
+        url={`${baseUrl}/blog/${cleanSlug}`}
+        summary={post.metadata.summary}
+      />
 
       {/* Related articles recommendation */}
       <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />

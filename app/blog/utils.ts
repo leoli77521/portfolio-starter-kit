@@ -88,26 +88,48 @@ export function getBlogPosts() {
 }
 
 export function formatDate(date: string, includeRelative = false) {
-  let currentDate = new Date()
-  if (!date.includes('T')) {
-    date = `${date}T00:00:00`
+  // 处理无效日期
+  if (!date || typeof date !== 'string') {
+    return 'Unknown Date'
   }
-  let targetDate = new Date(date)
 
-  let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
-  let monthsAgo = currentDate.getMonth() - targetDate.getMonth()
-  let daysAgo = currentDate.getDate() - targetDate.getDate()
+  let currentDate = new Date()
+  
+  // 标准化日期格式
+  let normalizedDate = date
+  if (!date.includes('T')) {
+    normalizedDate = `${date}T00:00:00`
+  }
+  
+  let targetDate = new Date(normalizedDate)
+  
+  // 检查日期是否有效
+  if (isNaN(targetDate.getTime())) {
+    // 尝试其他日期格式
+    targetDate = new Date(date)
+    if (isNaN(targetDate.getTime())) {
+      return 'Invalid Date'
+    }
+  }
+
+  // 计算时间差（毫秒）
+  let timeDiff = currentDate.getTime() - targetDate.getTime()
+  let daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
 
   let formattedDate = ''
-
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`
-  } else {
+  
+  if (daysDiff < 0) {
+    formattedDate = 'Future'
+  } else if (daysDiff === 0) {
     formattedDate = 'Today'
+  } else if (daysDiff < 30) {
+    formattedDate = `${daysDiff}d ago`
+  } else if (daysDiff < 365) {
+    let monthsDiff = Math.floor(daysDiff / 30)
+    formattedDate = `${monthsDiff}mo ago`
+  } else {
+    let yearsDiff = Math.floor(daysDiff / 365)
+    formattedDate = `${yearsDiff}y ago`
   }
 
   let fullDate = targetDate.toLocaleString('en-us', {

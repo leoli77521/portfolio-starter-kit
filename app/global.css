@@ -38,6 +38,36 @@ html {
   touch-action: manipulation;
 }
 
+/* 移动端优化 */
+@media (max-width: 768px) {
+  /* 改善移动端文本可读性 */
+  body {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  
+  /* 优化移动端按钮点击区域 */
+  .btn-primary, 
+  a[class*="btn"], 
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 确保面包屑在移动端不换行 */
+  nav[aria-label="Breadcrumb navigation"] ol {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* 优化移动端卡片间距 */
+  .featured-card,
+  article {
+    margin-bottom: 1rem;
+  }
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';

@@ -16,8 +16,19 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
   // 过滤掉当前文章
   const filteredPosts = posts.filter(post => post.slug !== currentSlug)
   
+  // 优化相关文章推荐算法：优先推荐同类别文章
+  const currentPost = posts.find(post => post.slug === currentSlug)
+  const sortedPosts = filteredPosts.sort((a, b) => {
+    // 如果当前文章有类别，优先推荐同类别文章
+    if (currentPost?.category) {
+      if (a.category === currentPost.category && b.category !== currentPost.category) return -1
+      if (b.category === currentPost.category && a.category !== currentPost.category) return 1
+    }
+    return 0
+  })
+  
   // 最多显示3篇相关文章
-  const relatedPosts = filteredPosts.slice(0, 3)
+  const relatedPosts = sortedPosts.slice(0, 3)
 
   if (relatedPosts.length === 0) {
     return null

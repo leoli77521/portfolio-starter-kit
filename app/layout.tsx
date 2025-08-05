@@ -23,19 +23,19 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
+    default: 'ToLearn Blog - AI Tech Blog | SEO Optimization | Programming Tutorials',
     template: '%s | ToLearn Blog',
   },
-  description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
-  keywords: ['programming technology', 'artificial intelligence', 'SEO optimization', 'web development', 'frontend development', 'tech blog', 'JavaScript', 'React', 'Next.js'],
+  description: 'Professional technology blog sharing AI artificial intelligence, SEO optimization, and programming development best practices. In-depth technical articles helping developers improve skills, covering frontend development, website optimization, AI applications and trending tech topics.',
+  keywords: ['AI Technology', 'SEO Optimization', 'Programming Tutorials', 'Artificial Intelligence', 'Website Optimization', 'Frontend Development', 'Tech Blog', 'JavaScript Tutorials', 'React Development', 'Next.js Framework'],
   authors: [{ name: 'ToLearn Blog' }],
   creator: 'ToLearn Blog',
   publisher: 'ToLearn Blog',
   applicationName: 'ToLearn Blog',
   referrer: 'origin-when-cross-origin',
   openGraph: {
-    title: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
-    description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
+    title: 'ToLearn Blog - AI Tech Blog | SEO Optimization | Programming Tutorials',
+    description: 'Professional technology blog sharing AI artificial intelligence, SEO optimization, and programming development best practices. In-depth technical articles helping developers improve skills, covering frontend development, website optimization, AI applications and trending tech topics.',
     url: baseUrl,
     siteName: 'ToLearn Blog',
     locale: 'en_US',
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
-    description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
+    title: 'ToLearn Blog - AI Tech Blog | SEO Optimization | Programming Tutorials',
+    description: 'Professional technology blog sharing AI artificial intelligence, SEO optimization, and programming development best practices. In-depth technical articles helping developers improve skills, covering frontend development, website optimization, AI applications and trending tech topics.',
     images: [`${baseUrl}/og-image.jpg`],
   },
   robots: {

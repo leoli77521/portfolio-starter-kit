@@ -38,7 +38,7 @@ export function Navbar() {
                 <Link
                   key={path}
                   href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-3 px-4 m-1 min-h-[44px] touch-manipulation font-medium"
+                  className="nav-link touch-manipulation"
                 >
                   {name}
                 </Link>

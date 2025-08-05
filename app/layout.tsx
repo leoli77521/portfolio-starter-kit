@@ -1,5 +1,5 @@
 import './global.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from './components/nav'
@@ -7,6 +7,18 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { baseUrl } from './sitemap'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  colorScheme: 'dark light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' }
+  ],
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -21,11 +33,6 @@ export const metadata: Metadata = {
   publisher: 'ToLearn Blog',
   applicationName: 'ToLearn Blog',
   referrer: 'origin-when-cross-origin',
-  colorScheme: 'dark light',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' }
-  ],
   openGraph: {
     title: 'ToLearn Blog - Professional Tech Insights & AI Analysis',
     description: 'Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.',
@@ -69,6 +76,7 @@ export const metadata: Metadata = {
     google: process.env.GOOGLE_SITE_VERIFICATION,
   },
   category: 'technology',
+  manifest: '/manifest.json',
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
@@ -88,17 +96,15 @@ export default function RootLayout({
       )}
     >
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Vim Portfolio" />
+        <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
+      <body className="antialiased max-w-2xl mx-4 mt-8 lg:mx-auto bg-gradient-primary">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
           {children}

@@ -45,47 +45,47 @@ export default function Page() {
           }),
         }}
       />
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
+      <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
         ToLearn Blog - Professional Tech Insights
       </h1>
-      <p className="mb-6 text-neutral-700 dark:text-neutral-300">
+      <p className="mb-8 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
         Welcome to ToLearn Technology Blog! We focus on sharing cutting-edge programming techniques, AI artificial intelligence insights, and web development best practices.
         Whether you're a beginner or an experienced developer, you'll find valuable in-depth technical content here.
       </p>
 
       {/* Featured Articles Section */}
-      <div className="mb-8 p-6 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
-        <h2 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">Featured Technical Articles</h2>
-        <div className="grid gap-4 md:grid-cols-2">
+      <div className="content-section">
+        <h2 className="section-title">Featured Technical Articles</h2>
+        <div className="grid gap-6 md:grid-cols-2">
           <Link 
             href="/blog/seo-optimization-guide"
-            className="block p-4 bg-white dark:bg-neutral-800 rounded-lg hover:shadow-md transition-shadow"
+            className="featured-card block"
           >
-            <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2">
+            <h3 className="card-title">
               SEO Deployment for Beginners: A Step-by-Step Guide
             </h3>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="card-description">
               Learn how to deploy effective SEO strategies for your website as a beginner, from technical setup to content optimization and beyond.
             </p>
           </Link>
           
           <Link 
             href="/blog/ai-revolution-finance"
-            className="block p-4 bg-white dark:bg-neutral-800 rounded-lg hover:shadow-md transition-shadow"
+            className="featured-card block"
           >
-            <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2">
+            <h3 className="card-title">
               The AI Revolution in Your Wallet: How AI is Changing Finance
             </h3>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="card-description">
               Discover how artificial intelligence is being used in the world of finance, from keeping your money safe to making investing easier.
             </p>
           </Link>
         </div>
         
-        <div className="mt-4 text-center">
+        <div className="mt-8 text-center">
           <Link 
             href="/blog" 
-            className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+            className="btn-primary"
           >
             View All Technical Articles →
           </Link>
@@ -93,8 +93,8 @@ export default function Page() {
       </div>
 
       {/* Latest Articles List */}
-      <div className="my-8">
-        <h2 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100">Latest Technical Articles</h2>
+      <div className="content-section">
+        <h2 className="section-title">Latest Technical Articles</h2>
         <BlogPosts />
       </div>
     </section>

@@ -1,0 +1,20 @@
+{
+    "name": "ToLearn Blog - Professional Tech Insights & AI Analysis",
+    "short_name": "ToLearn Blog",
+    "description": "Professional technology blog focusing on cutting-edge programming techniques, AI artificial intelligence, SEO optimization strategies, and web development best practices.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "orientation": "portrait-primary",
+    "categories": ["education", "technology", "productivity"],
+    "lang": "en-US",
+    "icons": [
+      {
+        "src": "/favicon.ico",
+        "sizes": "any",
+        "type": "image/x-icon"
+      }
+    ]
+  }
+  

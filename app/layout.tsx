@@ -7,6 +7,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import GoogleAnalytics from './components/google-analytics'
+import GoogleAdSense from './components/google-adsense'
 import { baseUrl } from './sitemap'
 
 export const viewport: Viewport = {
@@ -104,6 +105,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <GoogleAdSense />
       </head>
       <body className="antialiased max-w-2xl mx-4 mt-8 lg:mx-auto bg-gradient-primary">
         <GoogleAnalytics />

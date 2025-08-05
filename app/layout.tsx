@@ -6,6 +6,7 @@ import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
+import GoogleAnalytics from './components/google-analytics'
 import { baseUrl } from './sitemap'
 
 export const viewport: Viewport = {
@@ -105,6 +106,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased max-w-2xl mx-4 mt-8 lg:mx-auto bg-gradient-primary">
+        <GoogleAnalytics />
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
           {children}

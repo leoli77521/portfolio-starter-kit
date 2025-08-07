@@ -4,15 +4,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'ToLearn Blog - AI Tech Blog Home | SEO Optimization Tutorials | Programming Development Guide',
-  description: 'ToLearn professional technology blog, focusing on sharing AI artificial intelligence technology, SEO website optimization strategies, and frontend programming development best practices. Providing in-depth technical articles to help developers improve skills and career growth.',
+  title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
+  description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
   keywords: ['AI Tech Blog', 'SEO Optimization Tutorials', 'Programming Development', 'Artificial Intelligence Applications', 'Website Optimization Strategies', 'Frontend Development Technology', 'JavaScript Tutorials', 'React Development Guide'],
   alternates: {
     canonical: baseUrl,
   },
   openGraph: {
-    title: 'ToLearn Blog - AI Tech Blog | SEO Optimization Tutorials | Programming Development Guide',
-    description: 'ToLearn professional technology blog, focusing on sharing AI artificial intelligence technology, SEO website optimization strategies, and frontend programming development best practices. Providing in-depth technical articles to help developers improve skills.',
+    title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
+    description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
     url: baseUrl,
     type: 'website',
     locale: 'en_US',
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ToLearn Blog - AI Tech Blog | SEO Optimization Tutorials',
-    description: 'ToLearn professional technology blog, sharing AI artificial intelligence, SEO optimization, and programming development best practices.',
+    title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
+    description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
   },
 }
 
@@ -37,7 +37,7 @@ export default function Page() {
             '@type': 'WebSite',
             name: 'ToLearn Blog - AI Tech Blog',
             alternateName: 'ToLearn Tech Blog',
-            description: 'Professional technology blog sharing AI artificial intelligence, SEO optimization, and programming development best practices. In-depth technical articles helping developers improve skills.',
+            description: 'Professional tech blog sharing AI insights, SEO strategies, and programming best practices. In-depth articles helping developers improve skills.',
             url: baseUrl,
             inLanguage: 'en-US',
             potentialAction: {

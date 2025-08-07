@@ -3,15 +3,15 @@ import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata: Metadata = {
-  title: 'ToLearn Blog - Cutting-Edge Tech Insights & Analysis',
-  description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
+  title: 'Tech Blog - AI Insights & Programming Tutorials',
+  description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
   keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization tips', 'web development', 'frontend technology', 'programming learning', 'tech sharing'],
   alternates: {
     canonical: `${baseUrl}/blog`,
   },
   openGraph: {
-    title: 'ToLearn Blog - Cutting-Edge Tech Insights & Analysis',
-    description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
+    title: 'Tech Blog - AI Insights & Programming Tutorials',
+    description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
     url: `${baseUrl}/blog`,
     type: 'website',
   },
@@ -37,7 +37,7 @@ export default function Page() {
             '@context': 'https://schema.org',
             '@type': 'Blog',
             name: 'ToLearn Technology Blog',
-            description: 'Professional programming technology blog, sharing AI artificial intelligence, SEO optimization, and web development best practices. In-depth technical articles to help developers improve skills and knowledge.',
+            description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
             url: `${baseUrl}/blog`,
             author: {
               '@type': 'Person',

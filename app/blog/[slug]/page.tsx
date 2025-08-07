@@ -48,16 +48,55 @@ export function generateMetadata({ params }): Metadata {
   const cleanSlug = post.slug
   const fullUrl = `${baseUrl}/blog/${cleanSlug}`
 
+  // Create category-specific Meta description with proper length control
+  const getCategorySpecificDescription = (category, summary) => {
+    const suffixes = {
+      'ai technology': ' | Expert AI insights and practical implementation strategies.',
+      'ai & seo': ' | Expert AI insights and practical implementation strategies.',
+      'seo optimization': ' | Proven SEO techniques and ranking improvement strategies.',
+      'programming': ' | In-depth programming tutorials and development best practices.',
+      'web development': ' | In-depth programming tutorials and development best practices.'
+    }
+    
+    const suffix = suffixes[category?.toLowerCase()] || ' | Professional tech insights and optimization strategies.'
+    const maxSummaryLength = 160 - suffix.length
+    
+    const truncatedSummary = summary.length > maxSummaryLength 
+      ? summary.substring(0, maxSummaryLength - 3) + '...'
+      : summary
+    
+    return truncatedSummary + suffix
+  }
+  
+  const optimizedDescription = getCategorySpecificDescription(post.metadata.category, description)
+  
+  // Optimize title length for SEO (50-60 chars)
+  const getOptimizedTitle = (originalTitle) => {
+    const suffix = ' | ToLearn Blog'
+    const maxLength = 60 - suffix.length // 46 chars for main title
+    
+    if (originalTitle.length <= maxLength) {
+      return `${originalTitle}${suffix}`
+    }
+    
+    // Smart truncation at word boundaries
+    const truncated = originalTitle.substring(0, maxLength)
+    const lastSpace = truncated.lastIndexOf(' ')
+    const finalTitle = lastSpace > 30 ? truncated.substring(0, lastSpace) : truncated
+    
+    return `${finalTitle}${suffix}`
+  }
+  
   return {
-    title: `${title} - SEO Optimization Tips & Strategy Sharing`,
-    description: `${description} - ToLearn Blog professionally shares programming technology, AI insights & SEO optimization strategies.`,
+    title: getOptimizedTitle(title),
+    description: optimizedDescription,
     authors: [{ name: 'ToLearn Blog' }],
     creator: 'ToLearn Blog',
     publisher: 'ToLearn Blog',
     category: 'Technology Articles',
     openGraph: {
       title,
-      description,
+      description: optimizedDescription,
       type: 'article',
       publishedTime,
       modifiedTime: publishedTime,
@@ -76,7 +115,7 @@ export function generateMetadata({ params }): Metadata {
     twitter: {
       card: 'summary_large_image',
       title,
-      description,
+      description: optimizedDescription,
       images: [ogImage],
       creator: '@tolearn_blog',
     },
@@ -192,9 +231,9 @@ export default function Blog({ params }) {
         </ol>
       </nav>
 
-      <h1 className="title font-semibold text-2xl tracking-tighter">
+      <div className="title font-semibold text-2xl tracking-tighter mb-2 text-neutral-900 dark:text-neutral-100">
         {post.metadata.title}
-      </h1>
+      </div>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(post.metadata.publishedAt)}

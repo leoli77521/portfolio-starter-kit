@@ -45,6 +45,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
             key={post.slug}
             href={`/blog/${post.slug}`}
             className="block p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            title={`${post.title} - ${post.summary.slice(0, 80)}${post.summary.length > 80 ? '...' : ''}`}
           >
             <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2 line-clamp-2">
               {post.title}
@@ -68,6 +69,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
         <Link 
           href="/blog" 
           className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+          title="View All Technical Articles - Complete Collection of AI Insights & Programming Tutorials"
         >
           View All Technical Articles →
         </Link>

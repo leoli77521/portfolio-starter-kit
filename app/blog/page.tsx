@@ -23,7 +23,7 @@ export default function Page() {
       {/* Breadcrumb navigation */}
       <nav className="mb-6 text-sm" aria-label="Breadcrumb navigation">
         <ol className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
-          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Home</a></li>
+          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400" title="ToLearn Blog Homepage - AI Tech Hub & Programming Tutorials">Home</a></li>
           <li>/</li>
           <li className="text-neutral-900 dark:text-neutral-100">Tech Blog</li>
         </ol>

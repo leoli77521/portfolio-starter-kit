@@ -28,6 +28,7 @@ export function BlogPosts() {
             <Link
               href={`/blog/${post.slug}`}
               className="block group"
+              title={`${post.metadata.title} - ${truncateSummary(post.metadata.summary || 'Read this technical article', 80)}`}
             >
               <div className="flex flex-col space-y-3">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">

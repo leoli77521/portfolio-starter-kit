@@ -25,9 +25,10 @@ export default function Footer() {
             rel="noopener noreferrer"
             target="_blank"
             href="/rss"
+            title="Subscribe to RSS Feed for Latest AI Tech and SEO Tutorials"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">rss</p>
+            <p className="ml-2 h-7">RSS Feed</p>
           </a>
         </li>
         <li>
@@ -36,9 +37,10 @@ export default function Footer() {
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/vercel/next.js"
+            title="Next.js GitHub Repository - React Framework for Production"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">github</p>
+            <p className="ml-2 h-7">Next.js GitHub</p>
           </a>
         </li>
         <li>
@@ -47,9 +49,10 @@ export default function Footer() {
             rel="noopener noreferrer"
             target="_blank"
             href="https://vercel.com/templates/next.js/portfolio-starter-kit"
+            title="Portfolio Starter Kit Template Source Code on Vercel"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
+            <p className="ml-2 h-7">Template Source</p>
           </a>
         </li>
       </ul>

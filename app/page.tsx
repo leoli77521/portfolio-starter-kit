@@ -87,6 +87,7 @@ export default function Page() {
           <Link 
             href="/blog/seo-optimization-guide"
             className="featured-card block"
+            title="SEO Optimization Guide - Complete Website Optimization Tutorial for Beginners"
           >
             <h3 className="card-title text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
               SEO Deployment for Beginners: A Step-by-Step Guide
@@ -99,6 +100,7 @@ export default function Page() {
           <Link 
             href="/blog/ai-revolution-finance"
             className="featured-card block"
+            title="AI Revolution in Finance - How Artificial Intelligence is Transforming Financial Services"
           >
             <h3 className="card-title text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
               The AI Revolution in Your Wallet: How AI is Changing Finance
@@ -113,6 +115,7 @@ export default function Page() {
           <Link 
             href="/blog" 
             className="btn-primary inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            title="View All Technical Articles - Complete Collection of AI Insights & Programming Tutorials"
           >
             View All Technical Articles →
           </Link>

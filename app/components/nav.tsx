@@ -3,9 +3,11 @@ import Link from 'next/link'
 const navItems = {
   '/': {
     name: 'Home',
+    title: 'ToLearn Blog Homepage - AI Tech Hub & Programming Tutorials',
   },
   '/blog': {
     name: 'Tech Blog',
+    title: 'Tech Blog - Latest AI Insights & Programming Tutorials',
   },
 }
 
@@ -14,12 +16,14 @@ const featuredArticles = [
   {
     href: '/blog/seo-optimization-guide',
     name: 'SEO Guide',
-    description: 'Complete website optimization tutorial'
+    description: 'Complete website optimization tutorial',
+    title: 'SEO Optimization Guide - Complete Website Optimization Tutorial'
   },
   {
     href: '/blog/ai-revolution-finance', 
     name: 'AI Finance Revolution',
-    description: 'How AI is changing finance'
+    description: 'How AI is changing finance',
+    title: 'AI Revolution in Finance - How AI is Transforming Financial Services'
   }
 ]
 
@@ -33,12 +37,13 @@ export function Navbar() {
         >
           {/* 主导航 */}
           <div className="flex flex-row flex-wrap space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name }]) => {
+            {Object.entries(navItems).map(([path, { name, title }]) => {
               return (
                 <Link
                   key={path}
                   href={path}
                   className="nav-link touch-manipulation"
+                  title={title}
                 >
                   {name}
                 </Link>
@@ -55,6 +60,7 @@ export function Navbar() {
                   key={article.href}
                   href={article.href}
                   className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-md transition-colors"
+                  title={article.title}
                 >
                   <div className="font-medium">{article.name}</div>
                   <div className="text-xs text-neutral-500 dark:text-neutral-500">{article.description}</div>

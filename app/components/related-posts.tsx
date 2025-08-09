@@ -44,7 +44,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="block p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="block p-5 bg-white/60 dark:bg-neutral-900/60 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:shadow-md hover:shadow-blue-50 dark:hover:shadow-blue-900/20"
             title={`${post.title} - ${post.summary.slice(0, 80)}${post.summary.length > 80 ? '...' : ''}`}
           >
             <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2 line-clamp-2">
@@ -68,7 +68,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
       <div className="mt-6 text-center">
         <Link 
           href="/blog" 
-          className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+          className="btn-secondary"
           title="View All Technical Articles - Complete Collection of AI Insights & Programming Tutorials"
         >
           View All Technical Articles →

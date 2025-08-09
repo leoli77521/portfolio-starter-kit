@@ -23,7 +23,7 @@ export function BlogPosts() {
         .map((post) => (
           <article
             key={post.slug}
-            className="mb-8 p-4 -mx-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+            className="mb-6 p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white/60 dark:bg-neutral-900/60 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:shadow-md hover:shadow-blue-50 dark:hover:shadow-blue-900/20"
           >
             <Link
               href={`/blog/${post.slug}`}
@@ -31,8 +31,8 @@ export function BlogPosts() {
               title={`${post.metadata.title} - ${truncateSummary(post.metadata.summary || 'Read this technical article', 80)}`}
             >
               <div className="flex flex-col space-y-3">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                  <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors tracking-tight">
                     {post.metadata.title}
                   </h2>
                   <time 

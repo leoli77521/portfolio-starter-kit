@@ -29,47 +29,40 @@ const featuredArticles = [
 
 export function Navbar() {
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
-      <div className="lg:sticky lg:top-20">
-        <nav
-          className="flex flex-col space-y-4 relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
-          id="nav"
-        >
-          {/* 主导航 */}
-          <div className="flex flex-row flex-wrap space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name, title }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className="nav-link touch-manipulation"
-                  title={title}
-                >
-                  {name}
-                </Link>
-              )
-            })}
-          </div>
-
-          {/* Featured articles quick navigation */}
-          <div className="hidden md:block">
-            <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2 px-4">Featured Articles</h3>
-            <div className="space-y-1">
-              {featuredArticles.map((article) => (
-                <Link
-                  key={article.href}
-                  href={article.href}
-                  className="block px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-md transition-colors"
-                  title={article.title}
-                >
-                  <div className="font-medium">{article.name}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-500">{article.description}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </nav>
+    <header className="mb-12">
+      <div className="sticky top-0 z-40 -mx-4 px-4 lg:mx-0 lg:px-0 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:supports-[backdrop-filter]:bg-black/40">
+        <div className="flex items-center justify-between py-3">
+          <Link href="/" className="font-semibold text-lg text-neutral-900 dark:text-neutral-100" title="ToLearn Blog Homepage">
+            ToLearn
+          </Link>
+          <nav className="flex items-center gap-1">
+            {Object.entries(navItems).map(([path, { name, title }]) => (
+              <Link
+                key={path}
+                href={path}
+                className="nav-link"
+                title={title}
+              >
+                {name}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
-    </aside>
+
+      <div className="hidden md:flex flex-wrap items-center gap-2 mb-6">
+        {featuredArticles.map((article) => (
+          <Link
+            key={article.href}
+            href={article.href}
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-full bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 transition-colors"
+            title={article.title}
+          >
+            <span className="font-medium">{article.name}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">{article.description}</span>
+          </Link>
+        ))}
+      </div>
+    </header>
   )
 }

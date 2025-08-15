@@ -50,6 +50,11 @@ export function generateMetadata({ params }): Metadata {
 
   // Create category-specific Meta description with proper length control
   const getCategorySpecificDescription = (category, summary) => {
+    // 确保 summary 存在
+    if (!summary || typeof summary !== 'string') {
+      summary = 'Professional technology insights and practical solutions.'
+    }
+    
     const suffixes = {
       'ai technology': ' | Expert AI insights and practical implementation strategies.',
       'ai & seo': ' | Expert AI insights and practical implementation strategies.',
@@ -72,6 +77,11 @@ export function generateMetadata({ params }): Metadata {
   
   // Optimize title length for SEO (50-60 chars)
   const getOptimizedTitle = (originalTitle) => {
+    // 确保 title 存在
+    if (!originalTitle || typeof originalTitle !== 'string') {
+      originalTitle = 'Tech Article'
+    }
+    
     const suffix = ' | ToLearn Blog'
     const maxLength = 60 - suffix.length // 46 chars for main title
     
@@ -163,8 +173,8 @@ export default function Blog({ params }) {
   // 准备相关文章数据
   const relatedPostsData = allPosts.map(p => ({
     slug: p.slug,
-    title: p.metadata.title,
-    summary: p.metadata.summary,
+    title: p.metadata.title || 'Untitled',
+    summary: p.metadata.summary || 'No summary available',
     category: p.metadata.category
   }))
 

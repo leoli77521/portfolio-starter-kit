@@ -1,49 +1,10 @@
 ---
 title: "Building an AI Content Pipeline That Scales and Ranks"
-description: "A founder’s playbook to ship a production-grade AI content engine—ingestion to monitoring—with real SEO gains and paste-ready code."
-date: 2025-08-15T19:00:00-07:00
-updated: 2025-08-15T19:00:00-07:00
-slug: ai-content-pipeline-seo
+publishedAt: "2025-08-15"
+summary: "A founder's playbook to ship a production-grade AI content engine—ingestion to monitoring—with real SEO gains and paste-ready code."
+category: 'AI Technology'
 tags: ["AI","SEO","Content Pipeline","LLM","Next.js","pgvector"]
-author: "Your Name"
-draft: false
-canonical: "https://example.com/blog/ai-content-pipeline-seo"
-cover: "/images/blog/ai-content-pipeline-seo/cover.jpg"
-ogImage: "/images/blog/ai-content-pipeline-seo/og-1200x630.jpg"
-readingTime: 9
 ---
-
-export function JsonLd({ data }) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
-}
-
-// Optional: Article schema for this blog post (helps SEO)
-// If your MDX setup already injects Article JSON-LD globally, you can remove this.
-const articleSchema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: "Building an AI Content Pipeline That Scales and Ranks",
-  description:
-    "A founder’s playbook to ship a production-grade AI content engine—ingestion to monitoring—with real SEO gains and paste-ready code.",
-  inLanguage: "en",
-  author: [{ "@type": "Person", name: "Your Name" }],
-  datePublished: "2025-08-15T19:00:00-07:00",
-  dateModified: "2025-08-15T19:00:00-07:00",
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": "https://example.com/blog/ai-content-pipeline-seo",
-  },
-  image: [
-    "https://example.com/images/blog/ai-content-pipeline-seo/og-1200x630.jpg",
-  ],
-};
-
-<JsonLd data={articleSchema} />
 
 # Building an AI Content Pipeline That Scales *and* Ranks
 *Published on **Aug 15, 2025***  
@@ -283,7 +244,7 @@ export async function checkEmbed(url: string) {
 - **Readability**: target Grade 6–8 for casual audiences.
 - **Term lock**: glossary respected; brand terms preserved.
 - **Duplication**: cosine sim < 0.92 vs existing items.
-- **Image**: 1200×630 OG present; <200KB where possible.
+- **Image**: 1200×630 OG present; under 200KB where possible.
 - **JSON-LD** validates; canonical/hreflang consistent.
 - **Related block** returns ≥3 items.
 

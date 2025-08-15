@@ -45,7 +45,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
             key={post.slug}
             href={`/blog/${post.slug}`}
             className="block p-5 bg-white/60 dark:bg-neutral-900/60 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:shadow-md hover:shadow-blue-50 dark:hover:shadow-blue-900/20"
-            title={`${post.title} - ${post.summary.slice(0, 80)}${post.summary.length > 80 ? '...' : ''}`}
+            title={`${post.title} - ${post.summary?.slice(0, 80) || 'No summary available'}${(post.summary?.length || 0) > 80 ? '...' : ''}`}
           >
             <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2 line-clamp-2">
               {post.title}
@@ -56,7 +56,7 @@ export function RelatedPosts({ currentSlug, posts }: RelatedPostsProps) {
               </span>
             )}
             <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">
-              {post.summary}
+              {post.summary || 'No summary available'}
             </p>
             <div className="mt-3 text-blue-600 dark:text-blue-400 text-sm font-medium">
               Read more →

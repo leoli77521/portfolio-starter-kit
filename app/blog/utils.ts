@@ -25,8 +25,19 @@ function parseFrontmatter(fileContent: string) {
     
     const trimmedKey = key.trim() as keyof Metadata
     if (trimmedKey === 'tags') {
-      // 处理标签数组
-      metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
+      // 处理标签数组，支持JSON数组格式
+      try {
+        // 如果是JSON数组格式，直接解析
+        if (value.startsWith('[') && value.endsWith(']')) {
+          metadata[trimmedKey] = JSON.parse(value) as any
+        } else {
+          // 否则按逗号分割
+          metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
+        }
+      } catch (e) {
+        // 如果解析失败，按逗号分割
+        metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
+      }
     } else {
       metadata[trimmedKey] = value as any
     }

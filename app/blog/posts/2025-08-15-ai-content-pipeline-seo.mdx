@@ -1,0 +1,357 @@
+---
+title: "Building an AI Content Pipeline That Scales and Ranks"
+description: "A founder’s playbook to ship a production-grade AI content engine—ingestion to monitoring—with real SEO gains and paste-ready code."
+date: 2025-08-15T19:00:00-07:00
+updated: 2025-08-15T19:00:00-07:00
+slug: ai-content-pipeline-seo
+tags: ["AI","SEO","Content Pipeline","LLM","Next.js","pgvector"]
+author: "Your Name"
+draft: false
+canonical: "https://example.com/blog/ai-content-pipeline-seo"
+cover: "/images/blog/ai-content-pipeline-seo/cover.jpg"
+ogImage: "/images/blog/ai-content-pipeline-seo/og-1200x630.jpg"
+readingTime: 9
+---
+
+export function JsonLd({ data }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
+// Optional: Article schema for this blog post (helps SEO)
+// If your MDX setup already injects Article JSON-LD globally, you can remove this.
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Building an AI Content Pipeline That Scales and Ranks",
+  description:
+    "A founder’s playbook to ship a production-grade AI content engine—ingestion to monitoring—with real SEO gains and paste-ready code.",
+  inLanguage: "en",
+  author: [{ "@type": "Person", name: "Your Name" }],
+  datePublished: "2025-08-15T19:00:00-07:00",
+  dateModified: "2025-08-15T19:00:00-07:00",
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://example.com/blog/ai-content-pipeline-seo",
+  },
+  image: [
+    "https://example.com/images/blog/ai-content-pipeline-seo/og-1200x630.jpg",
+  ],
+};
+
+<JsonLd data={articleSchema} />
+
+# Building an AI Content Pipeline That Scales *and* Ranks
+*Published on **Aug 15, 2025***  
+*An entrepreneur’s playbook for shipping a production-grade AI content engine with real SEO gains—beyond generic “write a blog post” prompts.*
+
+---
+
+## TL;DR
+
+If your site adds new items regularly (games, listings, docs, products), don’t scale writers—scale a **content operations pipeline**: ingest → normalize → generate (titles, summaries, tags, translations, images) → publish with **structured data** → monitor health → measure SEO impact. Below is a battle-tested blueprint with schemas, prompts, code snippets, QA gates, and a 30/60/90 rollout.
+
+---
+
+## 1) What we’re actually building
+
+A minimal, resilient system that turns raw items (e.g., new HTML5 games) into **indexable, linkable, high-quality pages** with:
+
+- crisp titles & descriptions (CTR-oriented),
+- multilingual content with consistent terminology,
+- on-brand cover images/OG cards,
+- correct JSON-LD, canonical/hreflang, and sitemaps,
+- internal links that improve discovery,
+- continuous **health checks** (e.g., broken iframes, redirect traps),
+- analytics to prove impact.
+
+Think of it as **CI/CD for content**.
+
+---
+
+## 2) Architecture at a glance
+
+```
+Source feeds → Ingestion → Normalization
+             → LLM Tasks (summ, title, tags, translate, image)
+             → SEO Packager (JSON-LD, canonical, links, OG)
+             → Publish (Next.js/Vercel)
+             → Monitors (health, quality, costs)
+             → Analytics (GSC, logs, CTR, index coverage)
+```
+
+**Tech defaults**: Postgres (+pgvector), Next.js 14, Serverless workers, Playwright (screenshots/OG), vLLM or API gateway for models.
+
+---
+
+## 3) Data model (works for games, products, docs)
+
+```sql
+create table items (
+  id bigserial primary key,
+  slug text unique not null,
+  title_en text, title_zh text,
+  desc_en text, desc_zh text,
+  tags text[],
+  source_url text,
+  media_cover_url text,
+  iframe_url text,                -- optional: for embeddables
+  playable boolean default true,
+  broken_reason text,
+  last_checked timestamptz default now(),
+  embedding vector(768),
+  quality_score numeric default 0 -- QA gate
+);
+
+create index on items using ivfflat (embedding vector_cosine_ops);
+```
+
+---
+
+## 4) Ingestion & normalization
+
+- Accept CSV/feeds/webhooks; **dedupe** by `(normalized_title, source_domain)` and URL canonicalization.
+- Strip tracking params, collapse whitespace, run a profanity/brand-safety pass.
+- Create a **controlled vocabulary** for tags (no exploding taxonomies).
+
+---
+
+## 5) LLM tasks with guardrails
+
+### 5.1 Title (CTR-oriented)
+
+**Constraints**
+
+- 50–60 characters (desktop SERP sweet spot)
+- Include 1–2 primary intents (no stuffing)
+- Action verbs; avoid brackets unless meaningful
+
+**Prompt (system)**
+
+> You are an SEO editor. Write a single, natural-sounding title (50–60 chars) that maximizes CTR while staying faithful. Avoid clickbait and redundancy.
+
+**Prompt (user)**
+
+```
+Item: {short description}
+Audience: casual web gamers
+Primary intent: {e.g., puzzle, skill, speedrun}
+Brand tone: concise, friendly
+Return: just the title string.
+```
+
+### 5.2 Meta description (SERP snippet)
+
+- 140–160 chars; include value proposition + call to action.
+- Add multilingual variants only if you’ll ship hreflang.
+
+### 5.3 Summary (on-page)
+
+- 80–120 words; explain gameplay/features plainly.
+- Insert 3–5 **controlled** tags from your taxonomy.
+
+### 5.4 Translation with terminology lock
+
+- Maintain a glossary (JSON) of fixed translations (e.g., “parkour”→“跑酷”).
+- Reject translations that alter branded terms.
+
+### 5.5 Embeddings & related items
+
+- Compute embeddings for title+summary; store in `embedding`.
+- Related block = `topK(embedding) ∪ tag_intersection`.
+
+---
+
+## 6) Visuals: covers & OG images
+
+1) If you have official art: **auto-crop** to multiple sizes (1:1 card, 1.91:1 OG).  
+2) If not, generate via:
+   - **Playwright screenshot** of a stabilized state (delay 4–6s, hide UI clutter), or
+   - Text-to-image (only if licensing allows).
+
+**Playwright example (Node):**
+
+```ts
+import { chromium } from "playwright";
+
+export async function screenshotOG(url: string, out: string) {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 }});
+  await page.goto(url, { waitUntil: "networkidle" });
+  await page.waitForTimeout(4000); // let animations settle
+  await page.screenshot({ path: out });
+  await browser.close();
+}
+```
+
+---
+
+## 7) SEO packager: what Google actually needs
+
+### 7.1 Canonical & pagination
+
+- Self-canonical for leaf pages.
+- Paginated lists: `rel=prev/next` deprecated → rely on clean URLs + strong internal linking + clear canonicals.
+
+### 7.2 Hreflang (only if content is truly localized)
+
+- Always pair `x-default`.
+- Keep language-region pairs stable (e.g., `en`, `en-GB`, `zh-CN`).
+
+### 7.3 JSON-LD (choose the right type)
+
+For web games, prefer **VideoGame** (or **SoftwareApplication** fallback):
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Sliding Blocks: Speed Mode",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web",
+  "url": "https://example.com/games/sliding-blocks",
+  "image": "https://example.com/og/sliding-blocks.jpg",
+  "description": "A fast-paced tile puzzle with speedrun mode and daily challenges.",
+  "inLanguage": "en",
+  "genre": ["Puzzle","Speedrun"]
+}
+</script>
+```
+
+### 7.4 Internal links that matter
+
+- **Related items** module (semantic + tag overlap).
+- **Collections** (e.g., “Top Puzzle this week”) with curated intros—these pages earn links.
+- **Breadcrumbs** (and JSON-LD `BreadcrumbList`).
+
+### 7.5 Sitemaps
+
+- Split by type (items, collections, locales).
+- Refresh timestamps when material changes (not on every deploy).
+
+---
+
+## 8) Health monitoring (where most sites fail)
+
+For embeddables (games, tools, demos), check:
+
+- `X-Frame-Options` (`DENY`/`SAMEORIGIN` ⇒ mark unplayable),
+- `Content-Security-Policy` `frame-ancestors` restrictions,
+- 30x to external sites (steals your session),
+- Load timeouts and 4xx/5xx.
+
+**Node snippet**
+
+```ts
+import fetch from "node-fetch";
+
+export async function checkEmbed(url: string) {
+  const res = await fetch(url, { redirect: "manual" });
+  const xfo = res.headers.get("x-frame-options") || "";
+  const csp = res.headers.get("content-security-policy") || "";
+  const redirected = res.status >= 300 && res.status < 400;
+  const location = res.headers.get("location");
+
+  let playable = true,
+    reason = "";
+  if (/deny|sameorigin/i.test(xfo)) {
+    playable = false;
+    reason = `XFO: ${xfo}`;
+  } else if (/frame-ancestors/i.test(csp)) {
+    playable = false;
+    reason = `CSP: frame-ancestors`;
+  } else if (redirected) {
+    playable = false;
+    reason = `Redirect → ${location}`;
+  }
+
+  return { status: res.status, playable, reason, location };
+}
+```
+
+---
+
+## 9) Quality gates (QA before publish)
+
+- **Title length** 50–60 chars; no doubled words.
+- **Meta** 140–160 chars; includes one primary benefit.
+- **Readability**: target Grade 6–8 for casual audiences.
+- **Term lock**: glossary respected; brand terms preserved.
+- **Duplication**: cosine sim < 0.92 vs existing items.
+- **Image**: 1200×630 OG present; <200KB where possible.
+- **JSON-LD** validates; canonical/hreflang consistent.
+- **Related block** returns ≥3 items.
+
+If any fail, the item queues for human review.
+
+---
+
+## 10) Measuring impact (what to watch)
+
+- **Index coverage** (per locale and per collection).
+- **CTR** deltas for pages before/after AI titles.
+- **Impressions vs. pages published** (slope should rise).
+- **Bounce & session duration** (related block moves the needle).
+- **Error budgets**: % broken embeds, LCP/CLS medians.
+- **Cost per shipped page** (LLM + infra) and **time-to-publish**.
+
+---
+
+## 11) Cost & latency control
+
+- **Batch generation** (up to token/context limits).
+- **Cache** by normalized prompt; add semantic dedupe.
+- **Quantized models** for embeddings; reserve strong models for titles/desc only.
+- **Pre-compute** related items offline; render statically.
+- **Retry strategy**: exponential backoff with jitter; cap at 2 retries.
+
+Rough rule: With caching + small models for embeddings, you can keep end-to-end cost **well under $0.02 per item** in many setups.
+
+---
+
+## 12) Governance, E-E-A-T, and risk
+
+- Cite sources when summarizing vendor docs; link out judiciously.
+- Keep **editor notes/changelogs**—useful for users and reviewers.
+- Don’t publish pages with thin content or unplayable embeds; **noindex** until fixed.
+- Respect source **ToS**; avoid scraping where prohibited.
+- Maintain an **abuse and takedown** channel; log ownership claims.
+
+---
+
+## 13) 30 / 60 / 90 day rollout
+
+**Day 1–30 (MVP)**  
+- Ingest → title/summary/tags → publish with JSON-LD & sitemap.  
+- Add Playwright screenshots.  
+- Basic health checks + fail-closed on sitemaps.
+
+**Day 31–60 (Scale)**  
+- Localize (hreflang), controlled vocabulary, related items via embeddings.  
+- Collections and curated lists.  
+- Cost dashboard + prompt caching.
+
+**Day 61–90 (Moat)**  
+- CTR experiments (A/B titles & descriptions).  
+- Author pages, editorial guidelines (E-E-A-T).  
+- Advanced monitors (log-based crawl anomaly detection).
+
+---
+
+## Practical checklist
+
+- [ ] Titles 50–60 chars; metas 140–160 chars  
+- [ ] JSON-LD valid; canonical/hreflang consistent  
+- [ ] OG image 1200×630 and thumbnail set  
+- [ ] Related block returns ≥3 items  
+- [ ] Embed health pass (XFO/CSP/redirect)  
+- [ ] Item score ≥80 → auto-publish; else review
+
+---
+
+Most teams try to “scale content.” Winners scale **content operations**: tight schemas, predictable outputs, SEO-correct packaging, and ruthless monitoring. Build the pipeline once—then every new item becomes an asset that ranks, converts, and compounds.

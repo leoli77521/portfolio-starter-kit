@@ -23,14 +23,14 @@ function formatDateForSitemap(dateString: string): string {
 export default async function sitemap() {
   const staticRoutes = ['', '/blog'].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
+    lastModified: new Date().toISOString(),
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1.0 : 0.8,
   }))
 
   const blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: formatDateForSitemap(post.metadata.publishedAt),
+    url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
+    lastModified: new Date(formatDateForSitemap(post.metadata.publishedAt) + 'T00:00:00.000Z').toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))

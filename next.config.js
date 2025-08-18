@@ -43,17 +43,10 @@ const nextConfig = {
   // 重定向配置 - 统一URL结构
   redirects: async () => {
     return [
-      // 重定向 www 到非 www (如果需要)
+      // 重定向 www 到非 www
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.tolearn.blog' }],
-        destination: 'https://tolearn.blog/:path*',
-        permanent: true,
-      },
-      // 强制HTTPS重定向
-      {
-        source: '/:path*',
-        has: [{ type: 'header', key: 'x-forwarded-proto', value: 'http' }],
         destination: 'https://tolearn.blog/:path*',
         permanent: true,
       },

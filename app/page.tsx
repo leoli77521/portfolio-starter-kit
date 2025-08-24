@@ -127,6 +127,67 @@ export default function Page() {
         <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Latest Technical Articles</h2>
         <BlogPosts />
       </section>
+
+      {/* Developer Communities Section */}
+      <section className="content-section mt-16">
+        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Recommended Developer Communities</h2>
+        <p className="mb-6 text-gray-600 dark:text-gray-400">
+          Explore these valuable communities and resources for developers, data scientists, and tech enthusiasts.
+        </p>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Reddit Communities</h3>
+            <ul className="space-y-1 text-sm">
+              <li>
+                <a 
+                  href="https://www.reddit.com/r/artificial/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="Reddit Artificial Intelligence Community - Latest AI Discussions"
+                >
+                  r/artificial - AI Discussions
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://www.reddit.com/r/SEO/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="Reddit SEO Community - Search Engine Optimization Tips"
+                >
+                  r/SEO - SEO Strategies
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Google Developer Resources</h3>
+            <ul className="space-y-1 text-sm">
+              <li>
+                <a 
+                  href="https://developers.google.com/community" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="Google Developers Community - Official Developer Resources and Support"
+                >
+                  Google Dev Community
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 md:col-span-2 lg:col-span-1">
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Stay Connected</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Join these communities to stay updated with the latest in tech, AI, and web development.
+            </p>
+          </div>
+        </div>
+      </section>
     </section>
   )
 }

@@ -56,6 +56,133 @@ export default function Footer() {
           </a>
         </li>
       </ul>
+
+      {/* Tech Communities & Resources Section */}
+      <div className="mt-12 border-t border-neutral-200 dark:border-neutral-800 pt-8">
+        <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-4">Developer Resources</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Tech Communities */}
+          <div>
+            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Tech Communities</h4>
+            <ul className="space-y-1">
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://github.com"
+                  title="GitHub - World's Leading Development Platform"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://dev.to"
+                  title="DEV Community - Developer Articles and Discussions"
+                >
+                  DEV Community
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://stackoverflow.com"
+                  title="Stack Overflow - Programming Q&A Platform"
+                >
+                  Stack Overflow
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Content Platforms */}
+          <div>
+            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Content Platforms</h4>
+            <ul className="space-y-1">
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://medium.com"
+                  title="Medium - Quality Tech Content and Articles"
+                >
+                  Medium
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://news.ycombinator.com"
+                  title="Hacker News - Tech News and Discussions"
+                >
+                  Hacker News
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://www.reddit.com/r/programming/"
+                  title="Reddit Programming - Developer Discussions"
+                >
+                  Reddit /r/programming
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Professional Networks */}
+          <div>
+            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Professional Networks</h4>
+            <ul className="space-y-1">
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://towardsdatascience.com"
+                  title="Towards Data Science - AI and Machine Learning Articles"
+                >
+                  Towards Data Science
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://www.producthunt.com"
+                  title="Product Hunt - Discover New Tech Products"
+                >
+                  Product Hunt
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  href="https://www.indiehackers.com"
+                  title="Indie Hackers - Independent Developer Community"
+                >
+                  Indie Hackers
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <p className="mt-8 text-neutral-600 dark:text-neutral-300">
         © {new Date().getFullYear()} MIT Licensed
       </p>

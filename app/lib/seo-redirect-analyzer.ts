@@ -86,7 +86,11 @@ function findRedirectChains(redirectMap: Map<string, string>): string[][] {
   const chains: string[][] = []
   const visited = new Set<string>()
   
-  for (const [from] of redirectMap) {
+  // 兼容ES5的Map迭代方式
+  const keys = Array.from(redirectMap.keys())
+  
+  for (let i = 0; i < keys.length; i++) {
+    const from = keys[i]
     if (visited.has(from)) continue
     
     const chain = [from]
@@ -107,7 +111,9 @@ function findRedirectChains(redirectMap: Map<string, string>): string[][] {
       chains.push(chain)
     }
     
-    chain.forEach(url => visited.add(url))
+    for (let j = 0; j < chain.length; j++) {
+      visited.add(chain[j])
+    }
   }
   
   return chains

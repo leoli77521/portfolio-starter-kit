@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
@@ -44,9 +44,9 @@ export function generateMetadata({ params }): Metadata {
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
-  // 使用一致的URL结构，不使用双重编码
+  // 使用一致的URL结构，确保canonical URL使用标准化的slug
   const cleanSlug = post.slug
-  const fullUrl = `${baseUrl}/blog/${cleanSlug}`
+  const canonicalUrl = `${baseUrl}/blog/${cleanSlug}`
 
   // Create category-specific Meta description with proper length control
   const getCategorySpecificDescription = (category, summary) => {
@@ -112,7 +112,7 @@ export function generateMetadata({ params }): Metadata {
       modifiedTime: publishedTime,
       authors: ['ToLearn Blog'],
       section: 'Technology Articles',
-      url: fullUrl,
+      url: canonicalUrl,
       images: [
         {
           url: ogImage,
@@ -130,7 +130,7 @@ export function generateMetadata({ params }): Metadata {
       creator: '@tolearn_blog',
     },
     alternates: {
-      canonical: fullUrl,
+      canonical: canonicalUrl,
     },
     robots: {
       index: true,
@@ -159,6 +159,11 @@ export default function Blog({ params }) {
     try {
       const decodedSlug = decodeURIComponent(params.slug)
       post = allPosts.find((post) => post.slug === decodedSlug)
+      
+      // 如果找到了文章但URL是编码的，重定向到标准化的URL
+      if (post && params.slug !== decodedSlug) {
+        redirect(`/blog/${post.slug}`)
+      }
     } catch (e) {
       // 解码失败，保持 post 为 undefined
     }

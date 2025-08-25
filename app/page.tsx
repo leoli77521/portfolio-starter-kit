@@ -85,15 +85,15 @@ export default function Page() {
         <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Featured Technical Articles</h2>
         <div className="grid gap-6 md:grid-cols-2">
           <Link 
-            href="/blog/seo-optimization-guide"
+            href="/blog/google-ai-energy-data-disclosure"
             className="featured-card block"
-            title="SEO Optimization Guide - Complete Website Optimization Tutorial for Beginners"
+            title="Google AI Energy Data Disclosure - Industry-First Transparency on AI Energy Consumption"
           >
             <h3 className="card-title text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
-              SEO Deployment for Beginners: A Step-by-Step Guide
+              Google AI Energy Data: First Public Disclosure Shocks Industry
             </h3>
             <p className="card-description text-gray-600 dark:text-gray-400">
-              Learn how to deploy effective SEO strategies for your website as a beginner, from technical setup to content optimization and beyond.
+              Google reveals AI energy consumption data for first time: 0.24 watt-hours per query. Industry transparency breakthrough impacts sustainable AI development.
             </p>
           </Link>
           

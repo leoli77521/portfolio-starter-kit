@@ -21,19 +21,45 @@ function formatDateForSitemap(dateString: string): string {
 }
 
 export default async function sitemap() {
-  const staticRoutes = ['', '/blog'].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1.0 : 0.8,
-  }))
+  // 静态路由
+  const staticRoutes = [
+    {
+      url: `${baseUrl}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    }
+  ]
 
-  const blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
-    lastModified: new Date(formatDateForSitemap(post.metadata.publishedAt) + 'T00:00:00.000Z').toISOString(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
+  // API路由（仅包含公开可访问的）
+  const apiRoutes = [
+    {
+      url: `${baseUrl}/rss`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.3,
+    }
+  ]
 
-  return [...staticRoutes, ...blogs]
+  // 博客文章
+  const blogs = getBlogPosts().map((post) => {
+    const lastModified = new Date(formatDateForSitemap(post.metadata.publishedAt) + 'T00:00:00.000Z').toISOString()
+    
+    return {
+      url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
+      lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }
+  })
+
+  // 按优先级排序
+  const allRoutes = [...staticRoutes, ...apiRoutes, ...blogs]
+  return allRoutes.sort((a, b) => b.priority - a.priority)
 }

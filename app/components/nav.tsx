@@ -14,6 +14,12 @@ const navItems = {
 // Featured articles quick navigation
 const featuredArticles = [
   {
+    href: '/blog/gemini-deep-thinking-api-math-reasoning',
+    name: 'Gemini Deep Thinking',
+    description: 'Build advanced AI reasoning apps',
+    title: 'Gemini Deep Thinking API - Build Advanced Math Reasoning Applications'
+  },
+  {
     href: '/blog/seo-optimization-guide',
     name: 'SEO Guide',
     description: 'Complete website optimization tutorial',

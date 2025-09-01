@@ -107,7 +107,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <GoogleAdSense />
       </head>
-      <body className="antialiased max-w-3xl mx-4 lg:mx-auto mt-8 lg:mt-10 bg-gradient-primary">
+      <body className="antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12">\
         <GoogleAnalytics />
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />

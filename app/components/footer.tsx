@@ -17,175 +17,132 @@ function ArrowIcon() {
 
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
-        <li>
+    <footer className="mt-20 mb-16 border-t border-gray-200 dark:border-gray-700 pt-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        {/* About Section */}
+        <div>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">About ToLearn</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Your trusted source for cutting-edge AI insights, programming tutorials, and web development best practices.
+          </p>
+        </div>
+
+        {/* Quick Links */}
+        <div>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Quick Links</h3>
+          <ul className="space-y-2">
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/"
+                title="Homepage"
+              >
+                Home
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/blog"
+                title="Blog"
+              >
+                Blog
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/rss"
+                title="RSS Feed"
+              >
+                RSS Feed
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Resources */}
+        <div>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Resources</h3>
+          <ul className="space-y-2">
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://github.com"
+                title="GitHub"
+              >
+                GitHub
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://dev.to"
+                title="DEV Community"
+              >
+                DEV Community
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                rel="noopener noreferrer"
+                target="_blank"
+                href="https://stackoverflow.com"
+                title="Stack Overflow"
+              >
+                Stack Overflow
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Connect */}
+        <div>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Stay Connected</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Subscribe to our RSS feed for the latest updates on AI, programming, and tech trends.
+          </p>
           <a
-            className="footer-link"
-            rel="noopener noreferrer"
-            target="_blank"
             href="/rss"
-            title="Subscribe to RSS Feed for Latest AI Tech and SEO Tutorials"
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-full transition-colors"
+            title="Subscribe to RSS"
           >
-            <ArrowIcon />
-            <p className="ml-2 h-7">RSS Feed</p>
+            Subscribe to RSS
           </a>
-        </li>
-        <li>
-          <a
-            className="footer-link"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://github.com/vercel/next.js"
-            title="Next.js GitHub Repository - React Framework for Production"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">Next.js GitHub</p>
-          </a>
-        </li>
-        <li>
-          <a
-            className="footer-link"
-            rel="noopener noreferrer"
-            target="_blank"
-            href="https://vercel.com/templates/next.js/portfolio-starter-kit"
-            title="Portfolio Starter Kit Template Source Code on Vercel"
-          >
-            <ArrowIcon />
-            <p className="ml-2 h-7">Template Source</p>
-          </a>
-        </li>
-      </ul>
-
-      {/* Tech Communities & Resources Section */}
-      <div className="mt-12 border-t border-neutral-200 dark:border-neutral-800 pt-8">
-        <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-4">Developer Resources</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Tech Communities */}
-          <div>
-            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Tech Communities</h4>
-            <ul className="space-y-1">
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://github.com"
-                  title="GitHub - World's Leading Development Platform"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://dev.to"
-                  title="DEV Community - Developer Articles and Discussions"
-                >
-                  DEV Community
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://stackoverflow.com"
-                  title="Stack Overflow - Programming Q&A Platform"
-                >
-                  Stack Overflow
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Content Platforms */}
-          <div>
-            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Content Platforms</h4>
-            <ul className="space-y-1">
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://medium.com"
-                  title="Medium - Quality Tech Content and Articles"
-                >
-                  Medium
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://news.ycombinator.com"
-                  title="Hacker News - Tech News and Discussions"
-                >
-                  Hacker News
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://www.reddit.com/r/programming/"
-                  title="Reddit Programming - Developer Discussions"
-                >
-                  Reddit /r/programming
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Professional Networks */}
-          <div>
-            <h4 className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-2 uppercase tracking-wider">Professional Networks</h4>
-            <ul className="space-y-1">
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://towardsdatascience.com"
-                  title="Towards Data Science - AI and Machine Learning Articles"
-                >
-                  Towards Data Science
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://www.producthunt.com"
-                  title="Product Hunt - Discover New Tech Products"
-                >
-                  Product Hunt
-                </a>
-              </li>
-              <li>
-                <a
-                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  href="https://www.indiehackers.com"
-                  title="Indie Hackers - Independent Developer Community"
-                >
-                  Indie Hackers
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
 
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
-      </p>
+
+      <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-200 dark:border-gray-700">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          © {new Date().getFullYear()} ToLearn Blog. All rights reserved.
+        </p>
+        <div className="flex items-center gap-6 mt-4 md:mt-0">
+          <a
+            href="https://github.com/vercel/next.js"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="Next.js"
+          >
+            Built with Next.js
+          </a>
+          <a
+            href="https://vercel.com"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            rel="noopener noreferrer"
+            target="_blank"
+            title="Vercel"
+          >
+            Powered by Vercel
+          </a>
+        </div>
+      </div>
     </footer>
   )
 }

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section>
+    <section className="max-w-6xl mx-auto">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -72,81 +72,125 @@ export default function Page() {
           }),
         }}
       />
-      <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
-        ToLearn Blog - Professional Tech Insights
-      </h1>
-      <p className="mb-8 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-        Welcome to ToLearn Technology Blog! We focus on sharing cutting-edge programming techniques, AI artificial intelligence insights, and web development best practices.
-        Whether you're a beginner or an experienced developer, you'll find valuable in-depth technical content here.
-      </p>
+      {/* Hero Section */}
+      <div className="mb-16 py-12 -mx-4 px-4 lg:-mx-8 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 rounded-3xl">
+        <div className="text-center max-w-3xl mx-auto">
+          <h1 className="mb-6 text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+            ToLearn Blog
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-light leading-relaxed mb-8">
+            Exploring the frontiers of AI, programming, and modern web development
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+              🚀 AI Innovation
+            </span>
+            <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+              💻 Clean Code
+            </span>
+            <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+              📈 SEO Excellence
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Featured Articles Section */}
-      <section className="content-section">
-        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Featured Technical Articles</h2>
-        <div className="grid gap-6 md:grid-cols-2">
+      <section className="mb-16">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            Featured Articles
+          </h2>
+          <Link 
+            href="/blog" 
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-2 group"
+            title="View All Articles"
+          >
+            View all
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
+        </div>
+        <div className="grid gap-6 lg:grid-cols-2">
           <Link 
             href="/blog/google-ai-energy-data-disclosure"
-            className="featured-card block"
-            title="Google AI Energy Data Disclosure - Industry-First Transparency on AI Energy Consumption"
+            className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-xl"
+            title="Google AI Energy Data Disclosure"
           >
-            <h3 className="card-title text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
-              Google AI Energy Data: First Public Disclosure Shocks Industry
-            </h3>
-            <p className="card-description text-gray-600 dark:text-gray-400">
-              Google reveals AI energy consumption data for first time: 0.24 watt-hours per query. Industry transparency breakthrough impacts sustainable AI development.
-            </p>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">⚡</span>
+                <span className="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400">Energy & AI</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                Google's AI Energy Transparency Breakthrough
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                First-ever disclosure reveals 0.24 watt-hours per AI query, setting new industry standards for sustainable AI development.
+              </p>
+              <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
+                Read more
+                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
           </Link>
           
           <Link 
             href="/blog/ai-revolution-finance"
-            className="featured-card block"
-            title="AI Revolution in Finance - How Artificial Intelligence is Transforming Financial Services"
+            className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-xl"
+            title="AI Revolution in Finance"
           >
-            <h3 className="card-title text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">
-              The AI Revolution in Your Wallet: How AI is Changing Finance
-            </h3>
-            <p className="card-description text-gray-600 dark:text-gray-400">
-              Discover how artificial intelligence is being used in the world of finance, from keeping your money safe to making investing easier.
-            </p>
-          </Link>
-        </div>
-        
-        <div className="mt-8 text-center">
-          <Link 
-            href="/blog" 
-            className="btn-primary inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            title="View All Technical Articles - Complete Collection of AI Insights & Programming Tutorials"
-          >
-            View All Technical Articles →
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">💰</span>
+                <span className="text-xs uppercase tracking-wider font-semibold text-green-600 dark:text-green-400">Finance & AI</span>
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                AI Revolution in Your Wallet
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                From fraud detection to algorithmic trading, discover how AI is reshaping the financial landscape.
+              </p>
+              <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
+                Read more
+                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </div>
           </Link>
         </div>
       </section>
 
       {/* Latest Articles List */}
-      <section className="content-section">
-        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Latest Technical Articles</h2>
-        <BlogPosts />
+      <section className="mb-16">
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Latest Posts</h2>
+        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+          <BlogPosts />
+        </div>
       </section>
 
       {/* Developer Resources Section */}
-      <section className="content-section mt-16">
-        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Developer Resources</h2>
-        <p className="mb-6 text-gray-600 dark:text-gray-400">
-          Explore valuable resources for developers, data scientists, and tech enthusiasts to enhance your skills.
-        </p>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Official Documentation</h3>
-            <ul className="space-y-1 text-sm">
+      <section className="mb-16">
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Resources</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="group p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <span className="text-lg">📚</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">Documentation</h3>
+            </div>
+            <ul className="space-y-2">
               <li>
                 <a 
                   href="https://developers.google.com/community" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="Google Developers Community - Official Developer Resources and Support"
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  title="Google Developers"
                 >
-                  Google Dev Community
+                  <span className="text-xs">•</span>
+                  Google Developers
                 </a>
               </li>
               <li>
@@ -154,27 +198,34 @@ export default function Page() {
                   href="https://developer.mozilla.org/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="MDN Web Docs - Web Development Documentation"
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  title="MDN Web Docs"
                 >
+                  <span className="text-xs">•</span>
                   MDN Web Docs
                 </a>
               </li>
             </ul>
           </div>
           
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Learning Platforms</h3>
-            <ul className="space-y-1 text-sm">
+          <div className="group p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <span className="text-lg">🎓</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">Learning</h3>
+            </div>
+            <ul className="space-y-2">
               <li>
                 <a 
                   href="https://web.dev/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="Web.dev - Modern Web Development Best Practices"
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  title="Web.dev"
                 >
-                  Web.dev Best Practices
+                  <span className="text-xs">•</span>
+                  Web.dev
                 </a>
               </li>
               <li>
@@ -182,19 +233,25 @@ export default function Page() {
                   href="https://github.com/topics/artificial-intelligence" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="GitHub AI Projects - Open Source AI Resources"
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  title="GitHub AI"
                 >
-                  GitHub AI Projects
+                  <span className="text-xs">•</span>
+                  GitHub AI
                 </a>
               </li>
             </ul>
           </div>
 
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 md:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Stay Updated</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Access official documentation and trusted resources to stay current with the latest in tech, AI, and web development.
+          <div className="group p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:shadow-lg">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                <span className="text-lg">🔔</span>
+              </div>
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100">Stay Updated</h3>
+            </div>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              Access curated resources to stay ahead with the latest in AI, web development, and technology trends.
             </p>
           </div>
         </div>

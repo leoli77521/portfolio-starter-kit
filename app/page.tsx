@@ -128,43 +128,15 @@ export default function Page() {
         <BlogPosts />
       </section>
 
-      {/* Developer Communities Section */}
+      {/* Developer Resources Section */}
       <section className="content-section mt-16">
-        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Recommended Developer Communities</h2>
+        <h2 className="section-title text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-50">Developer Resources</h2>
         <p className="mb-6 text-gray-600 dark:text-gray-400">
-          Explore these valuable communities and resources for developers, data scientists, and tech enthusiasts.
+          Explore valuable resources for developers, data scientists, and tech enthusiasts to enhance your skills.
         </p>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Reddit Communities</h3>
-            <ul className="space-y-1 text-sm">
-              <li>
-                <a 
-                  href="https://www.reddit.com/r/artificial/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="Reddit Artificial Intelligence Community - Latest AI Discussions"
-                >
-                  r/artificial - AI Discussions
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://www.reddit.com/r/SEO/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                  title="Reddit SEO Community - Search Engine Optimization Tips"
-                >
-                  r/SEO - SEO Strategies
-                </a>
-              </li>
-            </ul>
-          </div>
-          
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Google Developer Resources</h3>
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Official Documentation</h3>
             <ul className="space-y-1 text-sm">
               <li>
                 <a 
@@ -177,13 +149,52 @@ export default function Page() {
                   Google Dev Community
                 </a>
               </li>
+              <li>
+                <a 
+                  href="https://developer.mozilla.org/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="MDN Web Docs - Web Development Documentation"
+                >
+                  MDN Web Docs
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Learning Platforms</h3>
+            <ul className="space-y-1 text-sm">
+              <li>
+                <a 
+                  href="https://web.dev/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="Web.dev - Modern Web Development Best Practices"
+                >
+                  Web.dev Best Practices
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://github.com/topics/artificial-intelligence" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  title="GitHub AI Projects - Open Source AI Resources"
+                >
+                  GitHub AI Projects
+                </a>
+              </li>
             </ul>
           </div>
 
           <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 md:col-span-2 lg:col-span-1">
-            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Stay Connected</h3>
+            <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Stay Updated</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Join these communities to stay updated with the latest in tech, AI, and web development.
+              Access official documentation and trusted resources to stay current with the latest in tech, AI, and web development.
             </p>
           </div>
         </div>

@@ -16,7 +16,6 @@ export default function robots() {
           '/og*', // 禁止直接访问OG图片生成端点
           '/manifest.json',
           '/_vercel/',
-          '/404', // 不索引404页面
           '/500', // 不索引500页面
           '*?*', // 禁止带查询参数的URL
         ],

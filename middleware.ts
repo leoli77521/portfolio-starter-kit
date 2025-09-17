@@ -27,20 +27,38 @@ export function middleware(request: NextRequest) {
   // Handle URL normalization and canonical redirects
   let shouldRedirect = false
   let newPathname = pathname
-  let redirectReason = ''
+  let pathAlreadyModified = false
+  const redirectReasons: string[] = []
+
+  // Strip tracking query parameters so crawlers land on canonical URLs
+  const trackingParamNames = new Set(['gclid', 'fbclid', 'msclkid', 'igshid', 'ref', 'ref_src'])
+  let removedTrackingParams = false
+  for (const paramKey of [...url.searchParams.keys()]) {
+    const lowerKey = paramKey.toLowerCase()
+    if (lowerKey.startsWith('utm_') || trackingParamNames.has(lowerKey)) {
+      url.searchParams.delete(paramKey)
+      removedTrackingParams = true
+    }
+  }
+  if (removedTrackingParams) {
+    shouldRedirect = true
+    redirectReasons.push('tracking-param-cleanup')
+  }
 
   // Remove trailing slash (except for root)
   if (pathname !== '/' && pathname.endsWith('/')) {
     newPathname = pathname.slice(0, -1)
     shouldRedirect = true
-    redirectReason = 'trailing-slash-removal'
+    pathAlreadyModified = true
+    redirectReasons.push('trailing-slash-removal')
   }
 
   // Handle double slashes
   if (pathname.includes('//')) {
     newPathname = pathname.replace(/\/+/g, '/')
     shouldRedirect = true
-    redirectReason = 'double-slash-cleanup'
+    pathAlreadyModified = true
+    redirectReasons.push('double-slash-cleanup')
   }
 
   // Handle blog URL variations with proper 301 redirects
@@ -58,14 +76,15 @@ export function middleware(request: NextRequest) {
   }
 
   // Check for exact matches first
-  if (blogRedirects[pathname]) {
+  if (!pathAlreadyModified && blogRedirects[pathname]) {
     newPathname = blogRedirects[pathname]
     shouldRedirect = true
-    redirectReason = 'url-structure-normalization'
+    pathAlreadyModified = true
+    redirectReasons.push('url-structure-normalization')
   }
 
   // Handle blog post URL variations
-  if (!shouldRedirect) {
+  if (!pathAlreadyModified) {
     const blogPostPatterns = [
       { pattern: /^\/posts\/(.+)$/, replacement: '/blog/$1', reason: 'posts-to-blog' },
       { pattern: /^\/articles\/(.+)$/, replacement: '/blog/$1', reason: 'articles-to-blog' },
@@ -80,14 +99,15 @@ export function middleware(request: NextRequest) {
       if (pattern.test(pathname)) {
         newPathname = pathname.replace(pattern, replacement)
         shouldRedirect = true
-        redirectReason = reason
+        pathAlreadyModified = true
+        redirectReasons.push(reason)
         break
       }
     }
   }
 
   // Handle category and tag redirects
-  if (!shouldRedirect) {
+  if (!pathAlreadyModified) {
     const categoryTagPatterns = [
       { pattern: /^\/blog\/category\/(.+)$/, reason: 'category-to-blog' },
       { pattern: /^\/category\/(.+)$/, reason: 'category-to-blog' },
@@ -99,14 +119,15 @@ export function middleware(request: NextRequest) {
       if (pattern.test(pathname)) {
         newPathname = '/blog'
         shouldRedirect = true
-        redirectReason = reason
+        pathAlreadyModified = true
+        redirectReasons.push(reason)
         break
       }
     }
   }
 
   // Handle WordPress and admin redirects
-  if (!shouldRedirect) {
+  if (!pathAlreadyModified) {
     const blockPatterns = [
       { pattern: /^\/wp-admin/, reason: 'wp-admin-block' },
       { pattern: /^\/wp-content/, reason: 'wp-content-block' },
@@ -120,7 +141,8 @@ export function middleware(request: NextRequest) {
       if (pattern.test(pathname)) {
         newPathname = '/'
         shouldRedirect = true
-        redirectReason = reason
+        pathAlreadyModified = true
+        redirectReasons.push(reason)
         break
       }
     }
@@ -140,7 +162,9 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
     
     // Add redirect reason for debugging
-    response.headers.set('X-Redirect-Reason', redirectReason)
+    if (redirectReasons.length > 0) {
+      response.headers.set('X-Redirect-Reason', redirectReasons.join(','))
+    }
     
     return response
   }

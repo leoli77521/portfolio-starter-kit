@@ -13,11 +13,10 @@ export default function robots() {
           '/_next/image',
           '/static/',
           '*.json',
-          '/og*', // 禁止直接访问OG图片生成端点
+          // Keep OG endpoint crawlable; control indexing via response headers
           '/manifest.json',
           '/_vercel/',
-          '/500', // 不索引500页面
-          '*?*', // 禁止带查询参数的URL
+          '/500', // Do not index the 500 error page
         ],
       },
       // Google爬虫特殊规则
@@ -33,7 +32,6 @@ export default function robots() {
           '/api/',
           '/_next/',
           '/static/',
-          '/og*',
           '*.json',
         ],
         crawlDelay: 1,
@@ -51,7 +49,6 @@ export default function robots() {
           '/api/',
           '/_next/',
           '/static/',
-          '/og*',
           '*.json',
         ],
         crawlDelay: 1,

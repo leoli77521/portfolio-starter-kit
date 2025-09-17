@@ -1,0 +1,142 @@
+﻿---
+title: "Spaces vs Tabs: Developer Ergonomics and Toolchain Reality"
+publishedAt: "2025-09-15"
+summary: "A pragmatic guide to choosing spaces or tabs in 2025 codebases, covering accessibility, diff hygiene, editor tooling, and migration tactics."
+category: "Programming"
+tags: ["code style", "developer productivity", "linting"]
+---
+
+# Spaces vs Tabs: Developer Ergonomics and Toolchain Reality
+
+*How to make a style decision that keeps code readable, inclusive, and automation-friendly*
+
+## The Debate Is Still Alive
+
+Every onboarding call still has that moment: someone asks whether the team prefers spaces or tabs and the room goes quiet. The debate is no longer ideological; the tooling we ship determines how accessible our code is, how clean our diffs look, and how predictable our automated migrations become.
+
+The goal of this guide is simple: give you a repeatable framework you can paste into your engineering handbook so that the "spaces vs tabs" question stops costing you sprint time.
+
+## Key Criteria That Should Drive the Decision
+
+1. **Accessibility requirements** - Screen readers and monospace fonts behave differently with tab stops.
+2. **Diff stability** - CI bots and reviewers prefer deterministic formatting to avoid noisy PRs.
+3. **Language ecosystem defaults** - Go, Python, and Rust toolchains all ship with opinions baked in.
+4. **Legacy footprint** - You may have tens of thousands of lines already formatted one way.
+5. **Editor support** - Developers still toggle between VS Code, JetBrains, and Vim on the same repo.
+
+## What the Toolchain Vendors Default To
+
+| Language / Ecosystem | Official Formatter | Default Indent | Override Options |
+| --- | --- | --- | --- |
+| JavaScript / TypeScript | Prettier | 2 spaces | `tabWidth`, `useTabs` |
+| Python | Black | 4 spaces | None (tabs rejected) |
+| Go | gofmt | Tabs | Rare overrides via `gofmt -tabs=false` |
+| Rust | rustfmt | 4 spaces | Unstable config required |
+| C# | dotnet-format | 4 spaces | `.editorconfig` |
+
+If you align with the ecosystem defaults, you get free upgrades every time the formatter adds a rule. Fighting the defaults means carrying custom config in perpetuity.
+
+## Accessibility and Screen Reader Considerations
+
+- Tabs render at variable widths depending on user settings. This is great for power users but confusing for screen readers that expect uniform spacing.
+- Spaces provide deterministic layout for Braille displays and speech synthesis because each space is announced consistently.
+- For mixed-ability teams, the safest choice is spaces for indentation and tabs reserved for alignment in data tables where flexibility matters.
+
+## Diff Hygiene: How Reviewers Experience Your Choice
+
+Consider a TypeScript file where a developer adds two guard clauses. With tabs configured at 4 spaces, a reviewer using an 80-column Git console might see the entire diff realign. Spaces keep the diff localized.
+
+```typescript
+if (!user?.profile) {
+  return redirect('/login')
+}
+
+if (!user.isOnboarded) {
+  return redirect('/welcome')
+}
+```
+
+The snippet above with spaces produces a tiny diff because every formatter agrees on the exact number of characters. Tabs often widen or shrink based on local editor settings, producing "phantom" changes on unrelated lines.
+
+## The Hybrid Pattern That Works in 2025
+
+A practical compromise adopted by many product teams:
+
+- **Indentation:** Use spaces (2 or 4) enforced by your formatter.
+- **Alignment:** Allow tabs only in Makefiles, Go code, or data tables where alignment is semantically significant.
+- **Automation:** Add `.editorconfig` plus formatter scripts so no human commits whitespace manually.
+
+### Example `.editorconfig`
+
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false
+```
+
+## Migration Playbook for Legacy Repositories
+
+1. **Pick a formatter** that understands your language (Prettier, rustfmt, clang-format, etc.).
+2. **Generate a baseline diff** on the main branch and tag it `style-migration-base` so future blame sessions have a checkpoint.
+3. **Run the formatter once** across the entire repo. Commit with a message like `chore: normalize whitespace`.
+4. **Enable CI enforcement** using a lint job. Example GitHub Action:
+
+```yaml
+name: formatting
+on: [pull_request]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run lint:format
+```
+
+5. **Document the decision** in your engineering handbook so new hires do not resurrect the debate.
+
+## When Tabs Are Non-Negotiable
+
+- **Go projects** - `gofmt` outputs tabs; fighting this means maintaining a forked formatter.
+- **Makefiles** - The syntax requires a literal tab for recipe lines; spaces throw runtime errors.
+- **Kernel or firmware codebases** where alignment with hardware docs matters.
+
+Use `.editorconfig` overrides so the exception lives at the file-type level rather than tribal knowledge.
+
+## Decision Matrix for Your Team
+
+| Constraint | Choose Spaces If... | Choose Tabs If... |
+| --- | --- | --- |
+| Mixed language monorepo | Majority favors spaces | Majority is Go / Make |
+| Contributors on screen readers | Accessibility is priority | Team can guarantee tab-friendly tooling |
+| CI formatting | Formatter defaults to spaces | Formatter outputs tabs |
+| Git history stability | You want consistent blame lines | Tab width differences are acceptable |
+
+## Implementation Checklist
+
+- [ ] Agree on indent size (2 vs 4) in writing.
+- [ ] Commit `.editorconfig` and format scripts.
+- [ ] Add a CI guard that fails on whitespace drift.
+- [ ] Document exceptions (Go, Makefile) directly in the repo README.
+- [ ] Run a one-time migration and tag the commit.
+
+## TL;DR for Your Playbook
+
+Spaces deliver predictability, accessibility, and clean diffs. Tabs remain essential in a handful of ecosystems. The most sustainable policy is to follow formatter defaults, encode the decision in automation, and never rely on individual editor settings again.
+
+Before your next retro, copy this article into your internal wiki and make the decision explicit. The flame war ends when the lint job runs.

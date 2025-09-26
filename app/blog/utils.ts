@@ -10,6 +10,25 @@ type Metadata = {
   tags?: string[]
 }
 
+const slugAliasMappings: Record<string, string> = {
+  'seo': 'seo-optimization-guide',
+}
+
+export function resolveBlogSlug(requestedSlug: string) {
+  const trimmedSlug = requestedSlug.trim()
+  if (!trimmedSlug) {
+    return trimmedSlug
+  }
+
+  const directMatch = slugAliasMappings[trimmedSlug]
+  if (directMatch) {
+    return directMatch
+  }
+
+  const lowerCased = trimmedSlug.toLowerCase()
+  return slugAliasMappings[lowerCased] || lowerCased
+}
+
 function parseFrontmatter(fileContent: string) {
   let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
   let match = frontmatterRegex.exec(fileContent)

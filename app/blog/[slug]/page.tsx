@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { formatDate, getBlogPosts, resolveBlogSlug } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
@@ -16,20 +16,22 @@ export async function generateStaticParams() {
 
 export function generateMetadata({ params }): Metadata {
   const allPosts = getBlogPosts()
-  
-  // 首先尝试直接匹配
-  let post = allPosts.find((post) => post.slug === params.slug)
-  
-  // 如果直接匹配失败，尝试解码后匹配
+  const requestedSlug = params.slug
+  const normalizedSlug = resolveBlogSlug(requestedSlug)
+
+  // 标准化 slug，兼容旧的 /blog/SEO 等链接
+  let post = allPosts.find((post) => post.slug === normalizedSlug)
+
   if (!post) {
     try {
-      const decodedSlug = decodeURIComponent(params.slug)
-      post = allPosts.find((post) => post.slug === decodedSlug)
+      const decodedSlug = decodeURIComponent(requestedSlug)
+      const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
+      post = allPosts.find((post) => post.slug === decodedNormalizedSlug)
     } catch (e) {
-      // 解码失败，保持 post 为 undefined
+      // 解码失败，保留 post 为 undefined
     }
   }
-  
+
   if (!post) {
     return {}
   }
@@ -150,22 +152,27 @@ export function generateMetadata({ params }): Metadata {
 
 export default function Blog({ params }) {
   const allPosts = getBlogPosts()
-  
-  // 首先尝试直接匹配
-  let post = allPosts.find((post) => post.slug === params.slug)
-  
-  // 如果直接匹配失败，尝试解码后匹配
+  const requestedSlug = params.slug
+  const normalizedSlug = resolveBlogSlug(requestedSlug)
+
+  // 标准化 slug，兼容旧的 /blog/SEO 等链接
+  let post = allPosts.find((post) => post.slug === normalizedSlug)
+
+  if (post && requestedSlug !== post.slug) {
+    redirect(`/blog/${post.slug}`)
+  }
+
   if (!post) {
     try {
-      const decodedSlug = decodeURIComponent(params.slug)
-      post = allPosts.find((post) => post.slug === decodedSlug)
-      
-      // 如果找到了文章但URL是编码的，重定向到标准化的URL
-      if (post && params.slug !== decodedSlug) {
+      const decodedSlug = decodeURIComponent(requestedSlug)
+      const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
+      post = allPosts.find((post) => post.slug === decodedNormalizedSlug)
+
+      if (post && requestedSlug !== post.slug) {
         redirect(`/blog/${post.slug}`)
       }
     } catch (e) {
-      // 解码失败，保持 post 为 undefined
+      // 解码失败，保留 post 为 undefined
     }
   }
 

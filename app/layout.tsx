@@ -1,7 +1,6 @@
 import './global.css'
 import type { Metadata, Viewport } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { inter, jetBrainsMono } from './fonts'
 import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -93,8 +92,8 @@ export default function RootLayout({
       lang="en"
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
-        GeistSans.variable,
-        GeistMono.variable
+        inter.variable,
+        jetBrainsMono.variable
       )}
     >
       <head>
@@ -107,7 +106,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <GoogleAdSense />
       </head>
-      <body className="antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12">\
+      <body className={cx('antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>
         <GoogleAnalytics />
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />

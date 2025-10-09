@@ -117,6 +117,14 @@ export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
 }
 
+export function calculateReadingTime(content: string): number {
+  // 平均阅读速度：每分钟200-250个单词
+  const wordsPerMinute = 225
+  const words = content.trim().split(/\s+/).length
+  const minutes = Math.ceil(words / wordsPerMinute)
+  return minutes
+}
+
 export function formatDate(date: string, includeRelative = false) {
   // 处理无效日期
   if (!date || typeof date !== 'string') {
@@ -124,15 +132,15 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   let currentDate = new Date()
-  
+
   // 标准化日期格式
   let normalizedDate = date
   if (!date.includes('T')) {
     normalizedDate = `${date}T00:00:00`
   }
-  
+
   let targetDate = new Date(normalizedDate)
-  
+
   // 检查日期是否有效
   if (isNaN(targetDate.getTime())) {
     // 尝试其他日期格式
@@ -147,7 +155,7 @@ export function formatDate(date: string, includeRelative = false) {
   let daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
 
   let formattedDate = ''
-  
+
   if (daysDiff < 0) {
     formattedDate = 'Future'
   } else if (daysDiff === 0) {

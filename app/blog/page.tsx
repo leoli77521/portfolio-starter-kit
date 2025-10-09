@@ -1,6 +1,7 @@
-import { BlogPosts } from 'app/components/posts'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
+import { getBlogPosts } from 'app/blog/utils'
+import { PostsWithFilter } from 'app/components/posts-with-filter'
 
 export const metadata: Metadata = {
   title: 'Tech Blog - AI Insights & Programming Tutorials',
@@ -18,6 +19,8 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+  const posts = getBlogPosts()
+
   return (
     <section className="max-w-6xl mx-auto">
       {/* Breadcrumb navigation */}
@@ -32,7 +35,7 @@ export default function Page() {
           <li className="text-gray-900 dark:text-gray-100 font-medium">Tech Blog</li>
         </ol>
       </nav>
-      
+
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -69,15 +72,13 @@ export default function Page() {
           Tech Blog
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
-          Explore cutting-edge insights on AI, programming, and web development. 
+          Explore cutting-edge insights on AI, programming, and web development.
           Stay ahead with our expert tutorials and industry analysis.
         </p>
       </div>
-      
-      {/* Blog Posts Grid */}
-      <div className="grid gap-8">
-        <BlogPosts />
-      </div>
+
+      {/* Blog Posts with Category Filter */}
+      <PostsWithFilter posts={posts} />
     </section>
   )
 }

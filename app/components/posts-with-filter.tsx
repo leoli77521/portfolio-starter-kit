@@ -158,7 +158,7 @@ export function PostsWithFilter({ posts }: PostsWithFilterProps) {
                           className="text-gray-500 dark:text-gray-400 text-sm font-medium tabular-nums shrink-0 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full"
                           dateTime={post.metadata.publishedAt}
                         >
-                          {formatDate(post.metadata.publishedAt, false)}
+                          {formatDate(post.metadata.publishedAt)}
                         </time>
                       </div>
 

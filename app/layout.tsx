@@ -102,13 +102,26 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
-        <link rel="icon" href="/favicon.ico" />
+
+        {/* 资源提示优化 - 预连接到关键域名 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+
+        {/* 图标优化 */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
         <GoogleAdSense />
       </head>
       <body className={cx('antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>
+        <a href="#main-content" className="skip-to-content">
+          Skip to main content
+        </a>
         <GoogleAnalytics />
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+        <main id="main-content" className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0" role="main">
           <Navbar />
           {children}
           <Footer />

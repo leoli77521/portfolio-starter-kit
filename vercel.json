@@ -12,19 +12,16 @@
         }
       ],
       "destination": "https://tolearn.blog/:path*",
-      "permanent": true,
       "statusCode": 308
     },
     {
       "source": "/sitemap",
       "destination": "/sitemap.xml",
-      "permanent": true,
       "statusCode": 308
     },
     {
       "source": "/index.:ext(html|php|htm)",
       "destination": "/",
-      "permanent": true,
       "statusCode": 308
     }
   ],

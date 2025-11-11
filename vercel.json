@@ -4,7 +4,7 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path((?!api/).*)",
+      "source": "/:path*",
       "has": [
         {
           "type": "host",

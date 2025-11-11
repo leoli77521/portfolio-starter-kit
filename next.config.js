@@ -26,68 +26,17 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
-  // SEO 优化
+  // SEO 优化 - Headers 已移至 vercel.json 避免重复配置
+  // 仅保留 Next.js 特定的 headers
   headers: async () => {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains',
-          },
-        ],
-      },
-    ]
+    return []
   },
-  // 重定向配置 - 仅保留域名级别和特殊案例的重定向
+  // 重定向配置已移至 vercel.json 避免双重跳转
+  // Next.js 层面只保留应用逻辑相关的重定向
   redirects: async () => {
     return [
-      // 重定向 www 到非 www (域名级别，middleware无法处理)
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.tolearn.blog' }],
-        destination: 'https://tolearn.blog/:path*',
-        permanent: true,
-      },
-      // 处理特殊的静态文件重定向
-      {
-        source: '/sitemap',
-        destination: '/sitemap.xml',
-        permanent: true,
-      },
-      // 处理文件扩展名的特殊情况
-      {
-        source: '/index.html',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/index.php',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/index.htm',
-        destination: '/',
-        permanent: true,
-      }
+      // 其他应用级别的重定向可以在这里添加
+      // 例如：旧路由到新路由的映射
     ]
   },
 }

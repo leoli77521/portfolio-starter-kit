@@ -15,7 +15,9 @@
       "Bash(git push:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nSEO: Optimize 8 blog titles to 60 characters or under\n\nReduced title lengths for better SERP display and mobile optimization:\n- AI-Revolution-American-Workplaces.mdx: 62 → 52 chars\n- 2025-08-15-ai-content-pipeline-seo.mdx: 62 → 54 chars  \n- AI-Search-vs-Traditional-Search-Reliability.mdx: 61 → 52 chars\n- google-ai-energy-data-disclosure.mdx: 62 → 54 chars\n- spaces-vs-tabs.mdx: 62 → 52 chars\n- claude-ai-now-executes-code.mdx: 61 → 58 chars\n- emerging-ai-development-trends-2025.mdx: 61 → 56 chars\n- ai-agents-production-guide.mdx: 61 → 58 chars\n\nAll titles now meet SEO best practices (≤60 characters)\nImproves title display on Google SERP and mobile devices\nMaintains keyword relevance while removing redundant words\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(vercel:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

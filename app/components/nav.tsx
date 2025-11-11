@@ -1,4 +1,10 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { MobileMenu } from './mobile-menu'
+import { Search } from './search'
+import { ThemeToggle } from './theme-toggle'
 
 const navItems = {
   '/': {
@@ -6,8 +12,20 @@ const navItems = {
     title: 'ToLearn Blog Homepage - AI Tech Hub & Programming Tutorials',
   },
   '/blog': {
-    name: 'Tech Blog',
+    name: 'Blog',
     title: 'Tech Blog - Latest AI Insights & Programming Tutorials',
+  },
+  '/categories': {
+    name: 'Categories',
+    title: 'Browse Articles by Category',
+  },
+  '/tags': {
+    name: 'Tags',
+    title: 'Browse Articles by Tags',
+  },
+  '/about': {
+    name: 'About',
+    title: 'About ToLearn Blog',
   },
 }
 
@@ -20,13 +38,13 @@ const featuredArticles = [
     title: 'Gemini Deep Thinking API - Build Advanced Math Reasoning Applications'
   },
   {
-    href: '/blog/seo-optimization-guide',
-    name: 'SEO Guide',
-    description: 'Complete website optimization tutorial',
-    title: 'SEO Optimization Guide - Complete Website Optimization Tutorial'
+    href: '/blog/verbose-ai-beats-fast-ai-moonshot-k2',
+    name: 'Verbose AI vs Fast AI',
+    description: 'Moonshot K2 paradox explained',
+    title: 'Verbose AI Beats Fast AI: Moonshot K2 $1,172 Paradox'
   },
   {
-    href: '/blog/ai-revolution-finance', 
+    href: '/blog/ai-revolution-finance',
     name: 'AI Finance Revolution',
     description: 'How AI is changing finance',
     title: 'AI Revolution in Finance - How AI is Transforming Financial Services'
@@ -34,36 +52,65 @@ const featuredArticles = [
 ]
 
 export function Navbar() {
+  const pathname = usePathname()
+
   return (
     <header className="mb-16" role="banner">
       <div className="sticky top-0 z-50 -mx-4 px-4 lg:mx-0 lg:px-0 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-700/50">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4">
+          {/* Logo */}
           <Link
             href="/"
-            className="font-black text-2xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-300 dark:hover:to-purple-300 transition-all duration-200"
+            className="flex items-center gap-2 font-black text-2xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-300 dark:hover:to-purple-300 transition-all duration-200"
             title="ToLearn Blog Homepage"
             aria-label="ToLearn Blog - Go to homepage"
           >
-            ToLearn
+            <span className="text-3xl" aria-hidden="true">🎓</span>
+            <span>ToLearn</span>
           </Link>
-          <nav className="flex items-center gap-2" role="navigation" aria-label="Main navigation">
-            {Object.entries(navItems).map(([path, { name, title }]) => (
-              <Link
-                key={path}
-                href={path}
-                className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-                title={title}
-                aria-label={title}
-              >
-                {name}
-              </Link>
-            ))}
+
+          {/* 桌面端导航 */}
+          <nav className="hidden md:flex items-center gap-2" role="navigation" aria-label="Main navigation">
+            {Object.entries(navItems).map(([path, { name, title }]) => {
+              const isActive = pathname === path
+              return (
+                <Link
+                  key={path}
+                  href={path}
+                  className={`px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-200 ${
+                    isActive
+                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white shadow-md'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                  title={title}
+                  aria-label={title}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {name}
+                </Link>
+              )
+            })}
           </nav>
+
+          {/* 右侧工具栏 */}
+          <div className="flex items-center gap-2">
+            {/* 搜索按钮 */}
+            <Search />
+
+            {/* 主题切换按钮 */}
+            <ThemeToggle />
+
+            {/* 移动端菜单 */}
+            <MobileMenu navItems={navItems} />
+          </div>
         </div>
       </div>
 
+      {/* Featured Articles Quick Access - 仅桌面端显示 */}
       <nav className="hidden md:flex flex-wrap items-center gap-3 mt-6 max-w-6xl mx-auto" role="navigation" aria-label="Featured articles quick access">
-        <span className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-gray-400 mr-2" aria-hidden="true">Quick Access:</span>
+        <span className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-gray-400 mr-2" aria-hidden="true">
+          Quick Access:
+        </span>
         {featuredArticles.map((article) => (
           <Link
             key={article.href}
@@ -73,7 +120,9 @@ export function Navbar() {
             aria-label={`Read article: ${article.name} - ${article.description}`}
           >
             <span className="font-semibold">{article.name}</span>
-            <span className="text-gray-500 dark:text-gray-400 text-xs hidden lg:inline" aria-hidden="true">{article.description}</span>
+            <span className="text-gray-500 dark:text-gray-400 text-xs hidden lg:inline" aria-hidden="true">
+              {article.description}
+            </span>
           </Link>
         ))}
       </nav>

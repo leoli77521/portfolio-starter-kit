@@ -5,6 +5,7 @@ import { formatDate, getBlogPosts, resolveBlogSlug } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
+import { InArticleAd } from 'app/components/AdUnit'
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
@@ -269,6 +270,9 @@ export default function Blog({ params }: { params: { slug: string } }) {
       <article className="prose">
         <CustomMDX source={post.content} />
       </article>
+
+      {/* Google AdSense - In-Article Ad */}
+      <InArticleAd slot="1234567890" />
 
       {/* Social Share Component */}
       <SocialShare 

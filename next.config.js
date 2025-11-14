@@ -4,8 +4,6 @@ const nextConfig = {
   trailingSlash: false,
   // 压缩配置
   compress: true,
-  // SWC 最小化
-  swcMinify: true,
   // 生产环境移除 console
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {

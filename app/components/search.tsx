@@ -18,9 +18,12 @@ export function Search() {
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 加载所有文章（通过 API）
+  // 懒加载：仅在打开搜索框时加载文章
   useEffect(() => {
     async function loadPosts() {
+      // 如果已加载或未打开搜索，则跳过
+      if (allPosts.length > 0 || !isOpen) return
+
       try {
         const response = await fetch('/api/search')
         if (response.ok) {
@@ -32,7 +35,7 @@ export function Search() {
       }
     }
     loadPosts()
-  }, [])
+  }, [isOpen, allPosts.length])
 
   // 处理搜索
   useEffect(() => {

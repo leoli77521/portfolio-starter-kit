@@ -48,28 +48,30 @@ function parseFrontmatter(fileContent: string) {
       try {
         // 如果是JSON数组格式，直接解析
         if (value.startsWith('[') && value.endsWith(']')) {
-          metadata[trimmedKey] = JSON.parse(value) as any
+          const parsed = JSON.parse(value)
+          metadata[trimmedKey] = Array.isArray(parsed) ? parsed : [String(parsed)]
         } else {
           // 否则按逗号分割
-          metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
+          metadata[trimmedKey] = value.split(',').map(tag => tag.trim())
         }
       } catch (e) {
         // 如果解析失败，按逗号分割
-        metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
+        metadata[trimmedKey] = value.split(',').map(tag => tag.trim())
       }
     } else {
-      metadata[trimmedKey] = value as any
+      // Cast to string for other metadata fields
+      metadata[trimmedKey] = value as string & Metadata[keyof Metadata]
     }
   })
 
   return { metadata: metadata as Metadata, content }
 }
 
-function getMDXFiles(dir) {
+function getMDXFiles(dir: string): string[] {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
 }
 
-function readMDXFile(filePath) {
+function readMDXFile(filePath: string) {
   let rawContent = fs.readFileSync(filePath, 'utf-8')
   return parseFrontmatter(rawContent)
 }
@@ -99,7 +101,7 @@ function createCleanSlug(filename: string): string {
     .replace(/^-|-$/g, '') // 移除开头和结尾的连字符
 }
 
-function getMDXData(dir) {
+function getMDXData(dir: string) {
   let mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
     let { metadata, content } = readMDXFile(path.join(dir, file))

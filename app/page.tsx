@@ -64,9 +64,9 @@ export default function Page() {
               url: baseUrl,
               logo: {
                 '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
-                width: 150,
-                height: 150
+                url: `${baseUrl}/favicon.ico`,
+                width: 32,
+                height: 32
               }
             }
           }),
@@ -83,13 +83,13 @@ export default function Page() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-              🚀 AI Innovation
+              <span aria-hidden="true">🚀</span> AI Innovation
             </span>
             <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-              💻 Clean Code
+              <span aria-hidden="true">💻</span> Clean Code
             </span>
             <span className="px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-              📈 SEO Excellence
+              <span aria-hidden="true">📈</span> SEO Excellence
             </span>
           </div>
         </div>

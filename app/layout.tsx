@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
     images: [{
-      url: `${baseUrl}/og-image.jpg`,
+      url: `${baseUrl}/og?title=${encodeURIComponent('ToLearn Blog - AI, SEO & Programming Tutorials')}`,
       width: 1200,
       height: 630,
       alt: 'ToLearn Blog - Professional Technology Blog'
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ToLearn Blog - AI, SEO & Programming Tutorials',
     description: 'Discover cutting-edge AI tools, proven SEO techniques, and modern programming best practices. Elevate your development skills with ToLearn.',
-    images: [`${baseUrl}/og-image.jpg`],
+    images: [`${baseUrl}/og?title=${encodeURIComponent('ToLearn Blog - AI, SEO & Programming Tutorials')}`],
   },
   robots: {
     index: true,
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+const cx = (...classes: (string | boolean | undefined | null)[]) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,
@@ -104,8 +104,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
 
         {/* 资源提示优化 - 预连接到关键域名 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />

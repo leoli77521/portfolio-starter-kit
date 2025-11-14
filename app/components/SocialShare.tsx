@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, memo } from 'react'
 import { 
   Twitter, 
   Facebook, 
@@ -28,15 +28,15 @@ interface SocialShareProps {
   summary: string
 }
 
-export function SocialShare({ title, url, summary }: SocialShareProps) {
+export const SocialShare = memo(function SocialShare({ title, url, summary }: SocialShareProps) {
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [isSharing, setIsSharing] = useState(false)
 
-  const shareData: ShareData = { title, url, summary }
+  const shareData: ShareData = useMemo(() => ({ title, url, summary }), [title, url, summary])
 
-  // Generate QR code for WeChat sharing
+  // Generate QR code for WeChat sharing - memoized to prevent regeneration
   useEffect(() => {
     if (showQR && !qrCodeUrl) {
       const generateQR = async () => {
@@ -294,4 +294,4 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
       </div>
     </div>
   )
-}
+})

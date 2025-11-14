@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { memo } from 'react'
 
-export function BlogPosts() {
+export const BlogPosts = memo(function BlogPosts() {
   let allBlogs = getBlogPosts()
 
   const truncateSummary = (summary: string, maxLength: number = 160) => {
@@ -60,4 +61,4 @@ export function BlogPosts() {
         ))}
     </div>
   )
-}
+})

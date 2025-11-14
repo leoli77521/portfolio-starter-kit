@@ -14,7 +14,7 @@ export async function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }): Metadata {
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
@@ -150,7 +150,7 @@ export function generateMetadata({ params }): Metadata {
   }
 }
 
-export default function Blog({ params }) {
+export default function Blog({ params }: { params: { slug: string } }) {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
@@ -222,7 +222,7 @@ export default function Blog({ params }) {
               name: 'ToLearn Blog',
               logo: {
                 '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
+                url: `${baseUrl}/favicon.ico`,
                 width: 150,
                 height: 150
               }

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 
 const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-const ADSENSE_CLIENT = 'ca-pub-8944496077703633'
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_ID || ''
 const USER_INTERACTION_EVENTS: Array<[keyof DocumentEventMap, AddEventListenerOptions]> = [
   ['pointerdown', { once: true }],
   ['keydown', { once: true }],
@@ -34,7 +34,8 @@ const injectScript = () => {
 
 const GoogleAdSense = () => {
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    // Don't load if AdSense ID is not configured
+    if (typeof window === 'undefined' || !ADSENSE_CLIENT) {
       return
     }
 

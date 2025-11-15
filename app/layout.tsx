@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import GoogleAnalytics from './components/google-analytics'
 import GoogleAdSense from './components/google-adsense'
+import PlausibleAnalytics from './components/plausible-analytics'
 import { baseUrl } from './sitemap'
 
 export const viewport: Viewport = {
@@ -121,6 +122,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <GoogleAnalytics />
+        <PlausibleAnalytics />
         <main id="main-content" className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0" role="main">
           <Navbar />
           {children}

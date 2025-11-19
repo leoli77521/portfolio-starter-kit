@@ -91,6 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
         inter.variable,
@@ -115,6 +116,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('theme'),m=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&m)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})()`
+          }}
+        />
         <GoogleAdSense />
       </head>
       <body className={cx('antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>

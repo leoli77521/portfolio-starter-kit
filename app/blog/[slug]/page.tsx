@@ -57,7 +57,7 @@ export function generateMetadata({ params }): Metadata {
     if (!summary || typeof summary !== 'string') {
       summary = 'Professional technology insights and practical solutions.'
     }
-    
+
     const suffixes = {
       'ai technology': ' | Expert AI insights and practical implementation strategies.',
       'ai & seo': ' | Expert AI insights and practical implementation strategies.',
@@ -65,41 +65,41 @@ export function generateMetadata({ params }): Metadata {
       'programming': ' | In-depth programming tutorials and development best practices.',
       'web development': ' | In-depth programming tutorials and development best practices.'
     }
-    
+
     const suffix = suffixes[category?.toLowerCase()] || ' | Professional tech insights and optimization strategies.'
     const maxSummaryLength = 160 - suffix.length
-    
-    const truncatedSummary = summary.length > maxSummaryLength 
+
+    const truncatedSummary = summary.length > maxSummaryLength
       ? summary.substring(0, maxSummaryLength - 3) + '...'
       : summary
-    
+
     return truncatedSummary + suffix
   }
-  
+
   const optimizedDescription = getCategorySpecificDescription(post.metadata.category, description)
-  
+
   // Optimize title length for SEO (50-60 chars)
   const getOptimizedTitle = (originalTitle) => {
     // 确保 title 存在
     if (!originalTitle || typeof originalTitle !== 'string') {
       originalTitle = 'Tech Article'
     }
-    
+
     const suffix = ' | ToLearn Blog'
     const maxLength = 60 - suffix.length // 46 chars for main title
-    
+
     if (originalTitle.length <= maxLength) {
       return `${originalTitle}${suffix}`
     }
-    
+
     // Smart truncation at word boundaries
     const truncated = originalTitle.substring(0, maxLength)
     const lastSpace = truncated.lastIndexOf(' ')
     const finalTitle = lastSpace > 30 ? truncated.substring(0, lastSpace) : truncated
-    
+
     return `${finalTitle}${suffix}`
   }
-  
+
   return {
     title: getOptimizedTitle(title),
     description: optimizedDescription,
@@ -240,7 +240,7 @@ export default function Blog({ params }) {
           }),
         }}
       />
-      
+
       {/* Breadcrumb navigation */}
       <nav className="mb-6 text-sm" aria-label="Breadcrumb navigation">
         <ol className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
@@ -254,9 +254,9 @@ export default function Blog({ params }) {
         </ol>
       </nav>
 
-      <div className="title font-semibold text-2xl tracking-tighter mb-2 text-neutral-900 dark:text-neutral-100">
+      <h1 className="title font-semibold text-2xl tracking-tighter mb-2 text-neutral-900 dark:text-neutral-100">
         {post.metadata.title}
-      </div>
+      </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {formatDate(post.metadata.publishedAt)}
@@ -275,7 +275,7 @@ export default function Blog({ params }) {
       <InArticleAd slot="YOUR_AD_SLOT_ID" />
 
       {/* Social Share Component */}
-      <SocialShare 
+      <SocialShare
         title={post.metadata.title}
         url={`${baseUrl}/blog/${cleanSlug}`}
         summary={post.metadata.summary}

@@ -30,8 +30,6 @@ export default function robots() {
         ],
         disallow: [
           '/api/',
-          '/_next/',
-          '/static/',
           '*.json',
         ],
         crawlDelay: 1,
@@ -47,8 +45,6 @@ export default function robots() {
         ],
         disallow: [
           '/api/',
-          '/_next/',
-          '/static/',
           '*.json',
         ],
         crawlDelay: 1,

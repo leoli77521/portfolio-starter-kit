@@ -43,7 +43,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
     if (headings.length === 0) return null
 
     return (
-        <nav className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto hidden xl:block w-64">
+        <nav className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto hidden lg:block w-64">
             <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 uppercase tracking-wider">
                 On this page
             </h4>
@@ -63,8 +63,8 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
                                 setActiveId(heading.slug)
                             }}
                             className={`block transition-colors duration-200 border-l-2 pl-4 ${activeId === heading.slug
-                                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
-                                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700'
+                                ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
+                                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700'
                                 }`}
                         >
                             {heading.text}

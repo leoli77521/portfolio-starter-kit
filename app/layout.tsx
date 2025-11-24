@@ -123,7 +123,7 @@ export default function RootLayout({
         />
         <GoogleAdSense />
       </head>
-      <body className={cx('antialiased max-w-5xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>
+      <body className={cx('antialiased max-w-7xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>
         <a href="#main-content" className="skip-to-content">
           Skip to main content
         </a>

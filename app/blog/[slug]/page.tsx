@@ -291,7 +291,7 @@ export default function Blog({ params }) {
         </article>
 
         {/* Sidebar Table of Contents */}
-        <aside className="hidden xl:block w-64 shrink-0">
+        <aside className="hidden lg:block w-64 shrink-0">
           <div className="sticky top-24">
             <TableOfContents headings={headings} />
           </div>

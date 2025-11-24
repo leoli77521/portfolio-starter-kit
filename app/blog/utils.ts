@@ -41,7 +41,7 @@ function parseFrontmatter(fileContent: string) {
     let [key, ...valueArr] = line.split(': ')
     let value = valueArr.join(': ').trim()
     value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
-    
+
     const trimmedKey = key.trim() as keyof Metadata
     if (trimmedKey === 'tags') {
       // 处理标签数组，支持JSON数组格式
@@ -77,7 +77,7 @@ function readMDXFile(filePath) {
 function createCleanSlug(filename: string): string {
   // 移除文件扩展名
   let slug = path.basename(filename, path.extname(filename))
-  
+
   // 对于特殊文件名，创建SEO友好的URL
   const slugMappings: { [key: string]: string } = {
     'SEO': 'seo-optimization-guide',
@@ -85,12 +85,12 @@ function createCleanSlug(filename: string): string {
     'AI-Revolution-Finance': 'ai-revolution-finance',
     'AI-Revolution-American-Workplaces': 'ai-revolution-american-workplaces'
   }
-  
+
   // 如果有自定义映射，使用映射值
   if (slugMappings[slug]) {
     return slugMappings[slug]
   }
-  
+
   // 否则进行标准化处理
   return slug
     .toLowerCase()
@@ -181,4 +181,56 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   return `${fullDate} (${formattedDate})`
+}
+
+export type Heading = {
+  level: number
+  text: string
+  slug: string
+}
+
+function slugify(str: string) {
+  return str
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, '-and-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+}
+
+export function getHeadings(content: string): Heading[] {
+  // Match headings: # Heading, ## Heading, etc.
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm
+  const headings: Heading[] = []
+
+  const lines = content.split('\n')
+  let inCodeBlock = false
+
+  lines.forEach(line => {
+    if (line.trim().startsWith('```')) {
+      inCodeBlock = !inCodeBlock
+      return
+    }
+
+    if (inCodeBlock) return
+
+    const match = headingRegex.exec(line)
+    // Reset lastIndex because we are calling exec on different strings (lines) 
+    // actually regex.exec on a string without global flag or with new string doesn't use lastIndex like that, 
+    // but since we are iterating lines, we can just use string.match or regex.exec.
+    // However, since we defined headingRegex with 'g' and outside the loop, we need to be careful.
+    // Better to use line.match for simple line check.
+
+    const lineMatch = line.match(/^(#{1,6})\s+(.+)$/)
+    if (lineMatch) {
+      const level = lineMatch[1].length
+      const text = lineMatch[2].trim()
+      const slug = slugify(text)
+      headings.push({ level, text, slug })
+    }
+  })
+
+  return headings
 }

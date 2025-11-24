@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts, resolveBlogSlug } from 'app/blog/utils'
+import { TableOfContents } from 'app/components/toc'
+import { formatDate, getBlogPosts, resolveBlogSlug, getHeadings } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
@@ -182,6 +183,7 @@ export default function Blog({ params }) {
   }
 
   const cleanSlug = post.slug
+  const headings = getHeadings(post.content)
 
   // 准备相关文章数据
   const relatedPostsData = allPosts.map(p => ({
@@ -267,22 +269,39 @@ export default function Blog({ params }) {
           </span>
         )}
       </div>
-      <article className="prose">
-        <CustomMDX source={post.content} />
-      </article>
 
-      {/* Google AdSense - 文章底部广告 */}
-      <InArticleAd slot="YOUR_AD_SLOT_ID" />
+      <div className="flex gap-12">
+        {/* Main Content */}
+        <article className="prose flex-1 min-w-0">
+          <CustomMDX source={post.content} />
 
-      {/* Social Share Component */}
-      <SocialShare
-        title={post.metadata.title}
-        url={`${baseUrl}/blog/${cleanSlug}`}
-        summary={post.metadata.summary}
-      />
+          {/* Google AdSense - 文章底部广告 */}
+          <div className="mt-8">
+            <InArticleAd slot="YOUR_AD_SLOT_ID" />
+          </div>
+
+          {/* Social Share Component */}
+          <div className="mt-8">
+            <SocialShare
+              title={post.metadata.title}
+              url={`${baseUrl}/blog/${cleanSlug}`}
+              summary={post.metadata.summary}
+            />
+          </div>
+        </article>
+
+        {/* Sidebar Table of Contents */}
+        <aside className="hidden xl:block w-64 shrink-0">
+          <div className="sticky top-24">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      </div>
 
       {/* Related articles recommendation */}
-      <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
+      <div className="mt-16">
+        <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
+      </div>
     </section>
   )
 }

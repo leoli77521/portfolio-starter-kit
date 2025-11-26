@@ -101,6 +101,40 @@ export default function Footer() {
           </ul>
         </div>
 
+        {/* Legal */}
+        <div>
+          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Legal</h3>
+          <ul className="space-y-2">
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/privacy"
+                title="Privacy Policy"
+              >
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/terms"
+                title="Terms of Service"
+              >
+                Terms of Service
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/contact"
+                title="Contact Us"
+              >
+                Contact Us
+              </a>
+            </li>
+          </ul>
+        </div>
+
         {/* Connect */}
         <div>
           <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Stay Connected</h3>

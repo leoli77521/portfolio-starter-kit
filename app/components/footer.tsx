@@ -43,6 +43,15 @@ export default function Footer() {
             <li>
               <a
                 className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                href="/about"
+                title="About Us"
+              >
+                About Us
+              </a>
+            </li>
+            <li>
+              <a
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                 href="/blog"
                 title="Blog"
               >

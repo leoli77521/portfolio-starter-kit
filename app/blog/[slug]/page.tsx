@@ -199,7 +199,7 @@ export default function Blog({ params }) {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: JSON.stringify([{
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: post.metadata.title,

@@ -16,6 +16,21 @@ export default function ContactPage() {
                         We'd love to hear from you. Whether you have a question about our tutorials, need assistance, or just want to talk about AI and tech, we are here to help.
                     </p>
 
+                    <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">📧</span>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Email</h3>
+                                <p className="text-gray-600 dark:text-gray-400">lileo16881533@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span className="text-xl">💬</span>
+                            </div>
                             <div>
                                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Social Media</h3>
                                 <p className="text-gray-600 dark:text-gray-400">Follow us on Twitter and GitHub for updates.</p>
@@ -62,7 +77,7 @@ export default function ContactPage() {
                         </button>
                     </form>
                 </div>
-            </div >
-        </section >
+            </div>
+        </section>
     )
 }

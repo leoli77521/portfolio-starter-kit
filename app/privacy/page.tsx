@@ -53,7 +53,7 @@ export default function PrivacyPage() {
                 <p className="mb-4">
                     If you have questions or comments about this Privacy Policy, please contact us at:
                 </p>
-                <p className="font-medium">contact@tolearn.com</p>
+                <p className="font-medium">lileo16881533@gmail.com</p>
             </div>
         </section>
     )

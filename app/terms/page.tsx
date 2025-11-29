@@ -36,7 +36,7 @@ export default function TermsPage() {
                 <p className="mb-4">
                     In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at:
                 </p>
-                <p className="font-medium">contact@tolearn.com</p>
+                <p className="font-medium">lileo16881533@gmail.com</p>
             </div>
         </section>
     )

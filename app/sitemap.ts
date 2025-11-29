@@ -7,15 +7,15 @@ function formatDateForSitemap(dateString: string): string {
   if (!dateString.includes('T')) {
     dateString = `${dateString}T00:00:00`
   }
-  
+
   const date = new Date(dateString)
-  
+
   // 检查日期是否有效
   if (isNaN(date.getTime())) {
     // 如果日期无效，返回当前日期
     return new Date().toISOString().split('T')[0]
   }
-  
+
   // 返回 YYYY-MM-DD 格式
   return date.toISOString().split('T')[0]
 }
@@ -34,6 +34,30 @@ export default async function sitemap() {
       lastModified: new Date().toISOString(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
     }
   ]
 
@@ -50,7 +74,7 @@ export default async function sitemap() {
   // 博客文章
   const blogs = getBlogPosts().map((post) => {
     const lastModified = new Date(formatDateForSitemap(post.metadata.publishedAt) + 'T00:00:00.000Z').toISOString()
-    
+
     return {
       url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
       lastModified,

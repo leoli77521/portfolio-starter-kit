@@ -239,7 +239,26 @@ export default function Blog({ params }) {
             keywords: ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development', 'tech sharing'],
             articleSection: 'Technology Articles',
             inLanguage: 'en-US'
-          }),
+          }, {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [{
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Home',
+              item: baseUrl
+            }, {
+              '@type': 'ListItem',
+              position: 2,
+              name: 'Blog',
+              item: `${baseUrl}/blog`
+            }, {
+              '@type': 'ListItem',
+              position: 3,
+              name: post.metadata.title,
+              item: `${baseUrl}/blog/${cleanSlug}`
+            }]
+          }]),
         }}
       />
 

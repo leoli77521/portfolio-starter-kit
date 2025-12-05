@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 ::selection {
   background-color: #6366f1;
@@ -60,27 +60,28 @@ html {
 
 /* 移动端优化 */
 @media (max-width: 768px) {
+
   /* 改善移动端文本可读性 */
   body {
     font-size: 16px;
     line-height: 1.7;
   }
-  
+
   /* 优化移动端按钮点击区域 */
-  .btn-primary, 
-  a[class*="btn"], 
+  .btn-primary,
+  a[class*="btn"],
   button {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* 确保面包屑在移动端不换行 */
   nav[aria-label="Breadcrumb navigation"] ol {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* 优化移动端卡片间距 */
   .featured-card,
   article {
@@ -121,7 +122,7 @@ body {
   content: '#';
 }
 
-.prose *:hover > .anchor {
+.prose *:hover>.anchor {
   @apply visible;
 }
 
@@ -202,7 +203,7 @@ body {
   @apply list-decimal pl-6;
 }
 
-.prose > :first-child {
+.prose> :first-child {
   /* Override removing top margin, causing layout shift */
   margin-top: 1.25em !important;
   margin-bottom: 1.25em !important;
@@ -213,8 +214,10 @@ pre::-webkit-scrollbar {
 }
 
 pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Remove Safari input shadow on mobile */
@@ -234,6 +237,7 @@ input[type='email'] {
 
 /* 性能优化: 减少动画以提高性能 */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -259,6 +263,7 @@ input[type='email'] {
 
 /* 减少移动端不必要的动画效果 */
 @media (max-width: 768px) {
+
   .featured-card:hover,
   .card-hover:hover {
     transform: translateY(-2px);
@@ -317,26 +322,27 @@ input[type='email'] {
   body {
     font-size: 16px;
   }
-  
-  a, button {
+
+  a,
+  button {
     min-height: 44px;
     display: flex;
     align-items: center;
   }
-  
+
   .prose p {
     line-height: 1.7;
   }
-  
+
   .prose pre {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .featured-card {
     @apply p-4;
   }
-  
+
   .section-title {
     @apply text-xl mb-4;
   }
@@ -413,6 +419,7 @@ table {
 .prose ol li::marker {
   @apply text-indigo-600 dark:text-indigo-400 font-bold;
 }
+
 /* Reserve space for dynamically injected AdSense units to limit CLS */
 ins.adsbygoogle {
   display: block;

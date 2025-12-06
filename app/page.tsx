@@ -73,8 +73,8 @@ export default function Page() {
         }}
       />
       {/* Hero Section */}
-      <div className="mb-16 py-12 -mx-4 px-4 lg:-mx-8 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-none dark:bg-transparent rounded-3xl border border-gray-200/50 dark:border-slate-700/30">
-        <div className="text-center max-w-3xl mx-auto">
+      <div className="hero-glow mb-16 py-12 -mx-4 px-4 lg:-mx-8 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-none dark:bg-transparent rounded-3xl border border-gray-200/50 dark:border-slate-700/30">
+        <div className="text-center max-w-3xl mx-auto relative z-10">
           <h1 className="mb-6 text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
             ToLearn Blog
           </h1>
@@ -82,13 +82,13 @@ export default function Page() {
             Exploring the frontiers of AI, programming, and modern web development
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-700/50">
+            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
               🚀 AI Innovation
             </span>
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-700/50">
+            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
               💻 Clean Code
             </span>
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-700/50">
+            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
               📈 SEO Excellence
             </span>
           </div>

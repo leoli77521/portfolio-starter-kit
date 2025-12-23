@@ -118,17 +118,27 @@ export function Search() {
 
       {/* 搜索下拉框 */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+        <div
+          className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+          role="dialog"
+          aria-label="Search articles"
+          aria-modal="true"
+        >
           {/* 搜索输入框 */}
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="relative">
               <input
                 ref={inputRef}
-                type="text"
+                type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search articles..."
                 className="w-full px-4 py-2.5 pl-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                aria-label="Search articles"
+                aria-describedby="search-hint"
+                aria-controls="search-results"
+                aria-expanded={results.length > 0}
+                autoComplete="off"
               />
               <svg
                 className="absolute left-3 top-3 w-5 h-5 text-gray-400"
@@ -142,7 +152,7 @@ export function Search() {
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <div className="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div id="search-hint" className="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
               <span>Press Esc to close</span>
               <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600">
                 ⌘K
@@ -151,7 +161,7 @@ export function Search() {
           </div>
 
           {/* 搜索结果 */}
-          <div className="max-h-96 overflow-y-auto">
+          <div id="search-results" className="max-h-96 overflow-y-auto" role="region" aria-label="Search results" aria-live="polite">
             {query.trim() === '' ? (
               <div className="p-8 text-center text-gray-500 dark:text-gray-400">
                 <svg
@@ -183,16 +193,16 @@ export function Search() {
                 <p className="text-sm">No articles found for "{query}"</p>
               </div>
             ) : (
-              <ul className="py-2">
-                {results.map((post) => (
-                  <li key={post.slug}>
+              <ul className="py-2" role="listbox" aria-label="Search results">
+                {results.map((post, index) => (
+                  <li key={post.slug} role="option" aria-selected={index === 0}>
                     <Link
                       href={`/blog/${post.slug}`}
                       onClick={() => {
                         setIsOpen(false)
                         setQuery('')
                       }}
-                      className="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
+                      className="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-800"
                     >
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 line-clamp-1">
                         {post.title}

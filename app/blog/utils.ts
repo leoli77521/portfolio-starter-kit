@@ -1,14 +1,19 @@
 import fs from 'fs'
 import path from 'path'
+import type { BlogMetadata, Heading } from '@/app/types'
+import {
+  formatDate as formatDateUtil,
+  calculateReadingTime as calculateReadingTimeUtil,
+  slugify,
+  getHeadings as getHeadingsUtil,
+  createCleanSlug as createCleanSlugUtil,
+} from '@/app/lib/formatters'
 
-type Metadata = {
-  title: string
-  publishedAt: string
-  summary: string
-  image?: string
-  category?: string
-  tags?: string[]
-}
+// Re-export from formatters for backward compatibility
+export { slugify } from '@/app/lib/formatters'
+export type { Heading } from '@/app/types'
+
+type Metadata = BlogMetadata
 
 const slugAliasMappings: Record<string, string> = {
   'seo': 'seo-optimization-guide',
@@ -65,45 +70,30 @@ function parseFrontmatter(fileContent: string) {
   return { metadata: metadata as Metadata, content }
 }
 
-function getMDXFiles(dir) {
+function getMDXFiles(dir: string): string[] {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
 }
 
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, 'utf-8')
+function readMDXFile(filePath: string): { metadata: Metadata; content: string } {
+  const rawContent = fs.readFileSync(filePath, 'utf-8')
   return parseFrontmatter(rawContent)
 }
 
 function createCleanSlug(filename: string): string {
-  // 移除文件扩展名
-  let slug = path.basename(filename, path.extname(filename))
-
-  // 对于特殊文件名，创建SEO友好的URL
-  const slugMappings: { [key: string]: string } = {
-    'SEO': 'seo-optimization-guide',
-    'AI生成PPT': 'ai-generated-presentations',
-    'AI-Revolution-Finance': 'ai-revolution-finance',
-    'AI-Revolution-American-Workplaces': 'ai-revolution-american-workplaces'
-  }
-
-  // 如果有自定义映射，使用映射值
-  if (slugMappings[slug]) {
-    return slugMappings[slug]
-  }
-
-  // 否则进行标准化处理
-  return slug
-    .toLowerCase()
-    .replace(/[^a-z0-9\-]/g, '-') // 替换非字母数字字符为连字符
-    .replace(/-+/g, '-') // 合并多个连字符
-    .replace(/^-|-$/g, '') // 移除开头和结尾的连字符
+  return createCleanSlugUtil(path.basename(filename, path.extname(filename)))
 }
 
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir)
+type BlogPost = {
+  metadata: Metadata
+  slug: string
+  content: string
+}
+
+function getMDXData(dir: string): BlogPost[] {
+  const mdxFiles = getMDXFiles(dir)
   return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    let slug = createCleanSlug(file)
+    const { metadata, content } = readMDXFile(path.join(dir, file))
+    const slug = createCleanSlug(file)
 
     return {
       metadata,
@@ -118,119 +108,13 @@ export function getBlogPosts() {
 }
 
 export function calculateReadingTime(content: string): number {
-  // 平均阅读速度：每分钟200-250个单词
-  const wordsPerMinute = 225
-  const words = content.trim().split(/\s+/).length
-  const minutes = Math.ceil(words / wordsPerMinute)
-  return minutes
+  return calculateReadingTimeUtil(content)
 }
 
-export function formatDate(date: string, includeRelative = false) {
-  // 处理无效日期
-  if (!date || typeof date !== 'string') {
-    return 'Unknown Date'
-  }
-
-  let currentDate = new Date()
-
-  // 标准化日期格式
-  let normalizedDate = date
-  if (!date.includes('T')) {
-    normalizedDate = `${date}T00:00:00`
-  }
-
-  let targetDate = new Date(normalizedDate)
-
-  // 检查日期是否有效
-  if (isNaN(targetDate.getTime())) {
-    // 尝试其他日期格式
-    targetDate = new Date(date)
-    if (isNaN(targetDate.getTime())) {
-      return 'Invalid Date'
-    }
-  }
-
-  // 计算时间差（毫秒）
-  let timeDiff = currentDate.getTime() - targetDate.getTime()
-  let daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
-
-  let formattedDate = ''
-
-  if (daysDiff < 0) {
-    formattedDate = 'Future'
-  } else if (daysDiff === 0) {
-    formattedDate = 'Today'
-  } else if (daysDiff < 30) {
-    formattedDate = `${daysDiff}d ago`
-  } else if (daysDiff < 365) {
-    let monthsDiff = Math.floor(daysDiff / 30)
-    formattedDate = `${monthsDiff}mo ago`
-  } else {
-    let yearsDiff = Math.floor(daysDiff / 365)
-    formattedDate = `${yearsDiff}y ago`
-  }
-
-  let fullDate = targetDate.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
-
-  if (!includeRelative) {
-    return fullDate
-  }
-
-  return `${fullDate} (${formattedDate})`
-}
-
-export type Heading = {
-  level: number
-  text: string
-  slug: string
-}
-
-function slugify(str: string) {
-  return str
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/&/g, '-and-')
-    .replace(/[^\w\-]+/g, '')
-    .replace(/\-\-+/g, '-')
+export function formatDate(date: string, includeRelative = false): string {
+  return formatDateUtil(date, includeRelative)
 }
 
 export function getHeadings(content: string): Heading[] {
-  // Match headings: # Heading, ## Heading, etc.
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm
-  const headings: Heading[] = []
-
-  const lines = content.split('\n')
-  let inCodeBlock = false
-
-  lines.forEach(line => {
-    if (line.trim().startsWith('```')) {
-      inCodeBlock = !inCodeBlock
-      return
-    }
-
-    if (inCodeBlock) return
-
-    const match = headingRegex.exec(line)
-    // Reset lastIndex because we are calling exec on different strings (lines) 
-    // actually regex.exec on a string without global flag or with new string doesn't use lastIndex like that, 
-    // but since we are iterating lines, we can just use string.match or regex.exec.
-    // However, since we defined headingRegex with 'g' and outside the loop, we need to be careful.
-    // Better to use line.match for simple line check.
-
-    const lineMatch = line.match(/^(#{1,6})\s+(.+)$/)
-    if (lineMatch) {
-      const level = lineMatch[1].length
-      const text = lineMatch[2].trim()
-      const slug = slugify(text)
-      headings.push({ level, text, slug })
-    }
-  })
-
-  return headings
+  return getHeadingsUtil(content)
 }

@@ -3,41 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { CategoryFilter, getCategoryColor, getCategoryEmoji, type Category } from './category-filter'
-
-// 客户端格式化日期函数
-function formatDate(date: string): string {
-  if (!date || typeof date !== 'string') {
-    return 'Unknown Date'
-  }
-
-  let normalizedDate = date
-  if (!date.includes('T')) {
-    normalizedDate = `${date}T00:00:00`
-  }
-
-  let targetDate = new Date(normalizedDate)
-
-  if (isNaN(targetDate.getTime())) {
-    targetDate = new Date(date)
-    if (isNaN(targetDate.getTime())) {
-      return 'Invalid Date'
-    }
-  }
-
-  return targetDate.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
-}
-
-// 客户端计算阅读时间
-function calculateReadingTime(content: string): number {
-  const wordsPerMinute = 225
-  const words = content.trim().split(/\s+/).length
-  const minutes = Math.ceil(words / wordsPerMinute)
-  return minutes
-}
+import { formatDate, calculateReadingTime, truncateSummary } from '@/app/lib/formatters'
 
 interface Post {
   slug: string
@@ -74,11 +40,6 @@ export function PostsWithFilter({ posts }: PostsWithFilterProps) {
 
     return categoryMatch && (titleMatch || summaryMatch || contentMatch)
   })
-
-  const truncateSummary = (summary: string, maxLength: number = 160) => {
-    if (summary.length <= maxLength) return summary
-    return summary.slice(0, maxLength).replace(/\s+\S*$/, '') + '...'
-  }
 
   const getCategoryBadgeStyles = (category: string) => {
     const color = getCategoryColor(category)

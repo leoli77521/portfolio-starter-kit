@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+const cx = (...classes: (string | undefined | false)[]) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,

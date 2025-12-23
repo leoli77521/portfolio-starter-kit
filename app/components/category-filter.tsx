@@ -1,15 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import type { Category, CategoryConfig, CategoryColor, ColorStylesMap } from '@/app/types'
 
-export type Category = 'All' | 'AI Technology' | 'Web Development' | 'SEO & Marketing' | 'Productivity'
+// Re-export Category type for backward compatibility
+export type { Category } from '@/app/types'
 
 interface CategoryFilterProps {
   onCategoryChange: (category: Category) => void
   currentCategory: Category
 }
 
-const categories: { name: Category; color: string; emoji: string }[] = [
+const categories: CategoryConfig[] = [
   { name: 'All', color: 'gray', emoji: '📚' },
   { name: 'AI Technology', color: 'blue', emoji: '🤖' },
   { name: 'Web Development', color: 'green', emoji: '💻' },
@@ -17,7 +18,7 @@ const categories: { name: Category; color: string; emoji: string }[] = [
   { name: 'Productivity', color: 'orange', emoji: '⚡' },
 ]
 
-const colorStyles = {
+const colorStyles: ColorStylesMap = {
   gray: {
     active: 'bg-gray-600 text-white border-gray-600',
     inactive: 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500',
@@ -72,12 +73,12 @@ export function CategoryFilter({ onCategoryChange, currentCategory }: CategoryFi
   )
 }
 
-export function getCategoryColor(category: string): string {
-  const found = categories.find(c => c.name === category)
-  return found?.color || 'gray'
+export function getCategoryColor(category: string): CategoryColor {
+  const found = categories.find((c) => c.name === category)
+  return (found?.color as CategoryColor) || 'gray'
 }
 
 export function getCategoryEmoji(category: string): string {
-  const found = categories.find(c => c.name === category)
+  const found = categories.find((c) => c.name === category)
   return found?.emoji || '📄'
 }

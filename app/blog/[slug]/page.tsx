@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { TableOfContents } from 'app/components/toc'
-import { formatDate, getBlogPosts, resolveBlogSlug, getHeadings } from 'app/blog/utils'
+import { formatDate, getBlogPosts, resolveBlogSlug, getHeadings, calculateReadingTime } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
@@ -16,7 +16,11 @@ export async function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }): Metadata {
+interface PageProps {
+  params: { slug: string }
+}
+
+export function generateMetadata({ params }: PageProps): Metadata {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
@@ -53,26 +57,33 @@ export function generateMetadata({ params }): Metadata {
   const canonicalUrl = `${baseUrl}/blog/${cleanSlug}`
 
   // Create category-specific Meta description with proper length control
-  const getCategorySpecificDescription = (category, summary) => {
+  const getCategorySpecificDescription = (
+    category: string | undefined,
+    summary: string | undefined
+  ): string => {
     // 确保 summary 存在
-    if (!summary || typeof summary !== 'string') {
-      summary = 'Professional technology insights and practical solutions.'
+    let safeSummary = summary
+    if (!safeSummary || typeof safeSummary !== 'string') {
+      safeSummary = 'Professional technology insights and practical solutions.'
     }
 
-    const suffixes = {
+    const suffixes: Record<string, string> = {
       'ai technology': ' | Expert AI insights and practical implementation strategies.',
       'ai & seo': ' | Expert AI insights and practical implementation strategies.',
       'seo optimization': ' | Proven SEO techniques and ranking improvement strategies.',
       'programming': ' | In-depth programming tutorials and development best practices.',
-      'web development': ' | In-depth programming tutorials and development best practices.'
+      'web development': ' | In-depth programming tutorials and development best practices.',
     }
 
-    const suffix = suffixes[category?.toLowerCase()] || ' | Professional tech insights and optimization strategies.'
+    const suffix =
+      suffixes[category?.toLowerCase() ?? ''] ||
+      ' | Professional tech insights and optimization strategies.'
     const maxSummaryLength = 160 - suffix.length
 
-    const truncatedSummary = summary.length > maxSummaryLength
-      ? summary.substring(0, maxSummaryLength - 3) + '...'
-      : summary
+    const truncatedSummary =
+      safeSummary.length > maxSummaryLength
+        ? safeSummary.substring(0, maxSummaryLength - 3) + '...'
+        : safeSummary
 
     return truncatedSummary + suffix
   }
@@ -80,21 +91,22 @@ export function generateMetadata({ params }): Metadata {
   const optimizedDescription = getCategorySpecificDescription(post.metadata.category, description)
 
   // Optimize title length for SEO (50-60 chars)
-  const getOptimizedTitle = (originalTitle) => {
+  const getOptimizedTitle = (originalTitle: string | undefined): string => {
     // 确保 title 存在
-    if (!originalTitle || typeof originalTitle !== 'string') {
-      originalTitle = 'Tech Article'
+    let safeTitle = originalTitle
+    if (!safeTitle || typeof safeTitle !== 'string') {
+      safeTitle = 'Tech Article'
     }
 
     const suffix = ' | ToLearn Blog'
     const maxLength = 60 - suffix.length // 46 chars for main title
 
-    if (originalTitle.length <= maxLength) {
-      return `${originalTitle}${suffix}`
+    if (safeTitle.length <= maxLength) {
+      return `${safeTitle}${suffix}`
     }
 
     // Smart truncation at word boundaries
-    const truncated = originalTitle.substring(0, maxLength)
+    const truncated = safeTitle.substring(0, maxLength)
     const lastSpace = truncated.lastIndexOf(' ')
     const finalTitle = lastSpace > 30 ? truncated.substring(0, lastSpace) : truncated
 
@@ -152,7 +164,7 @@ export function generateMetadata({ params }): Metadata {
   }
 }
 
-export default function Blog({ params }) {
+export default function Blog({ params }: PageProps) {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
@@ -184,6 +196,8 @@ export default function Blog({ params }) {
 
   const cleanSlug = post.slug
   const headings = getHeadings(post.content)
+  const readingTime = calculateReadingTime(post.content)
+  const wordCount = post.content.split(/\s+/).length
 
   // 准备相关文章数据
   const relatedPostsData = allPosts.map(p => ({
@@ -199,66 +213,101 @@ export default function Blog({ params }) {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([{
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: post.metadata.title,
-            description: post.metadata.summary,
-            image: {
-              '@type': 'ImageObject',
-              url: post.metadata.image
-                ? `${baseUrl}${post.metadata.image}`
-                : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
-              width: 1200,
-              height: 630
-            },
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
-            author: {
-              '@type': 'Person',
-              name: 'ToLearn Blog',
-              url: baseUrl,
-              sameAs: [baseUrl]
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'ToLearn Blog',
-              logo: {
+          __html: JSON.stringify([
+            {
+              '@context': 'https://schema.org',
+              '@type': 'BlogPosting',
+              headline: post.metadata.title,
+              description: post.metadata.summary,
+              image: {
                 '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
-                width: 150,
-                height: 150
-              }
+                url: post.metadata.image
+                  ? `${baseUrl}${post.metadata.image}`
+                  : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+                width: 1200,
+                height: 630,
+              },
+              datePublished: post.metadata.publishedAt,
+              dateModified: post.metadata.publishedAt,
+              author: {
+                '@type': 'Person',
+                name: 'ToLearn Blog',
+                url: baseUrl,
+                sameAs: [baseUrl],
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: 'ToLearn Blog',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: `${baseUrl}/logo.png`,
+                  width: 150,
+                  height: 150,
+                },
+              },
+              mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': `${baseUrl}/blog/${cleanSlug}`,
+              },
+              url: `${baseUrl}/blog/${cleanSlug}`,
+              wordCount: wordCount,
+              timeRequired: `PT${readingTime}M`,
+              keywords: post.metadata.tags?.length
+                ? post.metadata.tags
+                : ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development'],
+              articleSection: post.metadata.category || 'Technology Articles',
+              inLanguage: 'en-US',
+              isAccessibleForFree: true,
+              speakable: {
+                '@type': 'SpeakableSpecification',
+                cssSelector: ['article', 'h1', '.prose'],
+              },
             },
-            mainEntityOfPage: {
+            {
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: 'Home',
+                  item: baseUrl,
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: 'Blog',
+                  item: `${baseUrl}/blog`,
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: post.metadata.title,
+                  item: `${baseUrl}/blog/${cleanSlug}`,
+                },
+              ],
+            },
+            {
+              '@context': 'https://schema.org',
               '@type': 'WebPage',
-              '@id': `${baseUrl}/blog/${cleanSlug}`
-            },
-            url: `${baseUrl}/blog/${cleanSlug}`,
-            wordCount: post.content.split(' ').length,
-            keywords: ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development', 'tech sharing'],
-            articleSection: 'Technology Articles',
-            inLanguage: 'en-US'
-          }, {
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [{
-              '@type': 'ListItem',
-              position: 1,
-              name: 'Home',
-              item: baseUrl
-            }, {
-              '@type': 'ListItem',
-              position: 2,
-              name: 'Blog',
-              item: `${baseUrl}/blog`
-            }, {
-              '@type': 'ListItem',
-              position: 3,
+              '@id': `${baseUrl}/blog/${cleanSlug}`,
+              url: `${baseUrl}/blog/${cleanSlug}`,
               name: post.metadata.title,
-              item: `${baseUrl}/blog/${cleanSlug}`
-            }]
-          }]),
+              description: post.metadata.summary,
+              isPartOf: {
+                '@type': 'WebSite',
+                '@id': `${baseUrl}/#website`,
+                url: baseUrl,
+                name: 'ToLearn Blog',
+              },
+              primaryImageOfPage: {
+                '@type': 'ImageObject',
+                url: post.metadata.image
+                  ? `${baseUrl}${post.metadata.image}`
+                  : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+              },
+            },
+          ]),
         }}
       />
 
@@ -278,10 +327,29 @@ export default function Blog({ params }) {
       <h1 className="title font-semibold text-2xl tracking-tighter mb-2 text-neutral-900 dark:text-neutral-100">
         {post.metadata.title}
       </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+      <div className="flex flex-wrap justify-between items-center mt-2 mb-8 text-sm gap-2">
+        <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-400">
+          <time dateTime={post.metadata.publishedAt}>
+            {formatDate(post.metadata.publishedAt)}
+          </time>
+          <span className="flex items-center gap-1" aria-label={`${readingTime} minute read`}>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {readingTime} min read
+          </span>
+        </div>
         {post.metadata.category && (
           <span className="inline-block px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
             {post.metadata.category}

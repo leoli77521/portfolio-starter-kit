@@ -17,7 +17,8 @@
       "Bash(vercel:*)",
       "WebSearch",
       "Bash(git commit:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git -C \"D:\\\\网站\\\\portfolio-starter-kit\" show 4c48667 --stat)"
     ],
     "deny": []
   }

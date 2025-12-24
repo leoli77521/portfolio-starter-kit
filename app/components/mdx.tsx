@@ -67,15 +67,22 @@ function RoundedImage({ alt, ...props }: RoundedImageProps) {
   return <Image alt={alt} className="rounded-lg" {...props} />
 }
 
-function Code({ children, ...props }: CodeProps) {
+import { CodeBlock } from './code-block'
+
+// ... existing imports
+
+function Code({ children, className, ...props }: CodeProps) {
   const codeString = typeof children === 'string' ? children : String(children ?? '')
   const codeHTML = highlight(codeString)
+  // Extract language from className (e.g. language-js)
+  const language = className?.replace(/language-/, '') || 'text'
+  
   return (
-    <code
-      dangerouslySetInnerHTML={{ __html: codeHTML }}
-      role="region"
-      aria-label="Code block"
-      {...props}
+    <CodeBlock 
+      codeHTML={codeHTML} 
+      rawCode={codeString} 
+      language={language}
+      {...props} 
     />
   )
 }

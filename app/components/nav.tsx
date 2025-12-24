@@ -77,9 +77,9 @@ export function Navbar() {
                 <Link
                   key={path}
                   href={path}
-                  className={`px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-200 ${isActive
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white shadow-md'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  className={`nav-link text-sm ${isActive
+                    ? 'text-indigo-600 dark:text-indigo-400 font-semibold'
+                    : ''
                     }`}
                   title={title}
                   aria-label={title}

@@ -22,6 +22,17 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
     setIsOpen(false)
   }, [pathname])
 
+  // 按 Esc 关闭菜单
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && isOpen) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
+
   // 防止背景滚动当菜单打开
   useEffect(() => {
     if (isOpen) {
@@ -76,6 +87,9 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
         className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
       >
         <div className="flex flex-col h-full">
           {/* 菜单头部 */}

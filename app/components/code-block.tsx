@@ -57,7 +57,7 @@ export function CodeBlock({ codeHTML, rawCode, language, ...props }: CodeBlockPr
         <div className="overflow-x-auto p-4">
           <code 
             dangerouslySetInnerHTML={{ __html: codeHTML }} 
-            className="grid font-mono text-sm leading-6"
+            className="grid font-mono text-sm sm:text-base leading-6"
             {...props}
           />
         </div>

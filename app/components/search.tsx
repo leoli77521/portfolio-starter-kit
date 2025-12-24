@@ -119,7 +119,7 @@ export function Search() {
       {/* 搜索下拉框 */}
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+          className="absolute right-0 mt-2 w-full sm:w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           role="dialog"
           aria-label="Search articles"
           aria-modal="true"
@@ -137,7 +137,7 @@ export function Search() {
                 aria-label="Search articles"
                 aria-describedby="search-hint"
                 aria-controls="search-results"
-                aria-expanded={results.length > 0}
+                aria-expanded={isOpen}
                 autoComplete="off"
               />
               <svg
@@ -152,7 +152,7 @@ export function Search() {
                 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <div id="search-hint" className="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div id="search-hint" className="mt-2 hidden sm:flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
               <span>Press Esc to close</span>
               <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600">
                 ⌘K

@@ -18,7 +18,7 @@ function ArrowIcon() {
 export default function Footer() {
   return (
     <footer className="mt-20 mb-16 border-t border-gray-200 dark:border-slate-800 pt-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
         {/* About Section */}
         <div>
           <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">About ToLearn</h3>

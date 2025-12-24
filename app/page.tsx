@@ -75,7 +75,7 @@ export default function Page() {
       {/* Hero Section */}
       <div className="hero-glow mb-16 py-12 -mx-4 px-4 lg:-mx-8 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-none dark:bg-transparent rounded-3xl border border-gray-200/50 dark:border-slate-700/30">
         <div className="text-center max-w-3xl mx-auto relative z-10">
-          <h1 className="mb-6 text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+          <h1 className="mb-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
             ToLearn Blog
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 font-light leading-relaxed mb-8">
@@ -110,7 +110,7 @@ export default function Page() {
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           <Link
             href="/blog/google-ai-energy-data-disclosure"
             className="group relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl p-8 border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl"
@@ -172,7 +172,7 @@ export default function Page() {
       {/* Developer Resources Section */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Resources</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">

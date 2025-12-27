@@ -1,6 +1,15 @@
 import { baseUrl } from 'app/sitemap'
 import { getBlogPosts } from 'app/blog/utils'
 
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 export async function GET() {
   let allBlogs = getBlogPosts()
 
@@ -14,9 +23,10 @@ export async function GET() {
     .map(
       (post) =>
         `<item>
-          <title>${post.metadata.title}</title>
+          <title>${escapeXml(post.metadata.title)}</title>
           <link>${baseUrl}/blog/${post.slug}</link>
-          <description>${post.metadata.summary || ''}</description>
+          <description>${escapeXml(post.metadata.summary || '')}</description>
+          <guid>${baseUrl}/blog/${post.slug}</guid>
           <pubDate>${new Date(
             post.metadata.publishedAt
           ).toUTCString()}</pubDate>
@@ -25,11 +35,12 @@ export async function GET() {
     .join('\n')
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8" ?>
-  <rss version="2.0">
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>My Portfolio</title>
+        <title>ToLearn Blog - AI, SEO & Programming Tutorials</title>
         <link>${baseUrl}</link>
-        <description>This is my portfolio RSS feed</description>
+        <description>Your gateway to AI innovation, SEO mastery, and modern web development.</description>
+        <atom:link href="${baseUrl}/rss" rel="self" type="application/rss+xml" />
         ${itemsXml}
     </channel>
   </rss>`

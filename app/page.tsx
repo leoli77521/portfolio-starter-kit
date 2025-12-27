@@ -26,50 +26,57 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
+  const organization = {
+    '@type': 'Organization',
+    '@id': `${baseUrl}/#organization`,
+    name: 'ToLearn Blog',
+    url: baseUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/favicon.ico`,
+      width: 32,
+      height: 32,
+    },
+  }
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${baseUrl}/#website`,
+    name: 'ToLearn Blog - AI Tech Blog',
+    alternateName: 'ToLearn Tech Blog',
+    description: 'Professional tech blog sharing AI insights, SEO strategies, and programming best practices. In-depth articles helping developers improve skills.',
+    url: baseUrl,
+    inLanguage: 'en-US',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${baseUrl}/search?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    },
+    publisher: organization,
+    mainEntity: {
+      '@type': 'Blog',
+      '@id': `${baseUrl}/blog/#blog`,
+      name: 'ToLearn Tech Blog',
+      description: 'In-depth technical articles sharing, covering AI artificial intelligence, SEO optimization, frontend development and trending tech topics',
+      url: `${baseUrl}/blog`,
+      author: organization,
+      publisher: organization,
+      isPartOf: {
+        '@id': `${baseUrl}/#website`,
+      },
+      keywords: ['AI Technology', 'SEO Optimization', 'Programming Tutorials', 'Artificial Intelligence', 'Frontend Development'],
+      inLanguage: 'en-US'
+    }
+  }
+
   return (
     <section className="max-w-6xl mx-auto">
       <script
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'ToLearn Blog - AI Tech Blog',
-            alternateName: 'ToLearn Tech Blog',
-            description: 'Professional tech blog sharing AI insights, SEO strategies, and programming best practices. In-depth articles helping developers improve skills.',
-            url: baseUrl,
-            inLanguage: 'en-US',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: `${baseUrl}/search?q={search_term_string}`,
-              'query-input': 'required name=search_term_string'
-            },
-            mainEntity: {
-              '@type': 'Blog',
-              name: 'ToLearn Tech Blog',
-              description: 'In-depth technical articles sharing, covering AI artificial intelligence, SEO optimization, frontend development and trending tech topics',
-              url: `${baseUrl}/blog`,
-              author: {
-                '@type': 'Organization',
-                name: 'ToLearn Blog',
-                url: baseUrl
-              },
-              keywords: ['AI Technology', 'SEO Optimization', 'Programming Tutorials', 'Artificial Intelligence', 'Frontend Development'],
-              inLanguage: 'en-US'
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'ToLearn Blog',
-              url: baseUrl,
-              logo: {
-                '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
-                width: 150,
-                height: 150
-              }
-            }
-          }),
+          __html: JSON.stringify(websiteSchema),
         }}
       />
       {/* Hero Section */}

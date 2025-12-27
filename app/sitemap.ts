@@ -1,6 +1,6 @@
 import { getBlogPosts } from 'app/blog/utils'
 
-export const baseUrl = 'https://tolearn.blog'
+export const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://tolearn.blog'
 
 function formatDateForSitemap(dateString: string): string {
   // 如果日期没有包含时间，添加默认时间
@@ -73,7 +73,8 @@ export default async function sitemap() {
 
   // 博客文章
   const blogs = getBlogPosts().map((post) => {
-    const lastModified = new Date(formatDateForSitemap(post.metadata.publishedAt) + 'T00:00:00.000Z').toISOString()
+    const sourceDate = post.metadata.updatedAt || post.metadata.publishedAt
+    const lastModified = new Date(formatDateForSitemap(sourceDate) + 'T00:00:00.000Z').toISOString()
 
     return {
       url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,

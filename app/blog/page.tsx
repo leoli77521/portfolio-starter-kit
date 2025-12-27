@@ -20,6 +20,34 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const posts = getBlogPosts()
+  const organization = {
+    '@type': 'Organization',
+    '@id': `${baseUrl}/#organization`,
+    name: 'ToLearn Blog',
+    url: baseUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/favicon.ico`,
+      width: 32,
+      height: 32,
+    },
+  }
+
+  const blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': `${baseUrl}/blog/#blog`,
+    name: 'ToLearn Technology Blog',
+    description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
+    url: `${baseUrl}/blog`,
+    author: organization,
+    publisher: organization,
+    isPartOf: {
+      '@id': `${baseUrl}/#website`,
+    },
+    inLanguage: 'en-US',
+    keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization', 'web development', 'programming technology', 'frontend development']
+  }
 
   return (
     <section className="max-w-6xl mx-auto">
@@ -40,30 +68,7 @@ export default function Page() {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Blog',
-            name: 'ToLearn Technology Blog',
-            description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
-            url: `${baseUrl}/blog`,
-            author: {
-              '@type': 'Person',
-              name: 'ToLearn Blog',
-              url: baseUrl
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'ToLearn Blog',
-              logo: {
-                '@type': 'ImageObject',
-                url: `${baseUrl}/logo.png`,
-                width: 150,
-                height: 150
-              }
-            },
-            inLanguage: 'en-US',
-            keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization', 'web development', 'programming technology', 'frontend development']
-          }),
+          __html: JSON.stringify(blogSchema),
         }}
       />
       {/* Page Header */}

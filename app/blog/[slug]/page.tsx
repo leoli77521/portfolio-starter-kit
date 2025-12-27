@@ -7,6 +7,87 @@ import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
 import { InArticleAd } from 'app/components/AdUnit'
+import type { FAQItem, HowToStep } from 'app/types'
+
+function parseJsonArray(value: unknown): unknown[] | null {
+  if (!value) return null
+  if (Array.isArray(value)) return value
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim()
+  if (!trimmed.startsWith('[') || !trimmed.endsWith(']')) return null
+  try {
+    const parsed = JSON.parse(trimmed)
+    return Array.isArray(parsed) ? parsed : null
+  } catch {
+    return null
+  }
+}
+
+function normalizeFaqItems(value: unknown): FAQItem[] {
+  const rawItems = parseJsonArray(value)
+  if (!rawItems) return []
+
+  return rawItems
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null
+      const record = item as Record<string, unknown>
+      const question =
+        typeof record.question === 'string'
+          ? record.question
+          : typeof record.q === 'string'
+            ? record.q
+            : null
+      const answer =
+        typeof record.answer === 'string'
+          ? record.answer
+          : typeof record.a === 'string'
+            ? record.a
+            : null
+      if (!question || !answer) return null
+      return {
+        question: question.trim(),
+        answer: answer.trim(),
+      }
+    })
+    .filter((item): item is FAQItem => Boolean(item))
+}
+
+function normalizeHowToSteps(value: unknown): HowToStep[] {
+  const rawItems = parseJsonArray(value)
+  if (!rawItems) return []
+
+  return rawItems.reduce<HowToStep[]>((acc, item, index) => {
+    if (typeof item === 'string') {
+      const text = item.trim()
+      if (text) {
+        acc.push({ name: `Step ${index + 1}`, text })
+      }
+      return acc
+    }
+    if (!item || typeof item !== 'object') return acc
+    const record = item as Record<string, unknown>
+    const textValue =
+      typeof record.text === 'string'
+        ? record.text
+        : typeof record.step === 'string'
+          ? record.step
+          : typeof record.description === 'string'
+            ? record.description
+            : null
+    if (!textValue || !textValue.trim()) return acc
+    const nameValue =
+      typeof record.name === 'string'
+        ? record.name
+        : typeof record.title === 'string'
+          ? record.title
+          : undefined
+    acc.push({
+      name: nameValue,
+      text: textValue.trim(),
+    })
+    return acc
+  }, [])
+}
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
@@ -45,9 +126,11 @@ export function generateMetadata({ params }: PageProps): Metadata {
   let {
     title,
     publishedAt: publishedTime,
+    updatedAt,
     summary: description,
     image,
   } = post.metadata
+  const modifiedTime = updatedAt || publishedTime
   const ogImage = image
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
@@ -125,7 +208,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
       description: optimizedDescription,
       type: 'article',
       publishedTime,
-      modifiedTime: publishedTime,
+      modifiedTime,
       authors: ['ToLearn Blog'],
       section: 'Technology Articles',
       url: canonicalUrl,
@@ -198,6 +281,145 @@ export default function Blog({ params }: PageProps) {
   const headings = getHeadings(post.content)
   const readingTime = calculateReadingTime(post.content)
   const wordCount = post.content.split(/\s+/).length
+  const organization = {
+    '@type': 'Organization',
+    '@id': `${baseUrl}/#organization`,
+    name: 'ToLearn Blog',
+    url: baseUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/favicon.ico`,
+      width: 32,
+      height: 32,
+    },
+  }
+  const modifiedTime = post.metadata.updatedAt || post.metadata.publishedAt
+  const faqItems = normalizeFaqItems(post.metadata.faq)
+  const howToSteps = normalizeHowToSteps(post.metadata.howto)
+
+  const structuredData: Record<string, unknown>[] = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${baseUrl}/blog/${cleanSlug}#article`,
+      headline: post.metadata.title,
+      description: post.metadata.summary,
+      image: {
+        '@type': 'ImageObject',
+        url: post.metadata.image
+          ? `${baseUrl}${post.metadata.image}`
+          : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+        width: 1200,
+        height: 630,
+      },
+      datePublished: post.metadata.publishedAt,
+      dateModified: modifiedTime,
+      author: {
+        '@type': 'Person',
+        name: 'ToLearn Blog',
+        url: baseUrl,
+        sameAs: [baseUrl],
+      },
+      publisher: organization,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': `${baseUrl}/blog/${cleanSlug}`,
+      },
+      url: `${baseUrl}/blog/${cleanSlug}`,
+      isPartOf: {
+        '@id': `${baseUrl}/blog/#blog`,
+      },
+      wordCount: wordCount,
+      timeRequired: `PT${readingTime}M`,
+      keywords: post.metadata.tags?.length
+        ? post.metadata.tags
+        : ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development'],
+      articleSection: post.metadata.category || 'Technology Articles',
+      inLanguage: 'en-US',
+      isAccessibleForFree: true,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['article', 'h1', '.prose'],
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: baseUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Blog',
+          item: `${baseUrl}/blog`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: post.metadata.title,
+          item: `${baseUrl}/blog/${cleanSlug}`,
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/blog/${cleanSlug}`,
+      url: `${baseUrl}/blog/${cleanSlug}`,
+      name: post.metadata.title,
+      description: post.metadata.summary,
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${baseUrl}/#website`,
+        url: baseUrl,
+        name: 'ToLearn Blog',
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: post.metadata.image
+          ? `${baseUrl}${post.metadata.image}`
+          : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+      },
+    },
+  ]
+
+  if (faqItems.length > 0) {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      '@id': `${baseUrl}/blog/${cleanSlug}#faq`,
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    })
+  }
+
+  if (howToSteps.length > 0) {
+    structuredData.push({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      '@id': `${baseUrl}/blog/${cleanSlug}#howto`,
+      name: post.metadata.title,
+      description: post.metadata.summary,
+      step: howToSteps.map((step, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: step.name || `Step ${index + 1}`,
+        text: step.text,
+      })),
+      inLanguage: 'en-US',
+    })
+  }
 
   // 准备相关文章数据
   const relatedPostsData = allPosts.map(p => ({
@@ -213,101 +435,7 @@ export default function Blog({ params }: PageProps) {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
-            {
-              '@context': 'https://schema.org',
-              '@type': 'BlogPosting',
-              headline: post.metadata.title,
-              description: post.metadata.summary,
-              image: {
-                '@type': 'ImageObject',
-                url: post.metadata.image
-                  ? `${baseUrl}${post.metadata.image}`
-                  : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
-                width: 1200,
-                height: 630,
-              },
-              datePublished: post.metadata.publishedAt,
-              dateModified: post.metadata.publishedAt,
-              author: {
-                '@type': 'Person',
-                name: 'ToLearn Blog',
-                url: baseUrl,
-                sameAs: [baseUrl],
-              },
-              publisher: {
-                '@type': 'Organization',
-                name: 'ToLearn Blog',
-                logo: {
-                  '@type': 'ImageObject',
-                  url: `${baseUrl}/logo.png`,
-                  width: 150,
-                  height: 150,
-                },
-              },
-              mainEntityOfPage: {
-                '@type': 'WebPage',
-                '@id': `${baseUrl}/blog/${cleanSlug}`,
-              },
-              url: `${baseUrl}/blog/${cleanSlug}`,
-              wordCount: wordCount,
-              timeRequired: `PT${readingTime}M`,
-              keywords: post.metadata.tags?.length
-                ? post.metadata.tags
-                : ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development'],
-              articleSection: post.metadata.category || 'Technology Articles',
-              inLanguage: 'en-US',
-              isAccessibleForFree: true,
-              speakable: {
-                '@type': 'SpeakableSpecification',
-                cssSelector: ['article', 'h1', '.prose'],
-              },
-            },
-            {
-              '@context': 'https://schema.org',
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: 'Home',
-                  item: baseUrl,
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: 'Blog',
-                  item: `${baseUrl}/blog`,
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 3,
-                  name: post.metadata.title,
-                  item: `${baseUrl}/blog/${cleanSlug}`,
-                },
-              ],
-            },
-            {
-              '@context': 'https://schema.org',
-              '@type': 'WebPage',
-              '@id': `${baseUrl}/blog/${cleanSlug}`,
-              url: `${baseUrl}/blog/${cleanSlug}`,
-              name: post.metadata.title,
-              description: post.metadata.summary,
-              isPartOf: {
-                '@type': 'WebSite',
-                '@id': `${baseUrl}/#website`,
-                url: baseUrl,
-                name: 'ToLearn Blog',
-              },
-              primaryImageOfPage: {
-                '@type': 'ImageObject',
-                url: post.metadata.image
-                  ? `${baseUrl}${post.metadata.image}`
-                  : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
-              },
-            },
-          ]),
+          __html: JSON.stringify(structuredData),
         }}
       />
 

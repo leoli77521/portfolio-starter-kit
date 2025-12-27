@@ -114,6 +114,7 @@ export default function RootLayout({
         {/* 图标优化 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="alternate" type="application/rss+xml" href="/rss" title="ToLearn Blog RSS Feed" />
 
         <script
           dangerouslySetInnerHTML={{

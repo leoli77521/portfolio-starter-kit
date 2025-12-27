@@ -70,6 +70,12 @@ export default function robots() {
         ],
         crawlDelay: 1,
       },
+      // AI Crawlers - Explicit Allow
+      {
+        userAgent: ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'],
+        allow: ['/', '/blog/', '/rss', '/sitemap.xml'],
+        disallow: ['/api/', '/_next/', '/static/', '*.json'],
+      },
       // 阻止有害爬虫
       {
         userAgent: [

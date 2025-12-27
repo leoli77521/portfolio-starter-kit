@@ -1,9 +1,12 @@
 ---
 title: 'AI Agents Production 2025: How I Avoided $3.4K Mistakes'
 publishedAt: '2025-09-04'
+updatedAt: '2025-09-04'
 summary: 'From demo to deployment: real lessons building production AI agents. Learn circuit breakers, token management, and cost optimization to avoid API disasters.'
 category: 'AI Technology'
 tags: ['AI Agents', 'Production Deployment', 'Cost Optimization', 'LangChain', 'GPT-4', 'API Management', 'Circuit Breakers', 'Token Management']
+faq: [{"question":"Why do AI agents blow up costs?","answer":"They can loop or over-iterate without hard token and iteration limits."},{"question":"What is the quickest safety fix?","answer":"Add circuit breakers and a strict token budget per request."}]
+howto: [{"name":"Set token limits","text":"Define max tokens and iterations for every agent execution."},{"name":"Route by complexity","text":"Use cheaper models for simple tasks and reserve premium models for hard cases."},{"name":"Monitor and kill loops","text":"Track cost per task and enforce kill switches when thresholds are hit."}]
 ---
 
 # AI Agents Production Guide: Avoid $3.4K
@@ -115,10 +118,10 @@ My prediction: 2025 will be the year of "boring" agents - specialized, predictab
 
 ## Key Takeaways
 
-âœ… **Start with a narrow use case**  
-âœ… **Add constraints, not capabilities**  
-âœ… **Measure everything**  
-âœ… **Always, always have a kill switch**
+âœ?**Start with a narrow use case**  
+âœ?**Add constraints, not capabilities**  
+âœ?**Measure everything**  
+âœ?**Always, always have a kill switch**
 
 ---
 

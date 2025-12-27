@@ -1,20 +1,23 @@
 ---
 title: "AI Content Pipeline 2025: SEO Automation"
 publishedAt: "2025-08-15"
+updatedAt: "2025-08-15"
 summary: "Founder's playbook to build production-grade AI content engine with real SEO results. Complete guide from ingestion to monitoring with paste-ready code."
 category: 'AI Technology'
 tags: ["AI","SEO","Content Pipeline","LLM","Next.js","pgvector"]
+faq: [{"question":"What is an AI content pipeline?","answer":"It is an automated workflow that turns raw items into SEO-ready pages with consistent metadata and monitoring."},{"question":"Why add structured data in the pipeline?","answer":"Structured data helps search and AI systems parse, validate, and cite your pages."}]
+howto: [{"name":"Ingest and normalize","text":"Collect source items, dedupe, and standardize fields before generation."},{"name":"Generate SEO assets","text":"Create titles, summaries, tags, and images with QA checks."},{"name":"Publish and monitor","text":"Ship pages with JSON-LD, sitemaps, and health checks."}]
 ---
 
 # AI Content Pipeline That Scales & Ranks
 *Published on **Aug 15, 2025***  
-*An entrepreneur‚Äôs playbook for shipping a production-grade AI content engine with real SEO gains‚Äîbeyond generic ‚Äúwrite a blog post‚Äù prompts.*
+*An entrepreneur‚Äôs playbook for shipping a production-grade AI content engine with real SEO gains‚Äîbeyond generic ‚Äúwrite a blog post‚Ä?prompts.*
 
 ---
 
 ## TL;DR
 
-If your site adds new items regularly (games, listings, docs, products), don‚Äôt scale writers‚Äîscale a **content operations pipeline**: ingest ‚Üí normalize ‚Üí generate (titles, summaries, tags, translations, images) ‚Üí publish with **structured data** ‚Üí monitor health ‚Üí measure SEO impact. Below is a battle-tested blueprint with schemas, prompts, code snippets, QA gates, and a 30/60/90 rollout.
+If your site adds new items regularly (games, listings, docs, products), don‚Äôt scale writers‚Äîscale a **content operations pipeline**: ingest ‚Ü?normalize ‚Ü?generate (titles, summaries, tags, translations, images) ‚Ü?publish with **structured data** ‚Ü?monitor health ‚Ü?measure SEO impact. Below is a battle-tested blueprint with schemas, prompts, code snippets, QA gates, and a 30/60/90 rollout.
 
 ---
 
@@ -37,12 +40,12 @@ Think of it as **CI/CD for content**.
 ## 2) Architecture at a glance
 
 ```
-Source feeds ‚Üí Ingestion ‚Üí Normalization
-             ‚Üí LLM Tasks (summ, title, tags, translate, image)
-             ‚Üí SEO Packager (JSON-LD, canonical, links, OG)
-             ‚Üí Publish (Next.js/Vercel)
-             ‚Üí Monitors (health, quality, costs)
-             ‚Üí Analytics (GSC, logs, CTR, index coverage)
+Source feeds ‚Ü?Ingestion ‚Ü?Normalization
+             ‚Ü?LLM Tasks (summ, title, tags, translate, image)
+             ‚Ü?SEO Packager (JSON-LD, canonical, links, OG)
+             ‚Ü?Publish (Next.js/Vercel)
+             ‚Ü?Monitors (health, quality, costs)
+             ‚Ü?Analytics (GSC, logs, CTR, index coverage)
 ```
 
 **Tech defaults**: Postgres (+pgvector), Next.js 14, Serverless workers, Playwright (screenshots/OG), vLLM or API gateway for models.
@@ -87,13 +90,13 @@ create index on items using ivfflat (embedding vector_cosine_ops);
 
 **Constraints**
 
-- 50‚Äì60 characters (desktop SERP sweet spot)
-- Include 1‚Äì2 primary intents (no stuffing)
+- 50‚Ä?0 characters (desktop SERP sweet spot)
+- Include 1‚Ä? primary intents (no stuffing)
 - Action verbs; avoid brackets unless meaningful
 
 **Prompt (system)**
 
-> You are an SEO editor. Write a single, natural-sounding title (50‚Äì60 chars) that maximizes CTR while staying faithful. Avoid clickbait and redundancy.
+> You are an SEO editor. Write a single, natural-sounding title (50‚Ä?0 chars) that maximizes CTR while staying faithful. Avoid clickbait and redundancy.
 
 **Prompt (user)**
 
@@ -107,23 +110,23 @@ Return: just the title string.
 
 ### 5.2 Meta description (SERP snippet)
 
-- 140‚Äì160 chars; include value proposition + call to action.
+- 140‚Ä?60 chars; include value proposition + call to action.
 - Add multilingual variants only if you‚Äôll ship hreflang.
 
 ### 5.3 Summary (on-page)
 
-- 80‚Äì120 words; explain gameplay/features plainly.
-- Insert 3‚Äì5 **controlled** tags from your taxonomy.
+- 80‚Ä?20 words; explain gameplay/features plainly.
+- Insert 3‚Ä? **controlled** tags from your taxonomy.
 
 ### 5.4 Translation with terminology lock
 
-- Maintain a glossary (JSON) of fixed translations (e.g., ‚Äúparkour‚Äù‚Üí‚ÄúË∑ëÈÖ∑‚Äù).
+- Maintain a glossary (JSON) of fixed translations (e.g., ‚Äúparkour‚Äù‚Üí‚ÄúË∑ëÈÖ∑‚Ä?.
 - Reject translations that alter branded terms.
 
 ### 5.5 Embeddings & related items
 
 - Compute embeddings for title+summary; store in `embedding`.
-- Related block = `topK(embedding) ‚à™ tag_intersection`.
+- Related block = `topK(embedding) ‚à?tag_intersection`.
 
 ---
 
@@ -131,7 +134,7 @@ Return: just the title string.
 
 1) If you have official art: **auto-crop** to multiple sizes (1:1 card, 1.91:1 OG).  
 2) If not, generate via:
-   - **Playwright screenshot** of a stabilized state (delay 4‚Äì6s, hide UI clutter), or
+   - **Playwright screenshot** of a stabilized state (delay 4‚Ä?s, hide UI clutter), or
    - Text-to-image (only if licensing allows).
 
 **Playwright example (Node):**
@@ -156,7 +159,7 @@ export async function screenshotOG(url: string, out: string) {
 ### 7.1 Canonical & pagination
 
 - Self-canonical for leaf pages.
-- Paginated lists: `rel=prev/next` deprecated ‚Üí rely on clean URLs + strong internal linking + clear canonicals.
+- Paginated lists: `rel=prev/next` deprecated ‚Ü?rely on clean URLs + strong internal linking + clear canonicals.
 
 ### 7.2 Hreflang (only if content is truly localized)
 
@@ -187,7 +190,7 @@ For web games, prefer **VideoGame** (or **SoftwareApplication** fallback):
 ### 7.4 Internal links that matter
 
 - **Related items** module (semantic + tag overlap).
-- **Collections** (e.g., ‚ÄúTop Puzzle this week‚Äù) with curated intros‚Äîthese pages earn links.
+- **Collections** (e.g., ‚ÄúTop Puzzle this week‚Ä? with curated intros‚Äîthese pages earn links.
 - **Breadcrumbs** (and JSON-LD `BreadcrumbList`).
 
 ### 7.5 Sitemaps
@@ -201,7 +204,7 @@ For web games, prefer **VideoGame** (or **SoftwareApplication** fallback):
 
 For embeddables (games, tools, demos), check:
 
-- `X-Frame-Options` (`DENY`/`SAMEORIGIN` ‚áí mark unplayable),
+- `X-Frame-Options` (`DENY`/`SAMEORIGIN` ‚á?mark unplayable),
 - `Content-Security-Policy` `frame-ancestors` restrictions,
 - 30x to external sites (steals your session),
 - Load timeouts and 4xx/5xx.
@@ -228,7 +231,7 @@ export async function checkEmbed(url: string) {
     reason = `CSP: frame-ancestors`;
   } else if (redirected) {
     playable = false;
-    reason = `Redirect ‚Üí ${location}`;
+    reason = `Redirect ‚Ü?${location}`;
   }
 
   return { status: res.status, playable, reason, location };
@@ -239,14 +242,14 @@ export async function checkEmbed(url: string) {
 
 ## 9) Quality gates (QA before publish)
 
-- **Title length** 50‚Äì60 chars; no doubled words.
-- **Meta** 140‚Äì160 chars; includes one primary benefit.
-- **Readability**: target Grade 6‚Äì8 for casual audiences.
+- **Title length** 50‚Ä?0 chars; no doubled words.
+- **Meta** 140‚Ä?60 chars; includes one primary benefit.
+- **Readability**: target Grade 6‚Ä? for casual audiences.
 - **Term lock**: glossary respected; brand terms preserved.
 - **Duplication**: cosine sim < 0.92 vs existing items.
 - **Image**: 1200√ó630 OG present; under 200KB where possible.
 - **JSON-LD** validates; canonical/hreflang consistent.
-- **Related block** returns ‚â•3 items.
+- **Related block** returns ‚â? items.
 
 If any fail, the item queues for human review.
 
@@ -287,17 +290,17 @@ Rough rule: With caching + small models for embeddings, you can keep end-to-end 
 
 ## 13) 30 / 60 / 90 day rollout
 
-**Day 1‚Äì30 (MVP)**  
-- Ingest ‚Üí title/summary/tags ‚Üí publish with JSON-LD & sitemap.  
+**Day 1‚Ä?0 (MVP)**  
+- Ingest ‚Ü?title/summary/tags ‚Ü?publish with JSON-LD & sitemap.  
 - Add Playwright screenshots.  
 - Basic health checks + fail-closed on sitemaps.
 
-**Day 31‚Äì60 (Scale)**  
+**Day 31‚Ä?0 (Scale)**  
 - Localize (hreflang), controlled vocabulary, related items via embeddings.  
 - Collections and curated lists.  
 - Cost dashboard + prompt caching.
 
-**Day 61‚Äì90 (Moat)**  
+**Day 61‚Ä?0 (Moat)**  
 - CTR experiments (A/B titles & descriptions).  
 - Author pages, editorial guidelines (E-E-A-T).  
 - Advanced monitors (log-based crawl anomaly detection).
@@ -306,13 +309,13 @@ Rough rule: With caching + small models for embeddings, you can keep end-to-end 
 
 ## Practical checklist
 
-- [ ] Titles 50‚Äì60 chars; metas 140‚Äì160 chars  
+- [ ] Titles 50‚Ä?0 chars; metas 140‚Ä?60 chars  
 - [ ] JSON-LD valid; canonical/hreflang consistent  
 - [ ] OG image 1200√ó630 and thumbnail set  
-- [ ] Related block returns ‚â•3 items  
+- [ ] Related block returns ‚â? items  
 - [ ] Embed health pass (XFO/CSP/redirect)  
-- [ ] Item score ‚â•80 ‚Üí auto-publish; else review
+- [ ] Item score ‚â?0 ‚Ü?auto-publish; else review
 
 ---
 
-Most teams try to ‚Äúscale content.‚Äù Winners scale **content operations**: tight schemas, predictable outputs, SEO-correct packaging, and ruthless monitoring. Build the pipeline once‚Äîthen every new item becomes an asset that ranks, converts, and compounds.
+Most teams try to ‚Äúscale content.‚Ä?Winners scale **content operations**: tight schemas, predictable outputs, SEO-correct packaging, and ruthless monitoring. Build the pipeline once‚Äîthen every new item becomes an asset that ranks, converts, and compounds.

@@ -1,9 +1,12 @@
-﻿---
+---
 title: "Spaces vs Tabs 2025: Guide for Modern Developers"
 publishedAt: "2025-09-15"
+updatedAt: "2025-09-15"
 summary: "Pragmatic guide to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
 category: 'Web Development'
 tags: ["code style", "developer productivity", "linting"]
+faq: [{"question":"Should we choose spaces or tabs?","answer":"Follow ecosystem defaults and use automation to enforce consistency."},{"question":"Why do tabs cause noisy diffs?","answer":"Tab width depends on editor settings, creating inconsistent alignment."}]
+howto: [{"name":"Pick a formatter","text":"Adopt Prettier, gofmt, or rustfmt and keep defaults where possible."},{"name":"Enforce in CI","text":"Add lint jobs that fail on whitespace drift."},{"name":"Document exceptions","text":"Allow tabs only where required (e.g., Makefiles, Go)."}]
 ---
 
 # Spaces vs Tabs: Developer Ergonomics and Toolchain Reality

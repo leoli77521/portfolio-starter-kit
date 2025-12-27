@@ -95,6 +95,12 @@ export function useStructuredData() {
         '@id': `${baseUrl}/#organization`,
         'name': 'ToLearn Blog',
         'url': baseUrl,
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/favicon.ico`,
+          'width': 32,
+          'height': 32,
+        },
       },
       'potentialAction': {
         '@type': 'SearchAction',
@@ -109,21 +115,27 @@ export function useStructuredData() {
     generateArticleSchema: (post: any) => ({
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
-      '@id': `${baseUrl}/blog/${post.slug}`,
+      '@id': `${baseUrl}/blog/${post.slug}#article`,
       'url': `${baseUrl}/blog/${post.slug}`,
       'headline': post.metadata.title,
       'description': post.metadata.summary,
       'datePublished': post.metadata.publishedAt,
-      'dateModified': post.metadata.publishedAt,
+      'dateModified': post.metadata.updatedAt || post.metadata.publishedAt,
       'author': {
         '@type': 'Person',
         'name': 'ToLearn Blog',
       },
       'publisher': {
         '@type': 'Organization',
-        '@id': `${baseUrl}/#organization`,
         'name': 'ToLearn Blog',
+        '@id': `${baseUrl}/#organization`,
         'url': baseUrl,
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/favicon.ico`,
+          'width': 32,
+          'height': 32,
+        },
       },
       'isPartOf': {
         '@type': 'Blog',

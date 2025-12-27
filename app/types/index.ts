@@ -1,13 +1,26 @@
 import type { ReactNode, AnchorHTMLAttributes, ImgHTMLAttributes } from 'react'
 
 // Blog metadata types
+export type FAQItem = {
+  question: string
+  answer: string
+}
+
+export type HowToStep = {
+  name?: string
+  text: string
+}
+
 export type BlogMetadata = {
   title: string
   publishedAt: string
+  updatedAt?: string
   summary: string
   image?: string
   category?: Category
   tags?: string[]
+  faq?: FAQItem[] | string
+  howto?: HowToStep[] | string
 }
 
 export type BlogPost = {

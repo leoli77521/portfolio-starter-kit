@@ -1,18 +1,21 @@
 ---
 title: 'Gemini Deep Thinking API: Build Math AI Apps'
 publishedAt: '2025-08-26'
+updatedAt: '2025-08-26'
 summary: 'Google's Gemini scored IMO gold medal. Learn to build advanced math reasoning apps with Gemini API - complete guide with code examples and implementation tips.'
 category: 'AI Technology'
 tags: ['Google Gemini', 'AI Reasoning', 'API Development', 'Machine Learning', 'Mathematical AI', 'Deep Thinking', 'Programming', 'Artificial Intelligence']
+faq: [{"question":"What is Gemini deep thinking mode?","answer":"It is a reasoning mode that allocates more steps to solve complex math problems."},{"question":"How do I control costs?","answer":"Route simple problems to cheaper models and cache repeated results."}]
+howto: [{"name":"Configure the API","text":"Initialize the Gemini model with deep thinking mode and a valid API key."},{"name":"Build a solver","text":"Send structured prompts and parse step-by-step responses."},{"name":"Optimize in production","text":"Add caching, timeouts, and complexity routing."}]
 ---
 
-Google's DeepMind just dropped something incredible. Their Gemini model scored 35/42 points on the 2025 International Mathematical Olympiad, earning a gold medal. This isn't just another AI milestone â€“ it's a game-changer for developers building reasoning applications.
+Google's DeepMind just dropped something incredible. Their Gemini model scored 35/42 points on the 2025 International Mathematical Olympiad, earning a gold medal. This isn't just another AI milestone â€?it's a game-changer for developers building reasoning applications.
 
 ## What Makes Gemini's Deep Thinking Special?
 
 The breakthrough lies in Gemini's "deep thinking" mode. Unlike standard AI responses, this approach combines dynamic programming with symbolic reasoning. Think of it as giving AI time to actually "think" through complex problems step by step.
 
-When I first tested this, I was blown away. The model doesn't just guess â€“ it shows its work, backtracks when needed, and builds solutions methodically.
+When I first tested this, I was blown away. The model doesn't just guess â€?it shows its work, backtracks when needed, and builds solutions methodically.
 
 ## Setting Up Gemini API for Math Reasoning
 
@@ -85,7 +88,7 @@ config = {
 
 ## Integration Challenges and Solutions
 
-The biggest hurdle? Managing the verbose output. The model explains everything â€“ sometimes too much.
+The biggest hurdle? Managing the verbose output. The model explains everything â€?sometimes too much.
 
 My solution: Parse responses into structured data. Extract just the final answer for user interfaces, but keep the reasoning for verification.
 
@@ -116,7 +119,7 @@ def parse_solution(response):
 
 ## Cost Considerations
 
-Deep thinking isn't cheap. Each query costs roughly 3x standard API calls. For production apps, implement smart caching and progressive complexity â€“ start simple, escalate to deep thinking only when needed.
+Deep thinking isn't cheap. Each query costs roughly 3x standard API calls. For production apps, implement smart caching and progressive complexity â€?start simple, escalate to deep thinking only when needed.
 
 ```python
 def cost_optimized_solver(problem, complexity_level="auto"):
@@ -195,7 +198,7 @@ def calculate_confidence_score(reasoning_steps, verification_result):
 
 ## What's Next for AI Reasoning?
 
-Google's pushing boundaries with mathematical reasoning. I expect we'll see specialized models for different domains soon â€“ physics, chemistry, economics.
+Google's pushing boundaries with mathematical reasoning. I expect we'll see specialized models for different domains soon â€?physics, chemistry, economics.
 
 The real opportunity? Building applications that leverage this reasoning capability. We're moving from simple Q&A to genuine AI collaboration.
 
@@ -208,7 +211,7 @@ The real opportunity? Building applications that leverage this reasoning capabil
 
 ## Getting Started Today
 
-For developers ready to explore this frontier, the tools are here. The question isn't whether AI can reason â€“ it's what you'll build with that capability.
+For developers ready to explore this frontier, the tools are here. The question isn't whether AI can reason â€?it's what you'll build with that capability.
 
 **ðŸ’¡ Quick Start Checklist**:
 - Set up Google AI Studio account

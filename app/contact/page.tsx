@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { baseUrl, organization } from 'app/lib/constants'
 
 export const metadata: Metadata = {
     title: 'Contact Us',
@@ -6,8 +7,26 @@ export const metadata: Metadata = {
 }
 
 export default function ContactPage() {
+    // Organization data is imported from constants
+    const contactSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'ContactPage',
+        '@id': `${baseUrl}/contact/#contact`,
+        url: `${baseUrl}/contact`,
+        name: 'Contact ToLearn Blog',
+        description: 'Contact ToLearn Blog',
+        mainEntity: organization,
+    }
+
     return (
         <section className="max-w-3xl mx-auto px-4 py-12">
+            <script
+                type="application/ld+json"
+                suppressHydrationWarning
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(contactSchema),
+                }}
+            />
             <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Contact Us</h1>
 
             <div className="grid md:grid-cols-2 gap-12">
@@ -23,7 +42,7 @@ export default function ContactPage() {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Email</h3>
-                                <p className="text-gray-600 dark:text-gray-400">lileo16881533@gmail.com</p>
+                                <p className="text-gray-600 dark:text-gray-400">{organization.email}</p>
                             </div>
                         </div>
 

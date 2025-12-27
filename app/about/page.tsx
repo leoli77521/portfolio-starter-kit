@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { baseUrl } from 'app/sitemap'
 
 export const metadata = {
   title: 'About - ToLearn Blog',
@@ -6,8 +7,37 @@ export const metadata = {
 }
 
 export default function AboutPage() {
+  const organization = {
+    '@type': 'Organization',
+    '@id': `${baseUrl}/#organization`,
+    name: 'ToLearn Blog',
+    url: baseUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${baseUrl}/favicon.ico`,
+      width: 32,
+      height: 32,
+    },
+  }
+  const aboutSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${baseUrl}/about/#about`,
+    url: `${baseUrl}/about`,
+    name: 'About ToLearn Blog',
+    description: 'Learn about ToLearn Blog - your source for AI technology insights, programming tutorials, and SEO optimization guides.',
+    mainEntity: organization,
+  }
+
   return (
     <section>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(aboutSchema),
+        }}
+      />
       <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
         About ToLearn Blog
       </h1>

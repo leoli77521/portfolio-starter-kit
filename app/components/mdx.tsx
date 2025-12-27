@@ -2,8 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
-import React, { ReactNode } from 'react'
-import type { MDXComponents } from 'mdx/types'
+import React from 'react'
 import { slugify } from '@/app/lib/formatters'
 import type {
   TableProps,
@@ -12,6 +11,11 @@ import type {
   CodeProps,
   HeadingProps,
 } from '@/app/types'
+import { CodeBlock } from './code-block'
+
+type MDXComponents = Record<string, React.ComponentType<any>> & {
+  wrapper?: React.ComponentType<any>
+}
 
 function Table({ data }: TableProps) {
   const headers = data.headers.map((header, index) => (
@@ -67,9 +71,7 @@ function RoundedImage({ alt, ...props }: RoundedImageProps) {
   return <Image alt={alt} className="rounded-lg" {...props} />
 }
 
-import { CodeBlock } from './code-block'
 
-// ... existing imports
 
 function Code({ children, className, ...props }: CodeProps) {
   const codeString = typeof children === 'string' ? children : String(children ?? '')

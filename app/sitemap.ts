@@ -1,6 +1,7 @@
 import { getBlogPosts } from 'app/blog/utils'
 
-export const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://tolearn.blog'
+export { baseUrl } from 'app/lib/constants'
+import { baseUrl } from 'app/lib/constants'
 
 function formatDateForSitemap(dateString: string): string {
   // 如果日期没有包含时间，添加默认时间

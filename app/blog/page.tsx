@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { baseUrl } from 'app/sitemap'
+import { baseUrl, organization } from 'app/lib/constants'
 import { getBlogPosts } from 'app/blog/utils'
 import { PostsWithFilter } from 'app/components/posts-with-filter'
 
@@ -20,18 +20,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   const posts = getBlogPosts()
-  const organization = {
-    '@type': 'Organization',
-    '@id': `${baseUrl}/#organization`,
-    name: 'ToLearn Blog',
-    url: baseUrl,
-    logo: {
-      '@type': 'ImageObject',
-      url: `${baseUrl}/favicon.ico`,
-      width: 32,
-      height: 32,
-    },
-  }
+
 
   const blogSchema = {
     '@context': 'https://schema.org',
@@ -48,6 +37,17 @@ export default function Page() {
     inLanguage: 'en-US',
     keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization', 'web development', 'programming technology', 'frontend development']
   }
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: posts.map((post, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `${baseUrl}/blog/${post.slug}`,
+      name: post.metadata.title,
+    })),
+  }
+  const structuredData = [blogSchema, itemListSchema]
 
   return (
     <section className="max-w-6xl mx-auto">
@@ -68,7 +68,7 @@ export default function Page() {
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(blogSchema),
+          __html: JSON.stringify(structuredData),
         }}
       />
       {/* Page Header */}

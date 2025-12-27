@@ -99,12 +99,12 @@ export function Search() {
       {/* 搜索按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105"
+        className="p-2.5 rounded-lg bg-gray-100/80 hover:bg-gray-200 dark:bg-slate-900/70 dark:hover:bg-indigo-950/60 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_8px_16px_rgba(79,70,229,0.2)] transition-all duration-200 hover:scale-105"
         aria-label="Search articles"
         title="Search (⌘K)"
       >
         <svg
-          className="w-5 h-5 text-gray-700 dark:text-gray-300"
+          className="w-5 h-5 text-gray-700 dark:text-slate-200"
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -56,7 +56,7 @@ export function Navbar() {
 
   return (
     <header className="mb-16" role="banner">
-      <div className="sticky top-0 z-50 -mx-4 px-4 lg:mx-0 lg:px-0 backdrop-blur-xl bg-white/70 dark:bg-slate-950/70 border-b border-gray-200/50 dark:border-slate-800/50 supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60">
+      <div className="sticky top-0 z-50 px-4 lg:px-0 rounded-2xl overflow-hidden backdrop-blur-xl bg-white/80 dark:bg-slate-950/85 dark:bg-gradient-to-r dark:from-indigo-500/15 dark:via-slate-950/85 dark:to-purple-500/15 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_10px_30px_rgba(79,70,229,0.25)] supports-[backdrop-filter]:bg-white/70">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4">
           {/* Logo */}
           <Link
@@ -107,14 +107,14 @@ export function Navbar() {
 
       {/* Featured Articles Quick Access - 仅桌面端显示 */}
       <nav className="hidden md:flex flex-wrap items-center gap-3 mt-6 max-w-6xl mx-auto" role="navigation" aria-label="Featured articles quick access">
-        <span className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-slate-500 mr-2" aria-hidden="true">
+        <span className="text-xs uppercase tracking-wider font-semibold text-gray-500 dark:text-slate-400 mr-2" aria-hidden="true">
           Quick Access:
         </span>
         {featuredArticles.map((article) => (
           <Link
             key={article.href}
             href={article.href}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-white/50 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 hover:bg-white dark:hover:bg-slate-800 hover:border-indigo-300 dark:hover:border-indigo-500/50 text-gray-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 hover:shadow-lg dark:hover:shadow-indigo-900/20 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-white/60 dark:bg-slate-900/60 border border-gray-200/70 dark:border-indigo-500/20 hover:bg-white dark:hover:bg-indigo-950/60 hover:border-indigo-300 dark:hover:border-indigo-400/50 text-gray-700 dark:text-slate-200 transition-all duration-200 hover:scale-105 hover:shadow-lg dark:hover:shadow-[0_10px_24px_rgba(79,70,229,0.25)] backdrop-blur-sm"
             title={article.title}
             aria-label={`Read article: ${article.name} - ${article.description}`}
           >

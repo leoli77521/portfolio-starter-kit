@@ -50,23 +50,23 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
       {/* 汉堡菜单按钮 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+        className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-indigo-950/40 transition-colors duration-200"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
       >
         <div className="w-6 h-5 flex flex-col justify-between">
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ${
+            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
               isOpen ? 'rotate-45 translate-y-2' : ''
             }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ${
+            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
               isOpen ? 'opacity-0' : ''
             }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-gray-300 transition-all duration-300 ${
+            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
               isOpen ? '-rotate-45 -translate-y-2' : ''
             }`}
           />
@@ -84,7 +84,7 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
 
       {/* 侧边抽屉菜单 */}
       <div
-        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-slate-950 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         role="dialog"
@@ -93,17 +93,17 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
       >
         <div className="flex flex-col h-full">
           {/* 菜单头部 */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-indigo-500/20">
             <span className="font-black text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
               ToLearn
             </span>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-indigo-950/40 transition-colors duration-200"
               aria-label="Close menu"
             >
               <svg
-                className="w-6 h-6 text-gray-700 dark:text-gray-300"
+                className="w-6 h-6 text-gray-700 dark:text-slate-200"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -127,8 +127,8 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
                       href={path}
                       className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-600 dark:text-indigo-400 border-l-4 border-indigo-600 dark:border-indigo-400'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400'
+                          ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-600 dark:text-indigo-300 border-l-4 border-indigo-600 dark:border-indigo-400'
+                          : 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-300'
                       }`}
                       title={title}
                     >
@@ -141,8 +141,8 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
           </nav>
 
           {/* 菜单底部 */}
-          <div className="p-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+          <div className="p-6 border-t border-gray-200 dark:border-indigo-500/20">
+            <p className="text-xs text-gray-500 dark:text-slate-400 text-center">
               © 2025 ToLearn Blog
             </p>
           </div>

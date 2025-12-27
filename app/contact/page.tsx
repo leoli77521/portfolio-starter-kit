@@ -37,7 +37,7 @@ export default function ContactPage() {
 
                     <div className="space-y-6">
                         <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-600 dark:text-indigo-400 border border-transparent dark:border-indigo-500/20">
                                 <span className="text-xl">📧</span>
                             </div>
                             <div>
@@ -47,7 +47,7 @@ export default function ContactPage() {
                         </div>
 
                         <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-purple-600 dark:text-purple-400 border border-transparent dark:border-purple-500/20">
                                 <span className="text-xl">💬</span>
                             </div>
                             <div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
                     </div>
                 </div>
 
-                <div className="bg-gray-50 dark:bg-gray-800/50 p-8 rounded-2xl border border-gray-200 dark:border-gray-700">
+                <div className="bg-white/50 dark:bg-slate-800/40 p-8 rounded-2xl border border-gray-200 dark:border-slate-700/50 backdrop-blur-sm shadow-xl dark:shadow-2xl dark:shadow-slate-900/50">
                     <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">Send us a message</h2>
                     <form className="space-y-4">
                         <div>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                             <input
                                 type="text"
                                 id="name"
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                                 placeholder="Your name"
                             />
                         </div>
@@ -75,7 +75,7 @@ export default function ContactPage() {
                             <input
                                 type="email"
                                 id="email"
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                                 placeholder="your@email.com"
                             />
                         </div>
@@ -84,13 +84,13 @@ export default function ContactPage() {
                             <textarea
                                 id="message"
                                 rows={4}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
                                 placeholder="How can we help?"
                             ></textarea>
                         </div>
                         <button
                             type="button"
-                            className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                            className="w-full py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-indigo-500/25"
                         >
                             Send Message
                         </button>

@@ -47,25 +47,27 @@
 }
 
 .dark {
-  /* Color System Dark */
-  --color-background: #020617; /* slate-950 */
-  --color-foreground: #e2e8f0; /* slate-200 */
+  /* Color System Dark - Tech Blue Purple Theme */
+  --color-background: #0B0F1A; /* Base: Very dark blue-gray */
+  --color-foreground: #E2E8F0; /* Text: Light gray, readable */
 
-  --color-primary: #6366f1; /* indigo-500 */
+  --color-primary: #818CF8; /* Indigo-400: Bright, glowing primary */
   --color-primary-foreground: #ffffff;
 
-  --color-secondary: #1e293b; /* slate-800 */
-  --color-secondary-foreground: #f8fafc; /* slate-50 */
+  --color-secondary: #1F2937; /* Gray-800: Surface color */
+  --color-secondary-foreground: #F9FAFB; /* Gray-50 */
 
-  --color-muted: #1e293b; /* slate-800 */
-  --color-muted-foreground: #94a3b8; /* slate-400 */
+  --color-muted: #1F2937; /* Gray-800: Muted surface */
+  --color-muted-foreground: #9CA3AF; /* Gray-400: Muted text */
 
-  --color-border: #1e293b; /* slate-800 */
+  --color-border: #374151; /* Gray-700: Subtle borders */
 
-  --sh-class: #4c97f8;
-  --sh-identifier: white;
-  --sh-keyword: #f47067;
-  --sh-string: #0fa295;
+  /* Syntax Highlighting adjustments for dark mode */
+  --sh-class: #60A5FA;
+  --sh-identifier: #F3F4F6;
+  --sh-keyword: #F87171;
+  --sh-string: #34D399;
+  
   color-scheme: dark;
 }
 

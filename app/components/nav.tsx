@@ -56,7 +56,7 @@ export function Navbar() {
 
   return (
     <header className="mb-16" role="banner">
-      <div className="sticky top-0 z-50 -mx-4 px-4 lg:mx-0 lg:px-0 backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-gray-200/50 dark:border-slate-800/50">
+      <div className="sticky top-0 z-50 -mx-4 px-4 lg:mx-0 lg:px-0 backdrop-blur-xl bg-white/70 dark:bg-slate-950/70 border-b border-gray-200/50 dark:border-slate-800/50 supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-950/60">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4">
           {/* Logo */}
           <Link
@@ -114,7 +114,7 @@ export function Navbar() {
           <Link
             key={article.href}
             href={article.href}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-gradient-to-r from-gray-50 to-gray-100 dark:from-transparent dark:to-transparent dark:bg-slate-800/30 border border-gray-200 dark:border-slate-700/50 hover:from-indigo-50 hover:to-purple-50 dark:hover:bg-slate-700/50 hover:border-indigo-300 dark:hover:border-slate-600 text-gray-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 hover:shadow-md"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-white/50 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 hover:bg-white dark:hover:bg-slate-800 hover:border-indigo-300 dark:hover:border-indigo-500/50 text-gray-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 hover:shadow-lg dark:hover:shadow-indigo-900/20 backdrop-blur-sm"
             title={article.title}
             aria-label={`Read article: ${article.name} - ${article.description}`}
           >

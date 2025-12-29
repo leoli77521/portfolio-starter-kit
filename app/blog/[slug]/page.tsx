@@ -7,6 +7,7 @@ import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
 import { InArticleAd } from 'app/components/AdUnit'
+import Comments from 'app/components/comments'
 import type { FAQItem, HowToStep } from 'app/types'
 
 function parseJsonArray(value: unknown): unknown[] | null {
@@ -513,10 +514,12 @@ export default function Blog({ params }: PageProps) {
         </aside>
       </div>
 
-      {/* Related articles recommendation */}
       <div className="mt-16">
         <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
       </div>
+
+      {/* Comments Section */}
+      <Comments />
     </section>
   )
 }

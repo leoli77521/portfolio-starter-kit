@@ -1,4 +1,6 @@
-function ArrowIcon() {
+import NewsletterForm from './newsletter-form'
+
+export function ArrowIcon() {
   return (
     <svg
       width="12"
@@ -146,17 +148,7 @@ export default function Footer() {
 
         {/* Connect */}
         <div>
-          <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4">Stay Connected</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Subscribe to our RSS feed for the latest updates on AI, programming, and tech trends.
-          </p>
-          <a
-            href="/rss"
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-full transition-colors"
-            title="Subscribe to RSS"
-          >
-            Subscribe to RSS
-          </a>
+          <NewsletterForm />
         </div>
       </div>
 

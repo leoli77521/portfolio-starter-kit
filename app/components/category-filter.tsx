@@ -10,7 +10,7 @@ interface CategoryFilterProps {
   currentCategory: Category
 }
 
-const categories: CategoryConfig[] = [
+export const categories: CategoryConfig[] = [
   { name: 'All', color: 'gray', emoji: '📚' },
   { name: 'AI Technology', color: 'blue', emoji: '🤖' },
   { name: 'Web Development', color: 'green', emoji: '💻' },

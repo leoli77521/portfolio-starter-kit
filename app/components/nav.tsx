@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { MobileMenu } from './mobile-menu'
 import { Search } from './search'
 import { ThemeToggle } from './theme-toggle'
+import { categories } from './category-filter'
 
 const navItems = {
   '/': {
@@ -73,6 +74,54 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-2" role="navigation" aria-label="Main navigation">
             {Object.entries(navItems).map(([path, { name, title }]) => {
               const isActive = pathname === path
+              
+              if (path === '/categories') {
+                return (
+                  <div key={path} className="relative group">
+                    <Link
+                      href={path}
+                      className={`nav-link text-sm flex items-center gap-1 ${isActive || pathname?.startsWith('/categories/')
+                        ? 'text-indigo-600 dark:text-indigo-400 font-semibold'
+                        : ''
+                        }`}
+                      title={title}
+                      aria-label={title}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {name}
+                      <svg 
+                        className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180 opacity-70" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Link>
+
+                    {/* Dropdown Menu */}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 w-64">
+                      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-xl border border-gray-200/60 dark:border-indigo-500/20 shadow-xl dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] overflow-hidden p-2">
+                        <div className="flex flex-col gap-1">
+                          {categories.map((cat) => (
+                            <Link
+                              key={cat.name}
+                              href={`/categories/${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
+                              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors group/item"
+                            >
+                              <span className="text-xl group-hover/item:scale-110 transition-transform duration-200">{cat.emoji}</span>
+                              <span className="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-300">
+                                {cat.name}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+
               return (
                 <Link
                   key={path}

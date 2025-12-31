@@ -52,12 +52,54 @@ const featuredArticles = [
   }
 ]
 
+const categoryDescriptions: Record<string, string> = {
+  'AI Technology': 'Models, agents, and intelligent systems',
+  'Web Development': 'Frontend, backend, and full-stack builds',
+  'SEO & Marketing': 'Search visibility and growth tactics',
+  'Productivity': 'Workflows, focus, and automation',
+}
+
+const toCategorySlug = (name: string) =>
+  encodeURIComponent(name.toLowerCase().replace(/\s+/g, '-'))
+
+const categoryLinks = categories.filter((cat) => cat.name !== 'All')
+const categorySplitIndex = Math.ceil(categoryLinks.length / 2)
+const categoryColumns = [
+  categoryLinks.slice(0, categorySplitIndex),
+  categoryLinks.slice(categorySplitIndex),
+]
+
+const exploreLinks = [
+  {
+    href: '/blog',
+    name: 'Latest Posts',
+    description: 'Fresh writing and tutorials',
+  },
+  {
+    href: '/tags',
+    name: 'Tags',
+    description: 'Browse topics and keywords',
+  },
+  {
+    href: '/categories',
+    name: 'All Categories',
+    description: 'Every topic in one view',
+  },
+  {
+    href: '/about',
+    name: 'About',
+    description: 'Mission, author, and goals',
+  },
+]
+
+const featuredMenuItems = featuredArticles.slice(0, 2)
+
 export function Navbar() {
   const pathname = usePathname()
 
   return (
     <header className="mb-16" role="banner">
-      <div className="sticky top-0 z-50 px-4 lg:px-0 rounded-2xl overflow-hidden backdrop-blur-xl bg-white/80 dark:bg-slate-950/85 dark:bg-gradient-to-r dark:from-indigo-500/15 dark:via-slate-950/85 dark:to-purple-500/15 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_10px_30px_rgba(79,70,229,0.25)] supports-[backdrop-filter]:bg-white/70">
+      <div className="sticky top-0 z-50 px-4 lg:px-0 rounded-2xl backdrop-blur-xl bg-white/80 dark:bg-slate-950/85 dark:bg-gradient-to-r dark:from-indigo-500/15 dark:via-slate-950/85 dark:to-purple-500/15 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_10px_30px_rgba(79,70,229,0.25)] supports-[backdrop-filter]:bg-white/70">
         <div className="max-w-6xl mx-auto flex items-center justify-between py-4">
           {/* Logo */}
           <Link
@@ -100,21 +142,84 @@ export function Navbar() {
                     </Link>
 
                     {/* Dropdown Menu */}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2 z-50 w-64">
-                      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-xl border border-gray-200/60 dark:border-indigo-500/20 shadow-xl dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] overflow-hidden p-2">
-                        <div className="flex flex-col gap-1">
-                          {categories.map((cat) => (
-                            <Link
-                              key={cat.name}
-                              href={`/categories/${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
-                              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors group/item"
-                            >
-                              <span className="text-xl group-hover/item:scale-110 transition-transform duration-200">{cat.emoji}</span>
-                              <span className="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-300">
-                                {cat.name}
-                              </span>
-                            </Link>
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:pointer-events-auto group-focus-within:translate-y-0 transition-all duration-200 transform translate-y-2 z-50 w-[min(94vw,980px)]">
+                      <div className="bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl rounded-2xl border border-gray-200/70 dark:border-slate-800 shadow-2xl">
+                        <div className="grid gap-8 p-6 lg:grid-cols-[1fr_1fr_1fr_1.1fr]">
+                          {categoryColumns.map((column, columnIndex) => (
+                            <div key={`category-column-${columnIndex}`} className="space-y-4">
+                              <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 dark:text-slate-400">
+                                {columnIndex === 0 ? 'Core Topics' : 'More Topics'}
+                              </p>
+                              <div className="space-y-2">
+                                {column.map((cat) => (
+                                  <Link
+                                    key={cat.name}
+                                    href={`/categories/${toCategorySlug(cat.name)}`}
+                                    className="group/link block rounded-lg px-3 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900"
+                                  >
+                                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-300">
+                                      {cat.name}
+                                    </div>
+                                    <div className="text-xs text-gray-500 dark:text-slate-400">
+                                      {categoryDescriptions[cat.name] || 'Browse posts in this topic'}
+                                    </div>
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
                           ))}
+
+                          <div className="space-y-4">
+                            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 dark:text-slate-400">
+                              Explore
+                            </p>
+                            <div className="space-y-2">
+                              {exploreLinks.map((link) => (
+                                <Link
+                                  key={link.href}
+                                  href={link.href}
+                                  className="group/link block rounded-lg px-3 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900"
+                                >
+                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-300">
+                                    {link.name}
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-slate-400">
+                                    {link.description}
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="space-y-4 border-l border-gray-200/80 dark:border-slate-800 pl-6">
+                            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 dark:text-slate-400">
+                              Featured
+                            </p>
+                            <div className="space-y-3">
+                              {featuredMenuItems.map((article) => (
+                                <Link
+                                  key={article.href}
+                                  href={article.href}
+                                  className="block rounded-xl border border-gray-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+                                  title={article.title}
+                                  aria-label={`Read article: ${article.name} - ${article.description}`}
+                                >
+                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                    {article.name}
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                                    {article.description}
+                                  </div>
+                                </Link>
+                              ))}
+                              <Link
+                                href="/blog"
+                                className="inline-flex items-center text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
+                              >
+                                Browse all articles
+                              </Link>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

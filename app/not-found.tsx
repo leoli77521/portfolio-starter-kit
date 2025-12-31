@@ -10,8 +10,8 @@ export const metadata: Metadata = {
     canonical: `${baseUrl}/404`,
   },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
   },
 }
 

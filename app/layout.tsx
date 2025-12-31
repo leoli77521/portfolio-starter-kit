@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
     images: [{
-      url: `${baseUrl}/og-image.jpg`,
+      url: `${baseUrl}/og`,
       width: 1200,
       height: 630,
       alt: 'ToLearn Blog - Professional Technology Blog'
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ToLearn Blog - AI, SEO & Programming Tutorials',
     description: 'Discover cutting-edge AI tools, proven SEO techniques, and modern programming best practices. Elevate your development skills with ToLearn.',
-    images: [`${baseUrl}/og-image.jpg`],
+    images: [`${baseUrl}/og`],
   },
   robots: {
     index: true,
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: baseUrl,
+    // canonical: baseUrl, // Removed global canonical to avoid duplicate content issues
     languages: {
       'en-US': baseUrl,
     },

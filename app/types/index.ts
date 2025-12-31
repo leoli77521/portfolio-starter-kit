@@ -36,6 +36,7 @@ export type Category =
   | 'Web Development'
   | 'SEO & Marketing'
   | 'Productivity'
+  | 'Technology'
 
 export type CategoryColor = 'gray' | 'blue' | 'green' | 'purple' | 'orange'
 

@@ -5,6 +5,7 @@ export const categories: CategoryConfig[] = [
   { name: 'AI Technology', color: 'blue', emoji: '🤖' },
   { name: 'Web Development', color: 'green', emoji: '💻' },
   { name: 'SEO & Marketing', color: 'purple', emoji: '📈' },
+  { name: 'Technology', color: 'blue', emoji: '🔌' },
   { name: 'Productivity', color: 'orange', emoji: '⚡' },
 ]
 

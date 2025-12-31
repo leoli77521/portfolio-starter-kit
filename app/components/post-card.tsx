@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { formatDate, calculateReadingTime, truncateSummary } from '@/app/lib/formatters'
-import { getCategoryColor, getCategoryEmoji } from './category-filter'
+import { getCategoryColor, getCategoryEmoji } from '@/app/lib/categories'
 
 interface PostCardProps {
   post: {

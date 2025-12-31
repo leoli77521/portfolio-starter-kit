@@ -1,6 +1,6 @@
 import { getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
-import { categories } from 'app/components/category-filter'
+import { categories } from 'app/lib/categories'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
 

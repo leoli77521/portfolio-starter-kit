@@ -1,22 +1,16 @@
 'use client'
 
-import type { Category, CategoryConfig, CategoryColor, ColorStylesMap } from '@/app/types'
+import type { Category, ColorStylesMap } from '@/app/types'
+import { categories, getCategoryColor, getCategoryEmoji } from '@/app/lib/categories'
 
-// Re-export Category type for backward compatibility
+// Re-export for backward compatibility (optional, but good for reducing refactor scope)
 export type { Category } from '@/app/types'
+export { categories, getCategoryColor, getCategoryEmoji }
 
 interface CategoryFilterProps {
   onCategoryChange: (category: Category) => void
   currentCategory: Category
 }
-
-export const categories: CategoryConfig[] = [
-  { name: 'All', color: 'gray', emoji: '📚' },
-  { name: 'AI Technology', color: 'blue', emoji: '🤖' },
-  { name: 'Web Development', color: 'green', emoji: '💻' },
-  { name: 'SEO & Marketing', color: 'purple', emoji: '📈' },
-  { name: 'Productivity', color: 'orange', emoji: '⚡' },
-]
 
 const colorStyles: ColorStylesMap = {
   gray: {
@@ -71,14 +65,4 @@ export function CategoryFilter({ onCategoryChange, currentCategory }: CategoryFi
       </div>
     </div>
   )
-}
-
-export function getCategoryColor(category: string): CategoryColor {
-  const found = categories.find((c) => c.name === category)
-  return (found?.color as CategoryColor) || 'gray'
-}
-
-export function getCategoryEmoji(category: string): string {
-  const found = categories.find((c) => c.name === category)
-  return found?.emoji || '📄'
 }

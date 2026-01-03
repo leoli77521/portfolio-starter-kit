@@ -172,7 +172,7 @@ export default function Page() {
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Latest Posts</h2>
         <div className="bg-gray-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-gray-200 dark:border-slate-800/50">
-          <BlogPosts />
+          <BlogPosts limit={6} />
         </div>
       </section>
 

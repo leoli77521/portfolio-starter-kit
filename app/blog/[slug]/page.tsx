@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound, redirect } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { TableOfContents } from 'app/components/toc'
@@ -489,6 +490,19 @@ export default function Blog({ params }: PageProps) {
       <div className="flex gap-12">
         {/* Main Content */}
         <article className="prose flex-1 min-w-0">
+          {post.metadata.image && (
+            <div className="not-prose mb-8">
+              <Image
+                src={post.metadata.image}
+                alt={post.metadata.title}
+                width={1024}
+                height={1024}
+                priority
+                sizes="(max-width: 1024px) 100vw, 960px"
+                className="w-full h-auto rounded-2xl border border-gray-200 dark:border-slate-800/50"
+              />
+            </div>
+          )}
           <CustomMDX source={post.content} />
 
           {/* Google AdSense - 文章底部广告 */}

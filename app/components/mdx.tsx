@@ -123,6 +123,15 @@ const components = {
   Image: RoundedImage,
   a: CustomLink,
   code: Code,
+  img: (props: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt={props.alt}
+      loading="lazy"
+      decoding="async"
+      {...props}
+    />
+  ),
   Table,
 } as MDXComponents
 

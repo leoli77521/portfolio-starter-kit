@@ -71,14 +71,7 @@
   color-scheme: dark;
 }
 
-/* Theme transition animation - Optimized to avoid layout thrashing */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, color;
-  transition-timing-function: ease;
-  transition-duration: 0.3s;
-}
+/* Global transition removed for performance */
 
 /* Hero section glow effect in dark mode */
 .dark .hero-glow {
@@ -312,7 +305,6 @@ input[type='email'] {
 
 /* 性能优化: 减少动画以提高性能 */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {

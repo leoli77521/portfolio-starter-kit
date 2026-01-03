@@ -1,4 +1,4 @@
-import { getBlogPosts } from 'app/blog/utils'
+import { getBlogPosts, getBlogPostsMetadata } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { tag: string } }):
 
 export default function TagPage({ params }: { params: { tag: string } }) {
   const decodedTag = decodeURIComponent(params.tag)
-  const allPosts = getBlogPosts()
+  const allPosts = getBlogPostsMetadata()
   
   // Filter posts that contain this tag
   const posts = allPosts.filter((post) => 

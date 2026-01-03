@@ -7,10 +7,10 @@ const PlausibleAnalytics = () => {
     <>
       <Script
         src="https://plausible.io/js/pa-QKldr8obV9H8Z2F_VVe7d.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         async
       />
-      <Script id="plausible-init" strategy="afterInteractive">
+      <Script id="plausible-init" strategy="lazyOnload">
         {`
           window.plausible = window.plausible || function() {
             (plausible.q = plausible.q || []).push(arguments)

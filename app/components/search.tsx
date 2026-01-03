@@ -8,6 +8,7 @@ interface SearchResult {
   title: string
   summary: string
   publishedAt: string
+  content?: string
 }
 
 export function Search() {
@@ -18,23 +19,28 @@ export function Search() {
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 加载所有文章（通过 API）
+  // Load search index from static JSON
   useEffect(() => {
     async function loadPosts() {
+      if (allPosts.length > 0) return
+
       try {
-        const response = await fetch('/api/search')
+        const response = await fetch('/search-index.json')
         if (response.ok) {
           const posts = await response.json()
           setAllPosts(posts)
         }
       } catch (error) {
-        console.error('Failed to load posts for search:', error)
+        console.error('Failed to load search index:', error)
       }
     }
-    loadPosts()
-  }, [])
+    
+    if (isOpen) {
+      loadPosts()
+    }
+  }, [isOpen, allPosts.length])
 
-  // 处理搜索
+  // Handle search
   useEffect(() => {
     if (query.trim() === '') {
       setResults([])
@@ -45,12 +51,13 @@ export function Search() {
     const filtered = allPosts.filter(
       (post) =>
         post.title.toLowerCase().includes(searchQuery) ||
-        post.summary.toLowerCase().includes(searchQuery)
+        post.summary.toLowerCase().includes(searchQuery) ||
+        (post.content && post.content.toLowerCase().includes(searchQuery))
     )
-    setResults(filtered.slice(0, 5)) // 最多显示5个结果
+    setResults(filtered.slice(0, 5)) // Max 5 results
   }, [query, allPosts])
 
-  // 点击外部关闭
+  // Click outside to close
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -67,7 +74,7 @@ export function Search() {
     }
   }, [isOpen])
 
-  // 快捷键 Cmd/Ctrl + K
+  // Shortcut Cmd/Ctrl + K
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
@@ -87,7 +94,7 @@ export function Search() {
     }
   }, [])
 
-  // 打开搜索时聚焦输入框
+  // Focus input when open
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus()
@@ -96,7 +103,7 @@ export function Search() {
 
   return (
     <div ref={searchRef} className="relative">
-      {/* 搜索按钮 */}
+      {/* Search Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="p-2.5 rounded-lg bg-gray-100/80 hover:bg-gray-200 dark:bg-slate-900/70 dark:hover:bg-indigo-950/60 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_8px_16px_rgba(79,70,229,0.2)] transition-all duration-200 hover:scale-105"
@@ -116,7 +123,7 @@ export function Search() {
         </svg>
       </button>
 
-      {/* 搜索下拉框 */}
+      {/* Dropdown */}
       {isOpen && (
         <div
           className="absolute right-0 mt-2 w-full sm:w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
@@ -124,7 +131,7 @@ export function Search() {
           aria-label="Search articles"
           aria-modal="true"
         >
-          {/* 搜索输入框 */}
+          {/* Input */}
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="relative">
               <input
@@ -160,7 +167,7 @@ export function Search() {
             </div>
           </div>
 
-          {/* 搜索结果 */}
+          {/* Results */}
           <div id="search-results" className="max-h-96 overflow-y-auto" role="region" aria-label="Search results" aria-live="polite">
             {query.trim() === '' ? (
               <div className="p-8 text-center text-gray-500 dark:text-gray-400">
@@ -220,7 +227,7 @@ export function Search() {
             )}
           </div>
 
-          {/* 底部提示 */}
+          {/* Footer */}
           {results.length > 0 && (
             <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
               <Link

@@ -107,6 +107,15 @@ export function getBlogPosts() {
   return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
 }
 
+export function getBlogPostsMetadata() {
+  const posts = getBlogPosts()
+  return posts.map((post) => ({
+    slug: post.slug,
+    metadata: post.metadata,
+    readingTime: calculateReadingTime(post.content)
+  }))
+}
+
 export function calculateReadingTime(content: string): number {
   return calculateReadingTimeUtil(content)
 }

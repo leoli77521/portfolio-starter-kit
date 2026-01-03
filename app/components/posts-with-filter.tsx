@@ -13,7 +13,7 @@ interface Post {
     summary?: string
     category?: string
   }
-  content: string
+  readingTime?: number
 }
 
 interface PostsWithFilterProps {
@@ -36,9 +36,10 @@ export function PostsWithFilter({ posts }: PostsWithFilterProps) {
     const query = searchQuery.toLowerCase()
     const titleMatch = post.metadata.title.toLowerCase().includes(query)
     const summaryMatch = post.metadata.summary?.toLowerCase().includes(query)
-    const contentMatch = post.content.toLowerCase().includes(query)
-
-    return categoryMatch && (titleMatch || summaryMatch || contentMatch)
+    // Content search temporarily disabled for performance payload optimization
+    // Phase 2 will implement full-text search via index
+    
+    return categoryMatch && (titleMatch || summaryMatch)
   })
 
   return (

@@ -1,4 +1,4 @@
-import { getBlogPosts } from 'app/blog/utils'
+import { getBlogPostsMetadata } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import { categories } from 'app/lib/categories'
 import { PostCard } from 'app/components/post-card'
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const allPosts = getBlogPosts()
+  const allPosts = getBlogPostsMetadata()
   
   // Find the category configuration that matches the URL slug
   const category = categories.find(cat => 

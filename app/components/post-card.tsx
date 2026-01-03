@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { formatDate, calculateReadingTime, truncateSummary } from '@/app/lib/formatters'
+import { formatDate, truncateSummary } from '@/app/lib/formatters'
 import { getCategoryColor, getCategoryEmoji } from '@/app/lib/categories'
 
 interface PostCardProps {
@@ -13,13 +13,13 @@ interface PostCardProps {
       summary?: string
       category?: string
     }
-    content: string
+    readingTime?: number
   }
 }
 
 export function PostCard({ post }: PostCardProps) {
   const categoryBadge = getCategoryBadgeStyles(post.metadata.category || 'All')
-  const readingTime = calculateReadingTime(post.content)
+  const readingTime = post.readingTime || 1
 
   return (
     <article

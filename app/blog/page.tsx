@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { baseUrl, organization } from 'app/lib/constants'
-import { getBlogPosts } from 'app/blog/utils'
+import { getBlogPostsMetadata } from 'app/blog/utils'
 import { PostsWithFilter } from 'app/components/posts-with-filter'
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 export default function Page() {
-  const posts = getBlogPosts()
+  const posts = getBlogPostsMetadata()
 
 
   const blogSchema = {

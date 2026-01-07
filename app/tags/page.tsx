@@ -1,9 +1,20 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
+import { slugify } from '@/app/lib/formatters'
+import { baseUrl } from 'app/sitemap'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Tags - ToLearn Blog',
   description: 'Browse articles by tags - AI, Programming, SEO, Machine Learning, and more.',
+  alternates: {
+    canonical: `${baseUrl}/tags`,
+  },
+}
+
+const toTagSlug = (tag: string) => {
+  const slug = slugify(tag)
+  return slug || tag.trim().toLowerCase().replace(/\s+/g, '-')
 }
 
 export default function TagsPage() {
@@ -89,7 +100,7 @@ export default function TagsPage() {
           {sortedTags.map(([tag, count], index) => (
             <Link
               key={tag}
-              href={`/tags/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`}
+              href={`/tags/${toTagSlug(tag)}`}
               className={`group relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${getTagColor(
                 index
               )} text-white font-semibold ${getTagSize(
@@ -115,7 +126,7 @@ export default function TagsPage() {
           {sortedTags.map(([tag, count], index) => (
             <Link
               key={tag}
-              href={`/tags/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`}
+              href={`/tags/${toTagSlug(tag)}`}
               className="group flex items-center justify-between rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4 transition-all duration-200 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md hover:scale-105"
             >
               <span className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">

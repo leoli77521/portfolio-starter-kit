@@ -1,9 +1,15 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
+import { getCategorySlug } from 'app/lib/categories'
+import { baseUrl } from 'app/sitemap'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Categories - ToLearn Blog',
   description: 'Browse articles by category - AI Technology, Programming, SEO & Marketing, and more.',
+  alternates: {
+    canonical: `${baseUrl}/categories`,
+  },
 }
 
 export default function CategoriesPage() {
@@ -62,7 +68,7 @@ export default function CategoriesPage() {
           return (
             <Link
               key={category}
-              href={`/categories/${encodeURIComponent(category.toLowerCase().replace(/\s+/g, '-'))}`}
+              href={`/categories/${getCategorySlug(category)}`}
               className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-transparent"
             >
               {/* 渐变背景 */}

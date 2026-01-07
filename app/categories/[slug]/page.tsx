@@ -1,18 +1,28 @@
 import { getBlogPostsMetadata } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
-import { categories } from 'app/lib/categories'
+import { categories, getCategorySlug } from 'app/lib/categories'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
+import { baseUrl } from 'app/sitemap'
+
+const normalizeCategorySlug = (value: string) => {
+  try {
+    return getCategorySlug(decodeURIComponent(value))
+  } catch {
+    return getCategorySlug(value)
+  }
+}
 
 export async function generateStaticParams() {
   return categories.map((category) => ({
-    slug: encodeURIComponent(category.name.toLowerCase().replace(/\s+/g, '-')),
+    slug: getCategorySlug(category.name),
   }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const category = categories.find(cat => 
-    encodeURIComponent(cat.name.toLowerCase().replace(/\s+/g, '-')) === params.slug
+  const normalizedSlug = normalizeCategorySlug(params.slug)
+  const category = categories.find(cat =>
+    getCategorySlug(cat.name) === normalizedSlug
   )
 
   if (!category) {
@@ -24,15 +34,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${category.name} - Blog Category`,
     description: `Read the latest articles about ${category.name}.`,
+    alternates: {
+      canonical: `${baseUrl}/categories/${normalizedSlug}`,
+    },
   }
 }
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
+  const normalizedSlug = normalizeCategorySlug(params.slug)
   const allPosts = getBlogPostsMetadata()
   
   // Find the category configuration that matches the URL slug
-  const category = categories.find(cat => 
-    encodeURIComponent(cat.name.toLowerCase().replace(/\s+/g, '-')) === params.slug
+  const category = categories.find(cat =>
+    getCategorySlug(cat.name) === normalizedSlug
   )
 
   if (!category) {

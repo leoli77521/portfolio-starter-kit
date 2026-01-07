@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { slugify } from './app/lib/formatters'
 
 // 记录重定向用于SEO分析
 function logRedirect(from: string, to: string, statusCode: number) {
@@ -106,22 +107,77 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Handle category and tag redirects
-  if (!pathAlreadyModified) {
-    const categoryTagPatterns = [
-      { pattern: /^\/blog\/category\/(.+)$/, reason: 'category-to-blog' },
-      { pattern: /^\/category\/(.+)$/, reason: 'category-to-blog' },
-      { pattern: /^\/tag\/(.+)$/, reason: 'tag-to-blog' },
-      { pattern: /^\/tags\/(.+)$/, reason: 'tags-to-blog' }
-    ]
+  const normalizeSlug = (value: string) => {
+    let decoded = value
+    try {
+      decoded = decodeURIComponent(value)
+    } catch {
+      // Keep raw segment when decoding fails
+    }
+    const slug = slugify(decoded)
+    if (slug) {
+      return slug
+    }
+    return decoded.trim().toLowerCase().replace(/\s+/g, '-')
+  }
 
-    for (const { pattern, reason } of categoryTagPatterns) {
-      if (pattern.test(pathname)) {
-        newPathname = '/blog'
+  const pathToNormalize = pathAlreadyModified ? newPathname : pathname
+
+  const legacyTagMatch = pathToNormalize.match(/^\/tag\/(.+)$/)
+  if (legacyTagMatch) {
+    const normalizedTag = normalizeSlug(legacyTagMatch[1])
+    if (normalizedTag) {
+      const canonicalPath = `/tags/${normalizedTag}`
+      if (canonicalPath !== pathToNormalize) {
+        newPathname = canonicalPath
         shouldRedirect = true
         pathAlreadyModified = true
-        redirectReasons.push(reason)
-        break
+        redirectReasons.push('tag-route-normalization')
+      }
+    }
+  }
+
+  const tagMatch = pathToNormalize.match(/^\/tags\/(.+)$/)
+  if (tagMatch) {
+    const normalizedTag = normalizeSlug(tagMatch[1])
+    if (normalizedTag) {
+      const canonicalPath = `/tags/${normalizedTag}`
+      if (canonicalPath !== pathToNormalize) {
+        newPathname = canonicalPath
+        shouldRedirect = true
+        pathAlreadyModified = true
+        redirectReasons.push('tag-slug-normalization')
+      }
+    }
+  }
+
+  const legacyCategoryMatch =
+    pathToNormalize.match(/^\/category\/(.+)$/) ||
+    pathToNormalize.match(/^\/blog\/category\/(.+)$/)
+
+  if (legacyCategoryMatch) {
+    const normalizedCategory = normalizeSlug(legacyCategoryMatch[1])
+    if (normalizedCategory) {
+      const canonicalPath = `/categories/${normalizedCategory}`
+      if (canonicalPath !== pathToNormalize) {
+        newPathname = canonicalPath
+        shouldRedirect = true
+        pathAlreadyModified = true
+        redirectReasons.push('category-route-normalization')
+      }
+    }
+  }
+
+  const categoryMatch = pathToNormalize.match(/^\/categories\/(.+)$/)
+  if (categoryMatch) {
+    const normalizedCategory = normalizeSlug(categoryMatch[1])
+    if (normalizedCategory) {
+      const canonicalPath = `/categories/${normalizedCategory}`
+      if (canonicalPath !== pathToNormalize) {
+        newPathname = canonicalPath
+        shouldRedirect = true
+        pathAlreadyModified = true
+        redirectReasons.push('category-slug-normalization')
       }
     }
   }

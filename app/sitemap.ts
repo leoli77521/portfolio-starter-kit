@@ -1,4 +1,6 @@
 import { getBlogPosts } from 'app/blog/utils'
+import { categories, getCategorySlug } from 'app/lib/categories'
+import { slugify } from 'app/lib/formatters'
 
 export { baseUrl } from 'app/lib/constants'
 import { baseUrl } from 'app/lib/constants'
@@ -22,6 +24,11 @@ function formatDateForSitemap(dateString: string): string {
 }
 
 export default async function sitemap() {
+  const posts = getBlogPosts()
+  const toTagSlug = (tag: string) => {
+    const slug = slugify(tag)
+    return slug || tag.trim().toLowerCase().replace(/\s+/g, '-')
+  }
   // 静态路由
   const staticRoutes = [
     {
@@ -35,6 +42,18 @@ export default async function sitemap() {
       lastModified: new Date().toISOString(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/categories`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/tags`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.4,
     },
     {
       url: `${baseUrl}/about`,
@@ -73,7 +92,7 @@ export default async function sitemap() {
   ]
 
   // 博客文章
-  const blogs = getBlogPosts().map((post) => {
+  const blogs = posts.map((post) => {
     const sourceDate = post.metadata.updatedAt || post.metadata.publishedAt
     const lastModified = new Date(formatDateForSitemap(sourceDate) + 'T00:00:00.000Z').toISOString()
 
@@ -85,7 +104,43 @@ export default async function sitemap() {
     }
   })
 
+  const tagSlugs = new Set<string>()
+  const categoryNames = new Set<string>()
+
+  posts.forEach((post) => {
+    if (post.metadata.category) {
+      categoryNames.add(post.metadata.category)
+    }
+    if (post.metadata.tags) {
+      post.metadata.tags.forEach((tag) => {
+        const slug = toTagSlug(tag)
+        if (slug) {
+          tagSlugs.add(slug)
+        }
+      })
+    }
+  })
+
+  const categoryRoutes = categories
+    .filter((category) => category.name !== 'All' && categoryNames.has(category.name))
+    .map((category) => {
+      const slug = getCategorySlug(category.name)
+      return {
+        url: `${baseUrl}/categories/${encodeURIComponent(slug)}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.5,
+      }
+    })
+
+  const tagRoutes = Array.from(tagSlugs).map((slug) => ({
+    url: `${baseUrl}/tags/${encodeURIComponent(slug)}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.4,
+  }))
+
   // 按优先级排序
-  const allRoutes = [...staticRoutes, ...apiRoutes, ...blogs]
+  const allRoutes = [...staticRoutes, ...apiRoutes, ...blogs, ...categoryRoutes, ...tagRoutes]
   return allRoutes.sort((a, b) => b.priority - a.priority)
 }

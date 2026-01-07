@@ -2,6 +2,8 @@ import { getBlogPosts, getBlogPostsMetadata } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
+import { slugify } from '@/app/lib/formatters'
+import { baseUrl } from 'app/sitemap'
 
 // Helper to get all unique tags
 function getAllTags(): string[] {
@@ -17,31 +19,64 @@ function getAllTags(): string[] {
   return Array.from(tags)
 }
 
+const toTagSlug = (tag: string) => {
+  const slug = slugify(tag)
+  return slug || tag.trim().toLowerCase().replace(/\s+/g, '-')
+}
+
+const normalizeTagSlug = (value: string) => {
+  try {
+    return toTagSlug(decodeURIComponent(value))
+  } catch {
+    return toTagSlug(value)
+  }
+}
+
+const getDisplayTag = (tagSlug: string, tags: string[]) => {
+  const match = tags.find((tag) => toTagSlug(tag) === tagSlug)
+  return match || tagSlug
+}
+
 export async function generateStaticParams() {
   const tags = getAllTags()
-  return tags.map((tag) => ({
-    tag: encodeURIComponent(tag),
+  const tagSlugs = Array.from(new Set(tags.map(toTagSlug).filter(Boolean)))
+  return tagSlugs.map((tag) => ({
+    tag,
   }))
 }
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
-  const decodedTag = decodeURIComponent(params.tag)
+  const allTags = getAllTags()
+  const normalizedSlug = normalizeTagSlug(params.tag)
+  const displayTag = getDisplayTag(normalizedSlug, allTags)
+
+  if (!normalizedSlug) {
+    return {
+      title: 'Tag Not Found',
+    }
+  }
+
   return {
-    title: `${decodedTag} - Blog Tags`,
-    description: `Read articles tagged with ${decodedTag}.`,
+    title: `${displayTag} - Blog Tags`,
+    description: `Read articles tagged with ${displayTag}.`,
+    alternates: {
+      canonical: `${baseUrl}/tags/${normalizedSlug}`,
+    },
   }
 }
 
 export default function TagPage({ params }: { params: { tag: string } }) {
-  const decodedTag = decodeURIComponent(params.tag)
+  const normalizedSlug = normalizeTagSlug(params.tag)
+  const allTags = getAllTags()
+  const displayTag = getDisplayTag(normalizedSlug, allTags)
   const allPosts = getBlogPostsMetadata()
   
   // Filter posts that contain this tag
-  const posts = allPosts.filter((post) => 
-    post.metadata.tags && post.metadata.tags.some(t => t.toLowerCase() === decodedTag.toLowerCase())
+  const posts = allPosts.filter((post) =>
+    post.metadata.tags && post.metadata.tags.some(tag => toTagSlug(tag) === normalizedSlug)
   )
 
-  if (posts.length === 0) {
+  if (!normalizedSlug || posts.length === 0) {
     notFound()
   }
 
@@ -50,7 +85,7 @@ export default function TagPage({ params }: { params: { tag: string } }) {
       <div className="mb-12 text-center">
         <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100 flex items-center justify-center gap-3">
           <span className="text-5xl">🏷️</span>
-          {decodedTag}
+          {displayTag}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
           {posts.length} {posts.length === 1 ? 'article' : 'articles'} with this tag

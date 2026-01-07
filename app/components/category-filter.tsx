@@ -1,11 +1,11 @@
 'use client'
 
 import type { Category, ColorStylesMap } from '@/app/types'
-import { categories, getCategoryColor, getCategoryEmoji } from '@/app/lib/categories'
+import { categories, getCategoryColor, getCategoryEmoji, getCategorySlug } from '@/app/lib/categories'
 
 // Re-export for backward compatibility (optional, but good for reducing refactor scope)
 export type { Category } from '@/app/types'
-export { categories, getCategoryColor, getCategoryEmoji }
+export { categories, getCategoryColor, getCategoryEmoji, getCategorySlug }
 
 interface CategoryFilterProps {
   onCategoryChange: (category: Category) => void

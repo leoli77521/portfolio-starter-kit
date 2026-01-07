@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { MobileMenu } from './mobile-menu'
 import { Search } from './search'
 import { ThemeToggle } from './theme-toggle'
-import { categories } from './category-filter'
+import { categories, getCategorySlug } from './category-filter'
 
 const navItems = {
   '/': {
@@ -58,9 +58,6 @@ const categoryDescriptions: Record<string, string> = {
   'SEO & Marketing': 'Search visibility and growth tactics',
   'Productivity': 'Workflows, focus, and automation',
 }
-
-const toCategorySlug = (name: string) =>
-  encodeURIComponent(name.toLowerCase().replace(/\s+/g, '-'))
 
 const categoryLinks = categories.filter((cat) => cat.name !== 'All')
 const categorySplitIndex = Math.ceil(categoryLinks.length / 2)
@@ -154,7 +151,7 @@ export function Navbar() {
                                 {column.map((cat) => (
                                   <Link
                                     key={cat.name}
-                                    href={`/categories/${toCategorySlug(cat.name)}`}
+                                    href={`/categories/${getCategorySlug(cat.name)}`}
                                     className="group/link block rounded-lg px-3 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900"
                                   >
                                     <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-300">

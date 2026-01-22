@@ -3,6 +3,7 @@ import { categories, getCategorySlug } from 'app/lib/categories'
 import { slugify } from 'app/lib/formatters'
 import { topicHubs } from 'app/lib/topic-hubs'
 import { guides } from 'app/lib/guides'
+import pseoData from '@/data/pseo_data.json'
 
 export { baseUrl } from 'app/lib/constants'
 import { baseUrl } from 'app/lib/constants'
@@ -212,6 +213,40 @@ export default async function sitemap() {
     priority: 0.85,
   }))
 
+  // pSEO: Templates index page
+  const templateIndexRoute = {
+    url: `${baseUrl}/templates`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }
+
+  // pSEO: Solutions index page
+  const solutionsIndexRoute = {
+    url: `${baseUrl}/solutions`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }
+
+  // pSEO: Tech × Role template pages
+  const templateRoutes = pseoData.technologies.flatMap((tech) =>
+    pseoData.roles.map((role) => ({
+      url: `${baseUrl}/templates/${tech.slug}/${role.slug}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }))
+  )
+
+  // pSEO: Feature/solution pages
+  const solutionRoutes = pseoData.features.map((feature) => ({
+    url: `${baseUrl}/solutions/${feature.slug}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
   // 按优先级排序
   const allRoutes = [
     ...staticRoutes,
@@ -222,6 +257,10 @@ export default async function sitemap() {
     ...tagRoutes,
     ...topicRoutes,
     ...guideRoutes,
+    templateIndexRoute,
+    solutionsIndexRoute,
+    ...templateRoutes,
+    ...solutionRoutes,
   ]
   return allRoutes.sort((a, b) => b.priority - a.priority)
 }

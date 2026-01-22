@@ -1,0 +1,325 @@
+{
+  "technologies": [
+    {
+      "slug": "nextjs",
+      "name": "Next.js",
+      "description": "The React framework for production-grade applications with built-in SSR, SSG, and API routes.",
+      "features": [
+        "Server-side Rendering",
+        "Static Site Generation",
+        "API Routes",
+        "App Router",
+        "Image Optimization",
+        "Edge Runtime"
+      ],
+      "useCases": [
+        "Portfolio websites",
+        "Blogs",
+        "E-commerce",
+        "SaaS applications"
+      ],
+      "relatedPosts": [],
+      "icon": "nextjs"
+    },
+    {
+      "slug": "react",
+      "name": "React",
+      "description": "A JavaScript library for building interactive user interfaces with component-based architecture.",
+      "features": [
+        "Component-based",
+        "Virtual DOM",
+        "Hooks",
+        "JSX",
+        "Rich ecosystem",
+        "React Server Components"
+      ],
+      "useCases": [
+        "Single-page apps",
+        "Interactive UIs",
+        "Web applications"
+      ],
+      "relatedPosts": [],
+      "icon": "react"
+    },
+    {
+      "slug": "typescript",
+      "name": "TypeScript",
+      "description": "JavaScript with static type definitions for better developer experience and code quality.",
+      "features": [
+        "Static typing",
+        "IntelliSense",
+        "Error detection",
+        "Better refactoring",
+        "Interface definitions",
+        "Generic types"
+      ],
+      "useCases": [
+        "Large-scale applications",
+        "Team projects",
+        "API development"
+      ],
+      "relatedPosts": [],
+      "icon": "typescript"
+    },
+    {
+      "slug": "tailwindcss",
+      "name": "Tailwind CSS",
+      "description": "A utility-first CSS framework for rapid UI development without leaving your HTML.",
+      "features": [
+        "Utility-first",
+        "Responsive design",
+        "Dark mode",
+        "JIT compiler",
+        "Component patterns",
+        "Custom plugins"
+      ],
+      "useCases": [
+        "Rapid prototyping",
+        "Custom designs",
+        "Responsive layouts"
+      ],
+      "relatedPosts": [],
+      "icon": "tailwindcss"
+    },
+    {
+      "slug": "mdx",
+      "name": "MDX",
+      "description": "Markdown enhanced with JSX components for rich, interactive documentation and blogs.",
+      "features": [
+        "Markdown + JSX",
+        "Interactive components",
+        "Syntax highlighting",
+        "Frontmatter",
+        "Custom components",
+        "Live code"
+      ],
+      "useCases": [
+        "Technical blogs",
+        "Documentation",
+        "Content-heavy sites"
+      ],
+      "relatedPosts": [],
+      "icon": "mdx"
+    }
+  ],
+  "roles": [
+    {
+      "slug": "frontend-developer",
+      "name": "Frontend Developer",
+      "description": "Developers focused on building user interfaces and client-side applications with modern frameworks.",
+      "keywords": [
+        "React",
+        "Vue",
+        "CSS",
+        "JavaScript",
+        "UI/UX"
+      ],
+      "challenges": [
+        "responsive design",
+        "performance optimization",
+        "cross-browser compatibility"
+      ],
+      "goals": [
+        "Showcase UI skills",
+        "Display interactive projects",
+        "Highlight design sense"
+      ]
+    },
+    {
+      "slug": "backend-developer",
+      "name": "Backend Developer",
+      "description": "Developers specializing in server-side logic, databases, APIs, and system architecture.",
+      "keywords": [
+        "Node.js",
+        "Python",
+        "APIs",
+        "Databases",
+        "Security"
+      ],
+      "challenges": [
+        "scalability",
+        "API design",
+        "database optimization"
+      ],
+      "goals": [
+        "Show system design skills",
+        "Display API projects",
+        "Highlight architecture"
+      ]
+    },
+    {
+      "slug": "fullstack-developer",
+      "name": "Fullstack Developer",
+      "description": "Developers skilled in both frontend and backend technologies, building end-to-end solutions.",
+      "keywords": [
+        "React",
+        "Node.js",
+        "Databases",
+        "DevOps",
+        "Full-stack"
+      ],
+      "challenges": [
+        "balancing frontend and backend",
+        "system integration",
+        "deployment"
+      ],
+      "goals": [
+        "Showcase end-to-end projects",
+        "Display diverse skills",
+        "Show project ownership"
+      ]
+    },
+    {
+      "slug": "software-engineer",
+      "name": "Software Engineer",
+      "description": "Engineers focused on building robust, scalable software systems with clean code practices.",
+      "keywords": [
+        "Algorithms",
+        "System design",
+        "Clean code",
+        "Testing",
+        "Architecture"
+      ],
+      "challenges": [
+        "code quality",
+        "maintainability",
+        "performance"
+      ],
+      "goals": [
+        "Display engineering mindset",
+        "Show problem-solving",
+        "Highlight best practices"
+      ]
+    },
+    {
+      "slug": "devops-engineer",
+      "name": "DevOps Engineer",
+      "description": "Engineers bridging development and operations with automation, CI/CD, and infrastructure.",
+      "keywords": [
+        "CI/CD",
+        "Docker",
+        "Kubernetes",
+        "AWS",
+        "Automation"
+      ],
+      "challenges": [
+        "infrastructure management",
+        "deployment automation",
+        "monitoring"
+      ],
+      "goals": [
+        "Show infrastructure projects",
+        "Display automation skills",
+        "Highlight DevOps culture"
+      ]
+    }
+  ],
+  "features": [
+    {
+      "slug": "dark-mode",
+      "name": "Dark Mode",
+      "description": "Eye-friendly dark theme that reduces eye strain and saves battery on OLED screens.",
+      "benefits": [
+        "Reduced eye strain",
+        "Battery saving on OLED",
+        "Modern aesthetic",
+        "User preference respect"
+      ],
+      "technicalDetails": "Implemented using CSS custom properties and system preference detection with next-themes for seamless switching."
+    },
+    {
+      "slug": "seo-optimized",
+      "name": "SEO Optimized",
+      "description": "Built-in SEO best practices for better search engine visibility and organic traffic.",
+      "benefits": [
+        "Higher search rankings",
+        "More organic traffic",
+        "Better discoverability",
+        "Rich snippets"
+      ],
+      "technicalDetails": "Includes dynamic meta tags, JSON-LD structured data, XML sitemap, robots.txt, and optimized content structure with semantic HTML."
+    },
+    {
+      "slug": "responsive-design",
+      "name": "Responsive Design",
+      "description": "Fully responsive layout that looks great on all devices from mobile to desktop.",
+      "benefits": [
+        "Mobile-friendly",
+        "Consistent experience",
+        "Better engagement",
+        "SEO boost"
+      ],
+      "technicalDetails": "Built with Tailwind CSS responsive utilities and mobile-first approach. Uses fluid typography and flexible grid layouts."
+    },
+    {
+      "slug": "fast-performance",
+      "name": "Fast Performance",
+      "description": "Optimized for speed with excellent Core Web Vitals scores for better UX and SEO.",
+      "benefits": [
+        "Better user experience",
+        "Higher engagement",
+        "SEO ranking boost",
+        "Lower bounce rate"
+      ],
+      "technicalDetails": "Uses Next.js Image optimization, code splitting, edge caching, lazy loading, and optimized font loading for sub-second page loads."
+    },
+    {
+      "slug": "blog-ready",
+      "name": "Blog Ready",
+      "description": "Full-featured blog with MDX support, categories, tags, search, and RSS feed.",
+      "benefits": [
+        "Content marketing",
+        "Thought leadership",
+        "SEO content",
+        "Audience engagement"
+      ],
+      "technicalDetails": "MDX-powered blog with syntax highlighting, frontmatter metadata, automatic sitemap, RSS generation, and category/tag filtering."
+    }
+  ],
+  "templates": {
+    "techRole": {
+      "titlePattern": "{tech} Portfolio Template for {role}s | Build Your Developer Portfolio",
+      "descriptionPattern": "Create a stunning {role} portfolio powered by {tech}. Features: {features}. Start building your professional online presence today.",
+      "h1Pattern": "Best {tech} Portfolio Template for {role}s"
+    },
+    "feature": {
+      "titlePattern": "{feature} Portfolio Template | Modern Developer Portfolio",
+      "descriptionPattern": "Build a portfolio with {feature}. Benefits: {benefits}. Perfect for developers who want a professional online presence.",
+      "h1Pattern": "Portfolio Template with {feature}"
+    }
+  },
+  "faqs": {
+    "techRole": [
+      {
+        "questionPattern": "Why use {tech} for a {role} portfolio?",
+        "answerPattern": "{tech} is perfect for {role}s because it offers {features}. This makes it ideal for showcasing your work professionally."
+      },
+      {
+        "questionPattern": "Is this template suitable for {role}s?",
+        "answerPattern": "Absolutely! This template is designed with {role}s in mind, addressing challenges like {challenges} and helping you achieve {goals}."
+      },
+      {
+        "questionPattern": "How do I customize this {tech} template?",
+        "answerPattern": "The template is fully customizable. You can modify colors, layouts, and content using {tech}'s component system and Tailwind CSS utilities."
+      },
+      {
+        "questionPattern": "What makes this portfolio stand out for {role}s?",
+        "answerPattern": "This template showcases skills important for {role}s: {keywords}. It's optimized to help you {goals}."
+      }
+    ],
+    "feature": [
+      {
+        "questionPattern": "How does {feature} work in this template?",
+        "answerPattern": "{technicalDetails}"
+      },
+      {
+        "questionPattern": "What are the benefits of {feature}?",
+        "answerPattern": "{feature} provides: {benefits}."
+      },
+      {
+        "questionPattern": "Can I customize the {feature} settings?",
+        "answerPattern": "Yes! The {feature} implementation is built with customization in mind. You can easily adjust colors, behavior, and preferences to match your personal brand."
+      }
+    ]
+  }
+}

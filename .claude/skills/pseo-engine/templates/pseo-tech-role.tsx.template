@@ -1,0 +1,329 @@
+/**
+ * pSEO Template: Technology + Role Combination Page
+ *
+ * Route: /templates/[tech]/[role]
+ * Example: /templates/nextjs/frontend-developer
+ *
+ * This template generates unique landing pages for each technology × role combination,
+ * capturing long-tail search traffic like "next.js portfolio for frontend developers".
+ */
+
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import pseoData from '@/data/pseo_data.json'
+import { getBlogPosts } from '@/app/blog/utils'
+
+// Types
+interface Technology {
+  slug: string
+  name: string
+  description: string
+  features: string[]
+  useCases: string[]
+  relatedPosts: string[]
+  icon?: string
+}
+
+interface Role {
+  slug: string
+  name: string
+  description: string
+  keywords: string[]
+  challenges: string[]
+  goals: string[]
+}
+
+interface Props {
+  params: Promise<{ tech: string; role: string }>
+}
+
+// Static params generation for SSG
+export async function generateStaticParams() {
+  const params: { tech: string; role: string }[] = []
+
+  for (const tech of pseoData.technologies as Technology[]) {
+    for (const role of pseoData.roles as Role[]) {
+      params.push({
+        tech: tech.slug,
+        role: role.slug,
+      })
+    }
+  }
+
+  return params
+}
+
+// Dynamic metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { tech, role } = await params
+
+  const technology = (pseoData.technologies as Technology[]).find(t => t.slug === tech)
+  const roleData = (pseoData.roles as Role[]).find(r => r.slug === role)
+
+  if (!technology || !roleData) {
+    return { title: 'Template Not Found' }
+  }
+
+  const title = pseoData.templates.techRole.titlePattern
+    .replace('{tech}', technology.name)
+    .replace('{role}', roleData.name)
+
+  const description = pseoData.templates.techRole.descriptionPattern
+    .replace('{tech}', technology.name)
+    .replace('{role}', roleData.name)
+    .replace('{features}', technology.features.slice(0, 3).join(', '))
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `/templates/${tech}/${role}`,
+    },
+  }
+}
+
+// Helper: Get related blog posts
+function getRelatedPosts(technology: Technology, roleData: Role) {
+  const allPosts = getBlogPosts()
+  const relevantTags = [...technology.features, ...roleData.keywords].map(t => t.toLowerCase())
+
+  return allPosts
+    .filter(post => {
+      const postTags = post.metadata.tags?.map(t => t.toLowerCase()) || []
+      return postTags.some(tag => relevantTags.includes(tag))
+    })
+    .slice(0, 6)
+}
+
+// Helper: Generate FAQs
+function generateFAQs(technology: Technology, roleData: Role) {
+  return [
+    {
+      question: `Why is ${technology.name} great for ${roleData.name}s?`,
+      answer: `${technology.name} is perfect for ${roleData.name}s because it offers ${technology.features.slice(0, 3).join(', ')}. This helps address common challenges like ${roleData.challenges.slice(0, 2).join(' and ')}.`,
+    },
+    {
+      question: `What features does this ${technology.name} portfolio template include?`,
+      answer: `This template includes: ${technology.features.join(', ')}. It's optimized for ${roleData.goals.slice(0, 2).join(' and ')}.`,
+    },
+    {
+      question: `Is this template suitable for ${roleData.name}s?`,
+      answer: `Absolutely! This template is specifically designed for ${roleData.name}s, focusing on ${roleData.keywords.slice(0, 3).join(', ')}. It helps you ${roleData.goals[0]}.`,
+    },
+    {
+      question: `How do I customize this ${technology.name} template?`,
+      answer: `The template is fully customizable using ${technology.name}'s component system. You can modify colors, layouts, and content to match your personal brand and showcase your ${roleData.keywords[0]} skills.`,
+    },
+  ]
+}
+
+// Main Page Component
+export default async function TechRoleTemplatePage({ params }: Props) {
+  const { tech, role } = await params
+
+  const technology = (pseoData.technologies as Technology[]).find(t => t.slug === tech)
+  const roleData = (pseoData.roles as Role[]).find(r => r.slug === role)
+
+  if (!technology || !roleData) {
+    notFound()
+  }
+
+  const relatedPosts = getRelatedPosts(technology, roleData)
+  const faqs = generateFAQs(technology, roleData)
+
+  // JSON-LD Structured Data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: `Best ${technology.name} Portfolio for ${roleData.name}s`,
+        description: `Build your ${roleData.name} portfolio with ${technology.name}`,
+        url: `https://yoursite.com/templates/${tech}/${role}`,
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: `${technology.name} Portfolio Template for ${roleData.name}s`,
+        applicationCategory: 'WebApplication',
+        operatingSystem: 'Web',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map(faq => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
+  }
+
+  return (
+    <>
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <main className="max-w-4xl mx-auto px-4 py-12">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-neutral-500 mb-8">
+          <Link href="/" className="hover:text-neutral-800 dark:hover:text-neutral-200">
+            Home
+          </Link>
+          {' / '}
+          <Link href="/templates" className="hover:text-neutral-800 dark:hover:text-neutral-200">
+            Templates
+          </Link>
+          {' / '}
+          <span className="text-neutral-800 dark:text-neutral-200">
+            {technology.name} for {roleData.name}s
+          </span>
+        </nav>
+
+        {/* Hero Section */}
+        <header className="mb-12">
+          <h1 className="text-4xl font-bold mb-4">
+            Best {technology.name} Portfolio Template for {roleData.name}s
+          </h1>
+          <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-6">
+            {technology.description} Perfect for {roleData.name}s who want to {roleData.goals[0]}.
+          </p>
+          <div className="flex gap-4">
+            <Link
+              href="/blog"
+              className="px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900"
+            >
+              View Demo
+            </Link>
+            <Link
+              href="https://github.com"
+              className="px-6 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+            >
+              Get Template
+            </Link>
+          </div>
+        </header>
+
+        {/* Features Grid */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Why {technology.name} for Your {roleData.name} Portfolio?
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {technology.features.map((feature, i) => (
+              <div
+                key={i}
+                className="p-6 border rounded-lg dark:border-neutral-700"
+              >
+                <h3 className="font-semibold mb-2">{feature}</h3>
+                <p className="text-neutral-600 dark:text-neutral-400">
+                  Essential for {roleData.name}s building a professional portfolio.
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Role-specific Benefits */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Built for {roleData.name}s
+          </h2>
+          <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+            {roleData.description}
+          </p>
+          <div className="grid md:grid-cols-3 gap-4">
+            {roleData.goals.map((goal, i) => (
+              <div
+                key={i}
+                className="p-4 bg-neutral-50 rounded-lg dark:bg-neutral-800"
+              >
+                {goal}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Related Articles */}
+        {relatedPosts.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {relatedPosts.map(post => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="p-4 border rounded-lg hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-500"
+                >
+                  <h3 className="font-semibold mb-2">{post.metadata.title}</h3>
+                  <p className="text-sm text-neutral-500 line-clamp-2">
+                    {post.metadata.summary}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* FAQ Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {faqs.map((faq, i) => (
+              <details
+                key={i}
+                className="p-4 border rounded-lg dark:border-neutral-700"
+              >
+                <summary className="font-semibold cursor-pointer">
+                  {faq.question}
+                </summary>
+                <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="text-center py-12 bg-neutral-50 rounded-lg dark:bg-neutral-800">
+          <h2 className="text-2xl font-bold mb-4">
+            Ready to Build Your {roleData.name} Portfolio?
+          </h2>
+          <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+            Start with our {technology.name} template and launch your professional portfolio today.
+          </p>
+          <Link
+            href="https://github.com"
+            className="inline-block px-8 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900"
+          >
+            Get Started Free
+          </Link>
+        </section>
+      </main>
+    </>
+  )
+}

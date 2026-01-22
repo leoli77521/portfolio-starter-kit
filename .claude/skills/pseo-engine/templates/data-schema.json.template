@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pSEO Data Schema",
+  "description": "Schema for pseo_data.json used by pSEO page generation",
+  "type": "object",
+  "required": ["technologies", "roles", "features", "templates"],
+  "properties": {
+    "technologies": {
+      "type": "array",
+      "description": "Technology definitions for tech+role pages",
+      "items": {
+        "type": "object",
+        "required": ["slug", "name", "description", "features"],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "URL-friendly identifier (lowercase, hyphenated)",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the technology"
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief description of the technology (1-2 sentences)"
+          },
+          "features": {
+            "type": "array",
+            "description": "Key features of this technology",
+            "items": { "type": "string" },
+            "minItems": 3,
+            "maxItems": 8
+          },
+          "useCases": {
+            "type": "array",
+            "description": "Common use cases",
+            "items": { "type": "string" }
+          },
+          "relatedPosts": {
+            "type": "array",
+            "description": "Slugs of related blog posts",
+            "items": { "type": "string" }
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon identifier (optional)"
+          }
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "description": "Developer role definitions for tech+role pages",
+      "items": {
+        "type": "object",
+        "required": ["slug", "name", "description"],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "URL-friendly identifier",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the role"
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief description of the role"
+          },
+          "keywords": {
+            "type": "array",
+            "description": "Keywords associated with this role",
+            "items": { "type": "string" }
+          },
+          "challenges": {
+            "type": "array",
+            "description": "Common challenges faced by this role",
+            "items": { "type": "string" }
+          },
+          "goals": {
+            "type": "array",
+            "description": "Career goals this role typically has",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "description": "Feature definitions for solution pages",
+      "items": {
+        "type": "object",
+        "required": ["slug", "name", "description", "benefits"],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "URL-friendly identifier",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the feature"
+          },
+          "description": {
+            "type": "string",
+            "description": "Brief description of the feature"
+          },
+          "benefits": {
+            "type": "array",
+            "description": "Benefits of this feature",
+            "items": { "type": "string" },
+            "minItems": 2
+          },
+          "technicalDetails": {
+            "type": "string",
+            "description": "Technical implementation details"
+          }
+        }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "description": "Title and description patterns for generated pages",
+      "required": ["techRole", "feature"],
+      "properties": {
+        "techRole": {
+          "type": "object",
+          "description": "Patterns for tech+role pages",
+          "required": ["titlePattern", "descriptionPattern", "h1Pattern"],
+          "properties": {
+            "titlePattern": {
+              "type": "string",
+              "description": "Title pattern with {tech} and {role} placeholders"
+            },
+            "descriptionPattern": {
+              "type": "string",
+              "description": "Meta description pattern with placeholders"
+            },
+            "h1Pattern": {
+              "type": "string",
+              "description": "H1 heading pattern"
+            }
+          }
+        },
+        "feature": {
+          "type": "object",
+          "description": "Patterns for feature pages",
+          "required": ["titlePattern", "descriptionPattern", "h1Pattern"],
+          "properties": {
+            "titlePattern": {
+              "type": "string",
+              "description": "Title pattern with {feature} placeholder"
+            },
+            "descriptionPattern": {
+              "type": "string",
+              "description": "Meta description pattern with placeholders"
+            },
+            "h1Pattern": {
+              "type": "string",
+              "description": "H1 heading pattern"
+            }
+          }
+        }
+      }
+    },
+    "faqs": {
+      "type": "object",
+      "description": "FAQ patterns for schema generation",
+      "properties": {
+        "techRole": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "questionPattern": { "type": "string" },
+              "answerPattern": { "type": "string" }
+            }
+          }
+        },
+        "feature": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "questionPattern": { "type": "string" },
+              "answerPattern": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "technologies": [
+        {
+          "slug": "nextjs",
+          "name": "Next.js",
+          "description": "The React Framework for the Web",
+          "features": ["SSR", "SSG", "API Routes", "App Router"],
+          "useCases": ["Portfolio", "Blog", "E-commerce"]
+        }
+      ],
+      "roles": [
+        {
+          "slug": "frontend-developer",
+          "name": "Frontend Developer",
+          "description": "Developers focused on UI/UX",
+          "keywords": ["React", "CSS", "JavaScript"],
+          "challenges": ["Responsive design", "Performance"],
+          "goals": ["Showcase projects", "Land jobs"]
+        }
+      ],
+      "features": [
+        {
+          "slug": "dark-mode",
+          "name": "Dark Mode",
+          "description": "Eye-friendly dark theme",
+          "benefits": ["Reduced eye strain", "Modern look"],
+          "technicalDetails": "Uses CSS custom properties"
+        }
+      ],
+      "templates": {
+        "techRole": {
+          "titlePattern": "{tech} Portfolio for {role}s",
+          "descriptionPattern": "Build your {role} portfolio with {tech}",
+          "h1Pattern": "Best {tech} Portfolio for {role}s"
+        },
+        "feature": {
+          "titlePattern": "Portfolio with {feature}",
+          "descriptionPattern": "Get a portfolio with {feature}",
+          "h1Pattern": "Portfolio Template with {feature}"
+        }
+      }
+    }
+  ]
+}

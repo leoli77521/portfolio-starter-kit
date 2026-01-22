@@ -1,0 +1,292 @@
+/**
+ * pSEO Template: Feature Page
+ *
+ * Route: /solutions/[feature]
+ * Example: /solutions/dark-mode
+ *
+ * This template generates landing pages for specific features,
+ * capturing search traffic like "portfolio template with dark mode".
+ */
+
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import Link from 'next/link'
+import pseoData from '@/data/pseo_data.json'
+
+// Types
+interface Feature {
+  slug: string
+  name: string
+  description: string
+  benefits: string[]
+  technicalDetails: string
+}
+
+interface Props {
+  params: Promise<{ feature: string }>
+}
+
+// Static params generation
+export async function generateStaticParams() {
+  return (pseoData.features as Feature[]).map(feature => ({
+    feature: feature.slug,
+  }))
+}
+
+// Dynamic metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { feature } = await params
+
+  const featureData = (pseoData.features as Feature[]).find(f => f.slug === feature)
+
+  if (!featureData) {
+    return { title: 'Feature Not Found' }
+  }
+
+  const title = pseoData.templates.feature.titlePattern
+    .replace('{feature}', featureData.name)
+
+  const description = pseoData.templates.feature.descriptionPattern
+    .replace('{feature}', featureData.name)
+    .replace('{benefits}', featureData.benefits.slice(0, 2).join(', '))
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `/solutions/${feature}`,
+    },
+  }
+}
+
+// Helper: Generate FAQs for feature
+function generateFAQs(feature: Feature) {
+  return [
+    {
+      question: `How does ${feature.name} work in this template?`,
+      answer: feature.technicalDetails,
+    },
+    {
+      question: `What are the benefits of ${feature.name}?`,
+      answer: `${feature.name} provides: ${feature.benefits.join(', ')}.`,
+    },
+    {
+      question: `Is ${feature.name} easy to customize?`,
+      answer: `Yes! The ${feature.name} implementation is built with customization in mind. You can easily adjust colors, behavior, and preferences to match your personal brand.`,
+    },
+    {
+      question: `Does ${feature.name} affect SEO?`,
+      answer: `${feature.name} is implemented following SEO best practices. It won't negatively impact your search rankings and may even improve user engagement signals.`,
+    },
+  ]
+}
+
+// Main Page Component
+export default async function FeaturePage({ params }: Props) {
+  const { feature } = await params
+
+  const featureData = (pseoData.features as Feature[]).find(f => f.slug === feature)
+
+  if (!featureData) {
+    notFound()
+  }
+
+  const faqs = generateFAQs(featureData)
+  const otherFeatures = (pseoData.features as Feature[])
+    .filter(f => f.slug !== feature)
+    .slice(0, 4)
+
+  // JSON-LD Structured Data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        name: `Portfolio Template with ${featureData.name}`,
+        description: featureData.description,
+        url: `https://yoursite.com/solutions/${feature}`,
+      },
+      {
+        '@type': 'Product',
+        name: `${featureData.name} Portfolio Template`,
+        description: featureData.description,
+        brand: {
+          '@type': 'Organization',
+          name: 'Your Site Name',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+        },
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map(faq => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
+  }
+
+  return (
+    <>
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <main className="max-w-4xl mx-auto px-4 py-12">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-neutral-500 mb-8">
+          <Link href="/" className="hover:text-neutral-800 dark:hover:text-neutral-200">
+            Home
+          </Link>
+          {' / '}
+          <Link href="/solutions" className="hover:text-neutral-800 dark:hover:text-neutral-200">
+            Solutions
+          </Link>
+          {' / '}
+          <span className="text-neutral-800 dark:text-neutral-200">
+            {featureData.name}
+          </span>
+        </nav>
+
+        {/* Hero Section */}
+        <header className="mb-12">
+          <h1 className="text-4xl font-bold mb-4">
+            Portfolio Template with {featureData.name}
+          </h1>
+          <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-6">
+            {featureData.description}
+          </p>
+          <div className="flex gap-4">
+            <Link
+              href="/blog"
+              className="px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900"
+            >
+              View Demo
+            </Link>
+            <Link
+              href="https://github.com"
+              className="px-6 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+            >
+              Get Template
+            </Link>
+          </div>
+        </header>
+
+        {/* Benefits Grid */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Benefits of {featureData.name}
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {featureData.benefits.map((benefit, i) => (
+              <div
+                key={i}
+                className="p-6 border rounded-lg dark:border-neutral-700"
+              >
+                <div className="text-2xl mb-2">
+                  {['✨', '🚀', '💡', '⚡'][i % 4]}
+                </div>
+                <h3 className="font-semibold mb-2">{benefit}</h3>
+                <p className="text-neutral-600 dark:text-neutral-400">
+                  Enhance your portfolio with this essential feature.
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Technical Implementation */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            How It Works
+          </h2>
+          <div className="p-6 bg-neutral-50 rounded-lg dark:bg-neutral-800">
+            <p className="text-neutral-700 dark:text-neutral-300">
+              {featureData.technicalDetails}
+            </p>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {faqs.map((faq, i) => (
+              <details
+                key={i}
+                className="p-4 border rounded-lg dark:border-neutral-700"
+              >
+                <summary className="font-semibold cursor-pointer">
+                  {faq.question}
+                </summary>
+                <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Other Features */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">
+            Other Features You'll Love
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {otherFeatures.map(f => (
+              <Link
+                key={f.slug}
+                href={`/solutions/${f.slug}`}
+                className="p-4 border rounded-lg hover:border-neutral-400 dark:border-neutral-700 dark:hover:border-neutral-500"
+              >
+                <h3 className="font-semibold mb-2">{f.name}</h3>
+                <p className="text-sm text-neutral-500 line-clamp-2">
+                  {f.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="text-center py-12 bg-neutral-50 rounded-lg dark:bg-neutral-800">
+          <h2 className="text-2xl font-bold mb-4">
+            Ready to Use {featureData.name}?
+          </h2>
+          <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+            Get our portfolio template with {featureData.name} built-in.
+          </p>
+          <Link
+            href="https://github.com"
+            className="inline-block px-8 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900"
+          >
+            Get Started Free
+          </Link>
+        </section>
+      </main>
+    </>
+  )
+}

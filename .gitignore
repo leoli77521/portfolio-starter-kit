@@ -42,3 +42,7 @@ next-env.d.ts
 # pSEO engine outputs
 .claude/skills/pseo-engine/outputs/*
 !.claude/skills/pseo-engine/outputs/.gitkeep
+
+# agent files
+.gemini/
+.cursor/

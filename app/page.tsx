@@ -2,6 +2,17 @@ import { BlogPosts } from 'app/components/posts'
 import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { 
+  Zap, 
+  Banknote, 
+  Rocket, 
+  Laptop, 
+  TrendingUp, 
+  BookOpen, 
+  GraduationCap, 
+  Bell, 
+  ArrowRight 
+} from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
@@ -89,14 +100,17 @@ export default function Page() {
             Exploring the frontiers of AI, programming, and modern web development
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              🚀 AI Innovation
+            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
+              <Rocket className="w-4 h-4 text-blue-500" />
+              AI Innovation
             </span>
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              💻 Clean Code
+            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
+              <Laptop className="w-4 h-4 text-purple-500" />
+              Clean Code
             </span>
-            <span className="px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              📈 SEO Excellence
+            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
+              <TrendingUp className="w-4 h-4 text-green-500" />
+              SEO Excellence
             </span>
           </div>
         </div>
@@ -114,7 +128,7 @@ export default function Page() {
             title="View All Articles"
           >
             View all
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
@@ -126,7 +140,9 @@ export default function Page() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/10 dark:to-purple-900/10 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
             <div className="relative">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">⚡</span>
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
+                  <Zap className="w-6 h-6" />
+                </div>
                 <span className="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400">Energy & AI</span>
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -137,7 +153,7 @@ export default function Page() {
               </p>
               <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
                 Read more
-                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>
@@ -150,7 +166,9 @@ export default function Page() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
             <div className="relative">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">💰</span>
+                <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
+                  <Banknote className="w-6 h-6" />
+                </div>
                 <span className="text-xs uppercase tracking-wider font-semibold text-green-600 dark:text-green-400">Finance & AI</span>
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -161,7 +179,7 @@ export default function Page() {
               </p>
               <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
                 Read more
-                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>
@@ -182,8 +200,8 @@ export default function Page() {
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <span className="text-lg">📚</span>
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400">
+                <BookOpen className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-gray-900 dark:text-slate-100">Documentation</h3>
             </div>
@@ -217,8 +235,8 @@ export default function Page() {
 
           <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                <span className="text-lg">🎓</span>
+              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400">
+                <GraduationCap className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-gray-900 dark:text-slate-100">Learning</h3>
             </div>
@@ -252,8 +270,8 @@ export default function Page() {
 
           <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-                <span className="text-lg">🔔</span>
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400">
+                <Bell className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-gray-900 dark:text-slate-100">Stay Updated</h3>
             </div>

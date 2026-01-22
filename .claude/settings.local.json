@@ -19,7 +19,12 @@
       "Bash(git commit:*)",
       "Bash(git add:*)",
       "Bash(git -C \"D:\\\\网站\\\\portfolio-starter-kit\" show 4c48667 --stat)",
-      "Bash(git show:*)"
+      "Bash(git show:*)",
+      "Bash(npx next build)",
+      "Bash(unzip:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)",
+      "Skill(pseo-engine)"
     ],
     "deny": []
   }

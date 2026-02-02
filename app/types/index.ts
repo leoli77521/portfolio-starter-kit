@@ -11,6 +11,11 @@ export type HowToStep = {
   text: string
 }
 
+export type ArticleRating = {
+  value: number    // 1-5 rating value
+  count?: number   // number of ratings (optional, defaults based on article age)
+}
+
 export type BlogMetadata = {
   title: string
   publishedAt: string
@@ -21,6 +26,7 @@ export type BlogMetadata = {
   tags?: string[]
   faq?: FAQItem[] | string
   howto?: HowToStep[] | string
+  rating?: ArticleRating | number  // Article rating for schema.org (number = value, defaults count)
 }
 
 export type BlogPost = {

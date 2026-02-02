@@ -289,14 +289,14 @@ export function generateMetadata({ params }: PageProps): Metadata {
   }
 
   // Optimize title length for SEO (50-60 chars) with CTR enhancements
-  const getOptimizedTitle = (originalTitle: string | undefined): string => {
+  const getOptimizedTitle = (originalTitle: string | undefined, category: string | undefined): string => {
     // 确保 title 存在
     let safeTitle = originalTitle
     if (!safeTitle || typeof safeTitle !== 'string') {
       safeTitle = 'Tech Article'
     }
 
-    const emoji = getCategoryEmoji(post.metadata.category)
+    const emoji = getCategoryEmoji(category)
     const suffix = ' - ToLearn'
     const maxLength = 60 - suffix.length - 3 // Account for emoji + space
 
@@ -316,7 +316,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
   }
 
   return {
-    title: getOptimizedTitle(title),
+    title: getOptimizedTitle(title, post.metadata.category),
     description: optimizedDescription,
     authors: [{ name: 'ToLearn Blog' }],
     creator: 'ToLearn Blog',

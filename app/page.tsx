@@ -1,18 +1,9 @@
-import { BlogPosts } from 'app/components/posts'
 import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { 
-  Zap, 
-  Banknote, 
-  Rocket, 
-  Laptop, 
-  TrendingUp, 
-  BookOpen, 
-  GraduationCap, 
-  Bell, 
-  ArrowRight 
-} from 'lucide-react'
+import { HeroSection } from 'app/components/hero-section'
+import { FeaturedArticles } from 'app/components/featured-articles'
+import { LatestPostsList } from 'app/components/latest-posts-list'
+import { NewsletterCTA } from 'app/components/newsletter-cta'
 
 export const metadata: Metadata = {
   title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
@@ -82,7 +73,7 @@ export default function Page() {
   }
 
   return (
-    <section className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -90,197 +81,18 @@ export default function Page() {
           __html: JSON.stringify(websiteSchema),
         }}
       />
+
       {/* Hero Section */}
-      <div className="hero-glow mb-16 py-12 -mx-4 px-4 lg:-mx-8 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:bg-none dark:bg-transparent rounded-3xl border border-gray-200/50 dark:border-slate-700/30">
-        <div className="text-center max-w-3xl mx-auto relative z-10">
-          <h1 className="mb-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-            ToLearn Blog
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 font-light leading-relaxed mb-8">
-            Exploring the frontiers of AI, programming, and modern web development
-          </p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              <Rocket className="w-4 h-4 text-blue-500" />
-              AI Innovation
-            </span>
-            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              <Laptop className="w-4 h-4 text-purple-500" />
-              Clean Code
-            </span>
-            <span className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/40 backdrop-blur-sm rounded-full text-sm font-medium text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-600">
-              <TrendingUp className="w-4 h-4 text-green-500" />
-              SEO Excellence
-            </span>
-          </div>
-        </div>
-      </div>
+      <HeroSection />
 
-      {/* Featured Articles Section */}
-      <section className="mb-16">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Featured Articles
-          </h2>
-          <Link
-            href="/blog"
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-2 group"
-            title="View All Articles"
-          >
-            View all
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          <Link
-            href="/blog/google-ai-energy-data-disclosure"
-            className="group relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl p-8 border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl"
-            title="Google AI Energy Data Disclosure"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/10 dark:to-purple-900/10 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
-                  <Zap className="w-6 h-6" />
-                </div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-blue-600 dark:text-blue-400">Energy & AI</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                Google's AI Energy Transparency Breakthrough
-              </h3>
-              <p className="text-gray-600 dark:text-slate-400 leading-relaxed">
-                First-ever disclosure reveals 0.24 watt-hours per AI query, setting new industry standards for sustainable AI development.
-              </p>
-              <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
-                Read more
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </Link>
+      {/* Featured Articles with Thumbnails */}
+      <FeaturedArticles limit={3} />
 
-          <Link
-            href="/blog/ai-revolution-finance"
-            className="group relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl p-8 border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl"
-            title="AI Revolution in Finance"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-full blur-3xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
-                  <Banknote className="w-6 h-6" />
-                </div>
-                <span className="text-xs uppercase tracking-wider font-semibold text-green-600 dark:text-green-400">Finance & AI</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                AI Revolution in Your Wallet
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                From fraud detection to algorithmic trading, discover how AI is reshaping the financial landscape.
-              </p>
-              <div className="mt-4 flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium">
-                Read more
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </Link>
-        </div>
-      </section>
+      {/* Latest Posts List */}
+      <LatestPostsList limit={5} skipFirst={3} />
 
-      {/* Latest Articles List */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Latest Posts</h2>
-        <div className="bg-gray-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-gray-200 dark:border-slate-800/50">
-          <BlogPosts limit={6} />
-        </div>
-      </section>
-
-      {/* Developer Resources Section */}
-      <section className="mb-16">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Resources</h2>
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-slate-100">Documentation</h3>
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="https://developers.google.com/community"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  title="Google Developers"
-                >
-                  <span className="text-xs">•</span>
-                  Google Developers
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://developer.mozilla.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  title="MDN Web Docs"
-                >
-                  <span className="text-xs">•</span>
-                  MDN Web Docs
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400">
-                <GraduationCap className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-slate-100">Learning</h3>
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <a
-                  href="https://web.dev/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  title="Web.dev"
-                >
-                  <span className="text-xs">•</span>
-                  Web.dev
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/topics/artificial-intelligence"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  title="GitHub AI"
-                >
-                  <span className="text-xs">•</span>
-                  GitHub AI
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="group p-6 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800/50 hover:border-blue-300 dark:hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 dark:text-purple-400">
-                <Bell className="w-6 h-6" />
-              </div>
-              <h3 className="font-semibold text-gray-900 dark:text-slate-100">Stay Updated</h3>
-            </div>
-            <p className="text-gray-600 dark:text-slate-400 leading-relaxed">
-              Access curated resources to stay ahead with the latest in AI, web development, and technology trends.
-            </p>
-          </div>
-        </div>
-      </section>
-    </section>
+      {/* Newsletter CTA */}
+      <NewsletterCTA />
+    </div>
   )
 }

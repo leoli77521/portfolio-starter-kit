@@ -3,19 +3,23 @@ import { getBlogPosts } from 'app/blog/utils'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
-import { generateItemListSchema, generateCollectionPageSchema, schemaToJsonLd } from 'app/lib/schemas'
+import {
+  generateCollectionPageSchema,
+  generateItemListSchema,
+  schemaToJsonLd,
+} from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Topic Hubs - Curated Learning Collections',
+  title: 'Topic Hubs | ToLearn',
   description:
-    'Explore our curated topic hubs - comprehensive collections of articles organized by subject area. From AI development to SEO fundamentals, find structured learning paths.',
+    'Explore curated topic hubs that group ToLearn articles into clearer learning paths.',
   alternates: {
     canonical: `${baseUrl}/topics`,
   },
   openGraph: {
-    title: 'Topic Hubs | ToLearn Blog',
+    title: 'Topic Hubs | ToLearn',
     description:
-      'Explore curated collections of articles organized by subject area. Find comprehensive learning resources on AI, SEO, web development, and more.',
+      'Curated collections of articles organized into practical learning paths for builders.',
     url: `${baseUrl}/topics`,
     type: 'website',
   },
@@ -23,21 +27,20 @@ export const metadata: Metadata = {
 
 export default function TopicsPage() {
   const allPosts = getBlogPosts()
-
-  // Calculate post counts for each topic hub
   const topicStats = topicHubs.map((hub) => {
-    const normalizedHubTags = hub.relatedTags.map((t) => t.toLowerCase())
+    const normalizedHubTags = hub.relatedTags.map((tag) => tag.toLowerCase())
     const matchingPosts = allPosts.filter((post) => {
       if (!post.metadata.tags) return false
+
       return post.metadata.tags.some((tag) => normalizedHubTags.includes(tag.toLowerCase()))
     })
+
     return {
       ...hub,
       postCount: matchingPosts.length,
     }
   })
 
-  // Generate schemas
   const itemListSchema = generateItemListSchema({
     name: 'Topic Hubs',
     description: 'Curated collections of articles organized by subject area',
@@ -50,8 +53,8 @@ export default function TopicsPage() {
   })
 
   const collectionPageSchema = generateCollectionPageSchema({
-    name: 'Topic Hubs - Curated Learning Collections',
-    description: 'Explore our curated topic hubs for comprehensive learning on various subjects.',
+    name: 'Topic Hubs',
+    description: 'Curated topic collections for structured learning.',
     url: `${baseUrl}/topics`,
     dateModified: new Date().toISOString(),
     items: topicStats.map((hub, index) => ({
@@ -61,90 +64,120 @@ export default function TopicsPage() {
     })),
   })
 
+  const totalLinkedPosts = topicStats.reduce((sum, hub) => sum + hub.postCount, 0)
+
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaToJsonLd([itemListSchema, collectionPageSchema]) }}
       />
 
-      {/* Header */}
-      <div className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-          Topic Hubs
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Explore our curated collections of articles organized by subject. Each hub brings together
-          related content to help you master a specific topic.
-        </p>
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <p className="section-kicker">Curated learning paths</p>
+        <div className="mt-3 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.75fr)] lg:items-end">
+          <div>
+            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              Topic hubs turn the archive into guided tracks
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              When categories are too broad and tags are too granular, topic hubs provide the
+              middle layer: curated groupings that bring related ideas together into clearer
+              paths through the archive.
+            </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {topicStats.length}
+              </span>
+              <span>curated hubs</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {totalLinkedPosts}
+              </span>
+              <span>linked post matches</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {topicStats[0]?.title || 'Archive'}
+              </span>
+              <span>first recommended hub</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Topic Hub Cards */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {topicStats.map((hub) => (
+      <div className="grid gap-5 md:grid-cols-2">
+        {topicStats.map((hub, index) => (
           <Link
             key={hub.slug}
             href={`/topics/${hub.slug}`}
-            className="group block p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 transition-all hover:shadow-lg"
+            className="surface-card group block px-6 py-6"
           >
-            <div className="flex items-start gap-4">
-              <span className="text-4xl">{hub.icon}</span>
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="section-kicker">Path {String(index + 1).padStart(2, '0')}</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
                   {hub.title}
                 </h2>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">{hub.description}</p>
-                <div className="mt-4 flex items-center gap-4 text-sm">
-                  <span className="text-blue-600 dark:text-blue-400 font-medium">
-                    {hub.postCount} {hub.postCount === 1 ? 'article' : 'articles'}
-                  </span>
-                  <span className="text-gray-400">•</span>
-                  <span className="text-gray-500 dark:text-gray-500">
-                    {hub.relatedTags.slice(0, 3).join(', ')}
-                    {hub.relatedTags.length > 3 && '...'}
-                  </span>
-                </div>
               </div>
+              <span className="meta-chip normal-case tracking-normal">
+                {hub.postCount} posts
+              </span>
             </div>
+
+            <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              {hub.description}
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {hub.relatedCategories.map((category) => (
+                <span key={category} className="meta-chip normal-case tracking-normal">
+                  {category}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {hub.relatedTags.slice(0, 4).map((tag) => (
+                <span key={tag} className="rounded-full border border-slate-200/80 px-3 py-1 text-xs font-medium text-slate-600 theme-dark:border-slate-800 theme-dark:text-slate-300">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-6 editorial-link">Open learning path</div>
           </Link>
         ))}
       </div>
 
-      {/* Additional Info */}
-      <div className="mt-16 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
-          About Topic Hubs
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-          Topic Hubs are curated collections designed to provide comprehensive coverage of specific
-          subjects. Each hub aggregates articles that share common themes, making it easier for you
-          to find all related content in one place. Whether you&apos;re starting your learning journey
-          or looking to deepen your expertise, our topic hubs provide structured paths through our
-          content library.
-        </p>
-      </div>
-
-      {/* Link to categories */}
-      <div className="mt-8 text-center">
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
-          Looking for more structured content?
-        </p>
-        <div className="flex justify-center gap-4">
-          <Link
-            href="/categories"
-            className="px-6 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-          >
-            Browse Categories
-          </Link>
-          <Link
-            href="/guides"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            View Guides
-          </Link>
+      <div className="surface-panel px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">Use the right entry point</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Categories, tags, and topic hubs each do a different job
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/categories" className="editorial-link">
+              Browse categories
+            </Link>
+            <Link href="/guides" className="editorial-link">
+              Read guides
+            </Link>
+          </div>
         </div>
+
+        <p className="mt-4 max-w-4xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+          Use categories for broad sections, tags for precise concepts, and topic hubs when you
+          want a curated path through a cluster of related material.
+        </p>
       </div>
     </section>
   )
 }
+

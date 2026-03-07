@@ -92,33 +92,33 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
       name: 'Twitter/X',
       icon: Twitter,
       onClick: () => handlePlatformShare('twitter'),
-      color: 'hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950'
+      color: 'hover:text-sky-600 hover:bg-sky-50 theme-dark:hover:bg-sky-950'
     },
     {
       name: 'Facebook',
       icon: Facebook,
       onClick: () => handlePlatformShare('facebook'),
-      color: 'hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950'
+      color: 'hover:text-blue-600 hover:bg-blue-50 theme-dark:hover:bg-blue-950'
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
       onClick: () => handlePlatformShare('linkedin'),
-      color: 'hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950'
+      color: 'hover:text-blue-700 hover:bg-blue-50 theme-dark:hover:bg-blue-950'
     },
     {
       name: 'WeChat',
       icon: MessageCircle,
       onClick: handleWeChatShare,
-      color: 'hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-950'
+      color: 'hover:text-green-600 hover:bg-green-50 theme-dark:hover:bg-green-950'
     }
   ]
 
   return (
-    <div className="border-t border-neutral-200 dark:border-neutral-800 pt-8 mt-12">
+    <div className="border-t border-neutral-200 theme-dark:border-neutral-800 pt-8 mt-12">
       <div className="flex flex-col space-y-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-neutral-900 theme-dark:text-neutral-100 flex items-center gap-2">
             <Share2 size={20} />
             Share This Article
           </h3>
@@ -143,7 +143,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
             <button
               key={platform.name}
               onClick={platform.onClick}
-              className={`group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-all duration-200 text-neutral-600 dark:text-neutral-400 ${platform.color} dark:hover:border-neutral-600`}
+              className={`group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 theme-dark:border-neutral-700 transition-all duration-200 text-neutral-600 theme-dark:text-neutral-400 ${platform.color} theme-dark:hover:border-neutral-600`}
               title={`Share on ${platform.name}`}
             >
               <platform.icon size={18} className="transition-transform group-hover:scale-110" />
@@ -154,7 +154,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
           {/* Weibo Button */}
           <button
             onClick={() => handlePlatformShare('weibo')}
-            className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-all duration-200 text-neutral-600 dark:text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950 dark:hover:border-neutral-600"
+            className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-neutral-200 theme-dark:border-neutral-700 transition-all duration-200 text-neutral-600 theme-dark:text-neutral-400 hover:text-red-600 hover:bg-red-50 theme-dark:hover:bg-red-950 theme-dark:hover:border-neutral-600"
             title="Share on Weibo"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="transition-transform group-hover:scale-110">
@@ -169,8 +169,8 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
             onClick={handleCopyLink}
             className={`group flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200 ${
               copied 
-                ? 'text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' 
-                : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800 dark:hover:border-neutral-600'
+                ? 'text-green-600 bg-green-50 border-green-200 theme-dark:bg-green-950 theme-dark:border-green-800' 
+                : 'border-neutral-200 theme-dark:border-neutral-700 text-neutral-600 theme-dark:text-neutral-400 hover:text-neutral-900 theme-dark:hover:text-neutral-100 hover:bg-neutral-50 theme-dark:hover:bg-neutral-800 theme-dark:hover:border-neutral-600'
             }`}
             title="Copy link"
           >
@@ -195,7 +195,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
               <button
                 key={platform.name}
                 onClick={platform.onClick}
-                className={`flex items-center justify-center gap-2 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-all duration-200 text-neutral-600 dark:text-neutral-400 ${platform.color}`}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg border border-neutral-200 theme-dark:border-neutral-700 transition-all duration-200 text-neutral-600 theme-dark:text-neutral-400 ${platform.color}`}
                 title={`Share on ${platform.name}`}
               >
                 <platform.icon size={20} />
@@ -207,7 +207,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
           <div className="mt-3 flex gap-3">
             <button
               onClick={() => handlePlatformShare('weibo')}
-              className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-all duration-200 text-neutral-600 dark:text-neutral-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+              className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border border-neutral-200 theme-dark:border-neutral-700 transition-all duration-200 text-neutral-600 theme-dark:text-neutral-400 hover:text-red-600 hover:bg-red-50 theme-dark:hover:bg-red-950"
               title="Share on Weibo"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -221,8 +221,8 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
               onClick={handleCopyLink}
               className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border transition-all duration-200 ${
                 copied 
-                  ? 'text-green-600 bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' 
-                  : 'border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                  ? 'text-green-600 bg-green-50 border-green-200 theme-dark:bg-green-950 theme-dark:border-green-800' 
+                  : 'border-neutral-200 theme-dark:border-neutral-700 text-neutral-600 theme-dark:text-neutral-400 hover:text-neutral-900 theme-dark:hover:text-neutral-100 hover:bg-neutral-50 theme-dark:hover:bg-neutral-800'
               }`}
               title="Copy link"
             >
@@ -248,7 +248,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
             onClick={() => setShowQR(false)}
           >
             <div 
-              className="bg-white dark:bg-neutral-900 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl border border-neutral-200 dark:border-neutral-700" 
+              className="bg-white theme-dark:bg-neutral-900 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl border border-neutral-200 theme-dark:border-neutral-700" 
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
@@ -256,12 +256,12 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
             >
               <div className="text-center">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                  <h4 className="text-lg font-semibold text-neutral-900 theme-dark:text-neutral-100">
                     Share via WeChat
                   </h4>
                   <button
                     onClick={() => setShowQR(false)}
-                    className="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    className="p-1 rounded-lg hover:bg-neutral-100 theme-dark:hover:bg-neutral-800 transition-colors"
                   >
                     <X size={20} className="text-neutral-500" />
                   </button>
@@ -276,12 +276,12 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
                         className="w-48 h-48 mx-auto"
                       />
                     </div>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                    <p className="text-sm text-neutral-600 theme-dark:text-neutral-400">
                       Scan with WeChat to share this article
                     </p>
                   </div>
                 ) : (
-                  <div className="w-48 h-48 bg-neutral-100 dark:bg-neutral-800 rounded-xl flex items-center justify-center mx-auto">
+                  <div className="w-48 h-48 bg-neutral-100 theme-dark:bg-neutral-800 rounded-xl flex items-center justify-center mx-auto">
                     <div className="text-neutral-500 text-sm">Generating QR Code...</div>
                   </div>
                 )}
@@ -291,7 +291,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
         )}
 
         {/* Engagement text */}
-        <div className="text-xs text-neutral-500 dark:text-neutral-400 text-center border-t border-neutral-100 dark:border-neutral-800 pt-4">
+        <div className="text-xs text-neutral-500 theme-dark:text-neutral-400 text-center border-t border-neutral-100 theme-dark:border-neutral-800 pt-4">
           Found this article helpful? Share it with your network to help others discover it too.
         </div>
       </div>

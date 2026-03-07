@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import pseoData from '@/data/pseo_data.json'
 import { baseUrl } from 'app/sitemap'
@@ -9,15 +9,16 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Portfolio Solutions | Features for Developer Portfolios',
-  description: 'Explore portfolio template features including dark mode, SEO optimization, responsive design, fast performance, and blog functionality.',
+  title: 'Solutions | ToLearn',
+  description:
+    'Browse portfolio template features such as dark mode, SEO, responsiveness, performance, and blog support.',
   keywords: ['portfolio features', 'dark mode portfolio', 'SEO portfolio', 'responsive portfolio'],
   alternates: {
     canonical: `${baseUrl}/solutions`,
   },
   openGraph: {
-    title: 'Portfolio Solutions | Features for Developer Portfolios',
-    description: 'Explore portfolio template features for modern developers.',
+    title: 'Solutions | ToLearn',
+    description: 'Feature-driven entry points for the portfolio template library.',
     type: 'website',
     url: `${baseUrl}/solutions`,
   },
@@ -33,16 +34,6 @@ interface Feature {
 export default function SolutionsPage() {
   const features = pseoData.features as Feature[]
 
-  // Feature icons
-  const featureIcons: Record<string, string> = {
-    'dark-mode': '🌙',
-    'seo-optimized': '🔍',
-    'responsive-design': '📱',
-    'fast-performance': '⚡',
-    'blog-ready': '📝',
-  }
-
-  // Generate schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Solutions', url: `${baseUrl}/solutions` },
@@ -50,18 +41,17 @@ export default function SolutionsPage() {
 
   const collectionSchema = generateCollectionPageSchema({
     name: 'Portfolio Solutions',
-    description: 'Features and solutions for developer portfolios',
+    description: 'Feature-driven pages for portfolio templates',
     url: `${baseUrl}/solutions`,
-    items: features.map((feature, i) => ({
+    items: features.map((feature, index) => ({
       url: `${baseUrl}/solutions/${feature.slug}`,
       name: feature.name,
-      position: i + 1,
+      position: index + 1,
     })),
   })
 
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -69,99 +59,87 @@ export default function SolutionsPage() {
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600 dark:text-gray-400">
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-gray-900 dark:text-gray-100 font-medium">Solutions</li>
-        </ol>
-      </nav>
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.75fr)] lg:items-end">
+          <div>
+            <p className="section-kicker">Feature-driven browsing</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              Solutions pages explain what the templates actually do
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              Instead of starting from a stack or role, start from a capability such as dark mode,
+              SEO, responsiveness, or performance and then move outward into the template combinations.
+            </p>
+          </div>
 
-      {/* Header */}
-      <header className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-          Portfolio Solutions
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Explore the features that make our portfolio templates stand out.
-          Each solution is built with best practices and modern technologies.
-        </p>
-      </header>
-
-      {/* Features Grid */}
-      <div className="mb-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map(feature => (
-            <Link
-              key={feature.slug}
-              href={`/solutions/${feature.slug}`}
-              className="group p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-            >
-              <div className="text-4xl mb-4">
-                {featureIcons[feature.slug] || '✨'}
-              </div>
-              <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                {feature.name}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                {feature.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {feature.benefits.slice(0, 2).map((benefit, i) => (
-                  <span
-                    key={i}
-                    className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs"
-                  >
-                    {benefit}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-4 text-blue-600 dark:text-blue-400 text-sm font-medium">
-                Learn more →
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* All Features Summary */}
-      <div className="mb-12 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
-          All Features Included
-        </h2>
-        <div className="grid md:grid-cols-2 gap-4">
-          {features.map(feature => (
-            <div key={feature.slug} className="flex items-start gap-3">
-              <span className="text-green-500 text-xl">✓</span>
-              <div>
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{feature.name}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{feature.description}</p>
-              </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {features.length}
+              </span>
+              <span>feature pages</span>
             </div>
-          ))}
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {features.reduce((sum, feature) => sum + feature.benefits.length, 0)}
+              </span>
+              <span>benefit points</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* CTA */}
-      <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-          Ready to Build Your Portfolio?
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          All these features are included in our portfolio templates. Choose your technology and role.
-        </p>
-        <Link
-          href="/templates"
-          className="inline-block px-8 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-colors"
-        >
-          Browse Templates
-        </Link>
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {features.map((feature) => (
+          <Link
+            key={feature.slug}
+            href={`/solutions/${feature.slug}`}
+            className="surface-card group block px-6 py-6"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="section-kicker">Feature</p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
+                  {feature.name}
+                </h2>
+              </div>
+              <span className="meta-chip normal-case tracking-normal">
+                {feature.benefits.length} benefits
+              </span>
+            </div>
+
+            <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              {feature.description}
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {feature.benefits.slice(0, 3).map((benefit) => (
+                <span key={benefit} className="meta-chip normal-case tracking-normal">
+                  {benefit}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-6 editorial-link">Open feature page</div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="surface-panel px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="section-kicker">Move from feature to template</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Once you know which capability matters most, switch back to the templates index to
+              compare combinations by stack and role.
+            </p>
+          </div>
+          <Link href="/templates" className="editorial-link">
+            Browse template combinations
+          </Link>
+        </div>
       </div>
     </section>
   )
 }
+

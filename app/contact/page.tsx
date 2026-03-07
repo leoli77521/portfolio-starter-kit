@@ -1,102 +1,118 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { baseUrl, organization } from 'app/lib/constants'
+import { ContactForm } from 'app/components/contact-form'
 
 export const metadata: Metadata = {
-    title: 'Contact Us',
-    description: 'Contact ToLearn Blog',
+  title: 'Contact | ToLearn',
+  description: 'Reach ToLearn by email for article feedback, questions, or collaboration.',
 }
+
+const contactTopics = [
+  'Article feedback or corrections',
+  'Questions about AI, search, or implementation details',
+  'Collaboration or partnership inquiries',
+]
 
 export default function ContactPage() {
-    // Organization data is imported from constants
-    const contactSchema = {
-        '@context': 'https://schema.org',
-        '@type': 'ContactPage',
-        '@id': `${baseUrl}/contact/#contact`,
-        url: `${baseUrl}/contact`,
-        name: 'Contact ToLearn Blog',
-        description: 'Contact ToLearn Blog',
-        mainEntity: organization,
-    }
+  const contactSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${baseUrl}/contact/#contact`,
+    url: `${baseUrl}/contact`,
+    name: 'Contact ToLearn',
+    description: 'Reach ToLearn by email for article feedback, questions, or collaboration.',
+    mainEntity: organization,
+  }
 
-    return (
-        <section className="max-w-3xl mx-auto px-4 py-12">
-            <script
-                type="application/ld+json"
-                suppressHydrationWarning
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(contactSchema),
-                }}
-            />
-            <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Contact Us</h1>
+  return (
+    <section className="space-y-8">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactSchema),
+        }}
+      />
 
-            <div className="grid md:grid-cols-2 gap-12">
-                <div>
-                    <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                        We'd love to hear from you. Whether you have a question about our tutorials, need assistance, or just want to talk about AI and tech, we are here to help.
-                    </p>
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(18rem,0.8fr)] lg:items-end">
+          <div>
+            <p className="section-kicker">Get in touch</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              The fastest route is still email
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              If you have a question, found an error, or want to talk about the work, send a
+              note. The form below opens a prefilled email draft in your local mail app.
+            </p>
+          </div>
 
-                    <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-indigo-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-600 dark:text-indigo-400 border border-transparent dark:border-indigo-500/20">
-                                <span className="text-xl">📧</span>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Email</h3>
-                                <p className="text-gray-600 dark:text-gray-400">{organization.email}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 bg-purple-100 dark:bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0 text-purple-600 dark:text-purple-400 border border-transparent dark:border-purple-500/20">
-                                <span className="text-xl">💬</span>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">Social Media</h3>
-                                <p className="text-gray-600 dark:text-gray-400">Follow us on Twitter and GitHub for updates.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-white/50 dark:bg-slate-800/40 p-8 rounded-2xl border border-gray-200 dark:border-slate-700/50 backdrop-blur-sm shadow-xl dark:shadow-2xl dark:shadow-slate-900/50">
-                    <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">Send us a message</h2>
-                    <form className="space-y-4">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
-                            <input
-                                type="text"
-                                id="name"
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
-                                placeholder="Your name"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
-                                placeholder="your@email.com"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
-                            <textarea
-                                id="message"
-                                rows={4}
-                                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-gray-900 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-slate-500"
-                                placeholder="How can we help?"
-                            ></textarea>
-                        </div>
-                        <button
-                            type="button"
-                            className="w-full py-3 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-indigo-500/25"
-                        >
-                            Send Message
-                        </button>
-                    </form>
-                </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                Email
+              </span>
+              <span>{organization.email}</span>
             </div>
-        </section>
-    )
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                Best for
+              </span>
+              <span>feedback, questions, collaboration</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="surface-panel px-6 py-6 md:px-8">
+          <p className="section-kicker">Start an email</p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+            Write the message in the browser, send it in your mail client
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            This keeps the contact flow honest. No fake success state, no hidden backend queue,
+            and no guesswork about whether the message actually went out.
+          </p>
+
+          <div className="mt-6">
+            <ContactForm recipientEmail={organization.email} />
+          </div>
+        </div>
+
+        <aside className="space-y-5">
+          <div className="surface-card px-5 py-5">
+            <p className="section-kicker">Good reasons to write</p>
+            <div className="mt-4 space-y-3">
+              {contactTopics.map((topic) => (
+                <div
+                  key={topic}
+                  className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
+                >
+                  {topic}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="surface-card px-5 py-5">
+            <p className="section-kicker">Prefer browsing first?</p>
+            <div className="mt-4 flex flex-col gap-3">
+              <Link href="/about" className="editorial-link">
+                Read about the project
+              </Link>
+              <Link href="/blog" className="editorial-link">
+                Open the journal
+              </Link>
+              <Link href="/guides" className="editorial-link">
+                Browse guides
+              </Link>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  )
 }
+

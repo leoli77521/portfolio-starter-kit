@@ -1,24 +1,18 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import pseoData from '@/data/pseo_data.json'
-import { getBlogPosts, calculateReadingTime } from 'app/blog/utils'
-import { baseUrl } from 'app/sitemap'
+import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { PostCard } from 'app/components/post-card'
-import {
-  generateBreadcrumbSchema,
-  schemaToJsonLd,
-} from 'app/lib/schemas'
+import { baseUrl } from 'app/sitemap'
+import { generateBreadcrumbSchema, schemaToJsonLd } from 'app/lib/schemas'
 
-// Types
 interface Technology {
   slug: string
   name: string
   description: string
   features: string[]
   useCases: string[]
-  relatedPosts: string[]
-  icon?: string
 }
 
 interface Role {
@@ -30,11 +24,10 @@ interface Role {
   goals: string[]
 }
 
-interface Props {
-  params: Promise<{ tech: string; role: string }>
+interface PageProps {
+  params: { tech: string; role: string }
 }
 
-// Static params generation for SSG
 export async function generateStaticParams() {
   const params: { tech: string; role: string }[] = []
 
@@ -50,12 +43,9 @@ export async function generateStaticParams() {
   return params
 }
 
-// Dynamic metadata
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { tech, role } = await params
-
-  const technology = (pseoData.technologies as Technology[]).find(t => t.slug === tech)
-  const roleData = (pseoData.roles as Role[]).find(r => r.slug === role)
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const technology = (pseoData.technologies as Technology[]).find((item) => item.slug === params.tech)
+  const roleData = (pseoData.roles as Role[]).find((item) => item.slug === params.role)
 
   if (!technology || !roleData) {
     return { title: 'Template Not Found' }
@@ -78,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       type: 'website',
-      url: `${baseUrl}/templates/${tech}/${role}`,
+      url: `${baseUrl}/templates/${params.tech}/${params.role}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -86,54 +76,47 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
     },
     alternates: {
-      canonical: `${baseUrl}/templates/${tech}/${role}`,
+      canonical: `${baseUrl}/templates/${params.tech}/${params.role}`,
     },
   }
 }
 
-// Helper: Get related blog posts
 function getRelatedPosts(technology: Technology, roleData: Role) {
   const allPosts = getBlogPosts()
-  const relevantTags = [...technology.features, ...roleData.keywords].map(t => t.toLowerCase())
+  const relevantTags = [...technology.features, ...roleData.keywords].map((tag) => tag.toLowerCase())
 
   return allPosts
-    .filter(post => {
-      const postTags = post.metadata.tags?.map(t => t.toLowerCase()) || []
-      return postTags.some(tag =>
-        relevantTags.some(rt => tag.includes(rt.toLowerCase()) || rt.toLowerCase().includes(tag))
+    .filter((post) => {
+      const postTags = post.metadata.tags?.map((tag) => tag.toLowerCase()) || []
+      return postTags.some((tag) =>
+        relevantTags.some((relevantTag) => tag.includes(relevantTag) || relevantTag.includes(tag))
       )
     })
     .slice(0, 6)
 }
 
-// Helper: Generate FAQs
 function generateFAQs(technology: Technology, roleData: Role) {
   return [
     {
-      question: `Why is ${technology.name} great for ${roleData.name}s?`,
-      answer: `${technology.name} is perfect for ${roleData.name}s because it offers ${technology.features.slice(0, 3).join(', ')}. This helps address common challenges like ${roleData.challenges.slice(0, 2).join(' and ')}.`,
+      question: `Why use ${technology.name} for a ${roleData.name} portfolio?`,
+      answer: `${technology.name} fits ${roleData.name}s well because it supports ${technology.features
+        .slice(0, 3)
+        .join(', ')} and maps cleanly to goals like ${roleData.goals.slice(0, 2).join(' and ')}.`,
     },
     {
-      question: `What features does this ${technology.name} portfolio template include?`,
-      answer: `This template includes: ${technology.features.join(', ')}. It's optimized to help you ${roleData.goals.slice(0, 2).join(' and ')}.`,
+      question: `What does this ${technology.name} template emphasize?`,
+      answer: `It emphasizes ${roleData.keywords.slice(0, 3).join(', ')} while keeping the portfolio easy to adapt for a specific hiring story.`,
     },
     {
-      question: `Is this template suitable for ${roleData.name}s?`,
-      answer: `Absolutely! This template is specifically designed for ${roleData.name}s, focusing on ${roleData.keywords.slice(0, 3).join(', ')}. It helps you ${roleData.goals[0]}.`,
-    },
-    {
-      question: `How do I customize this ${technology.name} template?`,
-      answer: `The template is fully customizable using ${technology.name}'s component system. You can modify colors, layouts, and content to match your personal brand and showcase your ${roleData.keywords[0]} skills.`,
+      question: `Can this template be customized heavily?`,
+      answer: `Yes. The structure is intended to be customized for content, styling, layout, and feature emphasis without changing the core publishing flow.`,
     },
   ]
 }
 
-// Main Page Component
-export default async function TechRoleTemplatePage({ params }: Props) {
-  const { tech, role } = await params
-
-  const technology = (pseoData.technologies as Technology[]).find(t => t.slug === tech)
-  const roleData = (pseoData.roles as Role[]).find(r => r.slug === role)
+export default function TechRoleTemplatePage({ params }: PageProps) {
+  const technology = (pseoData.technologies as Technology[]).find((item) => item.slug === params.tech)
+  const roleData = (pseoData.roles as Role[]).find((item) => item.slug === params.role)
 
   if (!technology || !roleData) {
     notFound()
@@ -141,27 +124,24 @@ export default async function TechRoleTemplatePage({ params }: Props) {
 
   const relatedPosts = getRelatedPosts(technology, roleData)
   const faqs = generateFAQs(technology, roleData)
-
-  // Get other technologies and roles for cross-linking
   const otherTechs = (pseoData.technologies as Technology[])
-    .filter(t => t.slug !== tech)
+    .filter((item) => item.slug !== params.tech)
     .slice(0, 3)
   const otherRoles = (pseoData.roles as Role[])
-    .filter(r => r.slug !== role)
+    .filter((item) => item.slug !== params.role)
     .slice(0, 3)
 
-  // Generate schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Templates', url: `${baseUrl}/templates` },
-    { name: technology.name, url: `${baseUrl}/templates/${tech}` },
-    { name: roleData.name, url: `${baseUrl}/templates/${tech}/${role}` },
+    { name: technology.name, url: `${baseUrl}/templates/${params.tech}` },
+    { name: roleData.name, url: `${baseUrl}/templates/${params.tech}/${params.role}` },
   ])
 
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
+    mainEntity: faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
       acceptedAnswer: {
@@ -186,8 +166,7 @@ export default async function TechRoleTemplatePage({ params }: Props) {
   }
 
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -195,221 +174,283 @@ export default async function TechRoleTemplatePage({ params }: Props) {
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600 dark:text-gray-400">
-        <ol className="flex items-center gap-2 flex-wrap">
+      <nav className="text-sm" aria-label="Breadcrumb navigation">
+        <ol className="flex flex-wrap items-center gap-2 text-slate-500 theme-dark:text-slate-400">
           <li>
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
               Home
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href="/templates" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link
+              href="/templates"
+              className="transition-colors hover:text-slate-950 theme-dark:hover:text-white"
+            >
               Templates
             </Link>
           </li>
           <li>/</li>
-          <li>
-            <Link href={`/templates/${tech}`} className="hover:text-blue-600 dark:hover:text-blue-400">
-              {technology.name}
-            </Link>
-          </li>
+          <li className="font-medium text-slate-900 theme-dark:text-slate-100">{technology.name}</li>
           <li>/</li>
-          <li className="text-gray-900 dark:text-gray-100 font-medium">{roleData.name}</li>
+          <li className="font-medium text-slate-900 theme-dark:text-slate-100">{roleData.name}</li>
         </ol>
       </nav>
 
-      {/* Hero Section */}
-      <header className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-          Best {technology.name} Portfolio Template for {roleData.name}s
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-6">
-          {technology.description} Perfect for {roleData.name}s who want to {roleData.goals[0]}.
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="section-kicker">Template combination</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="meta-chip normal-case tracking-normal">{technology.name}</span>
+              <span className="meta-chip normal-case tracking-normal">{roleData.name}</span>
+            </div>
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              Best {technology.name} portfolio template for {roleData.name}s
+            </h1>
+            <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              {technology.description} This angle works especially well for {roleData.name}s who
+              want to {roleData.goals[0].toLowerCase()}.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link href="/templates" className="editorial-link">
+              All templates
+            </Link>
+            <Link href="/solutions" className="editorial-link">
+              Browse by feature
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {technology.features.length}
+            </span>
+            <span>core stack features</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {roleData.goals.length}
+            </span>
+            <span>role goals covered</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {technology.useCases.length}
+            </span>
+            <span>common use cases</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {relatedPosts.length}
+            </span>
+            <span>related articles</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-6">
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="section-kicker">Why it fits</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                  Matching the stack to the story
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                Good portfolio framing is partly technical and partly narrative. The page combines both.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-5 md:grid-cols-2">
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Technology strengths</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {technology.features.map((feature) => (
+                    <span key={feature} className="meta-chip normal-case tracking-normal">
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Role priorities</p>
+                <div className="mt-4 space-y-3">
+                  {roleData.goals.map((goal) => (
+                    <div
+                      key={goal}
+                      className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
+                    >
+                      {goal}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <p className="section-kicker">Role-specific considerations</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Built for {roleData.name}s
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              {roleData.description}
+            </p>
+
+            <div className="mt-6 grid gap-5 md:grid-cols-2">
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Challenges</p>
+                <div className="mt-4 space-y-3">
+                  {roleData.challenges.map((challenge) => (
+                    <div
+                      key={challenge}
+                      className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
+                    >
+                      {challenge}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Use cases</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {technology.useCases.map((useCase) => (
+                    <span key={useCase} className="meta-chip normal-case tracking-normal">
+                      {useCase}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {relatedPosts.length > 0 ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Supporting reading</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Related articles
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  These posts overlap with the stack or role keywords for this combination.
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-6">
+                {relatedPosts.slice(0, 4).map((post) => (
+                  <PostCard
+                    key={post.slug}
+                    post={{
+                      slug: post.slug,
+                      metadata: post.metadata,
+                      readingTime: calculateReadingTime(post.content),
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <p className="section-kicker">Questions</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Frequently asked questions
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              {faqs.map((faq) => (
+                <details
+                  key={faq.question}
+                  className="rounded-[1.5rem] border border-slate-200/80 bg-white/85 px-5 py-4 theme-dark:border-slate-800 theme-dark:bg-slate-950/80"
+                >
+                  <summary className="cursor-pointer list-none text-base font-semibold text-slate-950 theme-dark:text-slate-100">
+                    {faq.question}
+                  </summary>
+                  <p className="mt-3 border-t border-slate-200/70 pt-3 text-sm leading-7 text-slate-600 theme-dark:border-slate-800 theme-dark:text-slate-300">
+                    {faq.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <aside className="space-y-5">
+          <div className="surface-card px-5 py-5">
+            <p className="section-kicker">Other technologies</p>
+            <div className="mt-4 space-y-3">
+              {otherTechs.map((tech) => (
+                <Link
+                  key={tech.slug}
+                  href={`/templates/${tech.slug}/${params.role}`}
+                  className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                >
+                  <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                    {tech.name}
+                  </div>
+                  <div className="mt-2 text-sm text-slate-600 theme-dark:text-slate-300">
+                    for {roleData.name}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="surface-card px-5 py-5">
+            <p className="section-kicker">Other roles</p>
+            <div className="mt-4 space-y-3">
+              {otherRoles.map((role) => (
+                <Link
+                  key={role.slug}
+                  href={`/templates/${params.tech}/${role.slug}`}
+                  className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                >
+                  <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                    {technology.name}
+                  </div>
+                  <div className="mt-2 text-sm text-slate-600 theme-dark:text-slate-300">
+                    for {role.name}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div className="surface-panel px-6 py-6 text-center md:px-8">
+        <p className="section-kicker">Next step</p>
+        <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+          Explore the features behind the templates
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+          If you want to browse by capability rather than by stack or role, switch to the solutions pages.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Link
-            href="/blog"
-            className="px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-colors"
-          >
-            View Demo
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/solutions" className="editorial-link">
+            Browse solutions
           </Link>
           <a
             href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800 transition-colors"
+            className="editorial-link"
           >
-            Get Template
+            View starter
           </a>
         </div>
-      </header>
-
-      {/* Features Grid */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Why {technology.name} for Your {roleData.name} Portfolio?
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {technology.features.map((feature, i) => (
-            <div
-              key={i}
-              className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg"
-            >
-              <div className="text-2xl mb-2">
-                {['⚡', '🚀', '🎨', '📱', '🔍', '🛠️'][i % 6]}
-              </div>
-              <h3 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">{feature}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Essential for {roleData.name}s building a professional portfolio.
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Role-specific Benefits */}
-      <div className="mb-12 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-          Built for {roleData.name}s
-        </h2>
-        <p className="text-gray-700 dark:text-gray-300 mb-6">
-          {roleData.description}
-        </p>
-        <div className="grid md:grid-cols-3 gap-4">
-          {roleData.goals.map((goal, i) => (
-            <div
-              key={i}
-              className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
-            >
-              <span className="text-green-500 mr-2">✓</span>
-              {goal}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Use Cases */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Perfect For
-        </h2>
-        <div className="flex flex-wrap gap-3">
-          {technology.useCases.map((useCase, i) => (
-            <span
-              key={i}
-              className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full"
-            >
-              {useCase}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Related Articles */}
-      {relatedPosts.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-            Related Articles
-          </h2>
-          <div className="space-y-4">
-            {relatedPosts.slice(0, 4).map(post => (
-              <PostCard
-                key={post.slug}
-                post={{
-                  slug: post.slug,
-                  metadata: post.metadata,
-                  readingTime: calculateReadingTime(post.content),
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* FAQ Section */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Frequently Asked Questions
-        </h2>
-        <div className="space-y-4">
-          {faqs.map((faq, i) => (
-            <details
-              key={i}
-              className="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg group"
-            >
-              <summary className="font-semibold cursor-pointer text-gray-900 dark:text-gray-100 list-none flex justify-between items-center">
-                {faq.question}
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="mt-3 text-gray-600 dark:text-gray-400 pt-3 border-t border-gray-200 dark:border-gray-700">
-                {faq.answer}
-              </p>
-            </details>
-          ))}
-        </div>
-      </div>
-
-      {/* Cross-linking Section */}
-      <div className="mb-12 grid md:grid-cols-2 gap-8">
-        {/* Other Technologies */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-            Other {roleData.name} Templates
-          </h3>
-          <div className="space-y-2">
-            {otherTechs.map(t => (
-              <Link
-                key={t.slug}
-                href={`/templates/${t.slug}/${role}`}
-                className="block p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span className="font-medium text-gray-900 dark:text-gray-100">{t.name}</span>
-                <span className="text-gray-500 dark:text-gray-400"> for {roleData.name}s</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Other Roles */}
-        <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-            {technology.name} for Other Roles
-          </h3>
-          <div className="space-y-2">
-            {otherRoles.map(r => (
-              <Link
-                key={r.slug}
-                href={`/templates/${tech}/${r.slug}`}
-                className="block p-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span className="font-medium text-gray-900 dark:text-gray-100">{technology.name}</span>
-                <span className="text-gray-500 dark:text-gray-400"> for {r.name}s</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div className="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-          Ready to Build Your {roleData.name} Portfolio?
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xl mx-auto">
-          Start with our {technology.name} template and launch your professional portfolio today.
-          Free, open-source, and ready to customize.
-        </p>
-        <a
-          href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block px-8 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-colors"
-        >
-          Get Started Free
-        </a>
       </div>
     </section>
   )
 }
+

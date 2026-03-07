@@ -15,10 +15,6 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
   colorScheme: 'dark light',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' }
-  ],
 }
 
 export const metadata: Metadata = {
@@ -102,22 +98,23 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
+        <meta name="theme-color" content="#fafafa" />
 
-        {/* 资源提示优化 - 预连接到关键域名 */}
+        {/* 璧勬簮鎻愮ず浼樺寲 - 棰勮繛鎺ュ埌鍏抽敭鍩熷悕 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
 
-        {/* 图标优化 */}
+        {/* 鍥炬爣浼樺寲 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="alternate" type="application/rss+xml" href="/rss" title="ToLearn Blog RSS Feed" />
 
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('theme'),m=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&m)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})()`
+            __html: `(function(){try{var dark='#0b0f1a',light='#fafafa',saved=localStorage.getItem('theme'),prefersDark=window.matchMedia('(prefers-color-scheme:dark)').matches,theme=(saved==='dark'||(!saved&&prefersDark))?'dark':'light',meta=document.querySelector('meta[name="theme-color"]');document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.style.colorScheme=theme;if(meta){meta.setAttribute('content',theme==='dark'?dark:light)}}catch(e){}})()`
           }}
         />
       </head>

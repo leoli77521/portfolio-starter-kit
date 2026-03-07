@@ -1,82 +1,106 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { getBlogPosts, formatDate } from 'app/blog/utils'
+import { ArrowRight, ArrowUpRight, Clock } from 'lucide-react'
+import { calculateReadingTime, formatDate, getBlogPosts } from 'app/blog/utils'
+import { truncateSummary } from 'app/lib/formatters'
+import { getCategoryColor } from 'app/lib/categories'
 
-const categoryColors: Record<string, { bg: string; text: string }> = {
-  'AI Technology': { bg: 'bg-indigo-100 dark:bg-indigo-900/40', text: 'text-indigo-700 dark:text-indigo-300' },
-  'Web Development': { bg: 'bg-emerald-100 dark:bg-emerald-900/40', text: 'text-emerald-700 dark:text-emerald-300' },
-  'SEO & Marketing': { bg: 'bg-amber-100 dark:bg-amber-900/40', text: 'text-amber-700 dark:text-amber-300' },
-  'Programming': { bg: 'bg-blue-100 dark:bg-blue-900/40', text: 'text-blue-700 dark:text-blue-300' },
-  'Productivity': { bg: 'bg-purple-100 dark:bg-purple-900/40', text: 'text-purple-700 dark:text-purple-300' },
-  'Technology': { bg: 'bg-cyan-100 dark:bg-cyan-900/40', text: 'text-cyan-700 dark:text-cyan-300' },
-}
-
-function getCategoryStyle(category: string | undefined) {
-  if (!category) return categoryColors['AI Technology']
-  return categoryColors[category] || categoryColors['AI Technology']
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
 }
 
 export function LatestPostsList({
   limit = 5,
-  skipFirst = 3
+  skipFirst = 0,
 }: {
   limit?: number
   skipFirst?: number
 }) {
   const posts = getBlogPosts()
-    .sort((a, b) => new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+    )
     .slice(skipFirst, skipFirst + limit)
 
-  if (posts.length === 0) return null
+  if (!posts.length) {
+    return null
+  }
 
   return (
-    <section className="py-16 md:py-20">
-      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-10">
-        Latest Posts
-      </h2>
+    <section className="content-section pt-4">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="section-kicker">Latest dispatches</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
+            Fresh notes from the working notebook
+          </h2>
+          <p className="section-copy mt-3 max-w-2xl">
+            These are the most recent entries after the featured set, laid out for fast
+            scanning instead of long card repetition.
+          </p>
+        </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 overflow-hidden divide-y divide-gray-100 dark:divide-slate-800">
-        {posts.map((post) => {
-          const categoryStyle = getCategoryStyle(post.metadata.category)
-
-          return (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="group flex items-center justify-between p-5 md:p-6 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors"
-            >
-              <div className="flex items-center gap-4 md:gap-6 flex-1 min-w-0">
-                <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
-                  {post.metadata.title}
-                </h3>
-                <span className={`hidden sm:inline-block shrink-0 px-2.5 py-1 rounded text-xs font-semibold ${categoryStyle.bg} ${categoryStyle.text}`}>
-                  {post.metadata.category || 'Article'}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-4 md:gap-6 shrink-0 ml-4">
-                <time
-                  dateTime={post.metadata.publishedAt}
-                  className="hidden md:block text-sm text-gray-500 dark:text-gray-500"
-                >
-                  {formatDate(post.metadata.publishedAt, false)}
-                </time>
-                <ArrowRight className="w-5 h-5 text-indigo-600 dark:text-indigo-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-              </div>
-            </Link>
-          )
-        })}
+        <Link href="/blog" className="editorial-link">
+          See every post
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
-      <div className="mt-8 text-center">
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-medium hover:border-indigo-300 dark:hover:border-indigo-600 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
-        >
-          View all posts
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+      <div className="grid gap-5 md:grid-cols-2">
+        {posts.map((post) => {
+          const categoryTone = getCategoryColor(post.metadata.category || 'All')
+
+          return (
+            <article key={post.slug} className="surface-card overflow-hidden">
+              <Link
+                href={`/blog/${post.slug}`}
+                className="group block px-5 py-5 md:px-6 md:py-6"
+                title={post.metadata.title}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-500 theme-dark:text-slate-400">
+                      {post.metadata.category && (
+                        <span
+                          className={`inline-flex items-center rounded-full border px-3 py-1 ${categoryBadgeStyles[categoryTone]}`}
+                        >
+                          {post.metadata.category}
+                        </span>
+                      )}
+                      <span>{formatDate(post.metadata.publishedAt, false)}</span>
+                    </div>
+
+                    <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
+                      {post.metadata.title}
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                      {truncateSummary(post.metadata.summary || '', 150)}
+                    </p>
+                  </div>
+
+                  <span className="inline-flex rounded-full border border-slate-200/80 p-3 text-slate-500 transition-colors group-hover:border-indigo-300 group-hover:text-indigo-700 theme-dark:border-slate-800 theme-dark:text-slate-400 theme-dark:group-hover:border-indigo-500/60 theme-dark:group-hover:text-indigo-300">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </div>
+
+                <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                  <Clock className="h-3.5 w-3.5" />
+                  {calculateReadingTime(post.content)} min read
+                </div>
+              </Link>
+            </article>
+          )
+        })}
       </div>
     </section>
   )
 }
+

@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import pseoData from '@/data/pseo_data.json'
 import { baseUrl } from 'app/sitemap'
@@ -9,15 +9,17 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Portfolio Templates | Developer Portfolio Starter Kits',
-  description: 'Browse our collection of portfolio templates built with Next.js, React, TypeScript, and Tailwind CSS. Perfect for frontend developers, backend developers, and software engineers.',
+  title: 'Templates | ToLearn',
+  description:
+    'Browse portfolio template combinations by technology and role, with feature-driven entry points.',
   keywords: ['portfolio template', 'developer portfolio', 'nextjs template', 'react portfolio'],
   alternates: {
     canonical: `${baseUrl}/templates`,
   },
   openGraph: {
-    title: 'Portfolio Templates | Developer Portfolio Starter Kits',
-    description: 'Browse our collection of portfolio templates built with modern technologies.',
+    title: 'Templates | ToLearn',
+    description:
+      'Portfolio template combinations for developers, organized by stack and role.',
     type: 'website',
     url: `${baseUrl}/templates`,
   },
@@ -28,22 +30,21 @@ interface Technology {
   name: string
   description: string
   features: string[]
-  icon?: string
 }
 
 interface Role {
   slug: string
   name: string
   description: string
+  keywords: string[]
+  goals: string[]
 }
 
 export default function TemplatesPage() {
   const technologies = pseoData.technologies as Technology[]
   const roles = pseoData.roles as Role[]
-
   const totalCombinations = technologies.length * roles.length
 
-  // Generate schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Templates', url: `${baseUrl}/templates` },
@@ -51,18 +52,17 @@ export default function TemplatesPage() {
 
   const collectionSchema = generateCollectionPageSchema({
     name: 'Portfolio Templates',
-    description: 'Collection of developer portfolio templates',
+    description: 'Portfolio template combinations by technology and role',
     url: `${baseUrl}/templates`,
-    items: technologies.map((tech, i) => ({
+    items: technologies.map((tech, index) => ({
       url: `${baseUrl}/templates/${tech.slug}`,
       name: `${tech.name} Templates`,
-      position: i + 1,
+      position: index + 1,
     })),
   })
 
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -70,68 +70,91 @@ export default function TemplatesPage() {
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600 dark:text-gray-400">
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">
-              Home
-            </Link>
-          </li>
-          <li>/</li>
-          <li className="text-gray-900 dark:text-gray-100 font-medium">Templates</li>
-        </ol>
-      </nav>
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.75fr)] lg:items-end">
+          <div>
+            <p className="section-kicker">Template library</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              Portfolio templates organized by stack and role
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              Use templates as another entry point into the project. The pages below are grouped
+              by technology and by role so the archive feels navigable instead of generically
+              programmatic.
+            </p>
+          </div>
 
-      {/* Header */}
-      <header className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-          Portfolio Templates
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Find the perfect portfolio template for your role. Built with modern technologies
-          like Next.js, React, and TypeScript.
-        </p>
-        <div className="mt-4 text-sm text-gray-500">
-          {totalCombinations} template combinations available
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {technologies.length}
+              </span>
+              <span>technologies</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {roles.length}
+              </span>
+              <span>role profiles</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {totalCombinations}
+              </span>
+              <span>template combinations</span>
+            </div>
+          </div>
         </div>
-      </header>
+      </div>
 
-      {/* Technologies */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Browse by Technology
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {technologies.map(tech => (
-            <div
-              key={tech.slug}
-              className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg"
-            >
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-                {tech.name}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+      <div>
+        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">By technology</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Start from the stack
+            </h2>
+          </div>
+          <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            Useful when you already know the framework or tooling context and want matching role variants.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {technologies.map((tech) => (
+            <div key={tech.slug} className="surface-card px-6 py-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="section-kicker">Technology</p>
+                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                    {tech.name}
+                  </h3>
+                </div>
+                <span className="meta-chip normal-case tracking-normal">
+                  {roles.length} roles
+                </span>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
                 {tech.description}
               </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {tech.features.slice(0, 3).map((feature, i) => (
-                  <span
-                    key={i}
-                    className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs"
-                  >
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {tech.features.slice(0, 3).map((feature) => (
+                  <span key={feature} className="meta-chip normal-case tracking-normal">
                     {feature}
                   </span>
                 ))}
               </div>
-              <div className="space-y-2">
-                {roles.slice(0, 3).map(role => (
+
+              <div className="mt-6 space-y-2">
+                {roles.slice(0, 3).map((role) => (
                   <Link
                     key={role.slug}
                     href={`/templates/${tech.slug}/${role.slug}`}
-                    className="block text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                    className="editorial-link"
                   >
-                    → {tech.name} for {role.name}s
+                    {tech.name} for {role.name}
                   </Link>
                 ))}
               </div>
@@ -140,31 +163,65 @@ export default function TemplatesPage() {
         </div>
       </div>
 
-      {/* Roles */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Browse by Role
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {roles.map(role => (
-            <div
-              key={role.slug}
-              className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg"
-            >
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
-                {role.name}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+      <div>
+        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">By role</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Start from the hiring narrative
+            </h2>
+          </div>
+          <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            Useful when the role framing matters more than the stack itself.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {roles.map((role) => (
+            <div key={role.slug} className="surface-card px-6 py-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="section-kicker">Role</p>
+                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                    {role.name}
+                  </h3>
+                </div>
+                <span className="meta-chip normal-case tracking-normal">
+                  {technologies.length} stacks
+                </span>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
                 {role.description}
               </p>
-              <div className="space-y-2">
-                {technologies.slice(0, 3).map(tech => (
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {role.keywords.slice(0, 3).map((keyword) => (
+                  <span key={keyword} className="meta-chip normal-case tracking-normal">
+                    {keyword}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-5 space-y-2">
+                {role.goals.slice(0, 2).map((goal) => (
+                  <div
+                    key={goal}
+                    className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
+                  >
+                    {goal}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 space-y-2">
+                {technologies.slice(0, 3).map((tech) => (
                   <Link
                     key={tech.slug}
                     href={`/templates/${tech.slug}/${role.slug}`}
-                    className="block text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                    className="editorial-link"
                   >
-                    → {tech.name} for {role.name}s
+                    {tech.name} for {role.name}
                   </Link>
                 ))}
               </div>
@@ -173,66 +230,21 @@ export default function TemplatesPage() {
         </div>
       </div>
 
-      {/* All Combinations */}
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          All Template Combinations
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
-            <thead>
-              <tr className="bg-gray-100 dark:bg-gray-800">
-                <th className="p-3 text-left text-gray-900 dark:text-gray-100 font-semibold">
-                  Technology / Role
-                </th>
-                {roles.map(role => (
-                  <th
-                    key={role.slug}
-                    className="p-3 text-left text-gray-900 dark:text-gray-100 font-semibold"
-                  >
-                    {role.name}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {technologies.map(tech => (
-                <tr key={tech.slug} className="border-t border-gray-200 dark:border-gray-700">
-                  <td className="p-3 font-medium text-gray-900 dark:text-gray-100">
-                    {tech.name}
-                  </td>
-                  {roles.map(role => (
-                    <td key={role.slug} className="p-3">
-                      <Link
-                        href={`/templates/${tech.slug}/${role.slug}`}
-                        className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                      >
-                        View →
-                      </Link>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="surface-panel px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="section-kicker">Need feature-driven browsing?</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              If stack and role are not enough, switch to the solutions pages to browse templates
+              by feature such as dark mode, SEO, responsiveness, or performance.
+            </p>
+          </div>
+          <Link href="/solutions" className="editorial-link">
+            Browse feature pages
+          </Link>
         </div>
-      </div>
-
-      {/* Features CTA */}
-      <div className="text-center py-12 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-          Looking for Specific Features?
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Browse templates by features like dark mode, SEO optimization, and more.
-        </p>
-        <Link
-          href="/solutions"
-          className="inline-block px-8 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200 transition-colors"
-        >
-          Browse by Feature
-        </Link>
       </div>
     </section>
   )
 }
+

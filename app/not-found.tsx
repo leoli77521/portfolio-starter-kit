@@ -5,7 +5,8 @@ import { getBlogPosts } from './blog/utils'
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found | ToLearn Blog',
-  description: 'The page you are looking for does not exist. Return to ToLearn Blog to explore our AI insights, SEO guides, and programming tutorials.',
+  description:
+    'The page you are looking for does not exist. Return to ToLearn Blog to explore our AI insights, SEO guides, and programming tutorials.',
   alternates: {
     canonical: `${baseUrl}/404`,
   },
@@ -18,40 +19,55 @@ export const metadata: Metadata = {
 export default function NotFound() {
   const allPosts = getBlogPosts()
   const recentPosts = allPosts
-    .sort((a, b) => new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime())
+    .sort(
+      (a, b) => new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+    )
     .slice(0, 3)
 
   const popularCategories = [
-    { name: 'AI Technology', href: '/blog', description: 'Artificial Intelligence insights and tools' },
-    { name: 'SEO Optimization', href: '/blog', description: 'Search engine optimization guides' },
-    { name: 'Web Development', href: '/blog', description: 'Programming tutorials and best practices' }
+    {
+      name: 'AI Technology',
+      href: '/blog',
+      description: 'Artificial Intelligence insights and tools',
+    },
+    {
+      name: 'SEO Optimization',
+      href: '/blog',
+      description: 'Search engine optimization guides',
+    },
+    {
+      name: 'Web Development',
+      href: '/blog',
+      description: 'Programming tutorials and best practices',
+    },
   ]
 
   return (
     <section className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="mb-4 text-4xl font-bold tracking-tighter text-neutral-900 dark:text-neutral-100">
+        <h1 className="mb-4 text-4xl font-bold tracking-tighter text-neutral-900 theme-dark:text-neutral-100">
           404 - Page Not Found
         </h1>
-        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-6">
-          Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+        <p className="mb-6 text-lg text-neutral-600 theme-dark:text-neutral-400">
+          Sorry, the page you&apos;re looking for doesn&apos;t exist. It might have been moved,
+          deleted, or you entered the wrong URL.
         </p>
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
+        <h2 className="mb-4 text-xl font-semibold text-neutral-900 theme-dark:text-neutral-100">
           What can you do?
         </h2>
-        <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
-          <li>• Check the URL for typos</li>
-          <li>• Use the navigation menu to find what you're looking for</li>
-          <li>• Visit our homepage to explore all content</li>
-          <li>• Search our blog posts below</li>
+        <ul className="space-y-2 text-neutral-600 theme-dark:text-neutral-400">
+          <li>Check the URL for typos.</li>
+          <li>Use the navigation menu to find what you&apos;re looking for.</li>
+          <li>Visit the homepage to explore all content.</li>
+          <li>Search the latest blog posts below.</li>
         </ul>
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
+        <h2 className="mb-4 text-xl font-semibold text-neutral-900 theme-dark:text-neutral-100">
           Popular Categories
         </h2>
         <div className="grid gap-4 md:grid-cols-1">
@@ -59,12 +75,12 @@ export default function NotFound() {
             <Link
               key={category.name}
               href={category.href}
-              className="block p-4 border border-neutral-200 dark:border-neutral-800 rounded-lg hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
+              className="block rounded-lg border border-neutral-200 p-4 transition-colors hover:border-blue-300 theme-dark:border-neutral-800 theme-dark:hover:border-blue-700"
             >
-              <h3 className="font-medium text-neutral-900 dark:text-neutral-100 mb-1">
+              <h3 className="mb-1 font-medium text-neutral-900 theme-dark:text-neutral-100">
                 {category.name}
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              <p className="text-sm text-neutral-600 theme-dark:text-neutral-400">
                 {category.description}
               </p>
             </Link>
@@ -73,7 +89,7 @@ export default function NotFound() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-neutral-900 dark:text-neutral-100">
+        <h2 className="mb-4 text-xl font-semibold text-neutral-900 theme-dark:text-neutral-100">
           Recent Articles
         </h2>
         <div className="space-y-3">
@@ -81,19 +97,19 @@ export default function NotFound() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="block p-3 border border-neutral-200 dark:border-neutral-800 rounded-lg hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
+              className="block rounded-lg border border-neutral-200 p-3 transition-colors hover:border-blue-300 theme-dark:border-neutral-800 theme-dark:hover:border-blue-700"
             >
-              <h3 className="font-medium text-neutral-900 dark:text-neutral-100 mb-1">
+              <h3 className="mb-1 font-medium text-neutral-900 theme-dark:text-neutral-100">
                 {post.metadata.title}
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+              <p className="line-clamp-2 text-sm text-neutral-600 theme-dark:text-neutral-400">
                 {post.metadata.summary}
               </p>
-              {post.metadata.category && (
-                <span className="inline-block mt-2 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
+              {post.metadata.category ? (
+                <span className="mt-2 inline-block rounded bg-blue-100 px-2 py-1 text-xs text-blue-800 theme-dark:bg-blue-900 theme-dark:text-blue-200">
                   {post.metadata.category}
                 </span>
-              )}
+              ) : null}
             </Link>
           ))}
         </div>
@@ -102,13 +118,13 @@ export default function NotFound() {
       <div className="text-center">
         <Link
           href="/"
-          className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+          className="inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
         >
-          ← Back to Home
+          Back to Home
         </Link>
         <Link
           href="/blog"
-          className="inline-flex items-center px-6 py-3 ml-4 border border-neutral-300 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-700 text-neutral-900 dark:text-neutral-100 font-medium rounded-lg transition-colors"
+          className="ml-4 inline-flex items-center rounded-lg border border-neutral-300 px-6 py-3 font-medium text-neutral-900 transition-colors hover:border-blue-300 theme-dark:border-neutral-700 theme-dark:text-neutral-100 theme-dark:hover:border-blue-700"
         >
           Browse All Articles
         </Link>
@@ -127,8 +143,8 @@ export default function NotFound() {
             mainEntity: {
               '@type': 'Organization',
               name: 'ToLearn Blog',
-              url: baseUrl
-            }
+              url: baseUrl,
+            },
           }),
         }}
       />

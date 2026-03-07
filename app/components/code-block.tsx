@@ -31,15 +31,15 @@ export function CodeBlock({ codeHTML, rawCode, language, ...props }: CodeBlockPr
   const isLong = rawCode.split('\n').length > 20
 
   return (
-    <div className="group relative my-6 rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
+    <div className="group relative my-6 rounded-xl border border-gray-200 bg-gray-50 theme-dark:border-gray-800 theme-dark:bg-gray-900 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-100/50 dark:bg-gray-800/50">
-        <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 theme-dark:border-gray-800 bg-gray-100/50 theme-dark:bg-gray-800/50">
+        <span className="text-xs font-mono text-gray-500 theme-dark:text-gray-400">
           {language}
         </span>
         <button
           onClick={copyToClipboard}
-          className="p-1.5 rounded-md text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors"
+          className="p-1.5 rounded-md text-gray-500 hover:bg-gray-200 theme-dark:text-gray-400 theme-dark:hover:bg-gray-700 transition-colors"
           aria-label="Copy code"
         >
           {isCopied ? (
@@ -64,7 +64,7 @@ export function CodeBlock({ codeHTML, rawCode, language, ...props }: CodeBlockPr
         
         {/* Gradient Overlay for collapsed state */}
         {!isExpanded && isLong && (
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-gray-50 dark:from-gray-900 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-gray-50 theme-dark:from-gray-900 to-transparent pointer-events-none" />
         )}
       </div>
 
@@ -72,7 +72,7 @@ export function CodeBlock({ codeHTML, rawCode, language, ...props }: CodeBlockPr
       {isLong && (
         <button
           onClick={toggleExpand}
-          className="flex w-full items-center justify-center gap-2 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="flex w-full items-center justify-center gap-2 border-t border-gray-200 theme-dark:border-gray-800 bg-gray-50 theme-dark:bg-gray-900 py-2 text-xs font-medium text-gray-600 theme-dark:text-gray-400 hover:bg-gray-100 theme-dark:hover:bg-gray-800 transition-colors"
         >
           {isExpanded ? (
             <>
@@ -90,3 +90,4 @@ export function CodeBlock({ codeHTML, rawCode, language, ...props }: CodeBlockPr
     </div>
   )
 }
+

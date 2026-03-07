@@ -3,75 +3,78 @@
 import { useEffect, useState } from 'react'
 
 type Heading = {
-    level: number
-    text: string
-    slug: string
+  level: number
+  text: string
+  slug: string
 }
 
 export function TableOfContents({ headings }: { headings: Heading[] }) {
-    const [activeId, setActiveId] = useState<string>('')
+  const [activeId, setActiveId] = useState<string>('')
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setActiveId(entry.target.id)
-                    }
-                })
-            },
-            { rootMargin: '0% 0% -80% 0%' }
-        )
-
-        headings.forEach((heading) => {
-            const element = document.getElementById(heading.slug)
-            if (element) {
-                observer.observe(element)
-            }
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
         })
-
-        return () => {
-            headings.forEach((heading) => {
-                const element = document.getElementById(heading.slug)
-                if (element) {
-                    observer.unobserve(element)
-                }
-            })
-        }
-    }, [headings])
-
-    if (headings.length === 0) return null
-
-    return (
-        <nav className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto hidden lg:block w-64">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 uppercase tracking-wider">
-                On this page
-            </h4>
-            <ul className="space-y-2 text-sm">
-                {headings.map((heading) => (
-                    <li
-                        key={heading.slug}
-                        style={{ paddingLeft: `${(heading.level - 1) * 1}rem` }}
-                    >
-                        <a
-                            href={`#${heading.slug}`}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                document.getElementById(heading.slug)?.scrollIntoView({
-                                    behavior: 'smooth',
-                                })
-                                setActiveId(heading.slug)
-                            }}
-                            className={`block transition-colors duration-200 border-l-2 pl-4 ${activeId === heading.slug
-                                ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
-                                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-700'
-                                }`}
-                        >
-                            {heading.text}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </nav>
+      },
+      { rootMargin: '0% 0% -78% 0%' }
     )
+
+    headings.forEach((heading) => {
+      const element = document.getElementById(heading.slug)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [headings])
+
+  if (headings.length === 0) return null
+
+  return (
+    <nav
+      aria-label="Table of contents"
+      className="surface-panel max-h-[calc(100vh-8rem)] overflow-y-auto p-5"
+    >
+      <p className="section-kicker">On this page</p>
+      <ul className="mt-5 space-y-1.5">
+        {headings.map((heading) => {
+          const isActive = activeId === heading.slug
+
+          return (
+            <li
+              key={heading.slug}
+              style={{ paddingLeft: `${Math.max(heading.level - 2, 0) * 0.85}rem` }}
+            >
+              <a
+                href={`#${heading.slug}`}
+                onClick={(event) => {
+                  event.preventDefault()
+                  document.getElementById(heading.slug)?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                  })
+                  setActiveId(heading.slug)
+                }}
+                className={`block rounded-[1.1rem] border px-3 py-3 text-sm leading-6 transition-colors ${
+                  isActive
+                    ? 'border-indigo-200/80 bg-indigo-50/80 text-indigo-700 theme-dark:border-indigo-900/80 theme-dark:bg-indigo-950/40 theme-dark:text-indigo-200'
+                    : 'border-transparent text-slate-600 hover:border-slate-200/80 hover:bg-slate-100/80 hover:text-slate-950 theme-dark:text-slate-300 theme-dark:hover:border-slate-800 theme-dark:hover:bg-slate-900/80 theme-dark:hover:text-white'
+                }`}
+              >
+                {heading.text}
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
 }
+

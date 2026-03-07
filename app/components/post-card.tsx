@@ -1,8 +1,7 @@
-'use client'
-
 import Link from 'next/link'
-import { formatDate, truncateSummary } from '@/app/lib/formatters'
-import { getCategoryColor, getCategoryEmoji } from '@/app/lib/categories'
+import { ArrowUpRight, Clock } from 'lucide-react'
+import { formatDate, truncateSummary } from 'app/lib/formatters'
+import { getCategoryColor } from 'app/lib/categories'
 
 interface PostCardProps {
   post: {
@@ -12,70 +11,69 @@ interface PostCardProps {
       publishedAt: string
       summary?: string
       category?: string
+      image?: string
     }
     readingTime?: number
   }
 }
 
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+}
+
 export function PostCard({ post }: PostCardProps) {
-  const categoryBadge = getCategoryBadgeStyles(post.metadata.category || 'All')
-  const readingTime = post.readingTime || 1
+  const summary = post.metadata.summary
+    ? truncateSummary(post.metadata.summary, 180)
+    : 'Read the full article for the complete analysis.'
+  const categoryTone = getCategoryColor(post.metadata.category || 'All')
 
   return (
-    <article
-      className="group relative p-8 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-300 hover:shadow-xl overflow-hidden"
-    >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/10 dark:to-purple-900/10 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+    <article className="surface-card overflow-hidden">
       <Link
         href={`/blog/${post.slug}`}
-        className="block relative"
-        title={`${post.metadata.title} - ${truncateSummary(post.metadata.summary || 'Read this technical article', 80)}`}
+        className="group block px-6 py-6 md:px-7 md:py-7"
+        title={post.metadata.title}
       >
-        <div className="flex flex-col space-y-4">
-          {/* Category Badge and Reading Time */}
-          <div className="flex items-center gap-3 flex-wrap">
-            {post.metadata.category && (
-              <span className={`
-                px-3 py-1 rounded-full text-xs font-semibold border
-                flex items-center gap-1.5
-                ${categoryBadge.className}
-              `}>
-                <span>{categoryBadge.emoji}</span>
-                {post.metadata.category}
-              </span>
-            )}
-            <span className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {readingTime} min read
-            </span>
-          </div>
+        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-slate-500 theme-dark:text-slate-400">
+              {post.metadata.category && (
+                <span
+                  className={`inline-flex items-center rounded-full border px-3 py-1 ${categoryBadgeStyles[categoryTone]}`}
+                >
+                  {post.metadata.category}
+                </span>
+              )}
+              <span>{formatDate(post.metadata.publishedAt, false)}</span>
+              {post.readingTime ? (
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {post.readingTime} min read
+                </span>
+              ) : null}
+            </div>
 
-          {/* Title and Date */}
-          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-tight">
+            <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
               {post.metadata.title}
-            </h2>
-            <time
-              className="text-gray-500 dark:text-gray-400 text-sm font-medium tabular-nums shrink-0 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full"
-              dateTime={post.metadata.publishedAt}
-            >
-              {formatDate(post.metadata.publishedAt)}
-            </time>
+            </h3>
+
+            <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600 theme-dark:text-slate-300">
+              {summary}
+            </p>
           </div>
 
-          {/* Summary */}
-          {post.metadata.summary && (
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
-              {truncateSummary(post.metadata.summary)}
-            </p>
-          )}
-
-          {/* Read More Link */}
-          <div className="flex items-center text-indigo-600 dark:text-indigo-400 font-semibold group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">
-            Read article
-            <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          <div className="flex shrink-0 items-center justify-between md:block">
+            <span className="section-kicker">Open article</span>
+            <span className="mt-2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 text-slate-500 transition-colors group-hover:border-indigo-300 group-hover:text-indigo-700 theme-dark:border-slate-800 theme-dark:text-slate-400 theme-dark:group-hover:border-indigo-500/60 theme-dark:group-hover:text-indigo-300">
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
           </div>
         </div>
       </Link>
@@ -83,20 +81,3 @@ export function PostCard({ post }: PostCardProps) {
   )
 }
 
-function getCategoryBadgeStyles(category: string) {
-  const color = getCategoryColor(category)
-  const emoji = getCategoryEmoji(category)
-
-  const colorClasses = {
-    blue: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800',
-    green: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800',
-    purple: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200 dark:border-purple-800',
-    orange: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800',
-    gray: 'bg-gray-100 text-gray-700 dark:bg-gray-700/30 dark:text-gray-400 border-gray-200 dark:border-gray-700',
-  }
-
-  return {
-    className: colorClasses[color as keyof typeof colorClasses] || colorClasses.gray,
-    emoji,
-  }
-}

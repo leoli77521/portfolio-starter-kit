@@ -1,10 +1,11 @@
 @import 'tailwindcss';
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant theme-dark (&:where(.dark, .dark *));
 
 :root {
   /* Color System */
   --color-background: #FAFAFA; /* Warm Grey / Off-White */
   --color-foreground: #0f172a; /* slate-900 */
+  color-scheme: light;
   
   --color-primary: #6366F1; /* Vibrant Violet (Indigo-500) */
   --color-primary-foreground: #ffffff;
@@ -94,14 +95,14 @@
   z-index: 0;
 }
 
-/* 增强焦点可见性 - 可访问性优化 */
+/* 婢х偛宸遍悞锔惧仯閸欘垵顫嗛幀?- 閸欘垵顔栭梻顔解偓褌绱崠?*/
 :focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* 跳过导航链接 - 键盘用户可访问性 */
+/* 鐠哄疇绻冪€佃壈鍩呴柧鐐复 - 闁款喚娲忛悽銊﹀煕閸欘垵顔栭梻顔解偓?*/
 .skip-to-content {
   position: absolute;
   left: -9999px;
@@ -119,16 +120,16 @@
   transform: translateX(-50%);
 }
 
-/* 移动端优化 */
+/* 缁夎濮╃粩顖欑喘閸?*/
 @media (max-width: 768px) {
 
-  /* 改善移动端文本可读性 */
+  /* 閺€鐟版澖缁夎濮╃粩顖涙瀮閺堫剙褰茬拠缁樷偓?*/
   body {
     font-size: 16px;
     line-height: 1.7;
   }
 
-  /* 优化移动端按钮点击区域 */
+  /* 娴兼ê瀵茬粔璇插З缁旑垱瀵滈柦顔惧仯閸戣灏崺?*/
   .btn-primary,
   a[class*="btn"],
   button,
@@ -138,14 +139,14 @@
     /* Avoid forcing flex/grid if not needed, just ensure size */
   }
 
-  /* 确保面包屑在移动端不换行 */
+  /* 绾喕绻氶棃銏犲瘶鐏炴垵婀粔璇插З缁旑垯绗夐幑銏ｎ攽 */
   nav[aria-label="Breadcrumb navigation"] ol {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* 优化移动端卡片间距 */
+  /* 娴兼ê瀵茬粔璇插З缁旑垰宕遍悧鍥？鐠?*/
   .featured-card,
   article {
     margin-bottom: 1rem;
@@ -223,10 +224,10 @@ body {
 .prose img {
   /* Don't apply styles to next/image */
   @apply m-0;
-  /* 确保图片响应式 */
+  /* 绾喕绻氶崶鍓у閸濆秴绨插?*/
   max-width: 100%;
   height: auto;
-  /* 图片加载优化 */
+  /* 閸ュ墽澧栭崝鐘烘祰娴兼ê瀵?*/
   content-visibility: auto;
   contain-intrinsic-size: 0 500px;
 }
@@ -306,7 +307,7 @@ input[type='email'] {
   }
 }
 
-/* 性能优化: 减少动画以提高性能 */
+/* 閹嗗厴娴兼ê瀵? 閸戝繐鐨崝銊ф暰娴犮儲褰佹妯烩偓褑鍏?*/
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -318,7 +319,7 @@ input[type='email'] {
   }
 }
 
-/* GPU 加速优化 - 对需要动画的元素启用硬件加速 */
+/* GPU 閸旂娀鈧喍绱崠?- 鐎靛綊娓剁憰浣稿З閻㈣崵娈戦崗鍐閸氼垳鏁ょ涵顑挎閸旂娀鈧?*/
 .featured-card,
 .card-hover,
 .btn-primary,
@@ -331,7 +332,7 @@ input[type='email'] {
   perspective: 1000px;
 }
 
-/* 减少移动端不必要的动画效果 */
+/* 閸戝繐鐨粔璇插З缁旑垯绗夎箛鍛邦洣閻ㄥ嫬濮╅悽缁樻櫏閺?*/
 @media (max-width: 768px) {
 
   .featured-card:hover,
@@ -339,7 +340,7 @@ input[type='email'] {
     transform: translateY(-2px);
   }
 
-  /* 移动端禁用复杂的渐变动画 */
+  /* 缁夎濮╃粩顖滎洣閻劌顦查弶鍌滄畱濞撴劕褰夐崝銊ф暰 */
   .bg-gradient-primary {
     background: #f0f9ff;
   }
@@ -421,7 +422,7 @@ input[type='email'] {
   }
 }
 
-/* 优化表格在移动端的显示 */
+/* 娴兼ê瀵茬悰銊︾壐閸︺劎些閸斻劎顏惃鍕▔缁€?*/
 table {
   display: block;
   max-width: fit-content;
@@ -530,3 +531,231 @@ ins.adsbygoogle {
     transform: none;
   }
 }
+
+/* Editorial surface system */
+.surface-panel {
+  @apply rounded-[2rem] border border-slate-200/80 bg-white/88 shadow-[0_18px_60px_-28px_rgba(15,23,42,0.22)] backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/72;
+}
+
+.surface-card {
+  @apply rounded-[1.75rem] border border-slate-200/80 bg-white/82 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.2)] backdrop-blur-md transition-all duration-200 dark:border-slate-800/80 dark:bg-slate-950/82;
+}
+
+.surface-card:hover {
+  @apply border-slate-300/80 dark:border-slate-700/80;
+  transform: translateY(-2px);
+}
+
+.section-kicker {
+  @apply text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400;
+}
+
+.section-copy {
+  @apply text-base leading-7 text-slate-600 dark:text-slate-300;
+}
+
+.meta-chip {
+  @apply inline-flex items-center rounded-full border border-slate-200/70 bg-slate-100/80 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300;
+}
+
+.stat-pill {
+  @apply flex flex-col gap-1 rounded-[1.5rem] border border-slate-200/70 bg-white/80 px-4 py-4 text-sm text-slate-500 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-950/76 dark:text-slate-400;
+}
+
+.editorial-link {
+  @apply inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition-colors hover:text-slate-950 dark:text-slate-300 dark:hover:text-white;
+}
+
+.utility-button {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-3 py-2.5 text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950 dark:border-slate-800 dark:bg-slate-950/82 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:text-white;
+}
+
+.dark .prose a {
+  text-decoration-color: #525252;
+}
+
+.dark .prose .anchor:after {
+  color: #404040;
+}
+
+.dark .prose pre {
+  background-color: #111827;
+  border-color: #1f2937;
+}
+
+.dark .prose code {
+  background-color: #1f2937;
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+.dark .prose p {
+  color: #d1d5db;
+}
+
+.dark .prose h2 {
+  color: #f9fafb;
+}
+
+.dark .prose h3,
+.dark .prose h4 {
+  color: #f3f4f6;
+}
+
+.dark .section-title {
+  color: #f9fafb;
+}
+
+.dark .featured-card {
+  border-color: rgb(30 41 59 / 0.6);
+  background-color: rgb(15 23 42 / 0.6);
+}
+
+.dark .featured-card:hover {
+  border-color: rgb(59 130 246 / 0.3);
+  background-color: rgb(15 23 42 / 0.9);
+}
+
+.dark .card-title {
+  color: #60a5fa;
+}
+
+.dark .card-description {
+  color: #9ca3af;
+}
+
+.dark .btn-secondary {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #374151;
+}
+
+.dark .nav-link {
+  color: #e2e8f0;
+}
+
+.dark .nav-link:hover {
+  background-color: rgb(30 27 75 / 0.4);
+  color: #a5b4fc;
+}
+
+.dark .nav-link::after {
+  background-color: #818cf8;
+}
+
+.dark .footer-link {
+  color: #9ca3af;
+}
+
+.dark .footer-link:hover {
+  color: #818cf8;
+}
+
+.dark .prose blockquote {
+  background-color: rgb(49 46 129 / 0.2);
+  color: #d1d5db;
+}
+
+.dark .prose ul li::marker,
+.dark .prose ol li::marker {
+  color: #818cf8;
+}
+
+.dark .surface-panel {
+  border-color: rgb(30 41 59 / 0.8);
+  background-color: rgb(2 6 23 / 0.72);
+}
+
+.dark .surface-card {
+  border-color: rgb(30 41 59 / 0.8);
+  background-color: rgb(2 6 23 / 0.82);
+}
+
+.dark .surface-card:hover {
+  border-color: rgb(51 65 85 / 0.8);
+}
+
+.dark .section-kicker {
+  color: #94a3b8;
+}
+
+.dark .section-copy {
+  color: #cbd5e1;
+}
+
+.dark .meta-chip {
+  border-color: #1e293b;
+  background-color: rgb(15 23 42 / 0.8);
+  color: #cbd5e1;
+}
+
+.dark .stat-pill {
+  border-color: #1e293b;
+  background-color: rgb(2 6 23 / 0.76);
+  color: #94a3b8;
+}
+
+.dark .editorial-link {
+  color: #cbd5e1;
+}
+
+.dark .editorial-link:hover {
+  color: #ffffff;
+}
+
+.dark .utility-button {
+  border-color: #1e293b;
+  background-color: rgb(2 6 23 / 0.82);
+  color: #e2e8f0;
+}
+
+.dark .utility-button:hover {
+  border-color: #334155;
+  color: #ffffff;
+}
+
+/* Bridge class-based dark mode while Tailwind alpha still compiles dark utilities as media queries. */
+.dark [class*='text-slate-950'],
+.dark [class*='text-slate-900'],
+.dark [class*='text-gray-900'],
+.dark [class*='text-neutral-900'] {
+  color: #f8fafc !important;
+}
+
+.dark [class*='text-slate-700'],
+.dark [class*='text-slate-600'],
+.dark [class*='text-gray-700'],
+.dark [class*='text-gray-600'],
+.dark [class*='text-neutral-700'],
+.dark [class*='text-neutral-600'] {
+  color: #cbd5e1 !important;
+}
+
+.dark [class*='text-slate-500'],
+.dark [class*='text-gray-500'],
+.dark [class*='text-neutral-500'] {
+  color: #94a3b8 !important;
+}
+
+.dark [class*='border-slate-200'],
+.dark [class*='border-slate-300'],
+.dark [class*='border-gray-200'],
+.dark [class*='border-gray-300'],
+.dark [class*='border-neutral-200'],
+.dark [class*='border-neutral-300'] {
+  border-color: #1f2937 !important;
+}
+
+.dark [class*='bg-white'],
+.dark [class*='bg-slate-50'],
+.dark [class*='bg-slate-100'],
+.dark [class*='bg-gray-50'],
+.dark [class*='bg-gray-100'],
+.dark [class*='bg-neutral-50'],
+.dark [class*='bg-neutral-100'] {
+  background-color: rgb(2 6 23 / 0.82) !important;
+}
+

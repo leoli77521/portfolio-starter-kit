@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { ArrowUpRight, Command, Search as SearchIcon, X } from 'lucide-react'
 
 interface SearchResult {
   slug: string
@@ -19,7 +20,6 @@ export function Search() {
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Load search index from static JSON
   useEffect(() => {
     async function loadPosts() {
       if (allPosts.length > 0) return
@@ -34,13 +34,12 @@ export function Search() {
         console.error('Failed to load search index:', error)
       }
     }
-    
+
     if (isOpen) {
       loadPosts()
     }
-  }, [isOpen, allPosts.length])
+  }, [allPosts.length, isOpen])
 
-  // Handle search
   useEffect(() => {
     if (query.trim() === '') {
       setResults([])
@@ -54,10 +53,10 @@ export function Search() {
         post.summary.toLowerCase().includes(searchQuery) ||
         (post.content && post.content.toLowerCase().includes(searchQuery))
     )
-    setResults(filtered.slice(0, 5)) // Max 5 results
-  }, [query, allPosts])
 
-  // Click outside to close
+    setResults(filtered.slice(0, 5))
+  }, [allPosts, query])
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -69,12 +68,12 @@ export function Search() {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside)
     }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isOpen])
 
-  // Shortcut Cmd/Ctrl + K
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
@@ -82,6 +81,7 @@ export function Search() {
         setIsOpen(true)
         inputRef.current?.focus()
       }
+
       if (event.key === 'Escape') {
         setIsOpen(false)
         setQuery('')
@@ -94,7 +94,6 @@ export function Search() {
     }
   }, [])
 
-  // Focus input when open
   useEffect(() => {
     if (isOpen) {
       inputRef.current?.focus()
@@ -103,147 +102,128 @@ export function Search() {
 
   return (
     <div ref={searchRef} className="relative">
-      {/* Search Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2.5 rounded-lg bg-gray-100/80 hover:bg-gray-200 dark:bg-slate-900/70 dark:hover:bg-indigo-950/60 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_8px_16px_rgba(79,70,229,0.2)] transition-all duration-200 hover:scale-105"
+        onClick={() => setIsOpen((open) => !open)}
+        className="utility-button px-3"
         aria-label="Search articles"
-        title="Search (⌘K)"
+        title="Search articles"
+        type="button"
       >
-        <svg
-          className="w-5 h-5 text-gray-700 dark:text-slate-200"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
+        <SearchIcon className="h-4 w-4" />
+        <span className="hidden text-sm font-medium md:inline">Search</span>
+        <span className="hidden items-center gap-1 rounded-full border border-slate-200/80 px-2 py-1 text-[0.68rem] text-slate-500 theme-dark:border-slate-800 theme-dark:text-slate-400 xl:inline-flex">
+          <Command className="h-3 w-3" />
+          K
+        </span>
       </button>
 
-      {/* Dropdown */}
-      {isOpen && (
+      {isOpen ? (
         <div
-          className="absolute right-0 mt-2 w-full sm:w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+          className="surface-panel absolute right-0 z-50 mt-3 w-[min(92vw,30rem)] overflow-hidden"
           role="dialog"
           aria-label="Search articles"
           aria-modal="true"
         >
-          {/* Input */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="relative">
+          <div className="border-b border-slate-200/70 p-4 theme-dark:border-slate-800">
+            <div className="flex items-center gap-3 rounded-full border border-slate-200/80 bg-white/90 px-4 py-3 theme-dark:border-slate-800 theme-dark:bg-slate-950/90">
+              <SearchIcon className="h-4 w-4 text-slate-400" />
               <input
                 ref={inputRef}
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search articles..."
-                className="w-full px-4 py-2.5 pl-10 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search titles, summaries, and indexed content"
+                className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 theme-dark:text-slate-100 theme-dark:placeholder:text-slate-500"
                 aria-label="Search articles"
-                aria-describedby="search-hint"
-                aria-controls="search-results"
-                aria-expanded={isOpen}
                 autoComplete="off"
               />
-              <svg
-                className="absolute left-3 top-3 w-5 h-5 text-gray-400"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              {query ? (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:text-slate-700 theme-dark:hover:text-slate-200"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
             </div>
-            <div id="search-hint" className="mt-2 hidden sm:flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-500 theme-dark:text-slate-400">
               <span>Press Esc to close</span>
-              <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-600">
-                ⌘K
-              </kbd>
+              <span>Cmd/Ctrl + K</span>
             </div>
           </div>
 
-          {/* Results */}
-          <div id="search-results" className="max-h-96 overflow-y-auto" role="region" aria-label="Search results" aria-live="polite">
+          <div className="max-h-96 overflow-y-auto">
             {query.trim() === '' ? (
-              <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-                <svg
-                  className="w-12 h-12 mx-auto mb-3 opacity-50"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <p className="text-sm">Start typing to search articles...</p>
+              <div className="px-5 py-10 text-center">
+                <p className="section-kicker">Start typing</p>
+                <p className="mt-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                  Search the archive by title, summary, or indexed post content.
+                </p>
               </div>
             ) : results.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-                <svg
-                  className="w-12 h-12 mx-auto mb-3 opacity-50"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p className="text-sm">No articles found for "{query}"</p>
+              <div className="px-5 py-10 text-center">
+                <p className="section-kicker">No results</p>
+                <p className="mt-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                  No articles matched "{query}".
+                </p>
               </div>
             ) : (
-              <ul className="py-2" role="listbox" aria-label="Search results">
+              <ul className="p-2">
                 {results.map((post, index) => (
-                  <li key={post.slug} role="option" aria-selected={index === 0}>
+                  <li key={post.slug}>
                     <Link
                       href={`/blog/${post.slug}`}
                       onClick={() => {
                         setIsOpen(false)
                         setQuery('')
                       }}
-                      className="block px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-800"
+                      className="group block rounded-[1.25rem] px-4 py-4 transition-colors hover:bg-slate-100/80 theme-dark:hover:bg-slate-900/80"
                     >
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1 line-clamp-1">
-                        {post.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                        {post.summary}
-                      </p>
-                      <span className="text-xs text-gray-500 dark:text-gray-500 mt-1 block">
-                        {post.publishedAt}
-                      </span>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                            {post.title}
+                          </p>
+                          <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                            {post.summary}
+                          </p>
+                          <span className="mt-3 inline-flex text-xs uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                            {post.publishedAt}
+                          </span>
+                        </div>
+                        <span className="mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200/80 text-slate-400 transition-colors group-hover:border-indigo-300 group-hover:text-indigo-700 theme-dark:border-slate-800 theme-dark:group-hover:border-indigo-500/60 theme-dark:group-hover:text-indigo-300">
+                          <ArrowUpRight className="h-4 w-4" />
+                        </span>
+                      </div>
                     </Link>
+                    {index < results.length - 1 ? (
+                      <div className="mx-4 border-t border-slate-200/70 theme-dark:border-slate-800" />
+                    ) : null}
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          {/* Footer */}
-          {results.length > 0 && (
-            <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          {results.length > 0 ? (
+            <div className="border-t border-slate-200/70 px-4 py-3 theme-dark:border-slate-800">
               <Link
                 href="/blog"
                 onClick={() => {
                   setIsOpen(false)
                   setQuery('')
                 }}
-                className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
+                className="editorial-link"
               >
-                View all articles →
+                Open the full archive
               </Link>
             </div>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
+

@@ -4,8 +4,9 @@ export function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={`animate-pulse rounded-md bg-gray-200 dark:bg-gray-800 ${className}`}
+      className={`animate-pulse rounded-md bg-gray-200 theme-dark:bg-gray-800 ${className}`}
       {...props}
     />
   )
 }
+

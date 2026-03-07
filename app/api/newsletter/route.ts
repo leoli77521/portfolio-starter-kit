@@ -1,28 +1,52 @@
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-  const { email } = await request.json()
+  let payload: { email?: unknown }
 
-  if (!email || !email.length) {
+  try {
+    payload = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid request payload' }, { status: 400 })
+  }
+
+  const { email } = payload
+  const normalizedEmail = typeof email === 'string' ? email.trim() : ''
+
+  if (!normalizedEmail) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
-  const API_KEY = process.env.NEXT_PUBLIC_CONVERTKIT_API_KEY
-  const FORM_ID = process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID
-  const API_URL = `https://api.convertkit.com/v3/forms/${FORM_ID}/subscribe`
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)
 
-  const data = {
-    email,
-    api_key: API_KEY,
+  if (!isEmailValid) {
+    return NextResponse.json(
+      { error: 'Please enter a valid email address' },
+      { status: 400 }
+    )
+  }
+
+  const apiKey =
+    process.env.CONVERTKIT_API_KEY || process.env.NEXT_PUBLIC_CONVERTKIT_API_KEY
+  const formId =
+    process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID
+
+  if (!apiKey || !formId) {
+    return NextResponse.json(
+      { error: 'Newsletter is not configured on the server' },
+      { status: 500 }
+    )
   }
 
   try {
-    const response = await fetch(API_URL, {
-      body: JSON.stringify(data),
+    const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'POST',
+      body: JSON.stringify({
+        email: normalizedEmail,
+        api_key: apiKey,
+      }),
     })
 
     if (response.status >= 400) {
@@ -36,7 +60,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '' }, { status: 200 })
   } catch (error) {
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Internal Server Error' },
+      { error: error instanceof Error ? error.message : 'Subscription failed' },
       { status: 500 }
     )
   }

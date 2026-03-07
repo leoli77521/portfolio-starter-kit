@@ -49,17 +49,17 @@ function parseFrontmatter(fileContent: string) {
 
     const trimmedKey = key.trim() as keyof Metadata
     if (trimmedKey === 'tags') {
-      // 处理标签数组，支持JSON数组格式
+      // 澶勭悊鏍囩鏁扮粍锛屾敮鎸丣SON鏁扮粍鏍煎紡
       try {
-        // 如果是JSON数组格式，直接解析
+        // 濡傛灉鏄疛SON鏁扮粍鏍煎紡锛岀洿鎺ヨВ鏋?
         if (value.startsWith('[') && value.endsWith(']')) {
           metadata[trimmedKey] = JSON.parse(value) as any
         } else {
-          // 否则按逗号分割
+          // 鍚﹀垯鎸夐€楀彿鍒嗗壊
           metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
         }
       } catch (e) {
-        // 如果解析失败，按逗号分割
+        // 濡傛灉瑙ｆ瀽澶辫触锛屾寜閫楀彿鍒嗗壊
         metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
       }
     } else {

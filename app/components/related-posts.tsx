@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { ArrowUpRight, Clock3 } from 'lucide-react'
+import { formatDate } from 'app/blog/utils'
 import { findSimilarPosts, type PostForSimilarity, type SimilarityResult } from 'app/lib/content-similarity'
 
 interface RelatedPost {
@@ -18,14 +20,12 @@ interface RelatedPostsProps {
 }
 
 export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsProps) {
-  // Find current post if not provided
-  const current = currentPost || posts.find(post => post.slug === currentSlug)
+  const current = currentPost || posts.find((post) => post.slug === currentSlug)
 
   if (!current) {
     return null
   }
 
-  // Convert to PostForSimilarity format
   const currentForSimilarity: PostForSimilarity = {
     slug: current.slug,
     metadata: {
@@ -38,7 +38,7 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
     readingTime: current.readingTime,
   }
 
-  const allPostsForSimilarity: PostForSimilarity[] = posts.map(post => ({
+  const allPostsForSimilarity: PostForSimilarity[] = posts.map((post) => ({
     slug: post.slug,
     metadata: {
       title: post.title,
@@ -50,7 +50,6 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
     readingTime: post.readingTime,
   }))
 
-  // Use similarity algorithm to find related posts
   const similarPosts: SimilarityResult[] = findSimilarPosts(
     currentForSimilarity,
     allPostsForSimilarity,
@@ -62,58 +61,73 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
   }
 
   return (
-    <section className="mt-16 pt-8 border-t border-neutral-200 dark:border-neutral-800">
-      <h2 className="text-xl font-semibold mb-6 text-neutral-900 dark:text-neutral-100">
-        Related Technical Articles
-      </h2>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <section className="mt-16">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="section-kicker">Keep reading</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+            Related technical articles
+          </h2>
+        </div>
+
+        <Link href="/blog" className="editorial-link">
+          Browse the full archive
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+
+      <div className="mt-8 grid gap-5 lg:grid-cols-3">
         {similarPosts.map((result) => {
           const post = result.post
+          const publishedAt = post.metadata.publishedAt
+          const reason = result.reasons[0]
+
           return (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="block p-5 bg-white/60 dark:bg-neutral-900/60 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:shadow-md hover:shadow-blue-50 dark:hover:shadow-blue-900/20"
-              title={`${post.metadata.title} - ${post.metadata.summary?.slice(0, 80) || 'No summary available'}${(post.metadata.summary?.length || 0) > 80 ? '...' : ''}`}
+              className="surface-card group block px-6 py-6"
+              title={post.metadata.title}
             >
-              <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-2 line-clamp-2">
+              <p className="section-kicker">
+                {post.metadata.category || 'Editorial pick'}
+              </p>
+              <h3 className="mt-3 line-clamp-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
                 {post.metadata.title}
               </h3>
-              {post.metadata.category && (
-                <span className="inline-block px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full mb-2">
-                  {post.metadata.category}
-                </span>
-              )}
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">
+              <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
                 {post.metadata.summary || 'No summary available'}
               </p>
 
-              {/* Show similarity reasons */}
-              {result.reasons.length > 0 && (
-                <div className="mt-3 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-500 line-clamp-1">
-                    {result.reasons[0]}
-                  </p>
-                </div>
-              )}
+              <div className="mt-5 flex flex-wrap gap-2">
+                {publishedAt ? (
+                  <span className="meta-chip normal-case tracking-[0.04em]">
+                    {formatDate(publishedAt, false)}
+                  </span>
+                ) : null}
+                {post.readingTime ? (
+                  <span className="meta-chip normal-case tracking-[0.04em]">
+                    <Clock3 className="mr-1 h-3.5 w-3.5" />
+                    {post.readingTime} min read
+                  </span>
+                ) : null}
+              </div>
 
-              <div className="mt-3 text-blue-600 dark:text-blue-400 text-sm font-medium">
-                Read more →
+              {reason ? (
+                <div className="mt-5 rounded-[1.25rem] border border-slate-200/80 bg-slate-100/80 px-4 py-3 text-sm text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900/80 theme-dark:text-slate-300">
+                  {reason}
+                </div>
+              ) : null}
+
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition-colors group-hover:text-slate-950 theme-dark:text-slate-300 theme-dark:group-hover:text-white">
+                Read article
+                <ArrowUpRight className="h-4 w-4" />
               </div>
             </Link>
           )
         })}
       </div>
-
-      <div className="mt-6 text-center">
-        <Link
-          href="/blog"
-          className="btn-secondary"
-          title="View All Technical Articles - Complete Collection of AI Insights & Programming Tutorials"
-        >
-          View All Technical Articles →
-        </Link>
-      </div>
     </section>
   )
 }
+

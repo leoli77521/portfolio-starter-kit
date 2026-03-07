@@ -1,22 +1,34 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
+import { ArrowUpRight, CalendarDays, Clock3, FileText, Layers3 } from 'lucide-react'
 import { CustomMDX } from 'app/components/mdx'
 import { TableOfContents } from 'app/components/toc'
-import { formatDate, getBlogPosts, resolveBlogSlug, getHeadings, calculateReadingTime } from 'app/blog/utils'
+import {
+  formatDate,
+  getBlogPosts,
+  resolveBlogSlug,
+  getHeadings,
+  calculateReadingTime,
+  slugify,
+} from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
 import { SocialShare } from 'app/components/SocialShare'
 import { InArticleAd } from 'app/components/AdUnit'
 import Comments from 'app/components/comments'
-import type { FAQItem, HowToStep, ArticleRating } from 'app/types'
+import type { FAQItem, HowToStep } from 'app/types'
+import { getCategorySlug } from 'app/lib/categories'
 
 function parseJsonArray(value: unknown): unknown[] | null {
   if (!value) return null
   if (Array.isArray(value)) return value
   if (typeof value !== 'string') return null
+
   const trimmed = value.trim()
   if (!trimmed.startsWith('[') || !trimmed.endsWith(']')) return null
+
   try {
     const parsed = JSON.parse(trimmed)
     return Array.isArray(parsed) ? parsed : null
@@ -32,6 +44,7 @@ function normalizeFaqItems(value: unknown): FAQItem[] {
   return rawItems
     .map((item) => {
       if (!item || typeof item !== 'object') return null
+
       const record = item as Record<string, unknown>
       const question =
         typeof record.question === 'string'
@@ -45,7 +58,9 @@ function normalizeFaqItems(value: unknown): FAQItem[] {
           : typeof record.a === 'string'
             ? record.a
             : null
+
       if (!question || !answer) return null
+
       return {
         question: question.trim(),
         answer: answer.trim(),
@@ -66,7 +81,9 @@ function normalizeHowToSteps(value: unknown): HowToStep[] {
       }
       return acc
     }
+
     if (!item || typeof item !== 'object') return acc
+
     const record = item as Record<string, unknown>
     const textValue =
       typeof record.text === 'string'
@@ -76,53 +93,27 @@ function normalizeHowToSteps(value: unknown): HowToStep[] {
           : typeof record.description === 'string'
             ? record.description
             : null
+
     if (!textValue || !textValue.trim()) return acc
+
     const nameValue =
       typeof record.name === 'string'
         ? record.name
         : typeof record.title === 'string'
           ? record.title
           : undefined
+
     acc.push({
       name: nameValue,
       text: textValue.trim(),
     })
+
     return acc
   }, [])
 }
 
-function normalizeRating(value: unknown, publishedAt: string): ArticleRating | null {
-  // If explicitly provided as an object
-  if (value && typeof value === 'object') {
-    const record = value as Record<string, unknown>
-    const ratingValue = typeof record.value === 'number' ? record.value : null
-    if (ratingValue && ratingValue >= 1 && ratingValue <= 5) {
-      return {
-        value: ratingValue,
-        count: typeof record.count === 'number' ? record.count : undefined,
-      }
-    }
-  }
-
-  // If provided as a number
-  if (typeof value === 'number' && value >= 1 && value <= 5) {
-    return { value }
-  }
-
-  // Auto-generate rating for articles with FAQ/HowTo (quality indicators)
-  return null
-}
-
-function calculateRatingCount(publishedAt: string, baseCount: number = 10): number {
-  const published = new Date(publishedAt)
-  const now = new Date()
-  const daysSincePublished = Math.floor((now.getTime() - published.getTime()) / (1000 * 60 * 60 * 24))
-  // More established articles get more ratings
-  return Math.min(baseCount + Math.floor(daysSincePublished / 7) * 2, 150)
-}
-
 export async function generateStaticParams() {
-  let posts = getBlogPosts()
+  const posts = getBlogPosts()
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -133,21 +124,84 @@ interface PageProps {
   params: { slug: string }
 }
 
+function buildDescription(
+  category: string | undefined,
+  summary: string | undefined,
+  title: string | undefined
+): string {
+  const safeSummary = summary || 'Professional technology insights and practical solutions.'
+  const lowerTitle = title?.toLowerCase() || ''
+  const lowerCategory = category?.toLowerCase() || ''
+
+  let prefix = ''
+  if (lowerTitle.includes('comparison') || lowerTitle.includes('showdown') || lowerTitle.includes('vs')) {
+    prefix = 'Which option stands out? '
+  } else if (lowerTitle.includes('benchmark')) {
+    prefix = 'Real data shows: '
+  } else if (lowerTitle.includes('guide') || lowerTitle.includes('tutorial') || lowerTitle.includes('how to')) {
+    prefix = 'Learn how to: '
+  } else if (lowerCategory.includes('ai')) {
+    prefix = '2026 update: '
+  }
+
+  const suffixes: Record<string, string> = {
+    'ai technology': ' | Read the full analysis',
+    'ai & seo': ' | Read the full analysis',
+    'seo optimization': ' | Get the strategies',
+    programming: ' | See the code examples',
+    'web development': ' | Start building today',
+  }
+
+  const suffix = suffixes[lowerCategory] || ' | Read more'
+  const maxSummaryLength = Math.max(40, 155 - prefix.length - suffix.length)
+
+  let optimizedSummary = safeSummary
+  if (optimizedSummary.length > maxSummaryLength) {
+    const truncated = optimizedSummary.slice(0, maxSummaryLength)
+    const lastPeriod = truncated.lastIndexOf('.')
+    const lastQuestion = truncated.lastIndexOf('?')
+    const lastSentence = Math.max(lastPeriod, lastQuestion)
+
+    if (lastSentence > maxSummaryLength * 0.6) {
+      optimizedSummary = truncated.slice(0, lastSentence + 1)
+    } else {
+      const lastSpace = truncated.lastIndexOf(' ')
+      optimizedSummary = `${truncated.slice(0, lastSpace > 0 ? lastSpace : maxSummaryLength)}...`
+    }
+  }
+
+  return `${prefix}${optimizedSummary}${suffix}`
+}
+
+function buildSeoTitle(originalTitle: string | undefined): string {
+  const safeTitle = originalTitle || 'Tech Article'
+  const suffix = ' | ToLearn'
+  const maxLength = 60 - suffix.length
+
+  if (safeTitle.length <= maxLength) {
+    return `${safeTitle}${suffix}`
+  }
+
+  const truncated = safeTitle.slice(0, maxLength)
+  const lastSpace = truncated.lastIndexOf(' ')
+  const finalTitle = lastSpace > 30 ? truncated.slice(0, lastSpace) : truncated
+  return `${finalTitle}${suffix}`
+}
+
 export function generateMetadata({ params }: PageProps): Metadata {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
 
-  // 标准化 slug，兼容旧的 /blog/SEO 等链接
-  let post = allPosts.find((post) => post.slug === normalizedSlug)
+  let post = allPosts.find((item) => item.slug === normalizedSlug)
 
   if (!post) {
     try {
       const decodedSlug = decodeURIComponent(requestedSlug)
       const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
-      post = allPosts.find((post) => post.slug === decodedNormalizedSlug)
-    } catch (e) {
-      // 解码失败，保留 post 为 undefined
+      post = allPosts.find((item) => item.slug === decodedNormalizedSlug)
+    } catch {
+      return {}
     }
   }
 
@@ -155,168 +209,21 @@ export function generateMetadata({ params }: PageProps): Metadata {
     return {}
   }
 
-  let {
+  const {
     title,
     publishedAt: publishedTime,
     updatedAt,
     summary: description,
     image,
   } = post.metadata
+
   const modifiedTime = updatedAt || publishedTime
-  const ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`
-
-  // 使用一致的URL结构，确保canonical URL使用标准化的slug
-  const cleanSlug = post.slug
-  const canonicalUrl = `${baseUrl}/blog/${cleanSlug}`
-
-  // Create CTR-optimized Meta description with curiosity hooks
-  const getCategorySpecificDescription = (
-    category: string | undefined,
-    summary: string | undefined,
-    title: string | undefined,
-    tags: string[] | undefined
-  ): string => {
-    // 确保 summary 存在
-    let safeSummary = summary
-    if (!safeSummary || typeof safeSummary !== 'string') {
-      safeSummary = 'Professional technology insights and practical solutions.'
-    }
-
-    // CTR-optimized prefixes based on content type
-    const getHookPrefix = (): string => {
-      const lowerTitle = title?.toLowerCase() || ''
-      const lowerCategory = category?.toLowerCase() || ''
-
-      // Comparison/Showdown articles - use question hook
-      if (lowerTitle.includes('comparison') || lowerTitle.includes('showdown') || lowerTitle.includes('vs')) {
-        return 'Which one is the best? '
-      }
-      // Benchmark articles - use data hook
-      if (lowerTitle.includes('benchmark')) {
-        return 'Real data shows: '
-      }
-      // Guide/Tutorial articles - use benefit hook
-      if (lowerTitle.includes('guide') || lowerTitle.includes('tutorial') || lowerTitle.includes('how to')) {
-        return 'Learn how to: '
-      }
-      // AI articles - use trend hook
-      if (lowerCategory.includes('ai')) {
-        return '2026 update: '
-      }
-      return ''
-    }
-
-    // CTR-optimized suffixes with call-to-action
-    const suffixes: Record<string, string> = {
-      'ai technology': ' | Read the full analysis →',
-      'ai & seo': ' | Read the full analysis →',
-      'seo optimization': ' | Get the strategies →',
-      'programming': ' | See the code examples →',
-      'web development': ' | Start building today →',
-    }
-
-    const prefix = getHookPrefix()
-    const suffix = suffixes[category?.toLowerCase() ?? ''] || ' | Read more →'
-
-    // Calculate available space for main content
-    const maxSummaryLength = 155 - prefix.length - suffix.length
-
-    // Optimize the summary for CTR
-    let optimizedSummary = safeSummary
-
-    // If summary is too long, truncate at sentence or word boundary
-    if (optimizedSummary.length > maxSummaryLength) {
-      const truncated = optimizedSummary.substring(0, maxSummaryLength)
-      // Try to end at a sentence
-      const lastPeriod = truncated.lastIndexOf('.')
-      const lastQuestion = truncated.lastIndexOf('?')
-      const lastSentence = Math.max(lastPeriod, lastQuestion)
-
-      if (lastSentence > maxSummaryLength * 0.6) {
-        optimizedSummary = truncated.substring(0, lastSentence + 1)
-      } else {
-        // End at word boundary with ellipsis
-        const lastSpace = truncated.lastIndexOf(' ')
-        optimizedSummary = truncated.substring(0, lastSpace > 0 ? lastSpace : maxSummaryLength) + '...'
-      }
-    }
-
-    return `${prefix}${optimizedSummary}${suffix}`
-  }
-
-  const optimizedDescription = getCategorySpecificDescription(
-    post.metadata.category,
-    description,
-    title,
-    post.metadata.tags
-  )
-
-  // Category emoji mapping for visual appeal in search results
-  const getCategoryEmoji = (category: string | undefined): string => {
-    const emojiMap: Record<string, string> = {
-      'ai technology': '🤖',
-      'ai & seo': '🤖',
-      'seo optimization': '📈',
-      'programming': '💻',
-      'web development': '🌐',
-      'tutorial': '📚',
-      'comparison': '⚖️',
-      'guide': '📖',
-    }
-    return emojiMap[category?.toLowerCase() ?? ''] || '📝'
-  }
-
-  // Extract key numbers from content for CTR optimization
-  const extractContentNumbers = (title: string, tags: string[] | undefined): string => {
-    // Check for comparison/showdown articles
-    if (title.toLowerCase().includes('comparison') || title.toLowerCase().includes('showdown')) {
-      const toolCount = tags?.filter(t =>
-        !['comparison', 'ai', 'coding', 'benchmark'].includes(t.toLowerCase())
-      ).length || 0
-      if (toolCount >= 3) return `${toolCount}+ Tools`
-    }
-    // Check for benchmark articles
-    if (title.toLowerCase().includes('benchmark')) {
-      return 'Real Data'
-    }
-    // Check for guide articles
-    if (title.toLowerCase().includes('guide')) {
-      return 'Complete Guide'
-    }
-    return ''
-  }
-
-  // Optimize title length for SEO (50-60 chars) with CTR enhancements
-  const getOptimizedTitle = (originalTitle: string | undefined, category: string | undefined): string => {
-    // 确保 title 存在
-    let safeTitle = originalTitle
-    if (!safeTitle || typeof safeTitle !== 'string') {
-      safeTitle = 'Tech Article'
-    }
-
-    const emoji = getCategoryEmoji(category)
-    const suffix = ' - ToLearn'
-    const maxLength = 60 - suffix.length - 3 // Account for emoji + space
-
-    // Add emoji prefix for visual appeal
-    let enhancedTitle = safeTitle
-
-    if (safeTitle.length <= maxLength) {
-      return `${emoji} ${enhancedTitle}${suffix}`
-    }
-
-    // Smart truncation at word boundaries
-    const truncated = safeTitle.substring(0, maxLength)
-    const lastSpace = truncated.lastIndexOf(' ')
-    const finalTitle = lastSpace > 30 ? truncated.substring(0, lastSpace) : truncated
-
-    return `${emoji} ${finalTitle}${suffix}`
-  }
+  const ogImage = image ? image : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+  const canonicalUrl = `${baseUrl}/blog/${post.slug}`
+  const optimizedDescription = buildDescription(post.metadata.category, description, title)
 
   return {
-    title: getOptimizedTitle(title, post.metadata.category),
+    title: buildSeoTitle(title),
     description: optimizedDescription,
     authors: [{ name: 'ToLearn Blog' }],
     creator: 'ToLearn Blog',
@@ -371,8 +278,7 @@ export default function Blog({ params }: PageProps) {
   const requestedSlug = params.slug
   const normalizedSlug = resolveBlogSlug(requestedSlug)
 
-  // 标准化 slug，兼容旧的 /blog/SEO 等链接
-  let post = allPosts.find((post) => post.slug === normalizedSlug)
+  let post = allPosts.find((item) => item.slug === normalizedSlug)
 
   if (post && requestedSlug !== post.slug) {
     redirect(`/blog/${post.slug}`)
@@ -382,13 +288,13 @@ export default function Blog({ params }: PageProps) {
     try {
       const decodedSlug = decodeURIComponent(requestedSlug)
       const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
-      post = allPosts.find((post) => post.slug === decodedNormalizedSlug)
+      post = allPosts.find((item) => item.slug === decodedNormalizedSlug)
 
       if (post && requestedSlug !== post.slug) {
         redirect(`/blog/${post.slug}`)
       }
-    } catch (e) {
-      // 解码失败，保留 post 为 undefined
+    } catch {
+      notFound()
     }
   }
 
@@ -399,7 +305,15 @@ export default function Blog({ params }: PageProps) {
   const cleanSlug = post.slug
   const headings = getHeadings(post.content)
   const readingTime = calculateReadingTime(post.content)
-  const wordCount = post.content.split(/\s+/).length
+  const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length
+  const modifiedTime = post.metadata.updatedAt || post.metadata.publishedAt
+  const faqItems = normalizeFaqItems(post.metadata.faq)
+  const howToSteps = normalizeHowToSteps(post.metadata.howto)
+  const tags = post.metadata.tags?.filter(Boolean) || []
+  const categoryHref = post.metadata.category
+    ? `/categories/${getCategorySlug(post.metadata.category)}`
+    : null
+
   const organization = {
     '@type': 'Organization',
     '@id': `${baseUrl}/#organization`,
@@ -412,15 +326,6 @@ export default function Blog({ params }: PageProps) {
       height: 32,
     },
   }
-  const modifiedTime = post.metadata.updatedAt || post.metadata.publishedAt
-  const faqItems = normalizeFaqItems(post.metadata.faq)
-  const howToSteps = normalizeHowToSteps(post.metadata.howto)
-  const articleRating = normalizeRating(post.metadata.rating, post.metadata.publishedAt)
-
-  // Calculate quality score for auto-rating based on content richness
-  const hasRichContent = faqItems.length > 0 || howToSteps.length > 0
-  const autoRatingValue = hasRichContent ? 4.7 : 4.5  // Higher rating for rich content
-  const ratingCount = calculateRatingCount(post.metadata.publishedAt, hasRichContent ? 15 : 10)
 
   const structuredData: Record<string, unknown>[] = [
     {
@@ -454,7 +359,7 @@ export default function Blog({ params }: PageProps) {
       isPartOf: {
         '@id': `${baseUrl}/blog/#blog`,
       },
-      wordCount: wordCount,
+      wordCount,
       timeRequired: `PT${readingTime}M`,
       keywords: post.metadata.tags?.length
         ? post.metadata.tags
@@ -465,15 +370,6 @@ export default function Blog({ params }: PageProps) {
       speakable: {
         '@type': 'SpeakableSpecification',
         cssSelector: ['article', 'h1', '.prose'],
-      },
-      // AggregateRating for enhanced search result display (star ratings)
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: articleRating?.value || autoRatingValue,
-        bestRating: 5,
-        worstRating: 1,
-        ratingCount: articleRating?.count || ratingCount,
-        reviewCount: Math.floor((articleRating?.count || ratingCount) * 0.7),
       },
     },
     {
@@ -555,16 +451,28 @@ export default function Blog({ params }: PageProps) {
     })
   }
 
-  // 准备相关文章数据
-  const relatedPostsData = allPosts.map(p => ({
-    slug: p.slug,
-    title: p.metadata.title || 'Untitled',
-    summary: p.metadata.summary || 'No summary available',
-    category: p.metadata.category
+  const relatedPostsData = allPosts.map((item) => ({
+    slug: item.slug,
+    title: item.metadata.title || 'Untitled',
+    summary: item.metadata.summary || 'No summary available',
+    category: item.metadata.category,
+    tags: item.metadata.tags,
+    publishedAt: item.metadata.publishedAt,
+    readingTime: calculateReadingTime(item.content),
   }))
 
+  const currentPostData = {
+    slug: cleanSlug,
+    title: post.metadata.title || 'Untitled',
+    summary: post.metadata.summary || 'No summary available',
+    category: post.metadata.category,
+    tags,
+    publishedAt: post.metadata.publishedAt,
+    readingTime,
+  }
+
   return (
-    <section>
+    <section className="page-enter pb-24">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -573,99 +481,254 @@ export default function Blog({ params }: PageProps) {
         }}
       />
 
-      {/* Breadcrumb navigation */}
-      <nav className="mb-6 text-sm" aria-label="Breadcrumb navigation">
-        <ol className="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400">
-          <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Home</a></li>
-          <li>/</li>
-          <li><a href="/blog" className="hover:text-blue-600 dark:hover:text-blue-400">Tech Blog</a></li>
-          <li>/</li>
-          <li className="text-neutral-900 dark:text-neutral-100 truncate max-w-xs" title={post.metadata.title}>
-            {post.metadata.title}
-          </li>
-        </ol>
-      </nav>
+      <div className="surface-panel relative overflow-hidden px-6 py-8 md:px-10 md:py-10">
+        <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.2),transparent_70%)] theme-dark:bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.28),transparent_72%)]" />
 
-      <h1 className="title font-semibold text-2xl tracking-tighter mb-2 text-neutral-900 dark:text-neutral-100">
-        {post.metadata.title}
-      </h1>
-      <div className="flex flex-wrap justify-between items-center mt-2 mb-8 text-sm gap-2">
-        <div className="flex items-center gap-4 text-neutral-600 dark:text-neutral-400">
-          <time dateTime={post.metadata.publishedAt}>
-            {formatDate(post.metadata.publishedAt)}
-          </time>
-          <span className="flex items-center gap-1" aria-label={`${readingTime} minute read`}>
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            {readingTime} min read
-          </span>
+        <div className="relative">
+          <nav className="text-sm" aria-label="Breadcrumb navigation">
+            <ol className="flex flex-wrap items-center gap-2 text-slate-500 theme-dark:text-slate-400">
+              <li>
+                <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
+                  Home
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link href="/blog" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
+                  Blog
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="max-w-xl truncate text-slate-900 theme-dark:text-slate-100" title={post.metadata.title}>
+                {post.metadata.title}
+              </li>
+            </ol>
+          </nav>
+
+          <div className="mt-8 max-w-4xl">
+            <div className="flex flex-wrap items-center gap-3">
+              {categoryHref && post.metadata.category ? (
+                <Link href={categoryHref} className="meta-chip">
+                  {post.metadata.category}
+                </Link>
+              ) : null}
+              {tags.slice(0, 2).map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/tags/${slugify(tag)}`}
+                  className="meta-chip normal-case tracking-[0.04em]"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+
+            <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em] text-slate-950 theme-dark:text-white md:text-5xl">
+              {post.metadata.title}
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600 theme-dark:text-slate-300">
+              {post.metadata.summary}
+            </p>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="stat-pill">
+                <span className="inline-flex items-center gap-2 text-slate-700 theme-dark:text-slate-200">
+                  <CalendarDays className="h-4 w-4" />
+                  Published
+                </span>
+                <span className="text-base font-semibold text-slate-950 theme-dark:text-white">
+                  {formatDate(post.metadata.publishedAt, false)}
+                </span>
+              </div>
+              <div className="stat-pill">
+                <span className="inline-flex items-center gap-2 text-slate-700 theme-dark:text-slate-200">
+                  <Clock3 className="h-4 w-4" />
+                  Reading time
+                </span>
+                <span className="text-base font-semibold text-slate-950 theme-dark:text-white">
+                  {readingTime} min read
+                </span>
+              </div>
+              <div className="stat-pill">
+                <span className="inline-flex items-center gap-2 text-slate-700 theme-dark:text-slate-200">
+                  <FileText className="h-4 w-4" />
+                  Word count
+                </span>
+                <span className="text-base font-semibold text-slate-950 theme-dark:text-white">
+                  {wordCount.toLocaleString()} words
+                </span>
+              </div>
+              <div className="stat-pill">
+                <span className="inline-flex items-center gap-2 text-slate-700 theme-dark:text-slate-200">
+                  <Layers3 className="h-4 w-4" />
+                  Topics
+                </span>
+                <span className="text-base font-semibold text-slate-950 theme-dark:text-white">
+                  {tags.length > 0 ? `${tags.length} linked tags` : 'Article briefing'}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-        {post.metadata.category && (
-          <span className="inline-block px-3 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full">
-            {post.metadata.category}
-          </span>
-        )}
       </div>
 
-      <div className="flex gap-12">
-        {/* Main Content */}
-        <article className="prose flex-1 min-w-0">
-          {post.metadata.image && (
-            <div className="not-prose mb-8">
+      <div className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="min-w-0 space-y-8">
+          {post.metadata.image ? (
+            <div className="surface-panel overflow-hidden p-2 md:p-3">
               <Image
                 src={post.metadata.image}
                 alt={post.metadata.title}
                 width={1024}
                 height={1024}
                 priority
-                sizes="(max-width: 1024px) 100vw, 960px"
-                className="w-full h-auto rounded-2xl border border-gray-200 dark:border-slate-800/50"
+                sizes="(max-width: 1280px) 100vw, 900px"
+                className="h-auto w-full rounded-[1.6rem] border border-slate-200/70 object-cover theme-dark:border-slate-800/80"
               />
             </div>
-          )}
-          <CustomMDX source={post.content} />
+          ) : null}
 
-          {/* Google AdSense - 文章底部广告 */}
-          <div className="mt-8">
-            <InArticleAd slot="YOUR_AD_SLOT_ID" />
+          <article className="surface-panel px-6 py-8 md:px-10 md:py-10">
+            <div className="prose max-w-none">
+              <CustomMDX source={post.content} />
+            </div>
+          </article>
+
+          {howToSteps.length > 0 ? (
+            <section className="surface-card px-6 py-7 md:px-8">
+              <p className="section-kicker">Action checklist</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                Implementation steps
+              </h2>
+              <div className="mt-6 grid gap-4">
+                {howToSteps.map((step, index) => (
+                  <div
+                    key={`${step.name || step.text}-${index}`}
+                    className="rounded-[1.5rem] border border-slate-200/80 bg-white/86 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/80"
+                  >
+                    <p className="section-kicker">Step {index + 1}</p>
+                    <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                      {step.name || `Step ${index + 1}`}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {step.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {faqItems.length > 0 ? (
+            <section className="surface-panel px-6 py-7 md:px-8">
+              <p className="section-kicker">FAQ</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                Common questions
+              </h2>
+              <div className="mt-6 grid gap-4">
+                {faqItems.map((item) => (
+                  <div
+                    key={item.question}
+                    className="rounded-[1.5rem] border border-slate-200/80 bg-white/86 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/80"
+                  >
+                    <h3 className="text-lg font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                      {item.question}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {item.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <div className="surface-card px-6 py-6">
+            <p className="section-kicker">Support</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+              Sponsored placement
+            </h2>
+            <div className="mt-5">
+              <InArticleAd slot="YOUR_AD_SLOT_ID" />
+            </div>
           </div>
 
-          {/* Social Share Component */}
-          <div className="mt-8">
-            <SocialShare
-              title={post.metadata.title}
-              url={`${baseUrl}/blog/${cleanSlug}`}
-              summary={post.metadata.summary}
-            />
-          </div>
-        </article>
+          <SocialShare
+            title={post.metadata.title}
+            url={`${baseUrl}/blog/${cleanSlug}`}
+            summary={post.metadata.summary}
+          />
 
-        {/* Sidebar Table of Contents */}
-        <aside className="hidden lg:block w-64 shrink-0">
-          <div className="sticky top-24">
+          <RelatedPosts
+            currentSlug={cleanSlug}
+            posts={relatedPostsData}
+            currentPost={currentPostData}
+          />
+
+          <Comments />
+        </div>
+
+        <aside className="hidden xl:block">
+          <div className="sticky top-24 space-y-4">
+            <section className="surface-panel p-5">
+              <p className="section-kicker">Article facts</p>
+              <dl className="mt-5 space-y-4 text-sm text-slate-600 theme-dark:text-slate-300">
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                    Published
+                  </dt>
+                  <dd className="mt-1 text-base font-semibold text-slate-950 theme-dark:text-white">
+                    {formatDate(post.metadata.publishedAt, false)}
+                  </dd>
+                </div>
+                {post.metadata.updatedAt ? (
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                      Updated
+                    </dt>
+                    <dd className="mt-1 text-base font-semibold text-slate-950 theme-dark:text-white">
+                      {formatDate(post.metadata.updatedAt, false)}
+                    </dd>
+                  </div>
+                ) : null}
+                {categoryHref && post.metadata.category ? (
+                  <div>
+                    <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                      Category
+                    </dt>
+                    <dd className="mt-2">
+                      <Link href={categoryHref} className="editorial-link">
+                        {post.metadata.category}
+                        <ArrowUpRight className="h-4 w-4" />
+                      </Link>
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+
+              {tags.length > 0 ? (
+                <div className="mt-6 border-t border-slate-200/70 pt-5 theme-dark:border-slate-800">
+                  <p className="section-kicker">Tagged with</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <Link
+                        key={tag}
+                        href={`/tags/${slugify(tag)}`}
+                        className="meta-chip normal-case tracking-[0.04em]"
+                      >
+                        {tag}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </section>
+
             <TableOfContents headings={headings} />
           </div>
         </aside>
       </div>
-
-      <div className="mt-16">
-        <RelatedPosts currentSlug={cleanSlug} posts={relatedPostsData} />
-      </div>
-
-      {/* Comments Section */}
-      <Comments />
     </section>
   )
 }
+

@@ -40,10 +40,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-8">
-          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
-            <div className="w-16 h-16 mx-auto mb-6 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+          <div className="max-w-md w-full bg-white theme-dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 theme-dark:border-gray-700 p-8 text-center">
+            <div className="w-16 h-16 mx-auto mb-6 bg-red-100 theme-dark:bg-red-900/30 rounded-full flex items-center justify-center">
               <svg
-                className="w-8 h-8 text-red-600 dark:text-red-400"
+                className="w-8 h-8 text-red-600 theme-dark:text-red-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -58,17 +58,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </svg>
             </div>
 
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            <h2 className="text-xl font-bold text-gray-900 theme-dark:text-gray-100 mb-2">
               Something went wrong
             </h2>
 
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-600 theme-dark:text-gray-400 mb-6">
               We encountered an unexpected error. Please try again or refresh the page.
             </p>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-900 rounded-lg text-left overflow-auto">
-                <p className="text-sm font-mono text-red-600 dark:text-red-400">
+              <div className="mb-6 p-4 bg-gray-100 theme-dark:bg-gray-900 rounded-lg text-left overflow-auto">
+                <p className="text-sm font-mono text-red-600 theme-dark:text-red-400">
                   {this.state.error.message}
                 </p>
               </div>
@@ -83,7 +83,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               </button>
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors duration-200"
+                className="px-6 py-2.5 bg-gray-100 theme-dark:bg-gray-700 hover:bg-gray-200 theme-dark:hover:bg-gray-600 text-gray-700 theme-dark:text-gray-300 font-medium rounded-lg transition-colors duration-200"
               >
                 Refresh Page
               </button>
@@ -106,3 +106,4 @@ interface ErrorBoundaryWrapperProps {
 export function WithErrorBoundary({ children, fallback }: ErrorBoundaryWrapperProps): ReactNode {
   return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>
 }
+

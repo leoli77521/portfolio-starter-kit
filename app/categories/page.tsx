@@ -1,140 +1,162 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
-import { getCategorySlug } from 'app/lib/categories'
+import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
+import { getCategoryDescription } from 'app/lib/category-descriptions'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata: Metadata = {
-  title: 'Categories - ToLearn Blog',
-  description: 'Browse articles by category - AI Technology, Programming, SEO & Marketing, and more.',
+  title: 'Categories | ToLearn',
+  description:
+    'Browse ToLearn by category, from AI systems and web development to search visibility and productivity.',
   alternates: {
     canonical: `${baseUrl}/categories`,
   },
 }
 
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+}
+
 export default function CategoriesPage() {
   const allPosts = getBlogPosts()
-
-  // 统计每个分类的文章数量
   const categoryCounts = allPosts.reduce((acc, post) => {
-    const category = post.metadata.category || 'Uncategorized'
-    acc[category] = (acc[category] || 0) + 1
+    const category = post.metadata.category
+    if (category) {
+      acc[category] = (acc[category] || 0) + 1
+    }
     return acc
   }, {} as Record<string, number>)
 
-  // 定义分类图标和颜色
-  const categoryInfo: Record<string, { icon: string; color: string; description: string }> = {
-    'AI Technology': {
-      icon: '🤖',
-      color: 'from-blue-500 to-indigo-600',
-      description: 'Artificial Intelligence, Machine Learning, and AI Development',
-    },
-    'Programming': {
-      icon: '💻',
-      color: 'from-green-500 to-emerald-600',
-      description: 'Software Development, Coding Tutorials, and Best Practices',
-    },
-    'SEO & Marketing': {
-      icon: '📈',
-      color: 'from-purple-500 to-pink-600',
-      description: 'Search Engine Optimization, Digital Marketing, and Growth Strategies',
-    },
-    'Web Development': {
-      icon: '🌐',
-      color: 'from-orange-500 to-red-600',
-      description: 'Frontend, Backend, and Full-Stack Web Development',
-    },
-    'Uncategorized': {
-      icon: '📁',
-      color: 'from-gray-500 to-gray-600',
-      description: 'Miscellaneous articles and resources',
-    },
-  }
+  const categoryCards = categories
+    .filter((category) => category.name !== 'All')
+    .map((category) => {
+      const details = getCategoryDescription(category.name)
 
-  const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])
+      return {
+        ...category,
+        count: categoryCounts[category.name] || 0,
+        description:
+          details?.shortDescription || `Browse the latest writing about ${category.name}.`,
+        featuredTopics: details?.featuredTopics.slice(0, 3) || [],
+      }
+    })
+    .sort((a, b) => b.count - a.count)
+
+  const totalPosts = allPosts.length
+  const activeCategories = categoryCards.filter((category) => category.count > 0).length
+  const topCategory = categoryCards[0]
 
   return (
-    <section>
-      <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-        Categories
-      </h1>
-      <p className="mb-12 text-lg text-gray-600 dark:text-gray-400">
-        Explore articles organized by topic. Find content that interests you most.
-      </p>
+    <section className="space-y-8">
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <p className="section-kicker">Browse by category</p>
+        <div className="mt-3 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.75fr)] lg:items-end">
+          <div>
+            <h1 className="text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              A cleaner map of the archive
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              Categories are the fastest way to jump into the parts of ToLearn that matter
+              to you, whether you are following AI systems, search visibility, or day-to-day
+              execution on the web.
+            </p>
+          </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map(([category, count]) => {
-          const info = categoryInfo[category] || categoryInfo['Uncategorized']
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {activeCategories}
+              </span>
+              <span>active categories</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {totalPosts}
+              </span>
+              <span>posts in the archive</span>
+            </div>
+            <div className="stat-pill">
+              <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+                {topCategory?.name || 'Archive'}
+              </span>
+              <span>largest collection</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {categoryCards.map((category) => {
+          const slug = getCategorySlug(category.name)
+
           return (
             <Link
-              key={category}
-              href={`/categories/${getCategorySlug(category)}`}
-              className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-transparent"
+              key={category.name}
+              href={`/categories/${slug}`}
+              className="surface-card group block px-6 py-6"
             >
-              {/* 渐变背景 */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${info.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-              />
-
-              {/* 内容 */}
-              <div className="relative">
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="text-5xl" aria-hidden="true">
-                    {info.icon}
-                  </span>
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-lg font-bold text-gray-700 dark:text-gray-300 group-hover:bg-white dark:group-hover:bg-gray-600 transition-colors duration-300">
-                    {count}
-                  </span>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="section-kicker">Category</p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
+                    {category.name}
+                  </h2>
                 </div>
+                <span
+                  className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryBadgeStyles[getCategoryColor(category.name)]}`}
+                >
+                  {category.count} posts
+                </span>
+              </div>
 
-                <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 dark:group-hover:from-indigo-400 dark:group-hover:to-purple-400 transition-all duration-300">
-                  {category}
-                </h2>
+              <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                {category.description}
+              </p>
 
-                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                  {info.description}
-                </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {category.featuredTopics.map((topic) => (
+                  <span key={topic} className="meta-chip normal-case tracking-normal">
+                    {topic}
+                  </span>
+                ))}
+              </div>
 
-                <div className="mt-4 flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300">
-                  View {count} {count === 1 ? 'article' : 'articles'}
-                  <svg
-                    className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+              <div className="mt-6 editorial-link">
+                Open category
+                <span aria-hidden="true">/</span>
+                <span>{slug}</span>
               </div>
             </Link>
           )
         })}
       </div>
 
-      {/* 返回链接 */}
-      <div className="mt-12 text-center">
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white font-semibold hover:from-indigo-700 hover:to-purple-700 dark:hover:from-indigo-600 dark:hover:to-purple-600 transition-all duration-200 hover:scale-105 hover:shadow-lg"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to All Articles
-        </Link>
+      <div className="surface-panel flex flex-col gap-4 px-6 py-6 md:flex-row md:items-center md:justify-between md:px-8">
+        <div>
+          <p className="section-kicker">Need a different way in?</p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            If categories feel too broad, use topic hubs for curated paths or browse the full
+            journal archive directly.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/topics" className="editorial-link">
+            Explore topic hubs
+          </Link>
+          <Link href="/blog" className="editorial-link">
+            Open the journal
+          </Link>
+        </div>
       </div>
     </section>
   )
 }
+

@@ -1,17 +1,37 @@
-import { guides, getGuide } from 'app/lib/guides'
-import { getBlogPosts, calculateReadingTime } from 'app/blog/utils'
+import { getGuide, guides } from 'app/lib/guides'
+import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
 import { PostCard } from 'app/components/post-card'
-import { categories, getCategorySlug } from 'app/lib/categories'
+import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
 import {
-  generateCourseSchema,
   generateBreadcrumbSchema,
+  generateCourseSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
 import { slugify } from 'app/lib/formatters'
+
+const difficultyBadgeStyles = {
+  Beginner:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  Intermediate:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+  Advanced:
+    'border-rose-200/80 bg-rose-50/90 text-rose-700 theme-dark:border-rose-900/80 theme-dark:bg-rose-950/50 theme-dark:text-rose-300',
+}
+
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+}
 
 export async function generateStaticParams() {
   return guides.map((guide) => ({
@@ -33,25 +53,19 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${guide.title} - Learning Guide`,
+    title: `${guide.title} | ToLearn`,
     description: guide.description,
     keywords: guide.targetKeywords,
     alternates: {
       canonical: `${baseUrl}/guides/${guide.slug}`,
     },
     openGraph: {
-      title: `${guide.title} | ToLearn Blog`,
+      title: `${guide.title} | ToLearn`,
       description: guide.description,
       url: `${baseUrl}/guides/${guide.slug}`,
       type: 'website',
     },
   }
-}
-
-const difficultyColors = {
-  Beginner: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
-  Intermediate: 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
-  Advanced: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200',
 }
 
 export default function GuidePage({ params }: { params: { slug: string } }) {
@@ -62,9 +76,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   }
 
   const allPosts = getBlogPosts()
-
-  // Find posts related to this guide
-  const normalizedGuideTags = guide.relatedTags.map((t) => t.toLowerCase())
+  const normalizedGuideTags = guide.relatedTags.map((tag) => tag.toLowerCase())
   const relatedPosts = allPosts
     .filter((post) => {
       if (!post.metadata.tags) return false
@@ -76,15 +88,11 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     )
     .slice(0, 6)
 
-  // Get related categories
   const relatedCategoryConfigs = categories.filter(
-    (cat) => cat.name !== 'All' && guide.relatedCategories.includes(cat.name)
+    (category) => category.name !== 'All' && guide.relatedCategories.includes(category.name)
   )
+  const otherGuides = guides.filter((item) => item.slug !== guide.slug).slice(0, 3)
 
-  // Get other guides
-  const otherGuides = guides.filter((g) => g.slug !== guide.slug).slice(0, 3)
-
-  // Generate schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Guides', url: `${baseUrl}/guides` },
@@ -101,7 +109,6 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     dateModified: new Date().toISOString(),
   })
 
-  // HowTo schema for the steps
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -117,8 +124,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -126,198 +132,255 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600 dark:text-gray-400">
-        <ol className="flex items-center gap-2">
+      <nav className="text-sm" aria-label="Breadcrumb navigation">
+        <ol className="flex items-center gap-2 text-slate-500 theme-dark:text-slate-400">
           <li>
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
               Home
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href="/guides" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link
+              href="/guides"
+              className="transition-colors hover:text-slate-950 theme-dark:hover:text-white"
+            >
               Guides
             </Link>
           </li>
           <li>/</li>
-          <li className="text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px]">
+          <li className="truncate font-medium text-slate-900 theme-dark:text-slate-100">
             {guide.title}
           </li>
         </ol>
       </nav>
 
-      {/* Header */}
-      <div className="mb-12">
-        <div className="flex items-center gap-4 mb-4">
-          <span className="text-6xl">{guide.icon}</span>
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`px-3 py-1 rounded-full text-sm ${difficultyColors[guide.difficulty]}`}>
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="section-kicker">Learning guide</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span
+                className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${difficultyBadgeStyles[guide.difficulty]}`}
+              >
                 {guide.difficulty}
               </span>
-              <span className="text-sm text-gray-500 dark:text-gray-500">
-                {guide.estimatedTime}
-              </span>
+              <span className="meta-chip normal-case tracking-normal">{guide.estimatedTime}</span>
+              <span className="meta-chip normal-case tracking-normal">{guide.steps.length} steps</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
               {guide.title}
             </h1>
+            <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              {guide.description}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link href="/guides" className="editorial-link">
+              All guides
+            </Link>
+            <Link href="/topics" className="editorial-link">
+              Topic hubs
+            </Link>
           </div>
         </div>
-        <p className="text-lg text-gray-600 dark:text-gray-400">{guide.description}</p>
-      </div>
 
-      {/* Long Description */}
-      <div className="mb-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{guide.longDescription}</p>
-      </div>
-
-      {/* Prerequisites */}
-      {guide.prerequisites && guide.prerequisites.length > 0 && (
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-            Prerequisites
-          </h2>
-          <ul className="space-y-2">
-            {guide.prerequisites.map((prereq, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-2 text-gray-600 dark:text-gray-400"
-              >
-                <span className="text-blue-500 mt-1">✓</span>
-                {prereq}
-              </li>
-            ))}
-          </ul>
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {guide.steps.length}
+            </span>
+            <span>learning steps</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {guide.relatedTags.length}
+            </span>
+            <span>related tags</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {guide.prerequisites?.length || 0}
+            </span>
+            <span>prerequisites</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {relatedPosts.length}
+            </span>
+            <span>supporting articles</span>
+          </div>
         </div>
-      )}
+      </div>
 
-      {/* Steps */}
-      <div className="mb-12">
-        <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-          What You&apos;ll Learn
-        </h2>
-        <div className="space-y-4">
-          {guide.steps.map((step, index) => (
-            <div
-              key={index}
-              className="flex gap-4 p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
-            >
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center font-bold">
-                {index + 1}
-              </div>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-6">
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <p className="section-kicker">Overview</p>
+            <p className="mt-4 text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base">
+              {guide.longDescription}
+            </p>
+          </div>
+
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{step.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{step.description}</p>
+                <p className="section-kicker">Roadmap</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                  What you&apos;ll learn
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                Each step is a segment of the path, designed to move from concepts into practical
+                implementation.
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              {guide.steps.map((step, index) => (
+                <div
+                  key={step.title}
+                  className="rounded-[1.5rem] border border-slate-200/80 bg-white/85 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/80"
+                >
+                  <div className="flex gap-4">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white theme-dark:bg-slate-100 theme-dark:text-slate-950">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-950 theme-dark:text-slate-100">
+                        {step.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {relatedPosts.length > 0 ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Supporting reading</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Related articles
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  These posts cover parts of the same subject area and work well alongside the
+                  guide.
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-6">
+                {relatedPosts.map((post) => (
+                  <PostCard
+                    key={post.slug}
+                    post={{
+                      slug: post.slug,
+                      metadata: post.metadata,
+                      readingTime: calculateReadingTime(post.content),
+                    }}
+                  />
+                ))}
               </div>
             </div>
-          ))}
+          ) : null}
         </div>
-      </div>
 
-      {/* Related Tags */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
-          Topics Covered
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {guide.relatedTags.map((tag) => (
-            <Link
-              key={tag}
-              href={`/tags/${slugify(tag)}`}
-              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-            >
-              {tag}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Related Categories */}
-      {relatedCategoryConfigs.length > 0 && (
-        <div className="mb-10">
-          <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
-            Related Categories
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {relatedCategoryConfigs.map((cat) => (
-              <Link
-                key={cat.name}
-                href={`/categories/${getCategorySlug(cat.name)}`}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span>{cat.emoji}</span>
-                <span className="text-gray-800 dark:text-gray-200">{cat.name}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Related Articles */}
-      {relatedPosts.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-            Related Articles
-          </h2>
-          <div className="space-y-4">
-            {relatedPosts.map((post) => (
-              <PostCard
-                key={post.slug}
-                post={{
-                  slug: post.slug,
-                  metadata: post.metadata,
-                  readingTime: calculateReadingTime(post.content),
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Other Guides */}
-      {otherGuides.length > 0 && (
-        <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-            Explore More Guides
-          </h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {otherGuides.map((otherGuide) => (
-              <Link
-                key={otherGuide.slug}
-                href={`/guides/${otherGuide.slug}`}
-                className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">{otherGuide.icon}</span>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs ${difficultyColors[otherGuide.difficulty]}`}
+        <aside className="space-y-5">
+          {guide.prerequisites && guide.prerequisites.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Prerequisites</p>
+              <div className="mt-4 space-y-3">
+                {guide.prerequisites.map((prerequisite) => (
+                  <div
+                    key={prerequisite}
+                    className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
                   >
-                    {otherGuide.difficulty}
-                  </span>
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                  {otherGuide.title}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-                  {otherGuide.description}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+                    {prerequisite}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
-      {/* Back to guides */}
-      <div className="mt-8 text-center">
-        <Link
-          href="/guides"
-          className="text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          ← View All Guides
-        </Link>
+          <div className="surface-card px-5 py-5">
+            <p className="section-kicker">Topics covered</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {guide.relatedTags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/tags/${slugify(tag)}`}
+                  className="meta-chip normal-case tracking-normal"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {relatedCategoryConfigs.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Related categories</p>
+              <div className="mt-4 space-y-3">
+                {relatedCategoryConfigs.map((category) => {
+                  const tone = getCategoryColor(category.name)
+
+                  return (
+                    <Link
+                      key={category.name}
+                      href={`/categories/${getCategorySlug(category.name)}`}
+                      className="flex items-center justify-between rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+                    >
+                      <span>{category.name}</span>
+                      <span
+                        className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryBadgeStyles[tone]}`}
+                      >
+                        Category
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {otherGuides.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Other guides</p>
+              <div className="mt-4 space-y-3">
+                {otherGuides.map((otherGuide) => (
+                  <Link
+                    key={otherGuide.slug}
+                    href={`/guides/${otherGuide.slug}`}
+                    className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${difficultyBadgeStyles[otherGuide.difficulty]}`}
+                      >
+                        {otherGuide.difficulty}
+                      </span>
+                    </div>
+                    <div className="mt-3 text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                      {otherGuide.title}
+                    </div>
+                    <div className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                      {otherGuide.description}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </aside>
       </div>
     </section>
   )
 }
+

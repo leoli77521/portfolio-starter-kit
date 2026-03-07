@@ -1,45 +1,49 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ArrowUpRight } from 'lucide-react'
 
-interface NavItem {
+type NavItem = {
+  href: string
   name: string
   title: string
 }
 
 interface MobileMenuProps {
-  navItems: Record<string, NavItem>
+  navItems: NavItem[]
+  exploreLinks: NavItem[]
 }
 
-export function MobileMenu({ navItems }: MobileMenuProps) {
+function isItemActive(pathname: string | null, href: string) {
+  if (!pathname) return false
+  if (href === '/') return pathname === '/'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+export function MobileMenu({ navItems, exploreLinks }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  // 关闭菜单当路由改变
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
 
-  // 按 Esc 关闭菜单
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' && isOpen) {
         setIsOpen(false)
       }
     }
+
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen])
 
-  // 防止背景滚动当菜单打开
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset'
+
     return () => {
       document.body.style.overflow = 'unset'
     }
@@ -47,107 +51,129 @@ export function MobileMenu({ navItems }: MobileMenuProps) {
 
   return (
     <>
-      {/* 汉堡菜单按钮 */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-indigo-950/40 transition-colors duration-200"
+        onClick={() => setIsOpen((open) => !open)}
+        className="rounded-full border border-slate-200/80 p-2.5 text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:text-slate-200 theme-dark:hover:border-slate-700 theme-dark:hover:text-white lg:hidden"
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isOpen}
+        type="button"
       >
-        <div className="w-6 h-5 flex flex-col justify-between">
+        <div className="flex h-5 w-6 flex-col justify-between">
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
-              isOpen ? 'rotate-45 translate-y-2' : ''
+            className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
+              isOpen ? 'translate-y-2 rotate-45' : ''
             }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
+            className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
               isOpen ? 'opacity-0' : ''
             }`}
           />
           <span
-            className={`block h-0.5 w-6 bg-gray-700 dark:bg-slate-200 transition-all duration-300 ${
-              isOpen ? '-rotate-45 -translate-y-2' : ''
+            className={`block h-0.5 w-6 bg-current transition-all duration-300 ${
+              isOpen ? '-translate-y-2 -rotate-45' : ''
             }`}
           />
         </div>
       </button>
 
-      {/* 背景遮罩 */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      {isOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-sm lg:hidden"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
 
-      {/* 侧边抽屉菜单 */}
-      <div
-        className={`fixed top-0 right-0 h-full w-72 bg-white dark:bg-slate-950 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile navigation"
-      >
-        <div className="flex flex-col h-full">
-          {/* 菜单头部 */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-indigo-500/20">
-            <span className="font-black text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-              ToLearn
-            </span>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-indigo-950/40 transition-colors duration-200"
-              aria-label="Close menu"
-            >
-              <svg
-                className="w-6 h-6 text-gray-700 dark:text-slate-200"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+          <div
+            className="fixed right-0 top-0 z-50 flex h-full w-[min(88vw,24rem)] flex-col bg-white px-5 py-5 shadow-2xl theme-dark:bg-slate-950 lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+          >
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4 theme-dark:border-slate-800">
+              <div>
+                <p className="section-kicker">ToLearn</p>
+                <p className="mt-2 text-sm text-slate-600 theme-dark:text-slate-400">
+                  Browse articles, topics, and guides.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="rounded-full border border-slate-200/80 p-2 text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:text-slate-200 theme-dark:hover:border-slate-700 theme-dark:hover:text-white"
+                aria-label="Close menu"
+                type="button"
               >
-                <path d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-          {/* 菜单项 */}
-          <nav className="flex-1 overflow-y-auto py-6 px-4" role="navigation">
-            <ul className="space-y-2">
-              {Object.entries(navItems).map(([path, { name, title }]) => {
-                const isActive = pathname === path
+            <nav className="mt-6 space-y-2" aria-label="Primary mobile navigation">
+              {navItems.map((item) => {
+                const active = isItemActive(pathname, item.href)
+
                 return (
-                  <li key={path}>
-                    <Link
-                      href={path}
-                      className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
-                        isActive
-                          ? 'bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-600 dark:text-indigo-300 border-l-4 border-indigo-600 dark:border-indigo-400'
-                          : 'text-gray-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-indigo-950/40 hover:text-indigo-600 dark:hover:text-indigo-300'
-                      }`}
-                      title={title}
-                    >
-                      {name}
-                    </Link>
-                  </li>
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`block rounded-2xl px-4 py-3 text-base font-medium transition-colors ${
+                      active
+                        ? 'bg-slate-900 text-white theme-dark:bg-slate-100 theme-dark:text-slate-950'
+                        : 'text-slate-700 hover:bg-slate-100 hover:text-slate-950 theme-dark:text-slate-200 theme-dark:hover:bg-slate-900 theme-dark:hover:text-white'
+                    }`}
+                    title={item.title}
+                  >
+                    {item.name}
+                  </Link>
                 )
               })}
-            </ul>
-          </nav>
+            </nav>
 
-          {/* 菜单底部 */}
-          <div className="p-6 border-t border-gray-200 dark:border-indigo-500/20">
-            <p className="text-xs text-gray-500 dark:text-slate-400 text-center">
-              © 2025 ToLearn Blog
-            </p>
+            <div className="mt-8">
+              <p className="section-kicker">Explore</p>
+              <div className="mt-3 space-y-3">
+                {exploreLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="surface-card block px-4 py-4"
+                    title={item.title}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-sm font-semibold text-slate-900 theme-dark:text-slate-100">
+                          {item.name}
+                        </div>
+                        <div className="mt-1 text-sm text-slate-600 theme-dark:text-slate-400">
+                          {item.title}
+                        </div>
+                      </div>
+                      <ArrowUpRight className="mt-0.5 h-4 w-4 text-slate-400" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-auto border-t border-slate-200 pt-5 theme-dark:border-slate-800">
+              <p className="text-xs uppercase tracking-[0.22em] text-slate-500 theme-dark:text-slate-400">
+                Editorial notes for builders
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : null}
     </>
   )
 }
+

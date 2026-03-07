@@ -1,20 +1,32 @@
 import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
+import { getBlogPosts } from 'app/blog/utils'
 import { HeroSection } from 'app/components/hero-section'
 import { FeaturedArticles } from 'app/components/featured-articles'
 import { LatestPostsList } from 'app/components/latest-posts-list'
 import { NewsletterCTA } from 'app/components/newsletter-cta'
 
 export const metadata: Metadata = {
-  title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
-  description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
-  keywords: ['AI Tech Blog', 'SEO Optimization Tutorials', 'Programming Development', 'Artificial Intelligence Applications', 'Website Optimization Strategies', 'Frontend Development Technology', 'JavaScript Tutorials', 'React Development Guide'],
+  title: 'ToLearn Blog | AI, Search, and Modern Web Work',
+  description:
+    'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
+  keywords: [
+    'AI Tech Blog',
+    'SEO Optimization Tutorials',
+    'Programming Development',
+    'Artificial Intelligence Applications',
+    'Website Optimization Strategies',
+    'Frontend Development Technology',
+    'JavaScript Tutorials',
+    'React Development Guide',
+  ],
   alternates: {
     canonical: baseUrl,
   },
   openGraph: {
-    title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
-    description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
+    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
+    description:
+      'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
     url: baseUrl,
     type: 'website',
     locale: 'en_US',
@@ -22,12 +34,22 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ToLearn Blog - AI Tech Hub | SEO & Programming Guide',
-    description: 'Welcome to ToLearn - where developers discover AI breakthroughs, master SEO tactics, and build exceptional web experiences. Start your journey here.',
+    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
+    description:
+      'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
   },
 }
 
 export default function Page() {
+  const allPosts = getBlogPosts().sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+  )
+  const latestPost = allPosts[0]
+  const uniqueCategories = new Set(
+    allPosts.map((post) => post.metadata.category).filter(Boolean)
+  )
+
   const organization = {
     '@type': 'Organization',
     '@id': `${baseUrl}/#organization`,
@@ -73,7 +95,7 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -82,16 +104,25 @@ export default function Page() {
         }}
       />
 
-      {/* Hero Section */}
-      <HeroSection />
+      <HeroSection
+        totalPosts={allPosts.length}
+        categoryCount={uniqueCategories.size}
+        latestPost={
+          latestPost
+            ? {
+                slug: latestPost.slug,
+                title: latestPost.metadata.title,
+                category: latestPost.metadata.category,
+                publishedAt: latestPost.metadata.publishedAt,
+              }
+            : null
+        }
+      />
 
-      {/* Featured Articles with Thumbnails */}
       <FeaturedArticles limit={3} />
 
-      {/* Latest Posts List */}
       <LatestPostsList limit={5} skipFirst={3} />
 
-      {/* Newsletter CTA */}
       <NewsletterCTA />
     </div>
   )

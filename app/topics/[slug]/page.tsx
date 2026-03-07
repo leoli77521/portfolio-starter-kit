@@ -1,18 +1,29 @@
-import { topicHubs, getTopicHub } from 'app/lib/topic-hubs'
-import { getBlogPosts, calculateReadingTime } from 'app/blog/utils'
+import { getTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
 import { PostCard } from 'app/components/post-card'
-import { categories, getCategorySlug } from 'app/lib/categories'
+import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
 import {
-  generateItemListSchema,
-  generateCollectionPageSchema,
   generateBreadcrumbSchema,
+  generateCollectionPageSchema,
+  generateItemListSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
 import { slugify } from 'app/lib/formatters'
+
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+}
 
 export async function generateStaticParams() {
   return topicHubs.map((hub) => ({
@@ -34,14 +45,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${hub.title} - Topic Hub`,
+    title: `${hub.title} | ToLearn`,
     description: hub.description,
     keywords: hub.targetKeywords,
     alternates: {
       canonical: `${baseUrl}/topics/${hub.slug}`,
     },
     openGraph: {
-      title: `${hub.title} | ToLearn Blog`,
+      title: `${hub.title} | ToLearn`,
       description: hub.description,
       url: `${baseUrl}/topics/${hub.slug}`,
       type: 'website',
@@ -57,9 +68,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
   }
 
   const allPosts = getBlogPosts()
-
-  // Find posts matching this topic hub
-  const normalizedHubTags = hub.relatedTags.map((t) => t.toLowerCase())
+  const normalizedHubTags = hub.relatedTags.map((tag) => tag.toLowerCase())
   const matchingPosts = allPosts
     .filter((post) => {
       if (!post.metadata.tags) return false
@@ -70,13 +79,11 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
         new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
     )
 
-  // Calculate statistics
   const totalReadingTime = matchingPosts.reduce(
-    (acc, post) => acc + calculateReadingTime(post.content),
+    (sum, post) => sum + calculateReadingTime(post.content),
     0
   )
 
-  // Get tag frequency within matching posts
   const tagCounts: Record<string, number> = {}
   matchingPosts.forEach((post) => {
     post.metadata.tags?.forEach((tag) => {
@@ -85,17 +92,13 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
   })
   const sortedTags = Object.entries(tagCounts)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
+    .slice(0, 8)
 
-  // Get related categories
   const relatedCategoryConfigs = categories.filter(
-    (cat) => cat.name !== 'All' && hub.relatedCategories.includes(cat.name)
+    (category) => category.name !== 'All' && hub.relatedCategories.includes(category.name)
   )
+  const otherHubs = topicHubs.filter((currentHub) => currentHub.slug !== hub.slug).slice(0, 3)
 
-  // Get other topic hubs
-  const otherHubs = topicHubs.filter((h) => h.slug !== hub.slug).slice(0, 3)
-
-  // Generate schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Topics', url: `${baseUrl}/topics` },
@@ -114,7 +117,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
   })
 
   const collectionPageSchema = generateCollectionPageSchema({
-    name: `${hub.title} - Topic Hub`,
+    name: `${hub.title} Hub`,
     description: hub.longDescription,
     url: `${baseUrl}/topics/${hub.slug}`,
     dateModified: new Date().toISOString(),
@@ -126,8 +129,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
   })
 
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -135,156 +137,206 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
         }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600 dark:text-gray-400">
-        <ol className="flex items-center gap-2">
+      <nav className="text-sm" aria-label="Breadcrumb navigation">
+        <ol className="flex items-center gap-2 text-slate-500 theme-dark:text-slate-400">
           <li>
-            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
               Home
             </Link>
           </li>
           <li>/</li>
           <li>
-            <Link href="/topics" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <Link
+              href="/topics"
+              className="transition-colors hover:text-slate-950 theme-dark:hover:text-white"
+            >
               Topics
             </Link>
           </li>
           <li>/</li>
-          <li className="text-gray-900 dark:text-gray-100 font-medium">{hub.title}</li>
+          <li className="font-medium text-slate-900 theme-dark:text-slate-100">{hub.title}</li>
         </ol>
       </nav>
 
-      {/* Header */}
-      <div className="mb-12 text-center">
-        <span className="text-6xl mb-4 block">{hub.icon}</span>
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100">
-          {hub.title}
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          {hub.description}
-        </p>
-      </div>
-
-      {/* Long Description */}
-      <div className="mb-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{hub.longDescription}</p>
-      </div>
-
-      {/* Statistics */}
-      <div className="mb-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {matchingPosts.length}
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="section-kicker">Topic hub</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {hub.relatedCategories.slice(0, 2).map((category) => {
+                const tone = getCategoryColor(category)
+                return (
+                  <span
+                    key={category}
+                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryBadgeStyles[tone]}`}
+                  >
+                    {category}
+                  </span>
+                )
+              })}
+            </div>
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              {hub.title}
+            </h1>
+            <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              {hub.description}
+            </p>
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Articles</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {totalReadingTime}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Min Read Total</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-            {hub.relatedTags.length}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Related Tags</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-            {hub.relatedCategories.length}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Categories</div>
-        </div>
-      </div>
 
-      {/* Tags in this hub */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
-          Topics Covered
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {sortedTags.map(([tag, count]) => (
-            <Link
-              key={tag}
-              href={`/tags/${slugify(tag)}`}
-              className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
-            >
-              {tag} ({count})
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Related Categories */}
-      {relatedCategoryConfigs.length > 0 && (
-        <div className="mb-10">
-          <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">
-            Related Categories
-          </h2>
           <div className="flex flex-wrap gap-3">
-            {relatedCategoryConfigs.map((cat) => (
-              <Link
-                key={cat.name}
-                href={`/categories/${getCategorySlug(cat.name)}`}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span>{cat.emoji}</span>
-                <span className="text-gray-800 dark:text-gray-200">{cat.name}</span>
-              </Link>
-            ))}
+            <Link href="/topics" className="editorial-link">
+              All topic hubs
+            </Link>
+            <Link href="/guides" className="editorial-link">
+              Read guides
+            </Link>
           </div>
         </div>
-      )}
 
-      {/* Articles List */}
-      <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-        All Articles in This Hub
-      </h2>
-      {matchingPosts.length > 0 ? (
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {matchingPosts.length}
+            </span>
+            <span>matching articles</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {totalReadingTime}
+            </span>
+            <span>reading minutes</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {hub.relatedTags.length}
+            </span>
+            <span>seed tags in this hub</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {hub.relatedCategories.length}
+            </span>
+            <span>connected categories</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="space-y-6">
-          {matchingPosts.map((post) => (
-            <PostCard
-              key={post.slug}
-              post={{
-                slug: post.slug,
-                metadata: post.metadata,
-                readingTime: calculateReadingTime(post.content),
-              }}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16">
-          <p className="text-gray-600 dark:text-gray-400">
-            No articles found in this topic hub yet.
-          </p>
-        </div>
-      )}
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <p className="section-kicker">Overview</p>
+            <p className="mt-4 text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base">
+              {hub.longDescription}
+            </p>
+          </div>
 
-      {/* Other Topic Hubs */}
-      {otherHubs.length > 0 && (
-        <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800">
-          <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-            Explore Other Topic Hubs
-          </h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {otherHubs.map((otherHub) => (
-              <Link
-                key={otherHub.slug}
-                href={`/topics/${otherHub.slug}`}
-                className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span className="text-2xl mb-2 block">{otherHub.icon}</span>
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{otherHub.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-                  {otherHub.description}
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="section-kicker">Archive</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                  All Articles in This Hub
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                Topic hubs sit between categories and tags: more curated than one label, less
+                rigid than a formal guide.
+              </p>
+            </div>
+
+            {matchingPosts.length > 0 ? (
+              <div className="mt-6 space-y-6">
+                {matchingPosts.map((post) => (
+                  <PostCard
+                    key={post.slug}
+                    post={{
+                      slug: post.slug,
+                      metadata: post.metadata,
+                      readingTime: calculateReadingTime(post.content),
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 px-6 py-10 text-center theme-dark:border-slate-800 theme-dark:bg-slate-950/70">
+                <p className="section-kicker">No entries yet</p>
+                <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  No articles match this topic hub yet.
                 </p>
-              </Link>
-            ))}
+              </div>
+            )}
           </div>
         </div>
-      )}
+
+        <aside className="space-y-5">
+          {sortedTags.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Topics covered</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {sortedTags.map(([tag, count]) => (
+                  <Link
+                    key={tag}
+                    href={`/tags/${slugify(tag)}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+                  >
+                    <span>{tag}</span>
+                    <span className="meta-chip normal-case tracking-normal">{count}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {relatedCategoryConfigs.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Related categories</p>
+              <div className="mt-4 space-y-3">
+                {relatedCategoryConfigs.map((category) => {
+                  const tone = getCategoryColor(category.name)
+
+                  return (
+                    <Link
+                      key={category.name}
+                      href={`/categories/${getCategorySlug(category.name)}`}
+                      className="flex items-center justify-between rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+                    >
+                      <span>{category.name}</span>
+                      <span
+                        className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryBadgeStyles[tone]}`}
+                      >
+                        Category
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {otherHubs.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Other hubs</p>
+              <div className="mt-4 space-y-3">
+                {otherHubs.map((otherHub) => (
+                  <Link
+                    key={otherHub.slug}
+                    href={`/topics/${otherHub.slug}`}
+                    className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                  >
+                    <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                      {otherHub.title}
+                    </div>
+                    <div className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                      {otherHub.description}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </aside>
+      </div>
     </section>
   )
 }
+

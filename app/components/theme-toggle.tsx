@@ -1,78 +1,102 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { MoonStar, SunMedium } from 'lucide-react'
+
+const LIGHT_THEME_COLOR = '#fafafa'
+const DARK_THEME_COLOR = '#0b0f1a'
+
+function getPreferredTheme(): 'light' | 'dark' {
+  const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+
+  if (savedTheme) {
+    return savedTheme
+  }
+
+  if (document.documentElement.classList.contains('dark')) {
+    return 'dark'
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+function applyTheme(theme: 'light' | 'dark') {
+  document.documentElement.classList.toggle('dark', theme === 'dark')
+  document.documentElement.style.colorScheme = theme
+
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]')
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute('content', theme === 'dark' ? DARK_THEME_COLOR : LIGHT_THEME_COLOR)
+  }
+}
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [mounted, setMounted] = useState(false)
 
-  // 组件挂载后获取主题
   useEffect(() => {
     setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
-    if (savedTheme) {
-      setTheme(savedTheme)
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark')
-    } else if (prefersDark) {
-      setTheme('dark')
-      document.documentElement.classList.add('dark')
+    const syncTheme = () => {
+      const nextTheme = getPreferredTheme()
+      setTheme(nextTheme)
+      applyTheme(nextTheme)
+    }
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleMediaChange = (event: MediaQueryListEvent) => {
+      if (localStorage.getItem('theme')) {
+        return
+      }
+
+      const nextTheme = event.matches ? 'dark' : 'light'
+      setTheme(nextTheme)
+      applyTheme(nextTheme)
+    }
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== 'theme') {
+        return
+      }
+
+      syncTheme()
+    }
+
+    syncTheme()
+    mediaQuery.addEventListener('change', handleMediaChange)
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange)
+      window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    localStorage.setItem('theme', newTheme)
-    if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
+    const nextTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(nextTheme)
+    localStorage.setItem('theme', nextTheme)
+    applyTheme(nextTheme)
   }
 
-  // 避免服务端渲染不匹配
   if (!mounted) {
-    return (
-      <div className="w-10 h-10 rounded-lg bg-gray-100/80 dark:bg-slate-900/70 animate-pulse" />
-    )
+    return <div className="h-11 w-11 animate-pulse rounded-full bg-slate-100 theme-dark:bg-slate-900" />
   }
 
   return (
     <button
       onClick={toggleTheme}
-      className="p-2.5 rounded-lg bg-gray-100/80 hover:bg-gray-200 dark:bg-slate-900/70 dark:hover:bg-indigo-950/60 border border-gray-200/60 dark:border-indigo-500/20 shadow-sm dark:shadow-[0_8px_16px_rgba(79,70,229,0.2)] transition-all duration-200 hover:scale-105"
+      className="utility-button h-11 w-11 p-0"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      type="button"
     >
       {theme === 'light' ? (
-        // 月亮图标（深色模式）
-        <svg
-          className="w-5 h-5 text-gray-700 dark:text-slate-200"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-        </svg>
+        <MoonStar className="h-4 w-4" />
       ) : (
-        // 太阳图标（浅色模式）
-        <svg
-          className="w-5 h-5 text-gray-700 dark:text-slate-200"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
+        <SunMedium className="h-4 w-4" />
       )}
     </button>
   )
 }
+

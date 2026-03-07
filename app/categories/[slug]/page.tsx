@@ -1,13 +1,28 @@
-import { getBlogPosts, getBlogPostsMetadata, calculateReadingTime } from 'app/blog/utils'
+import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
-import { categories, getCategorySlug, getCategoryEmoji } from 'app/lib/categories'
+import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
 import { getCategoryDescription } from 'app/lib/category-descriptions'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
-import { generateItemListSchema, generateCollectionPageSchema, schemaToJsonLd } from 'app/lib/schemas'
+import {
+  generateCollectionPageSchema,
+  generateItemListSchema,
+  schemaToJsonLd,
+} from 'app/lib/schemas'
 import { slugify } from 'app/lib/formatters'
+
+const categoryBadgeStyles = {
+  gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
+  blue: 'border-sky-200/80 bg-sky-50/90 text-sky-700 theme-dark:border-sky-900/80 theme-dark:bg-sky-950/50 theme-dark:text-sky-300',
+  green:
+    'border-emerald-200/80 bg-emerald-50/90 text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/50 theme-dark:text-emerald-300',
+  purple:
+    'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
+  orange:
+    'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
+}
 
 const normalizeCategorySlug = (value: string) => {
   try {
@@ -23,11 +38,13 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
   const normalizedSlug = normalizeCategorySlug(params.slug)
-  const category = categories.find(cat =>
-    getCategorySlug(cat.name) === normalizedSlug
-  )
+  const category = categories.find((item) => getCategorySlug(item.name) === normalizedSlug)
 
   if (!category) {
     return {
@@ -36,18 +53,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   const categoryDesc = getCategoryDescription(category.name)
-  const description = categoryDesc?.shortDescription || `Read the latest articles about ${category.name}.`
+  const description =
+    categoryDesc?.shortDescription || `Read the latest articles about ${category.name}.`
   const keywords = categoryDesc?.keywords || [category.name]
 
   return {
-    title: `${category.name} - Blog Category`,
+    title: `${category.name} | ToLearn`,
     description,
     keywords,
     alternates: {
       canonical: `${baseUrl}/categories/${normalizedSlug}`,
     },
     openGraph: {
-      title: `${category.name} Articles | ToLearn Blog`,
+      title: `${category.name} | ToLearn`,
       description,
       url: `${baseUrl}/categories/${normalizedSlug}`,
       type: 'website',
@@ -58,52 +76,47 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const normalizedSlug = normalizeCategorySlug(params.slug)
   const allPosts = getBlogPosts()
-
-  // Find the category configuration that matches the URL slug
-  const category = categories.find(cat =>
-    getCategorySlug(cat.name) === normalizedSlug
-  )
+  const category = categories.find((item) => getCategorySlug(item.name) === normalizedSlug)
 
   if (!category) {
     notFound()
   }
 
-  // Filter posts that belong to this category
-  const posts = allPosts.filter(post => post.metadata.category === category.name)
-  const sortedPosts = posts.sort((a, b) =>
-    new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+  const posts = allPosts.filter((post) => post.metadata.category === category.name)
+  const sortedPosts = posts.sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
   )
 
-  // Get category description
   const categoryDesc = getCategoryDescription(category.name)
+  const totalReadingTime = posts.reduce(
+    (sum, post) => sum + calculateReadingTime(post.content),
+    0
+  )
 
-  // Calculate statistics
-  const totalReadingTime = posts.reduce((acc, post) => acc + calculateReadingTime(post.content), 0)
-
-  // Get popular tags from this category
   const tagCounts: Record<string, number> = {}
-  posts.forEach(post => {
-    post.metadata.tags?.forEach(tag => {
+  posts.forEach((post) => {
+    post.metadata.tags?.forEach((tag) => {
       tagCounts[tag] = (tagCounts[tag] || 0) + 1
     })
   })
   const popularTags = Object.entries(tagCounts)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
+    .slice(0, 6)
     .map(([tag]) => tag)
 
-  // Get years with posts in this category
   const yearsWithPosts = Array.from(
-    new Set(posts.map(post => new Date(post.metadata.publishedAt).getFullYear()))
+    new Set(posts.map((post) => new Date(post.metadata.publishedAt).getFullYear()))
   ).sort((a, b) => b - a)
 
-  // Get related categories
   const relatedCategories = categoryDesc?.relatedCategories || []
   const otherCategories = categories.filter(
-    cat => cat.name !== 'All' && cat.name !== category.name && relatedCategories.includes(cat.name)
+    (item) =>
+      item.name !== 'All' &&
+      item.name !== category.name &&
+      relatedCategories.includes(item.name)
   )
 
-  // Generate schemas
   const itemListSchema = generateItemListSchema({
     name: `${category.name} Articles`,
     description: categoryDesc?.shortDescription || `Articles about ${category.name}`,
@@ -116,7 +129,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   })
 
   const collectionPageSchema = generateCollectionPageSchema({
-    name: `${category.name} - Blog Category`,
+    name: `${category.name} Collection`,
     description: categoryDesc?.shortDescription || `Articles about ${category.name}`,
     url: `${baseUrl}/categories/${normalizedSlug}`,
     dateModified: new Date().toISOString(),
@@ -127,131 +140,213 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
     })),
   })
 
+  const categoryTone = getCategoryColor(category.name)
+  const hasSidebar =
+    popularTags.length > 0 || yearsWithPosts.length > 1 || otherCategories.length > 0
+
   return (
-    <section>
-      {/* Schema.org structured data */}
+    <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaToJsonLd([itemListSchema, collectionPageSchema]) }}
       />
 
-      {/* Header */}
-      <div className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-black tracking-tight text-gray-900 dark:text-gray-100 flex items-center justify-center gap-3">
-          <span className="text-5xl">{category.emoji}</span>
-          {category.name}
-        </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
-          {posts.length} {posts.length === 1 ? 'article' : 'articles'} in this collection
-        </p>
-      </div>
+      <nav className="text-sm" aria-label="Breadcrumb navigation">
+        <ol className="flex items-center gap-2 text-slate-500 theme-dark:text-slate-400">
+          <li>
+            <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
+              Home
+            </Link>
+          </li>
+          <li>/</li>
+          <li>
+            <Link
+              href="/categories"
+              className="transition-colors hover:text-slate-950 theme-dark:hover:text-white"
+            >
+              Categories
+            </Link>
+          </li>
+          <li>/</li>
+          <li className="font-medium text-slate-900 theme-dark:text-slate-100">{category.name}</li>
+        </ol>
+      </nav>
 
-      {/* Category Description */}
-      {categoryDesc && (
-        <div className="mb-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {categoryDesc.longDescription}
-          </p>
-        </div>
-      )}
-
-      {/* Statistics Card */}
-      <div className="mb-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{posts.length}</div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Articles</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{totalReadingTime}</div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Min Read Total</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{Object.keys(tagCounts).length}</div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Topics</div>
-        </div>
-        <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 text-center">
-          <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{yearsWithPosts.length}</div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">Active Years</div>
-        </div>
-      </div>
-
-      {/* Popular Tags */}
-      {popularTags.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Popular Topics</h2>
-          <div className="flex flex-wrap gap-2">
-            {popularTags.map(tag => (
-              <Link
-                key={tag}
-                href={`/tags/${slugify(tag)}`}
-                className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+      <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="section-kicker">Category archive</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span
+                className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${categoryBadgeStyles[categoryTone]}`}
               >
-                {tag}
-              </Link>
-            ))}
+                {category.name}
+              </span>
+              {yearsWithPosts[0] ? (
+                <span className="meta-chip normal-case tracking-normal">
+                  Latest year: {yearsWithPosts[0]}
+                </span>
+              ) : null}
+            </div>
+            <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
+              {category.name}
+            </h1>
+            <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
+              {categoryDesc?.shortDescription ||
+                `Browse every article filed under ${category.name}.`}
+            </p>
           </div>
-        </div>
-      )}
 
-      {/* Year Navigation */}
-      {yearsWithPosts.length > 1 && (
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Browse by Year</h2>
-          <div className="flex flex-wrap gap-2">
-            {yearsWithPosts.map(year => {
-              const yearPostCount = posts.filter(
-                post => new Date(post.metadata.publishedAt).getFullYear() === year
-              ).length
-              return (
-                <Link
-                  key={year}
-                  href={`/categories/${normalizedSlug}/${year}`}
-                  className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                >
-                  {year} ({yearPostCount})
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Related Categories */}
-      {otherCategories.length > 0 && (
-        <div className="mb-10">
-          <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Related Categories</h2>
           <div className="flex flex-wrap gap-3">
-            {otherCategories.map(cat => (
-              <Link
-                key={cat.name}
-                href={`/categories/${getCategorySlug(cat.name)}`}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors"
-              >
-                <span>{cat.emoji}</span>
-                <span className="text-gray-800 dark:text-gray-200">{cat.name}</span>
-              </Link>
-            ))}
+            <Link href="/categories" className="editorial-link">
+              All categories
+            </Link>
+            <Link href="/blog" className="editorial-link">
+              Open journal
+            </Link>
           </div>
         </div>
-      )}
 
-      {/* Articles List */}
-      <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
-        All {category.name} Articles
-      </h2>
-      <div className="space-y-6">
-        {sortedPosts.map((post) => (
-          <PostCard key={post.slug} post={{ slug: post.slug, metadata: post.metadata, readingTime: calculateReadingTime(post.content) }} />
-        ))}
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {posts.length}
+            </span>
+            <span>articles in this category</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {totalReadingTime}
+            </span>
+            <span>total reading minutes</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {Object.keys(tagCounts).length}
+            </span>
+            <span>recurring topics</span>
+          </div>
+          <div className="stat-pill">
+            <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
+              {yearsWithPosts.length}
+            </span>
+            <span>active publishing years</span>
+          </div>
+        </div>
       </div>
 
-      {posts.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-gray-600 dark:text-gray-400">
-            No articles found in this category yet.
-          </p>
+      <div className={`grid gap-6 ${hasSidebar ? 'lg:grid-cols-[minmax(0,1fr)_20rem]' : ''}`}>
+        <div className="space-y-6">
+          {categoryDesc ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">Overview</p>
+              <p className="mt-4 text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base">
+                {categoryDesc.longDescription}
+              </p>
+            </div>
+          ) : null}
+
+          <div className="surface-panel px-6 py-6 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="section-kicker">Archive</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                  {category.name === 'All' ? 'All Articles' : `${category.name} Articles`}
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                Articles are sorted from newest to oldest so the latest additions surface first.
+              </p>
+            </div>
+
+            {sortedPosts.length > 0 ? (
+              <div className="mt-6 space-y-6">
+                {sortedPosts.map((post) => (
+                  <PostCard
+                    key={post.slug}
+                    post={{
+                      slug: post.slug,
+                      metadata: post.metadata,
+                      readingTime: calculateReadingTime(post.content),
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 px-6 py-10 text-center theme-dark:border-slate-800 theme-dark:bg-slate-950/70">
+                <p className="section-kicker">No entries yet</p>
+                <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  No articles have been filed under this category yet.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+
+        {hasSidebar ? (
+          <aside className="space-y-5">
+            {popularTags.length > 0 ? (
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Popular tags</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {popularTags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/tags/${slugify(tag)}`}
+                      className="meta-chip normal-case tracking-normal"
+                    >
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {yearsWithPosts.length > 1 ? (
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Browse by year</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {yearsWithPosts.map((year) => {
+                    const yearCount = posts.filter(
+                      (post) => new Date(post.metadata.publishedAt).getFullYear() === year
+                    ).length
+
+                    return (
+                      <Link
+                        key={year}
+                        href={`/categories/${normalizedSlug}/${year}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+                      >
+                        <span>{year}</span>
+                        <span className="meta-chip normal-case tracking-normal">{yearCount}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            {otherCategories.length > 0 ? (
+              <div className="surface-card px-5 py-5">
+                <p className="section-kicker">Related categories</p>
+                <div className="mt-4 space-y-3">
+                  {otherCategories.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={`/categories/${getCategorySlug(item.name)}`}
+                      className="flex items-center justify-between rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-slate-400">/</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </aside>
+        ) : null}
+      </div>
     </section>
   )
 }
+

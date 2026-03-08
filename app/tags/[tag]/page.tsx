@@ -1,8 +1,6 @@
-import { getBlogPosts, getBlogPostsMetadata } from 'app/blog/utils'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { PostCard } from 'app/components/post-card'
 import type { Metadata } from 'next'
-import { slugify } from '@/app/lib/formatters'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
 import { getRelatedTags, getTagDescription } from 'app/lib/tag-descriptions'
@@ -12,6 +10,15 @@ import {
   schemaToJsonLd,
 } from 'app/lib/schemas'
 import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
+import {
+  getAllTags,
+  getDisplayTag,
+  getPostsForTag,
+  getTagCountBySlug,
+  normalizeTagSlug,
+  shouldIndexTagPage,
+  toTagSlug,
+} from 'app/lib/tags'
 
 const categoryBadgeStyles = {
   gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
@@ -22,37 +29,6 @@ const categoryBadgeStyles = {
     'border-violet-200/80 bg-violet-50/90 text-violet-700 theme-dark:border-violet-900/80 theme-dark:bg-violet-950/50 theme-dark:text-violet-300',
   orange:
     'border-amber-200/80 bg-amber-50/90 text-amber-700 theme-dark:border-amber-900/80 theme-dark:bg-amber-950/50 theme-dark:text-amber-300',
-}
-
-function getAllTags(): string[] {
-  const posts = getBlogPosts()
-  const tags = new Set<string>()
-
-  posts.forEach((post) => {
-    post.metadata.tags?.forEach((tag) => {
-      if (tag) tags.add(tag)
-    })
-  })
-
-  return Array.from(tags)
-}
-
-const toTagSlug = (tag: string) => {
-  const slug = slugify(tag)
-  return slug || tag.trim().toLowerCase().replace(/\s+/g, '-')
-}
-
-const normalizeTagSlug = (value: string) => {
-  try {
-    return toTagSlug(decodeURIComponent(value))
-  } catch {
-    return toTagSlug(value)
-  }
-}
-
-const getDisplayTag = (tagSlug: string, tags: string[]) => {
-  const match = tags.find((tag) => toTagSlug(tag) === tagSlug)
-  return match || tagSlug
 }
 
 export async function generateStaticParams() {
@@ -72,6 +48,8 @@ export async function generateMetadata({
   const normalizedSlug = normalizeTagSlug(params.tag)
   const displayTag = getDisplayTag(normalizedSlug, allTags)
   const tagDesc = getTagDescription(displayTag)
+  const tagCount = getTagCountBySlug(normalizedSlug)
+  const shouldIndex = shouldIndexTagPage(tagCount)
 
   if (!normalizedSlug) {
     return {
@@ -82,16 +60,28 @@ export async function generateMetadata({
   const description = tagDesc?.description || `Read articles tagged with ${displayTag}.`
 
   return {
-    title: `${displayTag} | ToLearn`,
+    title: displayTag,
     description,
     alternates: {
       canonical: `${baseUrl}/tags/${normalizedSlug}`,
     },
     openGraph: {
-      title: `${displayTag} | ToLearn`,
+      title: `${displayTag} | ToLearn Blog`,
       description,
       url: `${baseUrl}/tags/${normalizedSlug}`,
       type: 'website',
+    },
+    robots: {
+      index: shouldIndex,
+      follow: true,
+      googleBot: {
+        index: shouldIndex,
+        follow: true,
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   }
 }
@@ -100,15 +90,15 @@ export default function TagPage({ params }: { params: { tag: string } }) {
   const normalizedSlug = normalizeTagSlug(params.tag)
   const allTags = getAllTags()
   const displayTag = getDisplayTag(normalizedSlug, allTags)
-  const allPosts = getBlogPostsMetadata()
-
-  const posts = allPosts.filter(
-    (post) =>
-      post.metadata.tags && post.metadata.tags.some((tag) => toTagSlug(tag) === normalizedSlug)
-  )
+  const posts = getPostsForTag(normalizedSlug)
+  const shouldIndex = shouldIndexTagPage(posts.length)
 
   if (!normalizedSlug || posts.length === 0) {
     notFound()
+  }
+
+  if (params.tag !== normalizedSlug) {
+    permanentRedirect(`/tags/${normalizedSlug}`)
   }
 
   const sortedPosts = posts.sort(
@@ -154,7 +144,7 @@ export default function TagPage({ params }: { params: { tag: string } }) {
     name: `${displayTag} Tag`,
     description: tagDesc?.description || `Articles tagged with ${displayTag}`,
     url: `${baseUrl}/tags/${normalizedSlug}`,
-    dateModified: new Date().toISOString(),
+    dateModified: sortedPosts[0]?.metadata.updatedAt || sortedPosts[0]?.metadata.publishedAt,
     items: sortedPosts.map((post, index) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       name: post.metadata.title,
@@ -213,6 +203,12 @@ export default function TagPage({ params }: { params: { tag: string } }) {
             <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
               {tagDesc?.description || `Browse all writing tagged with ${displayTag}.`}
             </p>
+            {!shouldIndex ? (
+              <p className="mt-3 text-sm leading-7 text-slate-500 theme-dark:text-slate-400">
+                This is a narrow reference tag with a small number of matching posts, so it stays
+                browsable but is intentionally de-emphasized for search indexing.
+              </p>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-3">

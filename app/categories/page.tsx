@@ -6,7 +6,7 @@ import { getCategoryDescription } from 'app/lib/category-descriptions'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata: Metadata = {
-  title: 'Categories | ToLearn',
+  title: 'Categories',
   description:
     'Browse ToLearn by category, from AI systems and web development to search visibility and productivity.',
   alternates: {

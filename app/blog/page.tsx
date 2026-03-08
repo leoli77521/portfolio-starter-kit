@@ -5,7 +5,7 @@ import { PostsWithFilter } from 'app/components/posts-with-filter'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Journal | ToLearn',
+  title: 'Journal',
   description:
     'Browse the full ToLearn archive covering AI systems, search visibility, and modern web execution.',
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     canonical: `${baseUrl}/blog`,
   },
   openGraph: {
-    title: 'Journal | ToLearn',
+    title: 'Journal | ToLearn Blog',
     description:
       'Browse the full ToLearn archive covering AI systems, search visibility, and modern web execution.',
     url: `${baseUrl}/blog`,

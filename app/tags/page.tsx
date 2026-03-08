@@ -1,12 +1,16 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getBlogPosts } from 'app/blog/utils'
-import { slugify } from 'app/lib/formatters'
 import { getTagDescription } from 'app/lib/tag-descriptions'
+import { getBlogPosts } from 'app/blog/utils'
+import {
+  MIN_POSTS_FOR_INDEXED_TAG_PAGE,
+  getTagCounts,
+  toTagSlug,
+} from 'app/lib/tags'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata: Metadata = {
-  title: 'Tags | ToLearn',
+  title: 'Tags',
   description:
     'Browse the ToLearn archive by tag to find recurring themes, tools, and technical patterns.',
   alternates: {
@@ -14,27 +18,15 @@ export const metadata: Metadata = {
   },
 }
 
-const toTagSlug = (tag: string) => {
-  const slug = slugify(tag)
-  return slug || tag.trim().toLowerCase().replace(/\s+/g, '-')
-}
-
 export default function TagsPage() {
   const allPosts = getBlogPosts()
-  const tagCounts = allPosts.reduce((acc, post) => {
-    const tags = post.metadata.tags || []
-
-    tags.forEach((tag) => {
-      acc[tag] = (acc[tag] || 0) + 1
-    })
-
-    return acc
-  }, {} as Record<string, number>)
+  const tagCounts = getTagCounts()
 
   const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1])
-  const featuredTags = sortedTags.slice(0, 6)
-  const remainingTags = sortedTags.slice(6)
-  const topTag = sortedTags[0]
+  const indexedTags = sortedTags.filter(([, count]) => count >= MIN_POSTS_FOR_INDEXED_TAG_PAGE)
+  const longTailTags = sortedTags.filter(([, count]) => count < MIN_POSTS_FOR_INDEXED_TAG_PAGE)
+  const featuredTags = indexedTags.slice(0, 6)
+  const remainingIndexedTags = indexedTags.slice(6)
 
   return (
     <section className="space-y-8">
@@ -54,9 +46,9 @@ export default function TagsPage() {
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             <div className="stat-pill">
               <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
-                {sortedTags.length}
+                {indexedTags.length}
               </span>
-              <span>unique tags</span>
+              <span>indexed tag clusters</span>
             </div>
             <div className="stat-pill">
               <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
@@ -66,9 +58,9 @@ export default function TagsPage() {
             </div>
             <div className="stat-pill">
               <span className="text-lg font-semibold text-slate-950 theme-dark:text-white">
-                {topTag?.[0] || 'Archive'}
+                {longTailTags.length}
               </span>
-              <span>most-used tag</span>
+              <span>single-post reference tags</span>
             </div>
           </div>
         </div>
@@ -81,6 +73,10 @@ export default function TagsPage() {
             <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
               Start with the strongest clusters
             </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              These tags appear on at least {MIN_POSTS_FOR_INDEXED_TAG_PAGE} posts, so they form a
+              stronger archive cluster and stay in the indexed discovery layer.
+            </p>
           </div>
           <Link href="/blog" className="editorial-link">
             Open the full journal
@@ -136,19 +132,45 @@ export default function TagsPage() {
       <div className="surface-panel px-6 py-6 md:px-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="section-kicker">All tags</p>
+            <p className="section-kicker">Indexed tags</p>
             <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-              Full tag index
+              Additional multi-post clusters
             </h2>
           </div>
           <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-            Smaller tags still matter. This list keeps the long tail discoverable without
-            forcing the page into a noisy tag-cloud layout.
+            Tags below the featured set still stay searchable when they connect more than one article.
           </p>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          {remainingTags.map(([tag, count]) => (
+          {remainingIndexedTags.map(([tag, count]) => (
+            <Link
+              key={tag}
+              href={`/tags/${toTagSlug(tag)}`}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
+            >
+              <span>{tag}</span>
+              <span className="meta-chip normal-case tracking-normal">{count}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="surface-panel px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">Reference tags</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Long-tail labels stay browsable
+            </h2>
+          </div>
+          <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            Single-post tags are still useful for readers, but they are treated as reference labels rather than primary indexed archives.
+          </p>
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          {longTailTags.map(([tag, count]) => (
             <Link
               key={tag}
               href={`/tags/${toTagSlug(tag)}`}

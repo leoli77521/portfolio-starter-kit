@@ -2,10 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import pseoData from '@/data/pseo_data.json'
-import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
+import { calculateReadingTime } from 'app/blog/utils'
 import { PostCard } from 'app/components/post-card'
+import { findRelevantGuides, findRelevantPosts, findRelevantTopicHubs } from 'app/lib/pseo-content'
 import { baseUrl } from 'app/sitemap'
 import { generateBreadcrumbSchema, schemaToJsonLd } from 'app/lib/schemas'
+import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
 
 interface Technology {
   slug: string
@@ -26,6 +28,75 @@ interface Role {
 
 interface PageProps {
   params: { tech: string; role: string }
+}
+
+function getTemplateTerms(technology: Technology, roleData: Role): string[] {
+  return [
+    technology.name,
+    technology.slug,
+    ...technology.features,
+    ...technology.useCases,
+    roleData.name,
+    ...roleData.keywords,
+    ...roleData.challenges,
+    ...roleData.goals,
+  ]
+}
+
+function getTemplateCategories(technology: Technology, roleData: Role): string[] {
+  const categories = new Set<string>(['Technology'])
+
+  if (['nextjs', 'react', 'tailwindcss', 'mdx'].includes(technology.slug)) {
+    categories.add('Web Development')
+  }
+
+  if (technology.slug === 'mdx') {
+    categories.add('SEO & Marketing')
+  }
+
+  if (roleData.slug === 'frontend-developer') {
+    categories.add('Web Development')
+  }
+
+  return Array.from(categories)
+}
+
+function buildTemplateDescription(technology: Technology, roleData: Role): string {
+  const featuredGoals = roleData.goals.slice(0, 2).join(' and ').toLowerCase()
+  const featuredChallenges = roleData.challenges.slice(0, 2).join(' and ')
+  const featuredFeatures = technology.features.slice(0, 2).join(', ')
+
+  return `A ${technology.name} portfolio template for ${roleData.name}s who need to ${featuredGoals}, address ${featuredChallenges}, and frame their work around ${featuredFeatures}.`
+}
+
+function buildRoleSignals(technology: Technology, roleData: Role) {
+  return [
+    {
+      title: 'Lead with proof, not the stack',
+      description: `Open with projects that make ${roleData.goals[0].toLowerCase()} obvious, then let ${technology.name} support the story instead of becoming the whole story.`,
+    },
+    {
+      title: 'Answer the hiring concern early',
+      description: `Use the layout to show how you handle ${roleData.challenges
+        .slice(0, 2)
+        .join(' and ')}, because that is more persuasive than listing responsibilities.`,
+    },
+    {
+      title: 'Choose projects that fit the role',
+      description: `${technology.useCases.slice(0, 2).join(' and ')} are strong anchors for a ${roleData.name.toLowerCase()} portfolio when you want to spotlight ${technology.features
+        .slice(0, 2)
+        .join(' and ')}.`,
+    },
+  ]
+}
+
+function buildProofChecklist(technology: Technology, roleData: Role) {
+  return [
+    `One project that proves you can ${roleData.goals[0].toLowerCase()}.`,
+    `One case study that explains how you approached ${roleData.challenges[0]}.`,
+    `A short technical note on ${technology.features[0].toLowerCase()} and why it mattered.`,
+    `A summary of how ${technology.useCases[0].toLowerCase()} shaped the final delivery.`,
+  ]
 }
 
 export async function generateStaticParams() {
@@ -54,45 +125,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = pseoData.templates.techRole.titlePattern
     .replace('{tech}', technology.name)
     .replace('{role}', roleData.name)
-
-  const description = pseoData.templates.techRole.descriptionPattern
-    .replace('{tech}', technology.name)
-    .replace('{role}', roleData.name)
-    .replace('{features}', technology.features.slice(0, 3).join(', '))
+  const seoTitle = trimSeoTitle(title)
+  const description = buildTemplateDescription(technology, roleData)
+  const socialTitle = buildSocialTitle(seoTitle)
+  const ogImage = resolveOgImage(undefined, seoTitle)
 
   return {
-    title,
+    title: seoTitle,
     description,
-    keywords: [...technology.features, ...roleData.keywords],
+    keywords: [
+      technology.name,
+      roleData.name,
+      ...technology.features,
+      ...roleData.keywords,
+      ...roleData.challenges,
+    ],
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       type: 'website',
       url: `${baseUrl}/templates/${params.tech}/${params.role}`,
+      images: [ogImage],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: socialTitle,
       description,
+      images: [ogImage],
     },
     alternates: {
       canonical: `${baseUrl}/templates/${params.tech}/${params.role}`,
     },
   }
-}
-
-function getRelatedPosts(technology: Technology, roleData: Role) {
-  const allPosts = getBlogPosts()
-  const relevantTags = [...technology.features, ...roleData.keywords].map((tag) => tag.toLowerCase())
-
-  return allPosts
-    .filter((post) => {
-      const postTags = post.metadata.tags?.map((tag) => tag.toLowerCase()) || []
-      return postTags.some((tag) =>
-        relevantTags.some((relevantTag) => tag.includes(relevantTag) || relevantTag.includes(tag))
-      )
-    })
-    .slice(0, 6)
 }
 
 function generateFAQs(technology: Technology, roleData: Role) {
@@ -122,7 +186,25 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
     notFound()
   }
 
-  const relatedPosts = getRelatedPosts(technology, roleData)
+  const templateTerms = getTemplateTerms(technology, roleData)
+  const templateCategories = getTemplateCategories(technology, roleData)
+  const relatedPosts = findRelevantPosts({
+    terms: templateTerms,
+    categories: templateCategories,
+    limit: 6,
+  })
+  const relatedGuides = findRelevantGuides({
+    terms: templateTerms,
+    categories: templateCategories,
+    limit: 2,
+  })
+  const relatedTopicHubs = findRelevantTopicHubs({
+    terms: templateTerms,
+    categories: templateCategories,
+    limit: 2,
+  })
+  const roleSignals = buildRoleSignals(technology, roleData)
+  const proofChecklist = buildProofChecklist(technology, roleData)
   const faqs = generateFAQs(technology, roleData)
   const otherTechs = (pseoData.technologies as Technology[])
     .filter((item) => item.slug !== params.tech)
@@ -134,8 +216,10 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: baseUrl },
     { name: 'Templates', url: `${baseUrl}/templates` },
-    { name: technology.name, url: `${baseUrl}/templates/${params.tech}` },
-    { name: roleData.name, url: `${baseUrl}/templates/${params.tech}/${params.role}` },
+    {
+      name: `${technology.name} for ${roleData.name}s`,
+      url: `${baseUrl}/templates/${params.tech}/${params.role}`,
+    },
   ])
 
   const faqSchema = {
@@ -252,6 +336,35 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
         </div>
       </div>
 
+      <div className="surface-panel px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">What this version should prove</p>
+            <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              A stronger angle for this exact combination
+            </h2>
+          </div>
+          <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            The point is not just to use {technology.name}. It is to make the stack serve a
+            hiring story that fits {roleData.name}s.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-5 md:grid-cols-3">
+          {roleSignals.map((signal) => (
+            <div key={signal.title} className="surface-card px-5 py-5">
+              <p className="section-kicker">Signal</p>
+              <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-slate-100">
+                {signal.title}
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                {signal.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="space-y-6">
           <div className="surface-panel px-6 py-6 md:px-8">
@@ -330,7 +443,92 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
                 </div>
               </div>
             </div>
+
+            <div className="mt-6 surface-card px-5 py-5">
+              <p className="section-kicker">Proof checklist</p>
+              <div className="mt-4 space-y-3">
+                {proofChecklist.map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-300"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {relatedGuides.length > 0 ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Guides to pair with it</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Supporting guides
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  These guides add implementation depth that makes the template page feel more actionable.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-5 md:grid-cols-2">
+                {relatedGuides.map((guide) => (
+                  <Link
+                    key={guide.slug}
+                    href={`/guides/${guide.slug}`}
+                    className="surface-card block px-5 py-5"
+                  >
+                    <p className="section-kicker">{guide.difficulty}</p>
+                    <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-slate-100">
+                      {guide.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {guide.description}
+                    </p>
+                    <p className="mt-4 text-xs font-medium uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                      {guide.estimatedTime}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {relatedTopicHubs.length > 0 ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Topic hubs</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Broader archives around this template
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  These hubs connect the landing page to broader themes so the template route behaves more like part of a learning cluster.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-5 md:grid-cols-2">
+                {relatedTopicHubs.map((hub) => (
+                  <Link
+                    key={hub.slug}
+                    href={`/topics/${hub.slug}`}
+                    className="surface-card block px-5 py-5"
+                  >
+                    <p className="section-kicker">Topic hub</p>
+                    <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-slate-100">
+                      {hub.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {hub.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           {relatedPosts.length > 0 ? (
             <div className="surface-panel px-6 py-6 md:px-8">
@@ -431,23 +629,18 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
       <div className="surface-panel px-6 py-6 text-center md:px-8">
         <p className="section-kicker">Next step</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-          Explore the features behind the templates
+          Keep the research path on-site
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-          If you want to browse by capability rather than by stack or role, switch to the solutions pages.
+          If this template angle is close to what you need, continue with related guides or browse the full journal to collect stronger project evidence.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/solutions" className="editorial-link">
             Browse solutions
           </Link>
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples/blog-starter"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="editorial-link"
-          >
-            View starter
-          </a>
+          <Link href="/guides" className="editorial-link">
+            Read guides
+          </Link>
         </div>
       </div>
     </section>

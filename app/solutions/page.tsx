@@ -9,7 +9,7 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Solutions | ToLearn',
+  title: 'Solutions',
   description:
     'Browse portfolio template features such as dark mode, SEO, responsiveness, performance, and blog support.',
   keywords: ['portfolio features', 'dark mode portfolio', 'SEO portfolio', 'responsive portfolio'],
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: `${baseUrl}/solutions`,
   },
   openGraph: {
-    title: 'Solutions | ToLearn',
+    title: 'Solutions | ToLearn Blog',
     description: 'Feature-driven entry points for the portfolio template library.',
     type: 'website',
     url: `${baseUrl}/solutions`,

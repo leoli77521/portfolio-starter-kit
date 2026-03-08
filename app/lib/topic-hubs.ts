@@ -1,4 +1,5 @@
 import type { Category } from '@/app/types'
+import { normalizeTagName } from 'app/lib/tag-utils'
 
 export interface TopicHub {
   slug: string
@@ -21,7 +22,7 @@ export const topicHubs: TopicHub[] = [
     title: 'AI Development Guide',
     description: 'Complete guide to building AI-powered applications with modern frameworks and tools.',
     longDescription: `Master the art of AI development with our comprehensive guide covering everything from fundamentals to advanced implementations. Learn how to build intelligent applications using cutting-edge frameworks like LangChain, integrate with powerful APIs from OpenAI and Anthropic, and create autonomous AI agents that can handle complex tasks. Whether you're just starting with AI development or looking to expand your expertise, this hub provides structured learning paths, practical tutorials, and real-world examples to accelerate your journey in AI engineering.`,
-    relatedTags: ['AI Agents', 'LangChain', 'GPT', 'ChatGPT', 'Claude', 'Machine Learning', 'Prompt Engineering', 'AI Tools'],
+    relatedTags: ['AI Agents', 'LangChain', 'GPT', 'ChatGPT', 'Claude', 'Machine Learning', 'Prompt Engineering', 'AI Tools', 'AI Programming', 'Artificial Intelligence', 'Gemini'],
     relatedCategories: ['AI Technology', 'Technology'],
     targetKeywords: ['AI开发教程', 'AI development tutorial', 'build AI applications', 'LangChain guide', 'AI agent development'],
     icon: '🤖',
@@ -41,7 +42,7 @@ export const topicHubs: TopicHub[] = [
     title: 'AI Tools for Developers',
     description: 'Discover and master AI-powered tools that enhance developer productivity.',
     longDescription: `Supercharge your development workflow with our curated collection of AI-powered tools designed specifically for developers. From intelligent code completion with GitHub Copilot to automated code review with AI assistants, discover how artificial intelligence is transforming software development. This hub explores productivity boosters, code generation tools, AI-assisted debugging, and intelligent documentation generators. Learn which tools work best for different tasks, how to integrate them into your existing workflow, and tips for getting the most out of AI assistance in your daily coding.`,
-    relatedTags: ['AI Tools', 'ChatGPT', 'Claude', 'Productivity', 'Developer Tools', 'Automation'],
+    relatedTags: ['AI Tools', 'ChatGPT', 'Claude', 'Productivity', 'Developer Tools', 'Automation', 'AI Programming', 'Gemini'],
     relatedCategories: ['AI Technology', 'Productivity', 'Technology'],
     targetKeywords: ['开发者AI工具', 'AI tools for coding', 'developer productivity AI', 'AI code assistant', 'programming with AI'],
     icon: '🛠️',
@@ -87,8 +88,8 @@ export function getTopicHubSlugs(): string[] {
  */
 export function postMatchesTopicHub(postTags: string[], hub: TopicHub): boolean {
   if (!postTags || postTags.length === 0) return false
-  const normalizedPostTags = postTags.map((t) => t.toLowerCase())
+  const normalizedPostTags = postTags.map((tag) => normalizeTagName(tag).toLowerCase())
   return hub.relatedTags.some((hubTag) =>
-    normalizedPostTags.includes(hubTag.toLowerCase())
+    normalizedPostTags.includes(normalizeTagName(hubTag).toLowerCase())
   )
 }

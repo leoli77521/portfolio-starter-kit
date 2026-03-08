@@ -6,7 +6,7 @@ import { categories } from 'app/lib/categories'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata = {
-  title: 'About | ToLearn',
+  title: 'About',
   description:
     'Learn what ToLearn covers, how the archive is structured, and what kind of work the site is for.',
 }

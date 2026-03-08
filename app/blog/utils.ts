@@ -8,6 +8,7 @@ import {
   getHeadings as getHeadingsUtil,
   createCleanSlug as createCleanSlugUtil,
 } from '@/app/lib/formatters'
+import { normalizeTagName } from 'app/lib/tag-utils'
 
 // Re-export from formatters for backward compatibility
 export { slugify } from '@/app/lib/formatters'
@@ -16,7 +17,34 @@ export type { Heading } from '@/app/types'
 type Metadata = BlogMetadata
 
 const slugAliasMappings: Record<string, string> = {
-  'seo': 'seo-optimization-guide',
+  seo: 'seo-optimization-guide',
+}
+
+function parseTagList(value: string): string[] {
+  const normalizedValue = value.trim()
+  if (!normalizedValue) {
+    return []
+  }
+
+  if (normalizedValue.startsWith('[') && normalizedValue.endsWith(']')) {
+    try {
+      const parsed = JSON.parse(normalizedValue)
+      if (Array.isArray(parsed)) {
+        return parsed.map((tag) => normalizeTagName(String(tag))).filter(Boolean)
+      }
+    } catch {
+      return normalizedValue
+        .slice(1, -1)
+        .split(',')
+        .map((tag) => normalizeTagName(tag))
+        .filter(Boolean)
+    }
+  }
+
+  return normalizedValue
+    .split(',')
+    .map((tag) => normalizeTagName(tag))
+    .filter(Boolean)
 }
 
 export function resolveBlogSlug(requestedSlug: string) {
@@ -35,33 +63,21 @@ export function resolveBlogSlug(requestedSlug: string) {
 }
 
 function parseFrontmatter(fileContent: string) {
-  let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
-  let match = frontmatterRegex.exec(fileContent)
-  let frontMatterBlock = match![1]
-  let content = fileContent.replace(frontmatterRegex, '').trim()
-  let frontMatterLines = frontMatterBlock.trim().split('\n')
-  let metadata: Partial<Metadata> = {}
+  const frontmatterRegex = /---\s*([\s\S]*?)\s*---/
+  const match = frontmatterRegex.exec(fileContent)
+  const frontMatterBlock = match![1]
+  const content = fileContent.replace(frontmatterRegex, '').trim()
+  const frontMatterLines = frontMatterBlock.trim().split('\n')
+  const metadata: Partial<Metadata> = {}
 
   frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(': ')
+    const [key, ...valueArr] = line.split(': ')
     let value = valueArr.join(': ').trim()
-    value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
+    value = value.replace(/^['"](.*)['"]$/, '$1')
 
     const trimmedKey = key.trim() as keyof Metadata
     if (trimmedKey === 'tags') {
-      // 澶勭悊鏍囩鏁扮粍锛屾敮鎸丣SON鏁扮粍鏍煎紡
-      try {
-        // 濡傛灉鏄疛SON鏁扮粍鏍煎紡锛岀洿鎺ヨВ鏋?
-        if (value.startsWith('[') && value.endsWith(']')) {
-          metadata[trimmedKey] = JSON.parse(value) as any
-        } else {
-          // 鍚﹀垯鎸夐€楀彿鍒嗗壊
-          metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
-        }
-      } catch (e) {
-        // 濡傛灉瑙ｆ瀽澶辫触锛屾寜閫楀彿鍒嗗壊
-        metadata[trimmedKey] = value.split(',').map(tag => tag.trim()) as any
-      }
+      metadata[trimmedKey] = parseTagList(value) as any
     } else {
       metadata[trimmedKey] = value as any
     }
@@ -112,7 +128,7 @@ export function getBlogPostsMetadata() {
   return posts.map((post) => ({
     slug: post.slug,
     metadata: post.metadata,
-    readingTime: calculateReadingTime(post.content)
+    readingTime: calculateReadingTime(post.content),
   }))
 }
 

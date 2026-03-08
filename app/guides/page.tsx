@@ -9,14 +9,14 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Guides | ToLearn',
+  title: 'Guides',
   description:
     'Structured learning guides covering AI development, SEO, performance, and practical web execution.',
   alternates: {
     canonical: `${baseUrl}/guides`,
   },
   openGraph: {
-    title: 'Guides | ToLearn',
+    title: 'Guides | ToLearn Blog',
     description:
       'Structured learning guides for builders working on AI systems, search, and the modern web.',
     url: `${baseUrl}/guides`,

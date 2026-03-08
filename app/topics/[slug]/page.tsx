@@ -1,4 +1,4 @@
-import { getTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { getTopicHub, postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
 import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -12,7 +12,18 @@ import {
   generateItemListSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
-import { slugify } from 'app/lib/formatters'
+import { toTagSlug } from 'app/lib/tags'
+
+function getMatchingPostsForHub(hub: NonNullable<ReturnType<typeof getTopicHub>>) {
+  const allPosts = getBlogPosts()
+
+  return allPosts
+    .filter((post) => postMatchesTopicHub(post.metadata.tags || [], hub))
+    .sort(
+      (a, b) =>
+        new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+    )
+}
 
 const categoryBadgeStyles = {
   gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
@@ -44,18 +55,33 @@ export async function generateMetadata({
     }
   }
 
+  const matchingPosts = getMatchingPostsForHub(hub)
+  const shouldIndex = matchingPosts.length > 0
+
   return {
-    title: `${hub.title} | ToLearn`,
+    title: hub.title,
     description: hub.description,
     keywords: hub.targetKeywords,
     alternates: {
       canonical: `${baseUrl}/topics/${hub.slug}`,
     },
     openGraph: {
-      title: `${hub.title} | ToLearn`,
+      title: `${hub.title} | ToLearn Blog`,
       description: hub.description,
       url: `${baseUrl}/topics/${hub.slug}`,
       type: 'website',
+    },
+    robots: {
+      index: shouldIndex,
+      follow: true,
+      googleBot: {
+        index: shouldIndex,
+        follow: true,
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   }
 }
@@ -67,17 +93,8 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
     notFound()
   }
 
-  const allPosts = getBlogPosts()
-  const normalizedHubTags = hub.relatedTags.map((tag) => tag.toLowerCase())
-  const matchingPosts = allPosts
-    .filter((post) => {
-      if (!post.metadata.tags) return false
-      return post.metadata.tags.some((tag) => normalizedHubTags.includes(tag.toLowerCase()))
-    })
-    .sort(
-      (a, b) =>
-        new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
-    )
+  const matchingPosts = getMatchingPostsForHub(hub)
+  const shouldIndex = matchingPosts.length > 0
 
   const totalReadingTime = matchingPosts.reduce(
     (sum, post) => sum + calculateReadingTime(post.content),
@@ -120,7 +137,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
     name: `${hub.title} Hub`,
     description: hub.longDescription,
     url: `${baseUrl}/topics/${hub.slug}`,
-    dateModified: new Date().toISOString(),
+    dateModified: matchingPosts[0]?.metadata.updatedAt || matchingPosts[0]?.metadata.publishedAt,
     items: matchingPosts.map((post, index) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       name: post.metadata.title,
@@ -181,6 +198,12 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
             <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
               {hub.description}
             </p>
+            {!shouldIndex ? (
+              <p className="mt-3 text-sm leading-7 text-slate-500 theme-dark:text-slate-400">
+                This hub currently acts as a planning layer rather than a fully populated archive,
+                so it remains accessible but is intentionally excluded from search indexing for now.
+              </p>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-3">
@@ -276,7 +299,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
                 {sortedTags.map(([tag, count]) => (
                   <Link
                     key={tag}
-                    href={`/tags/${slugify(tag)}`}
+                    href={`/tags/${toTagSlug(tag)}`}
                     className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
                   >
                     <span>{tag}</span>

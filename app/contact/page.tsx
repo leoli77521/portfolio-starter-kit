@@ -4,7 +4,7 @@ import { baseUrl, organization } from 'app/lib/constants'
 import { ContactForm } from 'app/components/contact-form'
 
 export const metadata: Metadata = {
-  title: 'Contact | ToLearn',
+  title: 'Contact',
   description: 'Reach ToLearn by email for article feedback, questions, or collaboration.',
 }
 

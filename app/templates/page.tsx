@@ -9,7 +9,7 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Templates | ToLearn',
+  title: 'Templates',
   description:
     'Browse portfolio template combinations by technology and role, with feature-driven entry points.',
   keywords: ['portfolio template', 'developer portfolio', 'nextjs template', 'react portfolio'],
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: `${baseUrl}/templates`,
   },
   openGraph: {
-    title: 'Templates | ToLearn',
+    title: 'Templates | ToLearn Blog',
     description:
       'Portfolio template combinations for developers, organized by stack and role.',
     type: 'website',
@@ -55,7 +55,7 @@ export default function TemplatesPage() {
     description: 'Portfolio template combinations by technology and role',
     url: `${baseUrl}/templates`,
     items: technologies.map((tech, index) => ({
-      url: `${baseUrl}/templates/${tech.slug}`,
+      url: `${baseUrl}/templates/${tech.slug}/${roles[0]?.slug || 'frontend-developer'}`,
       name: `${tech.name} Templates`,
       position: index + 1,
     })),

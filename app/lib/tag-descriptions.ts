@@ -1,4 +1,5 @@
 import type { Category } from '@/app/types'
+import { normalizeTagName } from 'app/lib/tag-utils'
 
 export interface TagDescription {
   tag: string
@@ -48,11 +49,32 @@ export const tagDescriptions: Record<string, TagDescription> = {
     relatedTags: ['AI Tools', 'ChatGPT', 'LLM', 'AI Development'],
     relatedCategory: 'AI Technology',
   },
+  Gemini: {
+    tag: 'Gemini',
+    description:
+      'Coverage of Google Gemini models, product updates, reasoning capabilities, and practical developer workflows built around the Gemini ecosystem.',
+    relatedTags: ['Artificial Intelligence', 'Machine Learning', 'Google', 'AI Programming'],
+    relatedCategory: 'AI Technology',
+  },
   'AI Tools': {
     tag: 'AI Tools',
     description:
       'Comprehensive reviews and tutorials on AI-powered tools for developers, creators, and businesses. Find the right AI tools to enhance your workflow.',
     relatedTags: ['ChatGPT', 'Claude', 'Productivity', 'Automation'],
+    relatedCategory: 'AI Technology',
+  },
+  'AI Programming': {
+    tag: 'AI Programming',
+    description:
+      'Coverage of AI-assisted software development, coding copilots, benchmark results, and practical ways to use language models in real engineering workflows.',
+    relatedTags: ['AI Tools', 'Claude', 'GPT', 'Developer Tools'],
+    relatedCategory: 'AI Technology',
+  },
+  'Artificial Intelligence': {
+    tag: 'Artificial Intelligence',
+    description:
+      'Broad analysis and practical guidance on artificial intelligence, including model capabilities, adoption patterns, product strategy, and developer impact.',
+    relatedTags: ['AI Tools', 'Machine Learning', 'AI Agents', 'AI Programming'],
     relatedCategory: 'AI Technology',
   },
   'Machine Learning': {
@@ -237,12 +259,14 @@ export const tagDescriptions: Record<string, TagDescription> = {
  * Get tag description by tag name
  */
 export function getTagDescription(tag: string): TagDescription | undefined {
+  const normalizedTag = normalizeTagName(tag)
+
   // Try exact match first
-  if (tagDescriptions[tag]) {
-    return tagDescriptions[tag]
+  if (tagDescriptions[normalizedTag]) {
+    return tagDescriptions[normalizedTag]
   }
   // Try case-insensitive match
-  const lowerTag = tag.toLowerCase()
+  const lowerTag = normalizedTag.toLowerCase()
   const found = Object.entries(tagDescriptions).find(
     ([key]) => key.toLowerCase() === lowerTag
   )

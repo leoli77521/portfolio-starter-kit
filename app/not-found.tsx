@@ -4,7 +4,7 @@ import { baseUrl } from './sitemap'
 import { getBlogPosts } from './blog/utils'
 
 export const metadata: Metadata = {
-  title: '404 - Page Not Found | ToLearn Blog',
+  title: '404 - Page Not Found',
   description:
     'The page you are looking for does not exist. Return to ToLearn Blog to explore our AI insights, SEO guides, and programming tutorials.',
   alternates: {

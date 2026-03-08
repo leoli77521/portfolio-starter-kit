@@ -58,14 +58,14 @@ export async function generateMetadata({
   const keywords = categoryDesc?.keywords || [category.name]
 
   return {
-    title: `${category.name} | ToLearn`,
+    title: category.name,
     description,
     keywords,
     alternates: {
       canonical: `${baseUrl}/categories/${normalizedSlug}`,
     },
     openGraph: {
-      title: `${category.name} | ToLearn`,
+      title: `${category.name} | ToLearn Blog`,
       description,
       url: `${baseUrl}/categories/${normalizedSlug}`,
       type: 'website',

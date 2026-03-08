@@ -1,3 +1,4 @@
+import { defaultOgImage } from 'app/lib/seo'
 import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
@@ -31,12 +32,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'ToLearn Tech Blog',
+    images: [
+      {
+        url: defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: 'ToLearn Blog homepage preview',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ToLearn Blog | AI, Search, and Modern Web Work',
     description:
       'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
+    images: [defaultOgImage],
   },
 }
 

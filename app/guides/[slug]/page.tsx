@@ -53,14 +53,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${guide.title} | ToLearn`,
+    title: guide.title,
     description: guide.description,
     keywords: guide.targetKeywords,
     alternates: {
       canonical: `${baseUrl}/guides/${guide.slug}`,
     },
     openGraph: {
-      title: `${guide.title} | ToLearn`,
+      title: `${guide.title} | ToLearn Blog`,
       description: guide.description,
       url: `${baseUrl}/guides/${guide.slug}`,
       type: 'website',

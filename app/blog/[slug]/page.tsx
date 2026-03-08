@@ -11,7 +11,6 @@ import {
   resolveBlogSlug,
   getHeadings,
   calculateReadingTime,
-  slugify,
 } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { RelatedPosts } from 'app/components/related-posts'
@@ -20,6 +19,10 @@ import { InArticleAd } from 'app/components/AdUnit'
 import Comments from 'app/components/comments'
 import type { FAQItem, HowToStep } from 'app/types'
 import { getCategorySlug } from 'app/lib/categories'
+import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
+import { findRelevantGuides } from 'app/lib/pseo-content'
+import { postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { normalizeTagName, toTagSlug } from 'app/lib/tags'
 
 function parseJsonArray(value: unknown): unknown[] | null {
   if (!value) return null
@@ -173,21 +176,6 @@ function buildDescription(
   return `${prefix}${optimizedSummary}${suffix}`
 }
 
-function buildSeoTitle(originalTitle: string | undefined): string {
-  const safeTitle = originalTitle || 'Tech Article'
-  const suffix = ' | ToLearn'
-  const maxLength = 60 - suffix.length
-
-  if (safeTitle.length <= maxLength) {
-    return `${safeTitle}${suffix}`
-  }
-
-  const truncated = safeTitle.slice(0, maxLength)
-  const lastSpace = truncated.lastIndexOf(' ')
-  const finalTitle = lastSpace > 30 ? truncated.slice(0, lastSpace) : truncated
-  return `${finalTitle}${suffix}`
-}
-
 export function generateMetadata({ params }: PageProps): Metadata {
   const allPosts = getBlogPosts()
   const requestedSlug = params.slug
@@ -217,20 +205,22 @@ export function generateMetadata({ params }: PageProps): Metadata {
     image,
   } = post.metadata
 
+  const seoTitle = trimSeoTitle(title)
+  const socialTitle = buildSocialTitle(seoTitle)
   const modifiedTime = updatedAt || publishedTime
-  const ogImage = image ? image : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+  const ogImage = resolveOgImage(image, title)
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
   const optimizedDescription = buildDescription(post.metadata.category, description, title)
 
   return {
-    title: buildSeoTitle(title),
+    title: seoTitle,
     description: optimizedDescription,
     authors: [{ name: 'ToLearn Blog' }],
     creator: 'ToLearn Blog',
     publisher: 'ToLearn Blog',
     category: 'Technology Articles',
     openGraph: {
-      title,
+      title: socialTitle,
       description: optimizedDescription,
       type: 'article',
       publishedTime,
@@ -249,7 +239,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: socialTitle,
       description: optimizedDescription,
       images: [ogImage],
       creator: '@tolearn_blog',
@@ -309,10 +299,25 @@ export default function Blog({ params }: PageProps) {
   const modifiedTime = post.metadata.updatedAt || post.metadata.publishedAt
   const faqItems = normalizeFaqItems(post.metadata.faq)
   const howToSteps = normalizeHowToSteps(post.metadata.howto)
-  const tags = post.metadata.tags?.filter(Boolean) || []
-  const categoryHref = post.metadata.category
-    ? `/categories/${getCategorySlug(post.metadata.category)}`
+  const tags = post.metadata.tags?.map(normalizeTagName).filter(Boolean) || []
+  const currentCategory = post.metadata.category
+  const categoryHref = currentCategory
+    ? `/categories/${getCategorySlug(currentCategory)}`
     : null
+  const relatedGuides = findRelevantGuides({
+    terms: [post.metadata.title, post.metadata.summary, currentCategory || '', ...tags],
+    categories: currentCategory ? [currentCategory] : undefined,
+    limit: 3,
+  })
+  const relatedTopicHubs = topicHubs
+    .filter((hub) => {
+      if (postMatchesTopicHub(tags, hub)) {
+        return true
+      }
+
+      return Boolean(currentCategory && hub.relatedCategories.some((category) => category === currentCategory))
+    })
+    .slice(0, 3)
 
   const organization = {
     '@type': 'Organization',
@@ -336,19 +341,17 @@ export default function Blog({ params }: PageProps) {
       description: post.metadata.summary,
       image: {
         '@type': 'ImageObject',
-        url: post.metadata.image
-          ? `${baseUrl}${post.metadata.image}`
-          : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+        url: resolveOgImage(post.metadata.image, post.metadata.title),
         width: 1200,
         height: 630,
       },
       datePublished: post.metadata.publishedAt,
       dateModified: modifiedTime,
       author: {
-        '@type': 'Person',
+        '@type': 'Organization',
+        '@id': `${baseUrl}/#organization`,
         name: 'ToLearn Blog',
         url: baseUrl,
-        sameAs: [baseUrl],
       },
       publisher: organization,
       mainEntityOfPage: {
@@ -411,9 +414,7 @@ export default function Blog({ params }: PageProps) {
       },
       primaryImageOfPage: {
         '@type': 'ImageObject',
-        url: post.metadata.image
-          ? `${baseUrl}${post.metadata.image}`
-          : `${baseUrl}/og?title=${encodeURIComponent(post.metadata.title)}`,
+        url: resolveOgImage(post.metadata.image, post.metadata.title),
       },
     },
   ]
@@ -515,7 +516,7 @@ export default function Blog({ params }: PageProps) {
               {tags.slice(0, 2).map((tag) => (
                 <Link
                   key={tag}
-                  href={`/tags/${slugify(tag)}`}
+                  href={`/tags/${toTagSlug(tag)}`}
                   className="meta-chip normal-case tracking-[0.04em]"
                 >
                   {tag}
@@ -643,6 +644,68 @@ export default function Blog({ params }: PageProps) {
             </section>
           ) : null}
 
+          {relatedGuides.length > 0 || relatedTopicHubs.length > 0 ? (
+            <section className="surface-panel px-6 py-7 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Continue in the archive</p>
+                  <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Related guides and topic hubs
+                  </h2>
+                </div>
+                <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  These links turn a single article into a stronger learning path and help the archive behave more like a topic cluster.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                {relatedGuides.length > 0 ? (
+                  <div className="surface-card px-5 py-5">
+                    <p className="section-kicker">Guides</p>
+                    <div className="mt-4 space-y-3">
+                      {relatedGuides.map((guide) => (
+                        <Link
+                          key={guide.slug}
+                          href={`/guides/${guide.slug}`}
+                          className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                        >
+                          <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                            {guide.title}
+                          </div>
+                          <div className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                            {guide.description}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {relatedTopicHubs.length > 0 ? (
+                  <div className="surface-card px-5 py-5">
+                    <p className="section-kicker">Topic hubs</p>
+                    <div className="mt-4 space-y-3">
+                      {relatedTopicHubs.map((hub) => (
+                        <Link
+                          key={hub.slug}
+                          href={`/topics/${hub.slug}`}
+                          className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                        >
+                          <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                            {hub.title}
+                          </div>
+                          <div className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                            {hub.description}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+
           <div className="surface-card px-6 py-6">
             <p className="section-kicker">Support</p>
             <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
@@ -713,7 +776,7 @@ export default function Blog({ params }: PageProps) {
                     {tags.map((tag) => (
                       <Link
                         key={tag}
-                        href={`/tags/${slugify(tag)}`}
+                        href={`/tags/${toTagSlug(tag)}`}
                         className="meta-chip normal-case tracking-[0.04em]"
                       >
                         {tag}

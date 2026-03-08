@@ -78,7 +78,7 @@ export async function generateMetadata({
   }
 
   const categoryDesc = getCategoryDescription(category.name)
-  const title = `${category.name} in ${year} | ToLearn`
+  const title = `${category.name} in ${year}`
   const description = `Browse ${category.name} articles published in ${year}. ${
     categoryDesc?.shortDescription || ''
   }`
@@ -90,7 +90,7 @@ export async function generateMetadata({
       canonical: `${baseUrl}/categories/${normalizedSlug}/${year}`,
     },
     openGraph: {
-      title,
+      title: `${title} | ToLearn Blog`,
       description,
       url: `${baseUrl}/categories/${normalizedSlug}/${year}`,
       type: 'website',

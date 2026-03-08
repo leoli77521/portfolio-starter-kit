@@ -10,14 +10,14 @@ import {
 } from 'app/lib/schemas'
 
 export const metadata: Metadata = {
-  title: 'Topic Hubs | ToLearn',
+  title: 'Topic Hubs',
   description:
     'Explore curated topic hubs that group ToLearn articles into clearer learning paths.',
   alternates: {
     canonical: `${baseUrl}/topics`,
   },
   openGraph: {
-    title: 'Topic Hubs | ToLearn',
+    title: 'Topic Hubs | ToLearn Blog',
     description:
       'Curated collections of articles organized into practical learning paths for builders.',
     url: `${baseUrl}/topics`,

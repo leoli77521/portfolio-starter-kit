@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Publish Packager"
+  short_description: "Packages article drafts into repo-ready MDX publish files."
+  default_prompt: "Use $blog-publish-packager to turn this article into a publish-ready MDX file for this repo."

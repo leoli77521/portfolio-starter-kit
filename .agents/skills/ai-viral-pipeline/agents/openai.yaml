@@ -1,4 +1,4 @@
 interface:
   display_name: "AI Viral Pipeline"
-  short_description: "Run the full AI trend-to-article-and-visual workflow."
-  default_prompt: "Use $ai-viral-pipeline to go from fresh AI trends to one breakout topic, a finished article, and a matching visual plan."
+  short_description: "Run the full AI trend-to-publish-package workflow."
+  default_prompt: "Use $ai-viral-pipeline to go from fresh AI trends to one breakout topic, a finished article, a visual plan, and a repo-ready publish package."

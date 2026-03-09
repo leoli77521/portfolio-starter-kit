@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blog Illustration Director"
+  short_description: "Plans editorial blog visuals, prompts, and image placement."
+  default_prompt: "Use $blog-illustration-director to turn this article into a polished image and illustration plan."

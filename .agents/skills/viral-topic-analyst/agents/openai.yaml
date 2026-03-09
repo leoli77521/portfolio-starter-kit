@@ -1,0 +1,4 @@
+interface:
+  display_name: "Viral Topic Analyst"
+  short_description: "Score fresh AI topics and pick the one most likely to break out."
+  default_prompt: "Use $viral-topic-analyst to rank fresh AI topics and choose the strongest breakout angle."

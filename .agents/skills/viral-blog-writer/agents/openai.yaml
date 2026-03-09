@@ -1,0 +1,4 @@
+interface:
+  display_name: "Viral Blog Writer"
+  short_description: "Write a breakout AI post in a Western viral style."
+  default_prompt: "Use $viral-blog-writer to turn a breakout AI topic into a Western-style viral article."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Trend Radar"
+  short_description: "Find and distill the newest AI and AI-tool topics from the web."
+  default_prompt: "Use $ai-trend-radar to find the latest AI and AI-tool topics with strong timeliness signals."

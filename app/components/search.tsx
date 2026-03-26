@@ -16,6 +16,7 @@ export function Search() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
+  const [totalMatches, setTotalMatches] = useState(0)
   const [allPosts, setAllPosts] = useState<SearchResult[]>([])
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -43,6 +44,7 @@ export function Search() {
   useEffect(() => {
     if (query.trim() === '') {
       setResults([])
+      setTotalMatches(0)
       return
     }
 
@@ -54,7 +56,8 @@ export function Search() {
         (post.content && post.content.toLowerCase().includes(searchQuery))
     )
 
-    setResults(filtered.slice(0, 5))
+    setTotalMatches(filtered.length)
+    setResults(filtered.slice(0, 8))
   }, [allPosts, query])
 
   useEffect(() => {
@@ -209,16 +212,23 @@ export function Search() {
 
           {results.length > 0 ? (
             <div className="border-t border-slate-200/70 px-4 py-3 theme-dark:border-slate-800">
-              <Link
-                href="/blog"
-                onClick={() => {
-                  setIsOpen(false)
-                  setQuery('')
-                }}
-                className="editorial-link"
-              >
-                Open the full archive
-              </Link>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-500 theme-dark:text-slate-400">
+                  {totalMatches > results.length
+                    ? `Showing ${results.length} of ${totalMatches} results`
+                    : `${totalMatches} ${totalMatches === 1 ? 'result' : 'results'}`}
+                </span>
+                <Link
+                  href="/blog"
+                  onClick={() => {
+                    setIsOpen(false)
+                    setQuery('')
+                  }}
+                  className="editorial-link"
+                >
+                  Open the full archive
+                </Link>
+              </div>
             </div>
           ) : null}
         </div>

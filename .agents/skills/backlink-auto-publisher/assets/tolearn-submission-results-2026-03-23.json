@@ -1,0 +1,62 @@
+{
+  "generated_at_local": "2026-03-23T09:28:17.7042851+08:00",
+  "generated_at_utc": "2026-03-23T01:28:28.2193990Z",
+  "site": "ToLearn Blog",
+  "queue_file": ".agents/skills/backlink-auto-publisher/assets/tolearn-submission-queue.json",
+  "submission_summary": {
+    "total_targets": 3,
+    "ready_before_execution": 3,
+    "submitted": 3,
+    "public": 2,
+    "awaiting_moderation": 1,
+    "skipped": 0,
+    "manual_review": 0
+  },
+  "results": [
+    {
+      "id": "goaffpro-affiliate-review-guide",
+      "platform": "GoAffPro Blog",
+      "domain": "blog.goaffpro.com",
+      "target_url": "https://blog.goaffpro.com/mastering-affiliate-product-reviews-a-step-by-step-guide-for-engaging-content-and-conversions/",
+      "destination_url": "https://tolearn.blog/guides/seo-optimization-complete-guide",
+      "status": "submitted",
+      "visibility": "awaiting_moderation",
+      "confirmation": "confirmed",
+      "comment_id": "54969",
+      "comment_url": null,
+      "author_name": "ToLearn Editorial",
+      "author_email": "lileo16881533@gmail.com",
+      "note": "Submission confirmed from the post-submit preview page, which displayed the comment under ToLearn Editorial with the message 'Your comment is awaiting moderation.'"
+    },
+    {
+      "id": "synced-microsoft-fpdt",
+      "platform": "Synced",
+      "domain": "syncedreview.com",
+      "target_url": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/",
+      "destination_url": "https://tolearn.blog/topics/ai-development-guide",
+      "status": "submitted",
+      "visibility": "public",
+      "confirmation": "confirmed",
+      "comment_id": "498215",
+      "comment_url": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/comment-page-7/#comment-498215",
+      "author_name": "ToLearn Editorial",
+      "author_email": "lileo16881533@gmail.com",
+      "note": "Comment is publicly visible on comment page 7 under ToLearn Editorial."
+    },
+    {
+      "id": "pixel77-typography-rules",
+      "platform": "Pixel77",
+      "domain": "pixel77.com",
+      "target_url": "https://pixel77.com/typography-rules-technique/",
+      "destination_url": "https://tolearn.blog/templates",
+      "status": "submitted",
+      "visibility": "public",
+      "confirmation": "confirmed",
+      "comment_id": "237031",
+      "comment_url": "https://pixel77.com/typography-rules-technique/#comment-237031",
+      "author_name": "ToLearn Editorial",
+      "author_email": "lileo16881533@gmail.com",
+      "note": "Comment published immediately and is publicly visible under ToLearn Editorial."
+    }
+  ]
+}

@@ -24,7 +24,19 @@
       "Bash(unzip:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run lint)",
-      "Skill(pseo-engine)"
+      "Skill(pseo-engine)",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" diff --staged)",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" log --oneline -5)",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" add .claude/skills/blog-content-enhancer/SKILL.md .claude/skills/blog-content-enhancer/references/research-sources.md .claude/skills/blog-content-enhancer/references/visual-guidelines.md .claude/skills/blog-content-enhancer/references/language-patterns.md)",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" commit -m \"$\\(cat <<''EOF''\nfeat: add blog-content-enhancer skill for article quality improvement\n\nAdd new skill with real-time research, visual enrichment, and language\nrefinement capabilities. Includes reference guides for trusted sources,\nMDX image templates, and formal-to-conversational language patterns.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" status)",
+      "Bash(git -C \"D:/网站/portfolio-starter-kit\" push)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(git clone:*)",
+      "Bash(bash ./setup)",
+      "Bash(cp ~/.claude/skills/gstack/browse/dist/browse.exe ~/.claude/skills/gstack/browse/dist/browse)",
+      "Bash(chmod +x ~/.claude/skills/gstack/browse/dist/browse)"
     ],
     "deny": []
   }

@@ -11,10 +11,10 @@ interface AdUnitProps {
 }
 
 /**
- * Google AdSense 广告单元组件
+ * Google AdSense 骞垮憡鍗曞厓缁勪欢
  *
- * 使用方法:
- * <AdUnit slot="你的广告位ID" format="auto" responsive />
+ * 浣跨敤鏂规硶:
+ * <AdUnit slot="浣犵殑骞垮憡浣岻D" format="auto" responsive />
  */
 export function AdUnit({
   slot,
@@ -25,12 +25,12 @@ export function AdUnit({
 }: AdUnitProps) {
   useEffect(() => {
     try {
-      // 推送广告到 AdSense
+      // 鎺ㄩ€佸箍鍛婂埌 AdSense
       if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
         ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({})
       }
     } catch (err) {
-      console.error('AdSense 加载错误:', err)
+      console.error('AdSense 鍔犺浇閿欒:', err)
     }
   }, [])
 
@@ -47,7 +47,7 @@ export function AdUnit({
 }
 
 /**
- * 文章内广告 (适合文章内容中间)
+ * 鏂囩珷鍐呭箍鍛?(閫傚悎鏂囩珷鍐呭涓棿)
  */
 export function InArticleAd({ slot }: { slot: string }) {
   return (
@@ -63,7 +63,7 @@ export function InArticleAd({ slot }: { slot: string }) {
 }
 
 /**
- * 侧边栏广告
+ * 渚ц竟鏍忓箍鍛?
  */
 export function SidebarAd({ slot }: { slot: string }) {
   return (
@@ -79,7 +79,7 @@ export function SidebarAd({ slot }: { slot: string }) {
 }
 
 /**
- * 横幅广告 (适合页面顶部/底部)
+ * 妯箙骞垮憡 (閫傚悎椤甸潰椤堕儴/搴曢儴)
  */
 export function BannerAd({ slot }: { slot: string }) {
   return (
@@ -95,7 +95,7 @@ export function BannerAd({ slot }: { slot: string }) {
 }
 
 /**
- * 展示广告 (通用矩形广告)
+ * 灞曠ず骞垮憡 (閫氱敤鐭╁舰骞垮憡)
  */
 export function DisplayAd({ slot }: { slot: string }) {
   return (

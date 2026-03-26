@@ -1,0 +1,72 @@
+{
+  "project_name": "ToLearn Blog",
+  "site_url": "https://tolearn.blog",
+  "project_summary": "Editorial notes on AI systems, search visibility, and practical web execution for builders.",
+  "fit_keywords": [
+    "ai",
+    "artificial-intelligence",
+    "llm",
+    "machine-learning",
+    "machine learning",
+    "transformer",
+    "search",
+    "seo",
+    "frontend",
+    "web-design",
+    "web design",
+    "developer",
+    "dev",
+    "typography",
+    "design",
+    "portfolio",
+    "affiliate",
+    "marketing"
+  ],
+  "secondary_keywords": [
+    "google",
+    "microsoft",
+    "nvidia",
+    "wordpress",
+    "shopify",
+    "conversion",
+    "analytics",
+    "ux",
+    "ui"
+  ],
+  "negative_keywords": [
+    "recipe",
+    "travel",
+    "pastry",
+    "cocktail",
+    "baking",
+    "craft",
+    "parenting",
+    "fitness",
+    "sports",
+    "gta",
+    "anime",
+    "celebrity",
+    "wedding",
+    "pet"
+  ],
+  "preferred_domains": [
+    "syncedreview.com",
+    "pixel77.com",
+    "blog.goaffpro.com"
+  ],
+  "blocked_patterns": [
+    "/profile",
+    "/profiles",
+    "/user/",
+    "/users/",
+    "/member",
+    "/members",
+    "/forum",
+    "/forums",
+    "/discussion",
+    "/discussions",
+    "/login",
+    "/register",
+    "show_bug.cgi"
+  ]
+}

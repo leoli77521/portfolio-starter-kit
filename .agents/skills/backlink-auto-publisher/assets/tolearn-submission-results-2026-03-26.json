@@ -1,0 +1,21 @@
+{
+  "generated_at_local": "2026-03-26T16:16:04+0800",
+  "site": "ToLearn Blog",
+  "results": [
+    {
+      "id": "synced-nvidia-gc-vit-watchlist-promoted-2026-03-26",
+      "platform": "Synced",
+      "domain": "syncedreview.com",
+      "target_url": "https://syncedreview.com/2022/06/29/nvidias-global-context-vit-achieves-sota-performance-on-cv-tasks-without-expensive-computation/",
+      "destination_url": "https://tolearn.blog/topics/ai-development-guide",
+      "status": "submitted",
+      "visibility": "public",
+      "confirmation": "confirmed",
+      "comment_id": "498616",
+      "comment_url": "https://syncedreview.com/2022/06/29/nvidias-global-context-vit-achieves-sota-performance-on-cv-tasks-without-expensive-computation/comment-page-2/#comment-498616",
+      "author_name": "ToLearn Editorial",
+      "author_email": "lileo16881533@gmail.com",
+      "note": "Comment appears publicly on the returned page."
+    }
+  ]
+}

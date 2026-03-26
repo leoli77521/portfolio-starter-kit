@@ -1,0 +1,113 @@
+[
+  {
+    "id": "goaffpro-affiliate-review-guide",
+    "platform": "GoAffPro Blog",
+    "domain": "blog.goaffpro.com",
+    "target_url": "https://blog.goaffpro.com/mastering-affiliate-product-reviews-a-step-by-step-guide-for-engaging-content-and-conversions/",
+    "source_type": "blog_comment",
+    "submission_mode": "browser_comment",
+    "project_fit": "high",
+    "preferred_destination_label": "auto",
+    "fallback_destination_label": "seo-guide",
+    "topic_signals": [
+      "affiliate marketing",
+      "content strategy",
+      "conversions",
+      "seo",
+      "search growth"
+    ],
+    "comment_brief": "Comment on authentic product reviews, content structure, and how builder-focused editorial content earns trust and conversions.",
+    "link_policy": "website_field_only",
+    "required_fields": [
+      "comment",
+      "name",
+      "email",
+      "website"
+    ],
+    "field_hints": {
+      "comment": "Comment *",
+      "name": "Name *",
+      "email": "Email *",
+      "website": "Website"
+    },
+    "verification": {
+      "status": "verified_no_signup",
+      "verified_on": "2026-03-23",
+      "evidence": "Live page exposes Leave a Reply with Comment, Name, Email, and Website fields. No login wall or captcha was visible during verification."
+    }
+  },
+  {
+    "id": "synced-microsoft-fpdt",
+    "platform": "Synced",
+    "domain": "syncedreview.com",
+    "target_url": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/",
+    "source_type": "blog_comment",
+    "submission_mode": "browser_comment",
+    "project_fit": "high",
+    "preferred_destination_label": "auto",
+    "fallback_destination_label": "ai-development-hub",
+    "topic_signals": [
+      "llm",
+      "long context",
+      "transformer",
+      "ai systems",
+      "microsoft research"
+    ],
+    "comment_brief": "React to long-context LLM training efficiency, connect it to practical AI systems coverage, and keep the comment specific to the Microsoft research angle.",
+    "link_policy": "website_field_only",
+    "required_fields": [
+      "comment",
+      "name",
+      "email",
+      "website"
+    ],
+    "field_hints": {
+      "comment": "Comment",
+      "name": "Name",
+      "email": "Email",
+      "website": "Website"
+    },
+    "verification": {
+      "status": "verified_no_signup",
+      "verified_on": "2026-03-23",
+      "evidence": "Live page exposes Leave a Reply with Comment, Name, Email, and Website fields. No login wall or captcha was visible during verification."
+    }
+  },
+  {
+    "id": "pixel77-typography-rules",
+    "platform": "Pixel77",
+    "domain": "pixel77.com",
+    "target_url": "https://pixel77.com/typography-rules-technique/",
+    "source_type": "blog_comment",
+    "submission_mode": "browser_comment",
+    "project_fit": "high",
+    "preferred_destination_label": "auto",
+    "fallback_destination_label": "templates",
+    "topic_signals": [
+      "typography",
+      "design systems",
+      "web design",
+      "ux",
+      "portfolio"
+    ],
+    "comment_brief": "Comment on typography hierarchy, readability, and brand communication in a way that naturally overlaps with portfolio, UX, and web design work.",
+    "link_policy": "website_field_only",
+    "required_fields": [
+      "comment",
+      "name",
+      "email",
+      "website"
+    ],
+    "field_hints": {
+      "comment": "Comment *",
+      "name": "Name",
+      "email": "E-mail",
+      "website": "Website"
+    },
+    "verification": {
+      "status": "verified_no_signup",
+      "verified_on": "2026-03-23",
+      "evidence": "Live page exposes Leave a Reply with Comment, Name, E-mail, and Website fields. No login wall or captcha was visible during verification."
+    }
+  }
+]

@@ -1,0 +1,161 @@
+{
+  "generated_at": "2026-03-23T01:08:12.244052+00:00",
+  "site": "ToLearn Blog",
+  "queue_summary": {
+    "total_targets": 3,
+    "ready": 3,
+    "manual_review": 0
+  },
+  "queue": [
+    {
+      "id": "goaffpro-affiliate-review-guide",
+      "platform": "GoAffPro Blog",
+      "domain": "blog.goaffpro.com",
+      "target_url": "https://blog.goaffpro.com/mastering-affiliate-product-reviews-a-step-by-step-guide-for-engaging-content-and-conversions/",
+      "submission_mode": "browser_comment",
+      "status": "ready",
+      "blocking_reasons": [],
+      "comment_name": "ToLearn Editorial",
+      "comment_email": "lileo16881533@gmail.com",
+      "comment_website": "https://tolearn.blog/guides/seo-optimization-complete-guide",
+      "destination_label": "seo-guide",
+      "destination_reason": "Use for search, content, conversions, growth, affiliate, and SEO workflow discussions.",
+      "routing_strategy": "rule",
+      "routing_rule_id": "seo-growth-content",
+      "routing_matched_keywords": [
+        "seo",
+        "search",
+        "affiliate",
+        "conversions",
+        "content strategy",
+        "marketing",
+        "reviews"
+      ],
+      "comment_brief": "Comment on authentic product reviews, content structure, and how builder-focused editorial content earns trust and conversions.",
+      "topic_signals": [
+        "affiliate marketing",
+        "content strategy",
+        "conversions",
+        "seo",
+        "search growth"
+      ],
+      "link_policy": "website_field_only",
+      "required_fields": [
+        "comment",
+        "name",
+        "email",
+        "website"
+      ],
+      "field_hints": {
+        "comment": "Comment *",
+        "name": "Name *",
+        "email": "Email *",
+        "website": "Website"
+      },
+      "verification": {
+        "status": "verified_no_signup",
+        "verified_on": "2026-03-23",
+        "evidence": "Live page exposes Leave a Reply with Comment, Name, Email, and Website fields. No login wall or captcha was visible during verification."
+      }
+    },
+    {
+      "id": "synced-microsoft-fpdt",
+      "platform": "Synced",
+      "domain": "syncedreview.com",
+      "target_url": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/",
+      "submission_mode": "browser_comment",
+      "status": "ready",
+      "blocking_reasons": [],
+      "comment_name": "ToLearn Editorial",
+      "comment_email": "lileo16881533@gmail.com",
+      "comment_website": "https://tolearn.blog/topics/ai-development-guide",
+      "destination_label": "ai-development-hub",
+      "destination_reason": "Use for AI research, model capability, and broad builder-facing AI systems discussions.",
+      "routing_strategy": "rule",
+      "routing_rule_id": "ai-research-editorial",
+      "routing_matched_keywords": [
+        "ai systems",
+        "llm",
+        "transformer",
+        "long context",
+        "microsoft research"
+      ],
+      "comment_brief": "React to long-context LLM training efficiency, connect it to practical AI systems coverage, and keep the comment specific to the Microsoft research angle.",
+      "topic_signals": [
+        "llm",
+        "long context",
+        "transformer",
+        "ai systems",
+        "microsoft research"
+      ],
+      "link_policy": "website_field_only",
+      "required_fields": [
+        "comment",
+        "name",
+        "email",
+        "website"
+      ],
+      "field_hints": {
+        "comment": "Comment",
+        "name": "Name",
+        "email": "Email",
+        "website": "Website"
+      },
+      "verification": {
+        "status": "verified_no_signup",
+        "verified_on": "2026-03-23",
+        "evidence": "Live page exposes Leave a Reply with Comment, Name, Email, and Website fields. No login wall or captcha was visible during verification."
+      }
+    },
+    {
+      "id": "pixel77-typography-rules",
+      "platform": "Pixel77",
+      "domain": "pixel77.com",
+      "target_url": "https://pixel77.com/typography-rules-technique/",
+      "submission_mode": "browser_comment",
+      "status": "ready",
+      "blocking_reasons": [],
+      "comment_name": "ToLearn Editorial",
+      "comment_email": "lileo16881533@gmail.com",
+      "comment_website": "https://tolearn.blog/templates",
+      "destination_label": "templates",
+      "destination_reason": "Use for design, frontend, UX, or portfolio discussions.",
+      "routing_strategy": "rule",
+      "routing_rule_id": "design-portfolio-routing",
+      "routing_matched_keywords": [
+        "typography",
+        "design",
+        "web design",
+        "ux",
+        "portfolio",
+        "brand communication"
+      ],
+      "comment_brief": "Comment on typography hierarchy, readability, and brand communication in a way that naturally overlaps with portfolio, UX, and web design work.",
+      "topic_signals": [
+        "typography",
+        "design systems",
+        "web design",
+        "ux",
+        "portfolio"
+      ],
+      "link_policy": "website_field_only",
+      "required_fields": [
+        "comment",
+        "name",
+        "email",
+        "website"
+      ],
+      "field_hints": {
+        "comment": "Comment *",
+        "name": "Name",
+        "email": "E-mail",
+        "website": "Website"
+      },
+      "verification": {
+        "status": "verified_no_signup",
+        "verified_on": "2026-03-23",
+        "evidence": "Live page exposes Leave a Reply with Comment, Name, E-mail, and Website fields. No login wall or captcha was visible during verification."
+      }
+    }
+  ]
+}

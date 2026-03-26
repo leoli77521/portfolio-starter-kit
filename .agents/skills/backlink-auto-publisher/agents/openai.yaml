@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backlink Auto Publisher"
+  short_description: "Prepare and publish approved backlinks with saved form configs."
+  default_prompt: "Use $backlink-auto-publisher to prepare a submission queue and publish approved no-signup backlinks."

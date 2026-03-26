@@ -1,0 +1,31 @@
+  ▲ Next.js 14.2.18
+  - Local:        http://localhost:3002
+
+ ✓ Starting...
+ ✓ Ready in 586ms
+ ⨯ Error: Cannot find module 'D:\网站\portfolio-starter-kit\.next\server\middleware-manifest.json'
+Require stack:
+- D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\server\next-server.js
+- D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\server\next.js
+- D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\server\lib\start-server.js
+- D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\cli\next-start.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1401:15)
+    at D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\server\require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1057:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1062:22)
+    at Function._load (node:internal/modules/cjs/loader:1211:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1487:12)
+    at mod.require (D:\网站\portfolio-starter-kit\node_modules\.pnpm\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\node_modules\next\dist\server\require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'D:\\网站\\portfolio-starter-kit\\node_modules\\.pnpm\\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\\node_modules\\next\\dist\\server\\next-server.js',
+    'D:\\网站\\portfolio-starter-kit\\node_modules\\.pnpm\\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\\node_modules\\next\\dist\\server\\next.js',
+    'D:\\网站\\portfolio-starter-kit\\node_modules\\.pnpm\\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+    'D:\\网站\\portfolio-starter-kit\\node_modules\\.pnpm\\next@14.2.18_react-dom@18.3.1_react@18.3.1__react@18.3.1\\node_modules\\next\\dist\\cli\\next-start.js'
+  ]
+}
+
+D:\网站\portfolio-starter-kit>

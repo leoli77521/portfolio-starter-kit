@@ -1,0 +1,193 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2024-01-15",
+    "description": "Keyword intelligence cache for pSEO engine"
+  },
+  "primaryKeywords": [
+    {
+      "keyword": "next.js portfolio template",
+      "intent": "commercial",
+      "difficulty": "medium",
+      "searchVolume": "high",
+      "targetPage": "/templates/nextjs",
+      "relatedKeywords": [
+        "nextjs portfolio starter",
+        "react portfolio template",
+        "developer portfolio nextjs"
+      ]
+    },
+    {
+      "keyword": "developer portfolio template",
+      "intent": "commercial",
+      "difficulty": "high",
+      "searchVolume": "high",
+      "targetPage": "/templates",
+      "relatedKeywords": [
+        "software engineer portfolio",
+        "frontend developer portfolio",
+        "coding portfolio template"
+      ]
+    },
+    {
+      "keyword": "ai development tutorial",
+      "intent": "informational",
+      "difficulty": "medium",
+      "searchVolume": "medium",
+      "targetPage": "/topics/ai-development-guide",
+      "relatedKeywords": [
+        "learn ai programming",
+        "ai coding tutorial",
+        "machine learning for developers"
+      ]
+    },
+    {
+      "keyword": "seo for developers",
+      "intent": "informational",
+      "difficulty": "low",
+      "searchVolume": "medium",
+      "targetPage": "/topics/seo-fundamentals",
+      "relatedKeywords": [
+        "technical seo guide",
+        "developer seo tips",
+        "nextjs seo optimization"
+      ]
+    }
+  ],
+  "longTailKeywords": {
+    "portfolio": [
+      "best portfolio template for software engineers",
+      "react developer portfolio with blog",
+      "fullstack developer portfolio template free",
+      "minimalist portfolio template for developers",
+      "portfolio template with dark mode",
+      "seo optimized portfolio template",
+      "typescript portfolio starter kit"
+    ],
+    "tutorials": [
+      "how to build portfolio with next.js",
+      "create developer blog with mdx",
+      "add dark mode to next.js site",
+      "next.js seo optimization guide",
+      "deploy next.js to vercel tutorial"
+    ],
+    "ai": [
+      "build chatbot with claude api",
+      "langchain tutorial for beginners",
+      "ai agent development guide",
+      "prompt engineering best practices",
+      "integrate openai with next.js"
+    ]
+  },
+  "topicClusters": {
+    "nextjs": {
+      "pillar": "Next.js Complete Guide",
+      "spokes": [
+        "Next.js App Router Tutorial",
+        "Next.js SEO Optimization",
+        "Next.js Performance Tips",
+        "Next.js with TypeScript",
+        "Next.js Image Optimization",
+        "Next.js API Routes Guide"
+      ]
+    },
+    "ai-development": {
+      "pillar": "AI Development Guide",
+      "spokes": [
+        "Getting Started with LangChain",
+        "Building AI Chatbots",
+        "Prompt Engineering Techniques",
+        "AI Agent Architecture",
+        "Integrating LLM APIs"
+      ]
+    },
+    "seo": {
+      "pillar": "SEO Fundamentals",
+      "spokes": [
+        "Technical SEO Checklist",
+        "Keyword Research Guide",
+        "Content Optimization Tips",
+        "Link Building Strategies",
+        "Core Web Vitals Guide"
+      ]
+    }
+  },
+  "competitorKeywords": {
+    "gaps": [
+      {
+        "keyword": "tailwind css portfolio",
+        "competitor": "tailwindcomponents.com",
+        "opportunity": "Create dedicated Tailwind portfolio template page"
+      },
+      {
+        "keyword": "mdx blog tutorial",
+        "competitor": "mdxjs.com",
+        "opportunity": "Write comprehensive MDX blogging guide"
+      }
+    ],
+    "overlaps": [
+      {
+        "keyword": "next.js blog template",
+        "ourRank": "page 2",
+        "competitorRank": "page 1",
+        "action": "Improve content depth and add more examples"
+      }
+    ]
+  },
+  "paaQuestions": {
+    "portfolio": [
+      "What should a developer portfolio include?",
+      "How do I make my portfolio stand out?",
+      "Is Next.js good for portfolio sites?",
+      "How many projects should be in a portfolio?",
+      "Should developers have a blog on their portfolio?"
+    ],
+    "seo": [
+      "How long does SEO take to work?",
+      "What is technical SEO?",
+      "How do I improve my site's SEO?",
+      "What are Core Web Vitals?",
+      "Is SEO still important in 2024?"
+    ],
+    "ai": [
+      "How do I start learning AI development?",
+      "What programming language is best for AI?",
+      "How do AI chatbots work?",
+      "What is prompt engineering?",
+      "Can I use AI in my web app?"
+    ]
+  },
+  "seasonalTrends": {
+    "january": ["new year goals", "learn to code", "career change"],
+    "september": ["back to school", "new skills", "job hunting"],
+    "yearEnd": ["year in review", "best of", "trends"]
+  },
+  "contentIdeas": {
+    "highPriority": [
+      {
+        "title": "Complete Next.js Portfolio Guide for 2024",
+        "targetKeyword": "nextjs portfolio guide",
+        "estimatedTraffic": "high",
+        "difficulty": "medium"
+      },
+      {
+        "title": "AI Tools Every Developer Should Know",
+        "targetKeyword": "ai tools for developers",
+        "estimatedTraffic": "high",
+        "difficulty": "low"
+      }
+    ],
+    "mediumPriority": [
+      {
+        "title": "Dark Mode Implementation Guide",
+        "targetKeyword": "add dark mode to website",
+        "estimatedTraffic": "medium",
+        "difficulty": "low"
+      }
+    ]
+  },
+  "trackedRankings": {
+    "note": "Placeholder for tracking keyword rankings over time",
+    "data": []
+  }
+}

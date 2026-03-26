@@ -1,0 +1,132 @@
+{
+  "project_name": "ToLearn Blog",
+  "site_url": "https://tolearn.blog",
+  "public_name": "ToLearn Editorial",
+  "public_email": "lileo16881533@gmail.com",
+  "default_website": "https://tolearn.blog",
+  "project_summary": "Editorial notes on AI systems, search visibility, and practical web execution for builders.",
+  "core_topics": [
+    "AI systems",
+    "machine learning",
+    "SEO",
+    "search visibility",
+    "modern web execution",
+    "frontend development",
+    "design systems",
+    "portfolio templates"
+  ],
+  "preferred_link_destinations": [
+    {
+      "label": "homepage",
+      "url": "https://tolearn.blog",
+      "when_to_use": "Use for general AI, SEO, or builder-focused discussions."
+    },
+    {
+      "label": "blog",
+      "url": "https://tolearn.blog/blog",
+      "when_to_use": "Use for article-driven or editorial discussions."
+    },
+    {
+      "label": "ai-development-hub",
+      "url": "https://tolearn.blog/topics/ai-development-guide",
+      "when_to_use": "Use for AI research, model capability, and broad builder-facing AI systems discussions."
+    },
+    {
+      "label": "ai-development-guide",
+      "url": "https://tolearn.blog/guides/getting-started-with-ai-development",
+      "when_to_use": "Use for practical AI implementation, API, and build-with-AI discussions."
+    },
+    {
+      "label": "seo-guide",
+      "url": "https://tolearn.blog/guides/seo-optimization-complete-guide",
+      "when_to_use": "Use for search, content, conversions, growth, affiliate, and SEO workflow discussions."
+    },
+    {
+      "label": "templates",
+      "url": "https://tolearn.blog/templates",
+      "when_to_use": "Use for design, frontend, UX, or portfolio discussions."
+    },
+    {
+      "label": "solutions",
+      "url": "https://tolearn.blog/solutions",
+      "when_to_use": "Use for workflow, implementation, or feature-oriented discussions."
+    }
+  ],
+  "fallback_destination_label": "homepage",
+  "routing_rules": [
+    {
+      "id": "ai-research-editorial",
+      "label": "ai-development-hub",
+      "priority": 30,
+      "min_matches": 1,
+      "keywords": [
+        "ai systems",
+        "llm",
+        "large language model",
+        "machine learning",
+        "transformer",
+        "long context",
+        "model training",
+        "microsoft research",
+        "nvidia",
+        "ai research"
+      ]
+    },
+    {
+      "id": "ai-practical-build",
+      "label": "ai-development-guide",
+      "priority": 24,
+      "min_matches": 1,
+      "keywords": [
+        "ai development",
+        "build ai",
+        "api",
+        "agent",
+        "langchain",
+        "developer workflow",
+        "practical ai",
+        "ai implementation"
+      ]
+    },
+    {
+      "id": "seo-growth-content",
+      "label": "seo-guide",
+      "priority": 26,
+      "min_matches": 1,
+      "keywords": [
+        "seo",
+        "search",
+        "traffic",
+        "ranking",
+        "affiliate",
+        "conversions",
+        "content strategy",
+        "keyword",
+        "marketing",
+        "reviews"
+      ]
+    },
+    {
+      "id": "design-portfolio-routing",
+      "label": "templates",
+      "priority": 25,
+      "min_matches": 1,
+      "keywords": [
+        "typography",
+        "design",
+        "web design",
+        "ui",
+        "ux",
+        "portfolio",
+        "frontend",
+        "layout",
+        "brand communication"
+      ]
+    }
+  ],
+  "link_policy": {
+    "prefer_website_field": true,
+    "avoid_exact_match_anchor": true,
+    "prefer_brand_or_naked_url": true
+  }
+}

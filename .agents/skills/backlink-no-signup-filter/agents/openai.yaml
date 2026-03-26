@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backlink No-Signup Filter"
+  short_description: "Filter backlink lists and keep project-fit no-signup targets."
+  default_prompt: "Use $backlink-no-signup-filter to screen a backlink list and keep only project-fit targets that do not require signup."

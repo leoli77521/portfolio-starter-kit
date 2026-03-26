@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-03-26T08:14:43.508220+00:00",
+  "site": "ToLearn Blog",
+  "queue_summary": {
+    "total_targets": 1,
+    "ready": 1,
+    "manual_review": 0
+  },
+  "queue": [
+    {
+      "id": "synced-nvidia-gc-vit-watchlist-promoted-2026-03-26",
+      "platform": "Synced",
+      "domain": "syncedreview.com",
+      "target_url": "https://syncedreview.com/2022/06/29/nvidias-global-context-vit-achieves-sota-performance-on-cv-tasks-without-expensive-computation/",
+      "submission_mode": "browser_comment",
+      "status": "ready",
+      "blocking_reasons": [],
+      "comment_name": "ToLearn Editorial",
+      "comment_email": "lileo16881533@gmail.com",
+      "comment_website": "https://tolearn.blog/topics/ai-development-guide",
+      "destination_label": "ai-development-hub",
+      "destination_reason": "Use for AI research, model capability, and broad builder-facing AI systems discussions.",
+      "routing_strategy": "rule",
+      "routing_rule_id": "ai-research-editorial",
+      "routing_matched_keywords": [
+        "ai systems",
+        "transformer",
+        "nvidia"
+      ],
+      "comment_brief": "Comment on efficient transformer design, global context in real AI systems, and how practical AI coverage benefits from translating research into builder-facing takeaways.",
+      "topic_signals": [
+        "nvidia",
+        "transformer",
+        "global context",
+        "ai systems",
+        "computer vision"
+      ],
+      "link_policy": "website_field_only",
+      "required_fields": [
+        "comment",
+        "name",
+        "email",
+        "website"
+      ],
+      "field_hints": {
+        "comment": "Comment",
+        "name": "Name",
+        "email": "Email",
+        "website": "Website"
+      },
+      "verification": {
+        "status": "verified_no_signup",
+        "verified_on": "2026-03-26",
+        "evidence": "Fetched the live page on March 26, 2026 and confirmed a public comment form with Comment, Name, Email, and Website fields. Captcha strings present in page HTML were tied to a poll plugin config with empty site keys rather than the visible comment form."
+      }
+    }
+  ]
+}

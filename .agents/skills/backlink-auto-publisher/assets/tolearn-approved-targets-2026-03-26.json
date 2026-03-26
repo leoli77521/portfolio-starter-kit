@@ -1,0 +1,39 @@
+[
+  {
+    "id": "synced-nvidia-gc-vit-watchlist-promoted-2026-03-26",
+    "platform": "Synced",
+    "domain": "syncedreview.com",
+    "target_url": "https://syncedreview.com/2022/06/29/nvidias-global-context-vit-achieves-sota-performance-on-cv-tasks-without-expensive-computation/",
+    "source_type": "blog_comment",
+    "submission_mode": "browser_comment",
+    "project_fit": "medium",
+    "preferred_destination_label": "auto",
+    "fallback_destination_label": "ai-development-hub",
+    "topic_signals": [
+      "nvidia",
+      "transformer",
+      "global context",
+      "ai systems",
+      "computer vision"
+    ],
+    "comment_brief": "Comment on efficient transformer design, global context in real AI systems, and how practical AI coverage benefits from translating research into builder-facing takeaways.",
+    "link_policy": "website_field_only",
+    "required_fields": [
+      "comment",
+      "name",
+      "email",
+      "website"
+    ],
+    "field_hints": {
+      "comment": "Comment",
+      "name": "Name",
+      "email": "Email",
+      "website": "Website"
+    },
+    "verification": {
+      "status": "verified_no_signup",
+      "verified_on": "2026-03-26",
+      "evidence": "Fetched the live page on March 26, 2026 and confirmed a public comment form with Comment, Name, Email, and Website fields. Captcha strings present in page HTML were tied to a poll plugin config with empty site keys rather than the visible comment form."
+    }
+  }
+]

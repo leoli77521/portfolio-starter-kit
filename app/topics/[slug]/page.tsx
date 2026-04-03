@@ -95,6 +95,12 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
 
   const matchingPosts = getMatchingPostsForHub(hub)
   const shouldIndex = matchingPosts.length > 0
+  const featuredPosts = (hub.featuredArticleSlugs?.length
+    ? hub.featuredArticleSlugs
+        .map((slug) => matchingPosts.find((post) => post.slug === slug))
+        .filter((post): post is (typeof matchingPosts)[number] => Boolean(post))
+    : matchingPosts.slice(0, 4))
+  const learningGoals = hub.learningGoals || []
 
   const totalReadingTime = matchingPosts.reduce(
     (sum, post) => sum + calculateReadingTime(post.content),
@@ -252,6 +258,76 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
               {hub.longDescription}
             </p>
           </div>
+
+          {featuredPosts.length > 0 || learningGoals.length > 0 ? (
+            <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)]">
+              {featuredPosts.length > 0 ? (
+                <div className="surface-panel px-6 py-6 md:px-8">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <p className="section-kicker">Start here</p>
+                      <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                        Recommended Reading Order
+                      </h2>
+                    </div>
+                    <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      Follow these featured reads to move from architecture basics to migration
+                      discipline without losing the thread.
+                    </p>
+                  </div>
+
+                  <ol className="mt-6 space-y-4">
+                    {featuredPosts.map((post, index) => (
+                      <li key={post.slug}>
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          className="block rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 px-5 py-5 transition-colors hover:border-indigo-300 hover:bg-white theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60 theme-dark:hover:bg-slate-950"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <span className="meta-chip normal-case tracking-normal">
+                              Step {index + 1}
+                            </span>
+                            <span className="text-xs uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
+                              {calculateReadingTime(post.content)} min read
+                            </span>
+                          </div>
+                          <div className="mt-3 text-lg font-semibold text-slate-950 theme-dark:text-slate-100">
+                            {post.metadata.title}
+                          </div>
+                          <p className="mt-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                            {post.metadata.summary}
+                          </p>
+                        </Link>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ) : null}
+
+              {learningGoals.length > 0 ? (
+                <div className="surface-panel px-6 py-6 md:px-8">
+                  <p className="section-kicker">Learning goals</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    What You'll Learn
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                    This hub is designed for developers who want to understand how coding agents
+                    work as systems, not just as model demos.
+                  </p>
+                  <ul className="mt-6 space-y-3">
+                    {learningGoals.map((goal) => (
+                      <li
+                        key={goal}
+                        className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-200"
+                      >
+                        {goal}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="surface-panel px-6 py-6 md:px-8">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

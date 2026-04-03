@@ -300,6 +300,7 @@ export default function Blog({ params }: PageProps) {
   const faqItems = normalizeFaqItems(post.metadata.faq)
   const howToSteps = normalizeHowToSteps(post.metadata.howto)
   const tags = post.metadata.tags?.map(normalizeTagName).filter(Boolean) || []
+  const normalizedTagSet = new Set(tags.map((tag) => normalizeTagName(tag).toLowerCase()))
   const currentCategory = post.metadata.category
   const categoryHref = currentCategory
     ? `/categories/${getCategorySlug(currentCategory)}`
@@ -310,14 +311,33 @@ export default function Blog({ params }: PageProps) {
     limit: 3,
   })
   const relatedTopicHubs = topicHubs
-    .filter((hub) => {
-      if (postMatchesTopicHub(tags, hub)) {
-        return true
+    .map((hub) => {
+      const normalizedHubTags = hub.relatedTags.map((tag) => normalizeTagName(tag).toLowerCase())
+      const tagMatchCount = normalizedHubTags.filter((tag) => normalizedTagSet.has(tag)).length
+      const categoryMatch = Boolean(
+        currentCategory && hub.relatedCategories.some((category) => category === currentCategory)
+      )
+
+      if (tagMatchCount === 0 && !categoryMatch && !postMatchesTopicHub(tags, hub)) {
+        return null
       }
 
-      return Boolean(currentCategory && hub.relatedCategories.some((category) => category === currentCategory))
+      return {
+        hub,
+        score: tagMatchCount * 10 + (categoryMatch ? 1 : 0),
+      }
     })
+    .filter(
+      (
+        entry
+      ): entry is {
+        hub: (typeof topicHubs)[number]
+        score: number
+      } => entry !== null
+    )
+    .sort((left, right) => right.score - left.score || left.hub.title.localeCompare(right.hub.title))
     .slice(0, 3)
+    .map(({ hub }) => hub)
 
   const organization = {
     '@type': 'Organization',

@@ -10,6 +10,8 @@ export interface TopicHub {
   relatedCategories: Category[]
   targetKeywords: string[]
   icon: string
+  featuredArticleSlugs?: string[]
+  learningGoals?: string[]
 }
 
 /**
@@ -66,6 +68,29 @@ export const topicHubs: TopicHub[] = [
     relatedCategories: ['Productivity', 'Technology', 'AI Technology'],
     targetKeywords: ['开发者效率工具', 'developer productivity', 'workflow automation', 'automate coding tasks', 'productivity tips'],
     icon: '⚙️',
+  },
+  {
+    slug: 'ai-coding-agent-stack',
+    title: 'AI Coding Agent Stack',
+    description: 'A practical path for understanding coding agent runtime design, tool systems, MCP integration, permissions, sessions, and extensibility.',
+    longDescription: `Study how serious AI coding agents are put together beyond the model layer. This topic hub focuses on the architecture patterns that make coding agents usable in real developer workflows: runtime loops, tool execution, permission models, MCP-powered external capabilities, session continuity, hooks, plugins, and migration discipline. It is designed for readers who want to understand the operating environment around AI coding agents rather than only compare model demos or benchmark charts.`,
+    relatedTags: ['AI Coding Agents', 'AI Agents', 'Developer Tools', 'AI Programming', 'MCP', 'Claw Code', 'Claude Code', 'Rust', 'Python', 'Automation'],
+    relatedCategories: ['AI Technology', 'Technology'],
+    targetKeywords: ['AI coding agent architecture', 'coding agent stack', 'AI developer tools', 'MCP coding agents', 'agent runtime design'],
+    icon: '🧭',
+    featuredArticleSlugs: [
+      '2026-04-02-claw-code-ai-coding-agent-architecture',
+      '2026-04-02-rust-python-ai-agent-runtime-architecture',
+      '2026-04-02-tooling-permissions-mcp-coding-agents',
+      '2026-04-02-hooks-plugins-sessions-ai-agents',
+      '2026-04-02-clean-room-rewrites-parity-audits-ai-agents',
+    ],
+    learningGoals: [
+      'Understand the runtime layers that sit between a foundation model and a usable coding agent.',
+      'See why tool registries, permission gates, and MCP integrations define real-world capability.',
+      'Learn how sessions, hooks, and plugins turn an assistant into an extensible developer environment.',
+      'Use parity audits and rewrite discipline to reason about agent migrations without losing behavior.',
+    ],
   },
 ]
 

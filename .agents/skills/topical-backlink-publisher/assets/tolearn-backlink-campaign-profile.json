@@ -1,0 +1,43 @@
+{
+  "project_name": "ToLearn Blog",
+  "site_url": "https://tolearn.blog",
+  "core_topics": [
+    "AI systems",
+    "AI coding agents",
+    "model context protocol",
+    "developer tools",
+    "SEO",
+    "search visibility",
+    "web development",
+    "design systems",
+    "portfolio templates"
+  ],
+  "preferred_destination_scopes": [
+    "article",
+    "topic_hub",
+    "guide",
+    "blog",
+    "homepage"
+  ],
+  "comment_guardrails": {
+    "prefer_website_field": true,
+    "max_inline_urls": 0,
+    "min_sentences": 2,
+    "max_sentences": 5,
+    "max_brand_mentions": 1,
+    "require_page_specific_reference": true,
+    "avoid_reused_openers": true
+  },
+  "batch_rules": {
+    "default_max_targets_per_run": 5,
+    "skip_when_topic_overlap_below": 1,
+    "prefer_article_specific_links": true
+  },
+  "tone_guardrails": [
+    "Sound like a real practitioner reacting to a specific point on the page.",
+    "Do not open every comment with generic praise.",
+    "Keep the useful observation stronger than the self-promotion.",
+    "Use the website field for the backlink whenever the form supports it.",
+    "If the page-topic match is weak, skip the target."
+  ]
+}

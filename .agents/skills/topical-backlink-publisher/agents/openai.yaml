@@ -1,0 +1,4 @@
+interface:
+  display_name: "Topical Backlink Publisher"
+  short_description: "Publish relevant backlinks with natural comments and extensible target types."
+  default_prompt: "Use $topical-backlink-publisher to plan and publish topic-matched backlinks for this repo without sounding automated."

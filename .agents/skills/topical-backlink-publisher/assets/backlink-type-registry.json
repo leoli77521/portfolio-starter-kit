@@ -1,0 +1,101 @@
+[
+  {
+    "id": "blog-comment",
+    "status": "active",
+    "automation_level": "full",
+    "input_source_types": [
+      "blog_comment"
+    ],
+    "input_submission_modes": [
+      "browser_comment"
+    ],
+    "required_fields": [
+      "comment",
+      "name",
+      "email",
+      "website"
+    ],
+    "fit_threshold": 4,
+    "notes": "Current fully automated path for public comment forms with a website field and verified no-signup flow."
+  },
+  {
+    "id": "resource-page",
+    "status": "planned",
+    "automation_level": "semi-auto",
+    "input_source_types": [
+      "resource_page",
+      "public_suggestion"
+    ],
+    "input_submission_modes": [
+      "browser_form",
+      "email"
+    ],
+    "required_fields": [
+      "title",
+      "url",
+      "description"
+    ],
+    "fit_threshold": 5,
+    "notes": "Use for curated AI, SEO, developer-tool, or design resource pages once public suggestion flows are vetted."
+  },
+  {
+    "id": "tool-directory",
+    "status": "planned",
+    "automation_level": "semi-auto",
+    "input_source_types": [
+      "tool_directory",
+      "listing_submission"
+    ],
+    "input_submission_modes": [
+      "browser_form"
+    ],
+    "required_fields": [
+      "name",
+      "url",
+      "summary",
+      "category"
+    ],
+    "fit_threshold": 5,
+    "notes": "Best for pages listing AI tools, developer tools, SEO tools, templates, or educational products."
+  },
+  {
+    "id": "newsletter-roundup",
+    "status": "planned",
+    "automation_level": "manual",
+    "input_source_types": [
+      "newsletter_roundup",
+      "editor_pitch"
+    ],
+    "input_submission_modes": [
+      "email",
+      "contact_form"
+    ],
+    "required_fields": [
+      "subject",
+      "pitch",
+      "url"
+    ],
+    "fit_threshold": 6,
+    "notes": "Use for editorial roundups where a short, human pitch is more appropriate than a comment."
+  },
+  {
+    "id": "guest-post-pitch",
+    "status": "planned",
+    "automation_level": "manual",
+    "input_source_types": [
+      "guest_post",
+      "contributor_pitch"
+    ],
+    "input_submission_modes": [
+      "email",
+      "contact_form"
+    ],
+    "required_fields": [
+      "subject",
+      "pitch",
+      "topic"
+    ],
+    "fit_threshold": 6,
+    "notes": "Use for trusted sites that accept article ideas in AI, SEO, web, or design-adjacent areas."
+  }
+]

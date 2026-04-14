@@ -57,7 +57,7 @@ export function Navbar() {
                 title="ToLearn home"
                 aria-label="ToLearn home"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-sm font-bold text-white shadow-sm theme-dark:bg-slate-100 theme-dark:text-slate-950">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-emerald-400 shadow-sm theme-dark:bg-slate-100 theme-dark:text-emerald-700">
                   TL
                 </span>
                 <span className="hidden sm:block">

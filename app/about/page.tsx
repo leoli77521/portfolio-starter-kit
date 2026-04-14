@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { getBlogPosts } from 'app/blog/utils'
 import { guides } from 'app/lib/guides'
 import { topicHubs } from 'app/lib/topic-hubs'
-import { categories } from 'app/lib/categories'
 import { baseUrl } from 'app/sitemap'
 
 export const metadata = {
@@ -50,7 +49,6 @@ const coverageAreas = [
 export default function AboutPage() {
   const allPosts = getBlogPosts()
   const totalTags = new Set(allPosts.flatMap((post) => post.metadata.tags || [])).size
-  const activeCategories = categories.filter((category) => category.name !== 'All').length
 
   const organization = {
     '@type': 'Organization',
@@ -206,28 +204,50 @@ export default function AboutPage() {
       </div>
 
       <div className="surface-panel px-6 py-6 md:px-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="section-kicker">Where to go next</p>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-              Start with the journal, browse {activeCategories} active categories, or get in touch
-              if you want to discuss the work directly.
+        <div>
+          <p className="section-kicker">Where to go next</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+            Pick the next move that matches how you read
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+            Start with core essays, switch to structured learning paths, or get the weekly brief
+            if you want the signal without watching the archive every day.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <Link href="/#start-here" className="surface-card block px-5 py-5">
+            <p className="section-kicker">New here?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Start with core essays
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Use the homepage&apos;s curated starting points instead of entering through the full
+              archive.
             </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link href="/blog" className="editorial-link">
-              Open the journal
-            </Link>
-            <Link href="/guides" className="editorial-link">
-              Browse guides
-            </Link>
-            <Link href="/contact" className="editorial-link">
-              Contact
-            </Link>
-          </div>
+          </Link>
+
+          <Link href="/topics" className="surface-card block px-5 py-5">
+            <p className="section-kicker">Prefer structure?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Browse topic hubs
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Follow curated paths through AI systems, search visibility, and modern web work.
+            </p>
+          </Link>
+
+          <Link href="/#newsletter" className="surface-card block px-5 py-5">
+            <p className="section-kicker">Want updates?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Get the weekly brief
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              One concise email each week with practical analysis instead of filler.
+            </p>
+          </Link>
         </div>
       </div>
     </section>
   )
 }
-

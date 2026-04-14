@@ -16,7 +16,7 @@ const categoryBadgeStyles = {
 }
 
 export function LatestPostsList({
-  limit = 5,
+  limit = 3,
   skipFirst = 0,
 }: {
   limit?: number
@@ -39,11 +39,10 @@ export function LatestPostsList({
         <div>
           <p className="section-kicker">Latest dispatches</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-            Fresh notes from the working notebook
+            Fresh notes from the notebook
           </h2>
           <p className="section-copy mt-3 max-w-2xl">
-            These are the most recent entries after the featured set, laid out for fast
-            scanning instead of long card repetition.
+            The newest analysis across AI systems, search visibility, and modern web execution.
           </p>
         </div>
 
@@ -53,7 +52,7 @@ export function LatestPostsList({
         </Link>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-3">
         {posts.map((post) => {
           const categoryTone = getCategoryColor(post.metadata.category || 'All')
 
@@ -103,4 +102,3 @@ export function LatestPostsList({
     </section>
   )
 }
-

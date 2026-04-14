@@ -9,13 +9,12 @@ export const metadata: Metadata = {
   description:
     'Browse the full ToLearn archive covering AI systems, search visibility, and modern web execution.',
   keywords: [
-    'technology blog',
-    'AI artificial intelligence',
-    'SEO optimization tips',
-    'web development',
-    'frontend technology',
-    'programming learning',
-    'tech sharing',
+    'AI systems archive',
+    'coding agents analysis',
+    'search visibility',
+    'technical SEO',
+    'modern web execution',
+    'developer workflows',
   ],
   alternates: {
     canonical: `${baseUrl}/blog`,
@@ -38,7 +37,8 @@ export default function Page() {
     '@type': 'Blog',
     '@id': `${baseUrl}/blog/#blog`,
     name: 'ToLearn Technology Blog',
-    description: 'Browse our comprehensive collection of AI guides, SEO strategies, and programming tutorials. Find actionable insights to advance your tech career.',
+    description:
+      'Browse the full ToLearn archive covering AI systems, search visibility, and modern web execution.',
     url: `${baseUrl}/blog`,
     author: organization,
     publisher: organization,
@@ -46,7 +46,7 @@ export default function Page() {
       '@id': `${baseUrl}/#website`,
     },
     inLanguage: 'en-US',
-    keywords: ['technology blog', 'AI artificial intelligence', 'SEO optimization', 'web development', 'programming technology', 'frontend development']
+    keywords: ['AI systems', 'coding agents', 'search visibility', 'technical SEO', 'modern web execution']
   }
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -96,8 +96,54 @@ export default function Page() {
         </p>
       </div>
 
+      <div className="surface-panel mb-8 px-6 py-6 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">Curated entry points</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Don&apos;t start the archive cold
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Use the strongest entry points first, then come back here when you want the full
+              stream of posts.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <Link href="/#start-here" className="surface-card block px-5 py-5">
+            <p className="section-kicker">New here?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Start with essentials
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Three curated entry points that explain the site&apos;s AI, search, and web lanes.
+            </p>
+          </Link>
+
+          <Link href="/topics" className="surface-card block px-5 py-5">
+            <p className="section-kicker">Need structure?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Browse topic hubs
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Follow guided paths through the archive instead of reading in timestamp order.
+            </p>
+          </Link>
+
+          <Link href="/guides" className="surface-card block px-5 py-5">
+            <p className="section-kicker">Want a progression?</p>
+            <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+              Read guides
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              Use the most structured layer when you want step-by-step learning, not just posts.
+            </p>
+          </Link>
+        </div>
+      </div>
+
       <PostsWithFilter posts={posts} />
     </section>
   )
 }
-

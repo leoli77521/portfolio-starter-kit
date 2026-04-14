@@ -158,7 +158,7 @@ export function Navbar() {
 
             <div className="flex items-center gap-2">
               <Link
-                href="/guides"
+                href="/#start-here"
                 className="hidden rounded-full border border-slate-200/80 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white xl:inline-flex"
               >
                 Start Here
@@ -173,4 +173,3 @@ export function Navbar() {
     </header>
   )
 }
-

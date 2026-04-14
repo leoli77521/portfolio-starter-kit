@@ -32,11 +32,11 @@ export default function Footer() {
           <div className="space-y-4">
             <p className="section-kicker">ToLearn</p>
             <h2 className="text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-              Notes for builders who care about signal.
+              ToLearn — signal-first notes for builders.
             </h2>
             <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-              ToLearn covers AI systems, search visibility, and modern web execution with a
-              bias toward practical decisions instead of recycled hype.
+              Independent writing on AI systems, search visibility, and modern web execution for
+              people shipping on the web.
             </p>
           </div>
 
@@ -103,4 +103,3 @@ export default function Footer() {
     </footer>
   )
 }
-

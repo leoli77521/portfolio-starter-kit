@@ -21,7 +21,11 @@ import type { FAQItem, HowToStep } from 'app/types'
 import { getCategorySlug } from 'app/lib/categories'
 import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
 import { findRelevantGuides } from 'app/lib/pseo-content'
-import { postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import {
+  getFeaturedSeriesContextForPost,
+  postMatchesTopicHub,
+  topicHubs,
+} from 'app/lib/topic-hubs'
 import { normalizeTagName, toTagSlug } from 'app/lib/tags'
 
 function parseJsonArray(value: unknown): unknown[] | null {
@@ -338,6 +342,44 @@ export default function Blog({ params }: PageProps) {
     .sort((left, right) => right.score - left.score || left.hub.title.localeCompare(right.hub.title))
     .slice(0, 3)
     .map(({ hub }) => hub)
+  const featuredSeriesContext = getFeaturedSeriesContextForPost(cleanSlug)
+  const featuredSeriesNextPost = featuredSeriesContext?.nextSlug
+    ? allPosts.find((item) => item.slug === featuredSeriesContext.nextSlug) || null
+    : null
+  const primaryTopicHub = featuredSeriesContext?.hub || relatedTopicHubs[0] || null
+  let nextStepCard = {
+    label: 'Archive',
+    title: 'Keep reading in the journal',
+    description: 'Move from this article into the broader archive and scan adjacent work.',
+    href: '/blog',
+    cta: 'Open the journal',
+  }
+
+  if (featuredSeriesContext && featuredSeriesNextPost) {
+    nextStepCard = {
+      label: `Step ${featuredSeriesContext.index + 2} of ${featuredSeriesContext.total}`,
+      title: 'Continue the series',
+      description: `Move to the next entry in ${featuredSeriesContext.hub.seriesTitle || featuredSeriesContext.hub.title}.`,
+      href: `/blog/${featuredSeriesNextPost.slug}`,
+      cta: 'Read the next article',
+    }
+  } else if (featuredSeriesContext) {
+    nextStepCard = {
+      label: `${featuredSeriesContext.total}-part series`,
+      title: 'View the full series',
+      description: `See the complete reading path inside ${featuredSeriesContext.hub.seriesTitle || featuredSeriesContext.hub.title}.`,
+      href: `/topics/${featuredSeriesContext.hub.slug}`,
+      cta: 'Open the series',
+    }
+  } else if (relatedGuides[0]) {
+    nextStepCard = {
+      label: relatedGuides[0].difficulty,
+      title: 'Read a structured guide',
+      description: 'Jump from this article into a more structured learning path.',
+      href: `/guides/${relatedGuides[0].slug}`,
+      cta: 'Open the guide',
+    }
+  }
 
   const organization = {
     '@type': 'Organization',
@@ -726,6 +768,73 @@ export default function Blog({ params }: PageProps) {
             </section>
           ) : null}
 
+          <section className="surface-panel px-6 py-7 md:px-8">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="section-kicker">Next step</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                  Choose where to go from here
+                </h2>
+              </div>
+              <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                Good archive pages should always suggest the next best action, not just another
+                loose list of links.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-5 lg:grid-cols-3">
+              <Link href={nextStepCard.href} className="surface-card block px-5 py-5">
+                <p className="section-kicker">{nextStepCard.label}</p>
+                <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+                  {nextStepCard.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  {nextStepCard.description}
+                </p>
+                <div className="mt-6 editorial-link">
+                  {nextStepCard.cta}
+                  <ArrowUpRight className="h-4 w-4" />
+                </div>
+              </Link>
+
+              <Link
+                href={primaryTopicHub ? `/topics/${primaryTopicHub.slug}` : '/topics'}
+                className="surface-card block px-5 py-5"
+              >
+                <p className="section-kicker">
+                  {primaryTopicHub ? 'Topic hub' : 'Guided paths'}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+                  {primaryTopicHub ? 'Explore this topic hub' : 'Browse topic hubs'}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  {primaryTopicHub
+                    ? primaryTopicHub.description
+                    : 'Switch from a single article to curated paths that connect related work.'}
+                </p>
+                <div className="mt-6 editorial-link">
+                  {primaryTopicHub ? 'Open the hub' : 'View all topic hubs'}
+                  <ArrowUpRight className="h-4 w-4" />
+                </div>
+              </Link>
+
+              <Link href="/#newsletter" className="surface-card block px-5 py-5">
+                <p className="section-kicker">Weekly brief</p>
+                <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
+                  Get the weekly brief
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  Get one concise email each week with signal-first analysis on AI systems, search
+                  visibility, and modern web execution.
+                </p>
+                <div className="mt-6 editorial-link">
+                  Subscribe
+                  <ArrowUpRight className="h-4 w-4" />
+                </div>
+              </Link>
+            </div>
+          </section>
+
           <div className="surface-card px-6 py-6">
             <p className="section-kicker">Support</p>
             <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
@@ -814,4 +923,3 @@ export default function Blog({ params }: PageProps) {
     </section>
   )
 }
-

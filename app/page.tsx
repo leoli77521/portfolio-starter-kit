@@ -3,23 +3,36 @@ import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
 import { HeroSection } from 'app/components/hero-section'
-import { FeaturedArticles } from 'app/components/featured-articles'
+import {
+  getHomepageFeaturedSeries,
+  getHomepageGuidedPaths,
+  getHomepageTrackData,
+  homepageStartHere,
+} from 'app/lib/homepage'
+import {
+  HomepageFeaturedSeriesCard,
+  HomepageGuidedPaths,
+  HomepageMiniAbout,
+  HomepageStartHere,
+  HomepageTrackExplorer,
+} from 'app/components/homepage-sections'
 import { LatestPostsList } from 'app/components/latest-posts-list'
 import { NewsletterCTA } from 'app/components/newsletter-cta'
+import { topicHubs } from 'app/lib/topic-hubs'
 
 export const metadata: Metadata = {
   title: 'ToLearn Blog | AI, Search, and Modern Web Work',
   description:
-    'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
+    'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
   keywords: [
-    'AI Tech Blog',
-    'SEO Optimization Tutorials',
-    'Programming Development',
-    'Artificial Intelligence Applications',
-    'Website Optimization Strategies',
-    'Frontend Development Technology',
-    'JavaScript Tutorials',
-    'React Development Guide',
+    'AI systems',
+    'coding agents',
+    'search visibility',
+    'technical SEO',
+    'modern web execution',
+    'developer workflows',
+    'AI architecture analysis',
+    'web performance',
   ],
   alternates: {
     canonical: baseUrl,
@@ -27,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ToLearn Blog | AI, Search, and Modern Web Work',
     description:
-      'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
+      'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
     url: baseUrl,
     type: 'website',
     locale: 'en_US',
@@ -45,7 +58,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'ToLearn Blog | AI, Search, and Modern Web Work',
     description:
-      'Editorial notes on AI systems, search visibility, and practical web execution for builders.',
+      'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
     images: [defaultOgImage],
   },
 }
@@ -55,10 +68,9 @@ export default function Page() {
     (a, b) =>
       new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
   )
-  const latestPost = allPosts[0]
-  const uniqueCategories = new Set(
-    allPosts.map((post) => post.metadata.category).filter(Boolean)
-  )
+  const trackData = getHomepageTrackData(allPosts)
+  const guidedPaths = getHomepageGuidedPaths(allPosts)
+  const featuredSeries = getHomepageFeaturedSeries(allPosts)
 
   const organization = {
     '@type': 'Organization',
@@ -77,9 +89,10 @@ export default function Page() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${baseUrl}/#website`,
-    name: 'ToLearn Blog - AI Tech Blog',
+    name: 'ToLearn Blog',
     alternateName: 'ToLearn Tech Blog',
-    description: 'Professional tech blog sharing AI insights, SEO strategies, and programming best practices. In-depth articles helping developers improve skills.',
+    description:
+      'Signal-first analysis covering AI systems, coding agents, search visibility, and modern web execution for builders.',
     url: baseUrl,
     inLanguage: 'en-US',
     potentialAction: {
@@ -92,14 +105,15 @@ export default function Page() {
       '@type': 'Blog',
       '@id': `${baseUrl}/blog/#blog`,
       name: 'ToLearn Tech Blog',
-      description: 'In-depth technical articles sharing, covering AI artificial intelligence, SEO optimization, frontend development and trending tech topics',
+      description:
+        'Practical analysis, implementation notes, and strategic writeups on AI systems, search visibility, and modern web execution.',
       url: `${baseUrl}/blog`,
       author: organization,
       publisher: organization,
       isPartOf: {
         '@id': `${baseUrl}/#website`,
       },
-      keywords: ['AI Technology', 'SEO Optimization', 'Programming Tutorials', 'Artificial Intelligence', 'Frontend Development'],
+      keywords: ['AI systems', 'coding agents', 'search visibility', 'technical SEO', 'modern web execution'],
       inLanguage: 'en-US'
     }
   }
@@ -116,24 +130,22 @@ export default function Page() {
 
       <HeroSection
         totalPosts={allPosts.length}
-        categoryCount={uniqueCategories.size}
-        latestPost={
-          latestPost
-            ? {
-                slug: latestPost.slug,
-                title: latestPost.metadata.title,
-                category: latestPost.metadata.category,
-                publishedAt: latestPost.metadata.publishedAt,
-              }
-            : null
-        }
+        topicHubCount={topicHubs.length}
       />
 
-      <FeaturedArticles limit={3} />
+      <HomepageStartHere items={homepageStartHere} />
 
-      <LatestPostsList limit={5} skipFirst={3} />
+      <HomepageTrackExplorer tracks={trackData} />
+
+      <HomepageGuidedPaths paths={guidedPaths} />
+
+      <HomepageFeaturedSeriesCard series={featuredSeries} />
+
+      <LatestPostsList limit={3} />
 
       <NewsletterCTA />
+
+      <HomepageMiniAbout />
     </div>
   )
 }

@@ -12,6 +12,8 @@ export interface TopicHub {
   icon: string
   featuredArticleSlugs?: string[]
   learningGoals?: string[]
+  seriesTitle?: string
+  seriesDescription?: string
 }
 
 /**
@@ -78,6 +80,9 @@ export const topicHubs: TopicHub[] = [
     relatedCategories: ['AI Technology', 'Technology'],
     targetKeywords: ['AI coding agent architecture', 'coding agent stack', 'AI developer tools', 'MCP coding agents', 'agent runtime design'],
     icon: '🧭',
+    seriesTitle: 'Inside the AI Coding Agent Stack',
+    seriesDescription:
+      'A connected series on runtime architecture, tool systems, MCP integration, permissions, sessions, hooks, plugins, and migration discipline in modern coding agents.',
     featuredArticleSlugs: [
       '2026-04-02-claw-code-ai-coding-agent-architecture',
       '2026-04-02-rust-python-ai-agent-runtime-architecture',
@@ -117,4 +122,25 @@ export function postMatchesTopicHub(postTags: string[], hub: TopicHub): boolean 
   return hub.relatedTags.some((hubTag) =>
     normalizedPostTags.includes(normalizeTagName(hubTag).toLowerCase())
   )
+}
+
+export function getFeaturedSeriesContextForPost(slug: string) {
+  for (const hub of topicHubs) {
+    if (!hub.featuredArticleSlugs?.includes(slug)) {
+      continue
+    }
+
+    const slugs = hub.featuredArticleSlugs
+    const index = slugs.indexOf(slug)
+
+    return {
+      hub,
+      index,
+      total: slugs.length,
+      previousSlug: index > 0 ? slugs[index - 1] : null,
+      nextSlug: index < slugs.length - 1 ? slugs[index + 1] : null,
+    }
+  }
+
+  return null
 }

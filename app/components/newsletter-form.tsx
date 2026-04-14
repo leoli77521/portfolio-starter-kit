@@ -55,10 +55,10 @@ export default function NewsletterForm() {
         <div className="min-w-0 flex-1">
           <p className="section-kicker">Newsletter</p>
           <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-            Weekly notes, not filler
+            Weekly analysis, not filler
           </h3>
           <p className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
-            Get the newest analysis and practical writeups in your inbox.
+            One concise update on AI systems, search visibility, and modern web execution.
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function NewsletterForm() {
             </p>
           ) : (
             <p className="mt-3 text-xs text-slate-500 theme-dark:text-slate-400">
-              One concise update at a time. No noisy autoresponder sequence.
+              Concise weekly notes. No noisy autoresponder sequence.
             </p>
           )}
         </form>
@@ -107,4 +107,3 @@ export default function NewsletterForm() {
     </div>
   )
 }
-

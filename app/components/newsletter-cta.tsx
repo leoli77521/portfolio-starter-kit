@@ -43,52 +43,74 @@ export function NewsletterCTA() {
 
   return (
     <section id="newsletter" className="py-16 md:py-20">
-      <div className="max-w-2xl mx-auto">
-        <div className="relative overflow-hidden bg-white theme-dark:bg-slate-900 rounded-3xl border border-gray-200 theme-dark:border-slate-800 p-8 md:p-12 shadow-xl">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl -z-10" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 rounded-full blur-3xl -z-10" />
+      <div className="surface-panel relative overflow-hidden px-6 py-8 md:px-10 md:py-10">
+        <div className="absolute inset-x-0 top-0 -z-10 h-48 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.18),transparent_42%),radial-gradient(circle_at_82%_22%,rgba(13,148,136,0.16),transparent_36%)]" />
 
-          <div className="text-center">
-            {/* Icon */}
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 mb-6 shadow-lg shadow-indigo-500/25">
-              <Mail className="w-7 h-7 text-white" />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.86fr)] lg:items-start">
+          <div>
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-100/85 text-slate-900 theme-dark:border-slate-800 theme-dark:bg-slate-900/80 theme-dark:text-white">
+              <Mail className="h-6 w-6" />
             </div>
 
-            {/* Title */}
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 theme-dark:text-white mb-4">
-              Get Weekly Tech Insights
+            <p className="section-kicker mt-6">Get the weekly brief</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
+              One sharp weekly email for AI builders and web operators.
             </h2>
-
-            {/* Description */}
-            <p className="text-gray-600 theme-dark:text-gray-400 mb-8 max-w-md mx-auto">
-              Subscribe to receive curated AI and development articles directly in your inbox.
+            <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 theme-dark:text-slate-300">
+              Get a concise brief on product shifts, search changes, and practical implementation
+              patterns worth paying attention to.
             </p>
 
-            {/* Form */}
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {[
+                'Clear analysis, not trend-chasing',
+                'Practical takeaways you can actually use',
+                'One concise update each week',
+                'No noisy autoresponder sequence',
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/85 px-4 py-4 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-200"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="surface-card px-5 py-5 md:px-6 md:py-6">
+            <p className="section-kicker">Subscribe</p>
+            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+              Weekly analysis, not filler
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              One concise email per week with signal-first notes on coding agents, search
+              visibility, and real execution patterns.
+            </p>
+
             {status === 'success' ? (
-              <div className="flex items-center justify-center gap-2 text-emerald-600 theme-dark:text-emerald-400 font-medium py-4">
-                <CheckCircle className="w-5 h-5" />
+              <div className="mt-6 flex items-center gap-2 rounded-[1.25rem] border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 text-sm font-medium text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/40 theme-dark:text-emerald-300">
+                <CheckCircle className="h-5 w-5" />
                 Thanks for subscribing!
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="flex-1 px-5 py-3.5 rounded-xl bg-gray-50 theme-dark:bg-slate-800 border border-gray-200 theme-dark:border-slate-700 text-gray-900 theme-dark:text-white placeholder:text-gray-500 theme-dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  className="w-full rounded-xl border border-slate-200/80 bg-white/90 px-5 py-3.5 text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-white theme-dark:placeholder:text-slate-500 theme-dark:focus:border-indigo-500/60"
                 />
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 disabled:opacity-70 disabled:cursor-not-allowed transition-all"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70 theme-dark:bg-slate-100 theme-dark:text-slate-950"
                 >
                   {status === 'loading' ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                       Subscribing...
                     </>
                   ) : (
@@ -104,9 +126,8 @@ export function NewsletterCTA() {
               </p>
             )}
 
-            {/* Privacy note */}
-            <p className="mt-4 text-xs text-gray-500 theme-dark:text-gray-500">
-              No spam, unsubscribe at any time.
+            <p className="mt-4 text-xs text-slate-500 theme-dark:text-slate-400">
+              No spam. Easy unsubscribe. Just signal.
             </p>
           </div>
         </div>
@@ -114,4 +135,3 @@ export function NewsletterCTA() {
     </section>
   )
 }
-

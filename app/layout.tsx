@@ -100,9 +100,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="ToLearn Blog" />
         <meta name="theme-color" content="#fafafa" />
 
-        {/* 璧勬簮鎻愮ず浼樺寲 - 棰勮繛鎺ュ埌鍏抽敭鍩熷悕 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />

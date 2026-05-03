@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight, Clock } from 'lucide-react'
 import { calculateReadingTime, formatDate, getBlogPosts } from 'app/blog/utils'
@@ -28,12 +27,13 @@ function renderLeadMedia(image: string | undefined, title: string, category?: st
   if (image && image.startsWith('/')) {
     return (
       <div className="relative aspect-[16/9] overflow-hidden rounded-[1.5rem] border border-slate-200/70 theme-dark:border-slate-800">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={image}
           alt={title}
-          fill
-          sizes="(max-width: 1024px) 100vw, 60vw"
-          className="object-cover"
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
         />
       </div>
     )
@@ -166,4 +166,3 @@ export function FeaturedArticles({ limit = 3 }: { limit?: number }) {
     </section>
   )
 }
-

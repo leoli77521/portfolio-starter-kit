@@ -3,7 +3,9 @@ import { NextResponse } from 'next/server'
 import type { SearchResult } from '@/app/types'
 
 // Cache configuration
-const CACHE_TTL = 5 * 60 * 1000 // 5 minutes in milliseconds
+const CACHE_TTL = 60 * 60 * 1000 // 1 hour in milliseconds
+const EDGE_CACHE_SECONDS = 60 * 60
+const EDGE_STALE_WHILE_REVALIDATE_SECONDS = 2 * EDGE_CACHE_SECONDS
 
 // In-memory cache
 let cachedPosts: SearchResult[] | null = null
@@ -39,7 +41,7 @@ export async function GET() {
 
     return NextResponse.json(posts, {
       headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        'Cache-Control': `public, s-maxage=${EDGE_CACHE_SECONDS}, stale-while-revalidate=${EDGE_STALE_WHILE_REVALIDATE_SECONDS}`,
       },
     })
   } catch (error) {

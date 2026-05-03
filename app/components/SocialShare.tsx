@@ -270,9 +270,11 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
                 {qrCodeUrl ? (
                   <div className="space-y-4">
                     <div className="bg-white p-4 rounded-xl shadow-inner">
-                      <img 
-                        src={qrCodeUrl} 
-                        alt="QR Code for WeChat sharing" 
+                      <img
+                        src={qrCodeUrl}
+                        alt="QR Code for WeChat sharing"
+                        loading="lazy"
+                        decoding="async"
                         className="w-48 h-48 mx-auto"
                       />
                     </div>

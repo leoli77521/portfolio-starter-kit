@@ -645,6 +645,7 @@ export default function Blog({ params }: PageProps) {
                 width={1024}
                 height={1024}
                 priority
+                unoptimized
                 sizes="(max-width: 1280px) 100vw, 900px"
                 className="h-auto w-full rounded-[1.6rem] border border-slate-200/70 object-cover theme-dark:border-slate-800/80"
               />

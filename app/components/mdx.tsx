@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
@@ -68,16 +67,24 @@ function CustomLink({ href = '', children, ...props }: CustomLinkProps) {
   )
 }
 
-function RoundedImage({ alt, src, ...props }: RoundedImageProps) {
+function RoundedImage({ alt, src, className, loading, decoding, ...props }: RoundedImageProps) {
   const resolvedAlt = getDescriptiveImageAlt(
     alt,
     typeof src === 'string' ? src : undefined
   )
 
-  return <Image alt={resolvedAlt} src={src} className="rounded-lg" {...props} />
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt={resolvedAlt}
+      src={src}
+      className={className ?? 'rounded-lg'}
+      loading={loading ?? 'lazy'}
+      decoding={decoding ?? 'async'}
+      {...props}
+    />
+  )
 }
-
-
 
 function Code({ children, className, ...props }: CodeProps) {
   const codeString = typeof children === 'string' ? children : String(children ?? '')
@@ -129,12 +136,13 @@ const components = {
   Image: RoundedImage,
   a: CustomLink,
   code: Code,
-  img: (props: any) => (
+  img: ({ alt, src, loading, decoding, ...props }: any) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      alt={getDescriptiveImageAlt(props.alt, props.src)}
-      loading="lazy"
-      decoding="async"
+      alt={getDescriptiveImageAlt(alt, typeof src === 'string' ? src : undefined)}
+      src={src}
+      loading={loading ?? 'lazy'}
+      decoding={decoding ?? 'async'}
       {...props}
     />
   ),

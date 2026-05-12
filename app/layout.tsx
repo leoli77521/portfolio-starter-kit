@@ -20,34 +20,48 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'ToLearn Blog - AI, SEO & Programming Tutorials',
+    default: 'ToLearn Blog',
     template: '%s | ToLearn Blog',
   },
-  description: 'ToLearn Blog - Your gateway to AI innovation, SEO mastery, and modern web development. Expert tutorials and insights for tech professionals.',
-  keywords: ['AI Technology', 'SEO Optimization', 'Programming Tutorials', 'Artificial Intelligence', 'Website Optimization', 'Frontend Development', 'Tech Blog', 'JavaScript Tutorials', 'React Development', 'Next.js Framework'],
+  description:
+    'Signal-first analysis covering AI systems, search visibility, and modern web execution for builders.',
+  keywords: [
+    'AI systems',
+    'coding agents',
+    'search visibility',
+    'technical SEO',
+    'modern web execution',
+    'developer workflows',
+    'AI architecture analysis',
+    'web performance',
+  ],
   authors: [{ name: 'ToLearn Blog' }],
   creator: 'ToLearn Blog',
   publisher: 'ToLearn Blog',
   applicationName: 'ToLearn Blog',
   referrer: 'origin-when-cross-origin',
   openGraph: {
-    title: 'ToLearn Blog - AI, SEO & Programming Tutorials',
-    description: 'ToLearn Blog - Your gateway to AI innovation, SEO mastery, and modern web development. Expert tutorials and insights for tech professionals.',
+    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
+    description:
+      'Signal-first analysis covering AI systems, search visibility, and modern web execution for builders.',
     url: baseUrl,
     siteName: 'ToLearn Blog',
     locale: 'en_US',
     type: 'website',
-    images: [{
-      url: `${baseUrl}/og`,
-      width: 1200,
-      height: 630,
-      alt: 'ToLearn Blog - Professional Technology Blog'
-    }]
+    images: [
+      {
+        url: `${baseUrl}/og`,
+        width: 1200,
+        height: 630,
+        alt: 'ToLearn Blog homepage preview',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ToLearn Blog - AI, SEO & Programming Tutorials',
-    description: 'Discover cutting-edge AI tools, proven SEO techniques, and modern programming best practices. Elevate your development skills with ToLearn.',
+    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
+    description:
+      'Signal-first analysis covering AI systems, search visibility, and modern web execution for builders.',
     images: [`${baseUrl}/og`],
   },
   robots: {
@@ -101,8 +115,6 @@ export default function RootLayout({
         <meta name="theme-color" content="#fafafa" />
 
         {/* 璧勬簮鎻愮ず浼樺寲 - 棰勮繛鎺ュ埌鍏抽敭鍩熷悕 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />

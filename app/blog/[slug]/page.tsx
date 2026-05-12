@@ -19,7 +19,7 @@ import { InArticleAd } from 'app/components/AdUnit'
 import Comments from 'app/components/comments'
 import type { FAQItem, HowToStep } from 'app/types'
 import { getCategorySlug } from 'app/lib/categories'
-import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
+import { buildSocialTitle, resolveOgImage, trimSeoTitle, trimSocialTitle } from 'app/lib/seo'
 import { findRelevantGuides } from 'app/lib/pseo-content'
 import {
   getFeaturedSeriesContextForPost,
@@ -134,7 +134,8 @@ interface PageProps {
 function buildDescription(
   category: string | undefined,
   summary: string | undefined,
-  title: string | undefined
+  title: string | undefined,
+  publishedAt: string | undefined
 ): string {
   const safeSummary = summary || 'Professional technology insights and practical solutions.'
   const lowerTitle = title?.toLowerCase() || ''
@@ -148,7 +149,8 @@ function buildDescription(
   } else if (lowerTitle.includes('guide') || lowerTitle.includes('tutorial') || lowerTitle.includes('how to')) {
     prefix = 'Learn how to: '
   } else if (lowerCategory.includes('ai')) {
-    prefix = '2026 update: '
+    const publishedYear = publishedAt ? new Date(publishedAt).getFullYear() : NaN
+    prefix = Number.isNaN(publishedYear) ? 'Latest analysis: ' : `${publishedYear} analysis: `
   }
 
   const suffixes: Record<string, string> = {
@@ -210,11 +212,16 @@ export function generateMetadata({ params }: PageProps): Metadata {
   } = post.metadata
 
   const seoTitle = trimSeoTitle(title)
-  const socialTitle = buildSocialTitle(seoTitle)
+  const socialTitle = buildSocialTitle(trimSocialTitle(title))
   const modifiedTime = updatedAt || publishedTime
   const ogImage = resolveOgImage(image, title)
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
-  const optimizedDescription = buildDescription(post.metadata.category, description, title)
+  const optimizedDescription = buildDescription(
+    post.metadata.category,
+    description,
+    title,
+    publishedTime
+  )
 
   return {
     title: seoTitle,
@@ -347,6 +354,8 @@ export default function Blog({ params }: PageProps) {
     ? allPosts.find((item) => item.slug === featuredSeriesContext.nextSlug) || null
     : null
   const primaryTopicHub = featuredSeriesContext?.hub || relatedTopicHubs[0] || null
+  const inArticleAdSlot = process.env.NEXT_PUBLIC_IN_ARTICLE_AD_SLOT?.trim() || ''
+  const shouldRenderInArticleAd = /^\d+$/.test(inArticleAdSlot)
   let nextStepCard = {
     label: 'Archive',
     title: 'Keep reading in the journal',
@@ -836,15 +845,17 @@ export default function Blog({ params }: PageProps) {
             </div>
           </section>
 
-          <div className="surface-card px-6 py-6">
-            <p className="section-kicker">Support</p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-              Sponsored placement
-            </h2>
-            <div className="mt-5">
-              <InArticleAd slot="YOUR_AD_SLOT_ID" />
+          {shouldRenderInArticleAd ? (
+            <div className="surface-card px-6 py-6">
+              <p className="section-kicker">Support</p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                Sponsored placement
+              </h2>
+              <div className="mt-5">
+                <InArticleAd slot={inArticleAdSlot} />
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <SocialShare
             title={post.metadata.title}

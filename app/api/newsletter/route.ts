@@ -25,14 +25,13 @@ export async function POST(request: Request) {
     )
   }
 
-  const apiKey =
-    process.env.CONVERTKIT_API_KEY || process.env.NEXT_PUBLIC_CONVERTKIT_API_KEY
+  const apiKey = process.env.CONVERTKIT_API_KEY
   const formId =
     process.env.CONVERTKIT_FORM_ID || process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID
 
   if (!apiKey || !formId) {
     return NextResponse.json(
-      { error: 'Newsletter is not configured on the server' },
+      { error: 'Newsletter is not configured with server-side credentials' },
       { status: 500 }
     )
   }

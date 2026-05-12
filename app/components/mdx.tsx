@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
+import remarkGfm from 'remark-gfm'
 import { slugify } from '@/app/lib/formatters'
 import { getDescriptiveImageAlt } from 'app/lib/seo'
 import type {
@@ -157,6 +158,11 @@ export function CustomMDX({ components: userComponents, ...props }: CustomMDXPro
   return (
     <MDXRemote
       {...props}
+      options={{
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+        },
+      }}
       components={{ ...components, ...(userComponents || {}) }}
     />
   )

@@ -1,4 +1,4 @@
-import { topicHubs } from 'app/lib/topic-hubs'
+import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
 import { getBlogPosts } from 'app/blog/utils'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
@@ -28,12 +28,7 @@ export const metadata: Metadata = {
 export default function TopicsPage() {
   const allPosts = getBlogPosts()
   const topicStats = topicHubs.map((hub) => {
-    const normalizedHubTags = hub.relatedTags.map((tag) => tag.toLowerCase())
-    const matchingPosts = allPosts.filter((post) => {
-      if (!post.metadata.tags) return false
-
-      return post.metadata.tags.some((tag) => normalizedHubTags.includes(tag.toLowerCase()))
-    })
+    const matchingPosts = allPosts.filter((post) => postBelongsToTopicHub(post, hub))
 
     return {
       ...hub,
@@ -180,4 +175,3 @@ export default function TopicsPage() {
     </section>
   )
 }
-

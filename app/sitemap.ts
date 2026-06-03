@@ -1,13 +1,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import pseoData from '@/data/pseo_data.json'
+import { aiDirectories } from 'app/lib/ai-directories'
 import { getBlogPosts } from 'app/blog/utils'
 import { categories, getCategorySlug } from 'app/lib/categories'
 import { baseUrl } from 'app/lib/constants'
 import { guides } from 'app/lib/guides'
 import { getMostRecentIsoString } from 'app/lib/seo'
 import { MIN_POSTS_FOR_INDEXED_TAG_PAGE, toTagSlug } from 'app/lib/tags'
-import { postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
 
 export { baseUrl } from 'app/lib/constants'
 
@@ -69,6 +70,14 @@ export default async function sitemap() {
     getFileLastModified('app/guides/[slug]/page.tsx'),
     getFileLastModified('app/lib/guides.ts')
   )
+  const aiDirectorySourceLastModified = getLatestTimestamp(
+    getFileLastModified('app/ai-coding-agents/page.tsx'),
+    getFileLastModified('app/ai-tools/page.tsx'),
+    getFileLastModified('app/ai-models/page.tsx'),
+    getFileLastModified('app/components/ai-directory-page.tsx'),
+    getFileLastModified('app/lib/ai-directories.ts'),
+    getFileLastModified('data/ai-topic-clusters.json')
+  )
   const pseoSourceLastModified = getLatestTimestamp(
     getFileLastModified('data/pseo_data.json'),
     getFileLastModified('app/templates/page.tsx'),
@@ -117,6 +126,12 @@ export default async function sitemap() {
       changeFrequency: 'weekly' as const,
       priority: 0.75,
     },
+    ...aiDirectories.map((directory) => ({
+      url: `${baseUrl}${directory.canonicalPath}`,
+      lastModified: aiDirectorySourceLastModified,
+      changeFrequency: 'weekly' as const,
+      priority: 0.78,
+    })),
     {
       url: `${baseUrl}/about`,
       lastModified: getFileLastModified('app/about/page.tsx'),
@@ -258,7 +273,7 @@ export default async function sitemap() {
       priority: number
     }>
   >((routes, topic) => {
-    const matchingPosts = posts.filter((post) => postMatchesTopicHub(post.metadata.tags || [], topic))
+    const matchingPosts = posts.filter((post) => postBelongsToTopicHub(post, topic))
 
     if (matchingPosts.length === 0) {
       return routes

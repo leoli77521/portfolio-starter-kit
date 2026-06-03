@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "node scripts/generate-search-index.js && next dev",
     "build": "node scripts/generate-search-index.js && next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test scripts/seo-content-audit.test.js"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",

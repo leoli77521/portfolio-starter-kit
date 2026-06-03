@@ -1,4 +1,4 @@
-import { getTopicHub, postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { getTopicHub, postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
 import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -18,7 +18,7 @@ function getMatchingPostsForHub(hub: NonNullable<ReturnType<typeof getTopicHub>>
   const allPosts = getBlogPosts()
 
   return allPosts
-    .filter((post) => postMatchesTopicHub(post.metadata.tags || [], hub))
+    .filter((post) => postBelongsToTopicHub(post, hub))
     .sort(
       (a, b) =>
         new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
@@ -213,6 +213,11 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            {hub.directoryHref ? (
+              <Link href={hub.directoryHref} className="editorial-link">
+                Open directory
+              </Link>
+            ) : null}
             <Link href="/topics" className="editorial-link">
               All topic hubs
             </Link>
@@ -438,4 +443,3 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
     </section>
   )
 }
-

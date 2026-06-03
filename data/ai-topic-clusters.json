@@ -1,0 +1,68 @@
+{
+  "hubs": [
+    {
+      "slug": "ai-coding-agent-stack",
+      "directoryHref": "/ai-coding-agents",
+      "focus": "runtime architecture, tool systems, MCP, permissions, sessions, and migration discipline"
+    },
+    {
+      "slug": "ai-tools-for-developers",
+      "directoryHref": "/ai-tools",
+      "focus": "developer-facing AI tools, coding assistants, productivity workflows, and practical tool selection"
+    },
+    {
+      "slug": "ai-model-comparisons",
+      "directoryHref": "/ai-models",
+      "focus": "model benchmarks, coding capability, cost tradeoffs, open-source models, and local AI infrastructure"
+    },
+    {
+      "slug": "ai-search-geo",
+      "directoryHref": "/topics/ai-search-geo",
+      "focus": "AI search, GEO, content pipelines, search reliability, and answer-engine visibility"
+    },
+    {
+      "slug": "enterprise-ai-governance",
+      "directoryHref": "/topics/enterprise-ai-governance",
+      "focus": "enterprise adoption, governance, safety, policy, sustainability, and organizational control planes"
+    }
+  ],
+  "primaryHubBySlug": {
+    "2026-04-02-claw-code-ai-coding-agent-architecture": "ai-coding-agent-stack",
+    "2026-04-02-clean-room-rewrites-parity-audits-ai-agents": "ai-coding-agent-stack",
+    "2026-04-02-hooks-plugins-sessions-ai-agents": "ai-coding-agent-stack",
+    "2026-04-02-rust-python-ai-agent-runtime-architecture": "ai-coding-agent-stack",
+    "2026-04-02-tooling-permissions-mcp-coding-agents": "ai-coding-agent-stack",
+    "2026-03-26-ai-war-wont-be-won-on-benchmarks-itll-be-won-in-distribution": "enterprise-ai-governance",
+    "2026-03-18-ai-chatbot-era-ending-agent-systems": "enterprise-ai-governance",
+    "2026-03-15-microsoft-agent-365-control-plane": "enterprise-ai-governance",
+    "2026-03-10-google-gemini-phone-layer": "ai-tools-for-developers",
+    "2026-03-09-claude-firefox-ai-bug-hunters": "ai-tools-for-developers",
+    "2026-03-09-gpt-5-4-codex-agent-stack": "ai-coding-agent-stack",
+    "llm-coding-benchmark-comparison-2026": "ai-model-comparisons",
+    "ai-agent-tools-comparison-2026": "ai-tools-for-developers",
+    "mcp-model-context-protocol-guide": "ai-coding-agent-stack",
+    "emerging-ai-development-trends-2025": "enterprise-ai-governance",
+    "verbose-ai-beats-fast-ai-moonshot-k2": "ai-model-comparisons",
+    "sora-2-azure-ai-generated-reality": "enterprise-ai-governance",
+    "apple-m5-chip-ai-programming-revolution": "ai-model-comparisons",
+    "ai-coding-tools-slower-productivity-paradox": "ai-tools-for-developers",
+    "claude-ai-now-executes-code": "ai-tools-for-developers",
+    "when-ai-becomes-too-human": "enterprise-ai-governance",
+    "from-chatbots-to-ai-agents-quiet-revolution": "enterprise-ai-governance",
+    "ai-chatbot-detection-methods-2025": "enterprise-ai-governance",
+    "ai-agents-production-guide": "ai-coding-agent-stack",
+    "gemini-deep-thinking-api-math-reasoning": "ai-model-comparisons",
+    "google-ai-energy-data-disclosure": "enterprise-ai-governance",
+    "gpt-5-enterprise-reality-check": "ai-model-comparisons",
+    "ai-search-vs-traditional-search-reliability": "ai-search-geo",
+    "2025-08-15-ai-content-pipeline-seo": "ai-search-geo",
+    "ai-epic-failures": "enterprise-ai-governance",
+    "gpt-5-for-coding": "ai-model-comparisons",
+    "gpt-oss-revolution": "ai-model-comparisons",
+    "ai-detectors-flag-declaration-independence": "enterprise-ai-governance",
+    "ai-revolution-american-workplaces": "enterprise-ai-governance",
+    "ai-revolution-finance": "enterprise-ai-governance",
+    "ai-generated-presentations": "ai-tools-for-developers",
+    "agentic-ai-revolution-2025": "enterprise-ai-governance"
+  }
+}

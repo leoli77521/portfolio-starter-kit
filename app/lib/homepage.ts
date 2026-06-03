@@ -1,6 +1,6 @@
 import type { BlogPost, Category } from '@/app/types'
 import { getCategorySlug } from 'app/lib/categories'
-import { getTopicHub, postMatchesTopicHub } from 'app/lib/topic-hubs'
+import { getTopicHub, postBelongsToTopicHub } from 'app/lib/topic-hubs'
 
 type StartHereItemType = 'Analysis' | 'Guide'
 
@@ -128,7 +128,7 @@ function getPostCountForHub(allPosts: BlogPost[], slug: string) {
     return 0
   }
 
-  return allPosts.filter((post) => postMatchesTopicHub(post.metadata.tags || [], hub)).length
+  return allPosts.filter((post) => postBelongsToTopicHub(post, hub)).length
 }
 
 export function getHomepageTrackData(allPosts: BlogPost[]): HomepageTrack[] {

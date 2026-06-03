@@ -1,4 +1,5 @@
 import type { Category } from '@/app/types'
+import aiTopicClusters from '@/data/ai-topic-clusters.json'
 import { normalizeTagName } from 'app/lib/tag-utils'
 
 export interface TopicHub {
@@ -14,7 +15,13 @@ export interface TopicHub {
   learningGoals?: string[]
   seriesTitle?: string
   seriesDescription?: string
+  directoryHref?: string
 }
+
+const primaryHubBySlug = aiTopicClusters.primaryHubBySlug as Record<string, string>
+const directoryHrefByHubSlug = new Map(
+  aiTopicClusters.hubs.map((hub) => [hub.slug, hub.directoryHref])
+)
 
 /**
  * Topic Hubs - Curated collections of related content
@@ -50,6 +57,18 @@ export const topicHubs: TopicHub[] = [
     relatedCategories: ['AI Technology', 'Productivity', 'Technology'],
     targetKeywords: ['开发者AI工具', 'AI tools for coding', 'developer productivity AI', 'AI code assistant', 'programming with AI'],
     icon: '🛠️',
+    directoryHref: directoryHrefByHubSlug.get('ai-tools-for-developers'),
+    featuredArticleSlugs: [
+      'ai-agent-tools-comparison-2026',
+      'ai-coding-tools-slower-productivity-paradox',
+      'claude-ai-now-executes-code',
+      '2026-03-10-google-gemini-phone-layer',
+    ],
+    learningGoals: [
+      'Compare developer-facing AI tools by workflow fit instead of product hype.',
+      'Understand where coding assistants speed teams up and where they can slow work down.',
+      'Choose tool stacks based on autonomy, review needs, integration surface, and operating cost.',
+    ],
   },
   {
     slug: 'nextjs-mastery',
@@ -80,6 +99,7 @@ export const topicHubs: TopicHub[] = [
     relatedCategories: ['AI Technology', 'Technology'],
     targetKeywords: ['AI coding agent architecture', 'coding agent stack', 'AI developer tools', 'MCP coding agents', 'agent runtime design'],
     icon: '🧭',
+    directoryHref: directoryHrefByHubSlug.get('ai-coding-agent-stack'),
     seriesTitle: 'Inside the AI Coding Agent Stack',
     seriesDescription:
       'A connected series on runtime architecture, tool systems, MCP integration, permissions, sessions, hooks, plugins, and migration discipline in modern coding agents.',
@@ -95,6 +115,136 @@ export const topicHubs: TopicHub[] = [
       'See why tool registries, permission gates, and MCP integrations define real-world capability.',
       'Learn how sessions, hooks, and plugins turn an assistant into an extensible developer environment.',
       'Use parity audits and rewrite discipline to reason about agent migrations without losing behavior.',
+    ],
+  },
+  {
+    slug: 'ai-model-comparisons',
+    title: 'AI Model Comparisons',
+    description:
+      'Benchmarks, pricing, open-source tradeoffs, and coding capability analysis for builders choosing AI models.',
+    longDescription: `Model choice has become an engineering decision, not a leaderboard ritual. This hub organizes ToLearn analysis on coding benchmarks, reasoning claims, open-source model shifts, local hardware, and enterprise cost tradeoffs so builders can compare AI models in context. The goal is to connect benchmark results to real workflow decisions: which model to use, where the scaffold matters more than the score, when local AI changes the economics, and how much reliability teams should expect in production.`,
+    relatedTags: [
+      'LLM',
+      'GPT-5',
+      'Gemini',
+      'DeepSeek',
+      'Kimi K2',
+      'Claude Opus 4.5',
+      'Coding Benchmark',
+      'SWE-bench',
+      'LiveCodeBench',
+      'AI benchmarks',
+      'AI reasoning',
+      'OpenAI',
+      'Apple M5',
+      'local AI',
+      'open source',
+    ],
+    relatedCategories: ['AI Technology', 'Technology'],
+    targetKeywords: [
+      'AI model comparison',
+      'LLM benchmark comparison',
+      'best AI model for coding',
+      'GPT-5 vs Claude vs Gemini',
+      'open source AI models',
+    ],
+    icon: '📊',
+    directoryHref: directoryHrefByHubSlug.get('ai-model-comparisons'),
+    featuredArticleSlugs: [
+      'llm-coding-benchmark-comparison-2026',
+      'gpt-5-for-coding',
+      'gpt-5-enterprise-reality-check',
+      'verbose-ai-beats-fast-ai-moonshot-k2',
+    ],
+    learningGoals: [
+      'Read benchmark claims alongside scaffolding, cost, and production constraints.',
+      'Compare proprietary and open-source model tradeoffs without flattening them into one score.',
+      'Understand when local hardware, context windows, or tool interfaces change model selection.',
+    ],
+  },
+  {
+    slug: 'ai-search-geo',
+    title: 'AI Search and GEO',
+    description:
+      'A focused path on AI search, generative engine optimization, search reliability, and content visibility in answer engines.',
+    longDescription: `AI search is changing the web traffic map. This hub gathers ToLearn work on answer engines, AI search reliability, content pipelines, GEO strategy, and the practical ways publishers can keep their work discoverable when users get more answers directly from AI interfaces. It is meant for builders and operators who need to connect SEO fundamentals with the realities of Google AI Overviews, Perplexity-style answers, and AI-mediated research flows.`,
+    relatedTags: [
+      'AI Search',
+      'GEO',
+      'SEO',
+      'SEO Strategy',
+      'Content Pipeline',
+      'Search Engine Optimization',
+      'Traditional Search',
+      'Perplexity',
+      'ChatGPT',
+      'Claude',
+      'Next.js',
+      'pgvector',
+    ],
+    relatedCategories: ['AI Technology', 'SEO & Marketing', 'Web Development'],
+    targetKeywords: [
+      'AI search optimization',
+      'generative engine optimization',
+      'GEO strategy',
+      'AI search vs Google',
+      'AI content pipeline SEO',
+    ],
+    icon: '🔎',
+    directoryHref: directoryHrefByHubSlug.get('ai-search-geo'),
+    featuredArticleSlugs: [
+      'ai-search-vs-traditional-search-reliability',
+      '2025-08-15-ai-content-pipeline-seo',
+      '2025-10-10-ai-search-rewriting-web-traffic-map',
+    ],
+    learningGoals: [
+      'Understand how AI answers change publisher traffic and search behavior.',
+      'Build content systems that support visibility in both search engines and answer engines.',
+      'Use reliability, citations, and original analysis as durable search assets.',
+    ],
+  },
+  {
+    slug: 'enterprise-ai-governance',
+    title: 'Enterprise AI Governance',
+    description:
+      'Control planes, adoption strategy, safety, policy, and operating models for AI systems inside organizations.',
+    longDescription: `Enterprise AI is moving from demos into governance. This hub collects analysis on control planes, agent registries, safety failures, adoption pressure, regulation, sustainability, and organizational readiness. It is designed for engineering leaders, operators, and builders who need to understand how AI systems behave once they leave isolated experiments and enter real businesses, policy environments, and user trust boundaries.`,
+    relatedTags: [
+      'Enterprise AI',
+      'Governance',
+      'AI Adoption',
+      'AI Strategy',
+      'Microsoft',
+      'Agent 365',
+      'AI Agents',
+      'AI Infrastructure',
+      'AI safety',
+      'AI regulation',
+      'AI ethics',
+      'Sustainability',
+      'Business Intelligence',
+      'Future of Work',
+    ],
+    relatedCategories: ['AI Technology', 'Technology', 'Productivity'],
+    targetKeywords: [
+      'enterprise AI governance',
+      'AI agent control plane',
+      'AI adoption strategy',
+      'AI safety governance',
+      'enterprise AI operating model',
+    ],
+    icon: '🏢',
+    directoryHref: directoryHrefByHubSlug.get('enterprise-ai-governance'),
+    featuredArticleSlugs: [
+      '2026-03-15-microsoft-agent-365-control-plane',
+      '2026-03-26-ai-war-wont-be-won-on-benchmarks-itll-be-won-in-distribution',
+      '2026-03-18-ai-chatbot-era-ending-agent-systems',
+      'when-ai-becomes-too-human',
+    ],
+    learningGoals: [
+      'Recognize why enterprise AI needs identity, policy, observability, and governance layers.',
+      'Separate adoption theater from durable operating models for AI systems.',
+      'Track safety, regulation, and sustainability risks before they become scaling blockers.',
     ],
   },
 ]
@@ -122,6 +272,69 @@ export function postMatchesTopicHub(postTags: string[], hub: TopicHub): boolean 
   return hub.relatedTags.some((hubTag) =>
     normalizedPostTags.includes(normalizeTagName(hubTag).toLowerCase())
   )
+}
+
+export function getPrimaryHubSlugForPost(slug: string): string | null {
+  return primaryHubBySlug[slug] || null
+}
+
+export function getPrimaryTopicHubForPost(post: {
+  slug: string
+  metadata?: {
+    category?: string
+    tags?: string[]
+  }
+}): TopicHub | null {
+  const assignedHubSlug = getPrimaryHubSlugForPost(post.slug)
+  if (assignedHubSlug) {
+    return getTopicHub(assignedHubSlug) || null
+  }
+
+  if (post.metadata?.category !== 'AI Technology') {
+    return null
+  }
+
+  return (
+    topicHubs.find((hub) => postMatchesTopicHub(post.metadata?.tags || [], hub)) || null
+  )
+}
+
+export function postBelongsToTopicHub(
+  post: {
+    slug: string
+    metadata?: {
+      tags?: string[]
+    }
+  },
+  hub: TopicHub
+): boolean {
+  const assignedHubSlug = getPrimaryHubSlugForPost(post.slug)
+  return assignedHubSlug === hub.slug || postMatchesTopicHub(post.metadata?.tags || [], hub)
+}
+
+export function getSiblingPostsForPost<
+  TPost extends {
+    slug: string
+    metadata: {
+      publishedAt: string
+      tags?: string[]
+    }
+  },
+>(currentSlug: string, allPosts: TPost[], limit = 3): TPost[] {
+  const assignedHubSlug = getPrimaryHubSlugForPost(currentSlug)
+
+  if (!assignedHubSlug) {
+    return []
+  }
+
+  return allPosts
+    .filter((post) => post.slug !== currentSlug && getPrimaryHubSlugForPost(post.slug) === assignedHubSlug)
+    .sort(
+      (left, right) =>
+        new Date(right.metadata.publishedAt).getTime() -
+        new Date(left.metadata.publishedAt).getTime()
+    )
+    .slice(0, limit)
 }
 
 export function getFeaturedSeriesContextForPost(slug: string) {

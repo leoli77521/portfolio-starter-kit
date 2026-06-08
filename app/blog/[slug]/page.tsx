@@ -207,23 +207,27 @@ export function generateMetadata({ params }: PageProps): Metadata {
 
   const {
     title,
+    seoTitle: metadataSeoTitle,
+    seoDescription,
     publishedAt: publishedTime,
     updatedAt,
     summary: description,
     image,
   } = post.metadata
 
-  const seoTitle = trimSeoTitle(title)
+  const seoTitle = trimSeoTitle(metadataSeoTitle || title)
   const socialTitle = buildSocialTitle(trimSocialTitle(title))
   const modifiedTime = updatedAt || publishedTime
   const ogImage = resolveOgImage(image, title)
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
-  const optimizedDescription = buildDescription(
-    post.metadata.category,
-    description,
-    title,
-    publishedTime
-  )
+  const optimizedDescription =
+    seoDescription ||
+    buildDescription(
+      post.metadata.category,
+      description,
+      title,
+      publishedTime
+    )
 
   return {
     title: seoTitle,

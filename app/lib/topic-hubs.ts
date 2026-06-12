@@ -41,12 +41,23 @@ export const topicHubs: TopicHub[] = [
   {
     slug: 'seo-fundamentals',
     title: 'SEO Fundamentals',
-    description: 'Essential SEO knowledge from basics to advanced techniques for better search rankings.',
-    longDescription: `Take your website from invisible to irresistible with our comprehensive SEO fundamentals hub. This collection covers the complete spectrum of search engine optimization, from understanding how search engines work to implementing advanced technical SEO strategies. Learn the art of keyword research, master on-page optimization techniques, build quality backlinks, and understand how to measure your SEO success with analytics. Our practical, up-to-date guides help you navigate the ever-changing landscape of search algorithms and stay ahead of the competition.`,
+    description: 'SEO fundamentals learning hub for Google SEO basics, technical setup, content optimization, and better search rankings.',
+    longDescription: `Take your website from invisible to irresistible with our comprehensive SEO fundamentals learning hub. This collection covers the complete spectrum of Google SEO fundamentals, from understanding how search engines work to implementing advanced technical SEO strategies. Learn the art of keyword research, master on-page optimization techniques, build quality backlinks, and understand how to measure your SEO success with analytics. Our practical, up-to-date guides help you navigate the ever-changing landscape of search algorithms and stay ahead of the competition.`,
     relatedTags: ['SEO Optimization', 'Keyword Research', 'Technical SEO', 'Content Marketing', 'Analytics'],
     relatedCategories: ['SEO & Marketing', 'Web Development'],
-    targetKeywords: ['SEO入门指南', 'SEO basics', 'search engine optimization guide', 'improve search ranking', 'SEO tutorial'],
+    targetKeywords: ['SEO fundamentals', 'Google SEO fundamentals', 'SEO learning hub', 'fundamentals of SEO', 'SEO basics', 'search engine optimization guide', 'improve search ranking', 'SEO tutorial'],
     icon: '📈',
+    featuredArticleSlugs: [
+      'seo-optimization-guide',
+      'ai-tools-seo-optimization',
+      'ai-javascript-seo-blog',
+      '2025-08-15-ai-content-pipeline-seo',
+    ],
+    learningGoals: [
+      'Understand the SEO fundamentals that help Google discover, render, and rank content.',
+      'Turn keyword research into titles, headings, summaries, and internal links that match search intent.',
+      'Measure mobile search performance with Search Console data and refresh weak pages systematically.',
+    ],
   },
   {
     slug: 'ai-tools-for-developers',

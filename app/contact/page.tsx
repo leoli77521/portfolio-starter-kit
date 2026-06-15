@@ -2,10 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { baseUrl, organization } from 'app/lib/constants'
 import { ContactForm } from 'app/components/contact-form'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Contact',
   description: 'Reach ToLearn by email for article feedback, questions, or collaboration.',
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/contact', pageMetadata)
 }
 
 const contactTopics = [
@@ -115,4 +120,3 @@ export default function ContactPage() {
     </section>
   )
 }
-

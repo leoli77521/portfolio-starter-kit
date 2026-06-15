@@ -1,8 +1,13 @@
 import type { Metadata } from 'next'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
     title: 'Privacy Policy',
     description: 'Privacy Policy for ToLearn Blog',
+}
+
+export function generateMetadata(): Promise<Metadata> {
+    return withLocalizedMetadata('/privacy', pageMetadata)
 }
 
 export default function PrivacyPage() {
@@ -58,4 +63,3 @@ export default function PrivacyPage() {
         </section>
     )
 }
-

@@ -1,8 +1,13 @@
 import type { Metadata } from 'next'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
     title: 'Terms of Service',
     description: 'Terms of Service for ToLearn Blog',
+}
+
+export function generateMetadata(): Promise<Metadata> {
+    return withLocalizedMetadata('/terms', pageMetadata)
 }
 
 export default function TermsPage() {
@@ -41,4 +46,3 @@ export default function TermsPage() {
         </section>
     )
 }
-

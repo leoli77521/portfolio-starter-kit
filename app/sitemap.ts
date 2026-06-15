@@ -6,6 +6,7 @@ import { getBlogPosts } from 'app/blog/utils'
 import { categories, getCategorySlug } from 'app/lib/categories'
 import { baseUrl } from 'app/lib/constants'
 import { guides } from 'app/lib/guides'
+import { locales, localizePath } from 'app/lib/i18n-paths'
 import { getMostRecentIsoString } from 'app/lib/seo'
 import { MIN_POSTS_FOR_INDEXED_TAG_PAGE, toTagSlug } from 'app/lib/tags'
 import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
@@ -15,6 +16,20 @@ export { baseUrl } from 'app/lib/constants'
 const PROJECT_ROOT = process.cwd()
 const DEFAULT_LAST_MODIFIED = '2026-01-01T00:00:00.000Z'
 const MIN_POSTS_FOR_YEAR_PAGE = 3
+const LOCALIZED_SITEMAP_PATHS = new Set([
+  '/',
+  '/blog',
+  '/categories',
+  '/tags',
+  '/topics',
+  '/guides',
+  '/templates',
+  '/solutions',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms',
+])
 
 type BlogPost = ReturnType<typeof getBlogPosts>[number]
 
@@ -43,6 +58,29 @@ function getLatestTimestamp(...values: Array<string | undefined>): string {
 
 function getPostLastModified(post: BlogPost): string {
   return formatDateForSitemap(post.metadata.updatedAt || post.metadata.publishedAt)
+}
+
+function pathFromAbsoluteUrl(url: string): string {
+  const path = url.replace(baseUrl, '')
+  return path || '/'
+}
+
+function localizeSitemapRoutes<T extends { url: string }>(routes: T[]): T[] {
+  return routes.flatMap((route) => {
+    const path = pathFromAbsoluteUrl(route.url)
+
+    if (!LOCALIZED_SITEMAP_PATHS.has(path)) {
+      return [route]
+    }
+
+    return locales.map((locale) => {
+      const localizedPath = localizePath(path, locale)
+      return {
+        ...route,
+        url: `${baseUrl}${localizedPath === '/' ? '' : localizedPath}`,
+      }
+    })
+  })
 }
 
 export default async function sitemap() {
@@ -329,8 +367,10 @@ export default async function sitemap() {
     priority: 0.6,
   }))
 
+  const localizedStaticRoutes = localizeSitemapRoutes(staticRoutes)
+
   return [
-    ...staticRoutes,
+    ...localizedStaticRoutes,
     ...apiRoutes,
     ...blogs,
     ...categoryRoutes,

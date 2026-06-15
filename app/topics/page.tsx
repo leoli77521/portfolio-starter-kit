@@ -8,14 +8,12 @@ import {
   generateItemListSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Topic Hubs',
   description:
     'Explore curated topic hubs that group ToLearn articles into clearer learning paths.',
-  alternates: {
-    canonical: `${baseUrl}/topics`,
-  },
   openGraph: {
     title: 'Topic Hubs | ToLearn Blog',
     description:
@@ -23,6 +21,10 @@ export const metadata: Metadata = {
     url: `${baseUrl}/topics`,
     type: 'website',
   },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/topics', pageMetadata)
 }
 
 export default function TopicsPage() {

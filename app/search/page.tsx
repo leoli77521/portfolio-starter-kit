@@ -3,24 +3,39 @@ import { PostCard } from 'app/components/post-card'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { getLocale, getTranslations } from 'next-intl/server'
+import {
+  getAbsoluteLocalizedAlternates,
+  getCanonicalUrl,
+  localizePath,
+} from 'app/lib/i18n-paths'
 
-export const metadata: Metadata = {
-  title: 'Search',
-  description: 'Search the ToLearn archive by title, summary, and full article content.',
-  alternates: {
-    canonical: `${baseUrl}/search`,
-  },
-  robots: {
-    index: false,
-    follow: true,
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+
+  return {
+    title: t('searchTitle'),
+    description: t('searchDescription'),
+    alternates: {
+      canonical: getCanonicalUrl('/search', locale, baseUrl),
+      languages: getAbsoluteLocalizedAlternates('/search', baseUrl),
+    },
+    robots: {
+      index: false,
+      follow: true,
+    },
+  }
 }
 
-export default function SearchPage({
+export default async function SearchPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'SearchPage' })
+  const common = await getTranslations({ locale, namespace: 'Common' })
   const q = typeof searchParams.q === 'string' ? searchParams.q : ''
   const posts = getBlogPosts()
 
@@ -39,40 +54,38 @@ export default function SearchPage({
   return (
     <section className="mx-auto max-w-6xl space-y-8">
       <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
-        <p className="section-kicker">Archive search</p>
+        <p className="section-kicker">{t('kicker')}</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-5xl">
-          Search the archive
+          {t('title')}
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
-          Search runs across titles, summaries, and full article content so you can recover a post
-          from a phrase, concept, or name you only half remember.
+          {t('intro')}
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
           {q ? (
-            <span className="meta-chip normal-case tracking-normal">Query: "{q}"</span>
+            <span className="meta-chip normal-case tracking-normal">{t('query', { query: q })}</span>
           ) : (
-            <span className="meta-chip normal-case tracking-normal">No query yet</span>
+            <span className="meta-chip normal-case tracking-normal">{t('noQuery')}</span>
           )}
           <span className="meta-chip normal-case tracking-normal">
-            {filteredPosts.length} {filteredPosts.length === 1 ? 'result' : 'results'}
+            {common('articles', { count: filteredPosts.length })}
           </span>
         </div>
       </div>
 
       {!q ? (
         <div className="surface-panel px-6 py-12 text-center md:px-8">
-          <p className="section-kicker">Ready when you are</p>
+          <p className="section-kicker">{t('readyKicker')}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-            Start from the search button in the header
+            {t('readyTitle')}
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-            Use the site search to open this page with a query, or jump straight into the archive
-            if you want to browse by recency.
+            {t('readyBody')}
           </p>
           <div className="mt-6">
-            <Link href="/blog" className="editorial-link justify-center">
-              Open the journal
+            <Link href={localizePath('/blog', locale)} className="editorial-link justify-center">
+              {t('openJournal')}
             </Link>
           </div>
         </div>
@@ -91,16 +104,15 @@ export default function SearchPage({
         </div>
       ) : (
         <div className="surface-panel px-6 py-12 text-center md:px-8">
-          <p className="section-kicker">No direct match</p>
+          <p className="section-kicker">{t('noMatchKicker')}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-            No articles matched "{q}"
+            {t('noMatchTitle', { query: q })}
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-            Try a shorter phrase, a product name, or a broader topic like AI agents, search, or
-            Next.js.
+            {t('noMatchBody')}
           </p>
-          <Link href="/blog" className="mt-6 inline-flex editorial-link justify-center">
-            Browse all articles
+          <Link href={localizePath('/blog', locale)} className="mt-6 inline-flex editorial-link justify-center">
+            {t('browseAll')}
           </Link>
         </div>
       )}

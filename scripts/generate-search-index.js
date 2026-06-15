@@ -104,6 +104,7 @@ function generateSearchIndex() {
   }
 
   fs.writeFileSync(path.join(publicDir, 'search-index.json'), JSON.stringify(searchIndex));
+  fs.writeFileSync(path.join(publicDir, 'search-index.en.json'), JSON.stringify(searchIndex));
   console.log(`Generated search-index.json with ${searchIndex.length} posts.`);
 }
 

@@ -7,15 +7,13 @@ import {
   generateCollectionPageSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Templates',
   description:
     'Browse portfolio template combinations by technology and role, with feature-driven entry points.',
   keywords: ['portfolio template', 'developer portfolio', 'nextjs template', 'react portfolio'],
-  alternates: {
-    canonical: `${baseUrl}/templates`,
-  },
   openGraph: {
     title: 'Templates | ToLearn Blog',
     description:
@@ -23,6 +21,10 @@ export const metadata: Metadata = {
     type: 'website',
     url: `${baseUrl}/templates`,
   },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/templates', pageMetadata)
 }
 
 interface Technology {
@@ -247,4 +249,3 @@ export default function TemplatesPage() {
     </section>
   )
 }
-

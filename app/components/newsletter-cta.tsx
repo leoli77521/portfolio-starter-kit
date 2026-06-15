@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Mail, CheckCircle, Loader2 } from 'lucide-react'
 
 export function NewsletterCTA() {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const t = useTranslations('Newsletter')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +30,7 @@ export function NewsletterCTA() {
 
       if (!response.ok || data.error) {
         setStatus('error')
-        setErrorMessage(data.error || 'Subscription failed. Please try again.')
+        setErrorMessage(data.error || t('error'))
         return
       }
 
@@ -37,9 +39,16 @@ export function NewsletterCTA() {
       window.setTimeout(() => setStatus('idle'), 3000)
     } catch {
       setStatus('error')
-      setErrorMessage('Unable to subscribe right now. Please try again later.')
+      setErrorMessage(t('errorShort'))
     }
   }
+
+  const bullets = [
+    t('ctaBullets.one'),
+    t('ctaBullets.two'),
+    t('ctaBullets.three'),
+    t('ctaBullets.four'),
+  ]
 
   return (
     <section id="newsletter" className="py-16 md:py-20">
@@ -52,22 +61,16 @@ export function NewsletterCTA() {
               <Mail className="h-6 w-6" />
             </div>
 
-            <p className="section-kicker mt-6">Get the weekly brief</p>
+            <p className="section-kicker mt-6">{t('ctaLabel')}</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-              One sharp weekly email for AI builders and web operators.
+              {t('ctaHeadline')}
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 theme-dark:text-slate-300">
-              Get a concise brief on product shifts, search changes, and practical implementation
-              patterns worth paying attention to.
+              {t('ctaDescription')}
             </p>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {[
-                'Clear analysis, not trend-chasing',
-                'Practical takeaways you can actually use',
-                'One concise update each week',
-                'No noisy autoresponder sequence',
-              ].map((item) => (
+              {bullets.map((item) => (
                 <div
                   key={item}
                   className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/85 px-4 py-4 text-sm text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-200"
@@ -79,19 +82,18 @@ export function NewsletterCTA() {
           </div>
 
           <div className="surface-card px-5 py-5 md:px-6 md:py-6">
-            <p className="section-kicker">Subscribe</p>
+            <p className="section-kicker">{t('subscribe')}</p>
             <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-              Weekly analysis, not filler
+              {t('headline')}
             </h3>
             <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-              One concise email per week with signal-first notes on coding agents, search
-              visibility, and real execution patterns.
+              {t('subscribeCopy')}
             </p>
 
             {status === 'success' ? (
               <div className="mt-6 flex items-center gap-2 rounded-[1.25rem] border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 text-sm font-medium text-emerald-700 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/40 theme-dark:text-emerald-300">
                 <CheckCircle className="h-5 w-5" />
-                Thanks for subscribing!
+                {t('successShort')}
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">
@@ -99,7 +101,7 @@ export function NewsletterCTA() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={t('emailLabel')}
                   required
                   className="w-full rounded-xl border border-slate-200/80 bg-white/90 px-5 py-3.5 text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-white theme-dark:placeholder:text-slate-500 theme-dark:focus:border-indigo-500/60"
                 />
@@ -111,10 +113,10 @@ export function NewsletterCTA() {
                   {status === 'loading' ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Subscribing...
+                      {t('subscribing')}
                     </>
                   ) : (
-                    'Subscribe'
+                    t('subscribe')
                   )}
                 </button>
               </form>
@@ -127,7 +129,7 @@ export function NewsletterCTA() {
             )}
 
             <p className="mt-4 text-xs text-slate-500 theme-dark:text-slate-400">
-              No spam. Easy unsubscribe. Just signal.
+              {t('privacy')}
             </p>
           </div>
         </div>

@@ -1,37 +1,90 @@
+import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
+import { routing } from './i18n/routing'
 import { slugify } from './app/lib/formatters'
+import {
+  defaultLocale,
+  getContentPath,
+  isArticlePath,
+  localizePath,
+  stripLocaleFromPath,
+} from './app/lib/i18n-paths'
 
-// 记录重定向用于SEO分析
+const intlMiddleware = createMiddleware(routing)
+
 function logRedirect(from: string, to: string, statusCode: number) {
   if (process.env.NODE_ENV === 'development') {
-    console.log(`🔄 SEO Redirect: ${from} → ${to} (${statusCode})`)
+    console.log(`SEO Redirect: ${from} -> ${to} (${statusCode})`)
   }
+}
+
+function shouldSkipMiddleware(pathname: string) {
+  return (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/static/') ||
+    (pathname.includes('.') &&
+      !pathname.endsWith('.html') &&
+      !pathname.endsWith('.php') &&
+      !pathname.endsWith('.htm')) ||
+    pathname.startsWith('/favicon') ||
+    pathname.startsWith('/robots') ||
+    pathname.startsWith('/sitemap') ||
+    pathname.startsWith('/manifest') ||
+    pathname.startsWith('/ads.txt') ||
+    pathname.startsWith('/llms.txt')
+  )
+}
+
+function normalizeSlug(value: string) {
+  let decoded = value
+  try {
+    decoded = decodeURIComponent(value)
+  } catch {
+    // Keep raw segment when decoding fails.
+  }
+  const slug = slugify(decoded)
+  if (slug) {
+    return slug
+  }
+  return decoded.trim().toLowerCase().replace(/\s+/g, '-')
+}
+
+function localizedRedirectPath(pathname: string, locale: string) {
+  if (pathname === '/rss') {
+    return '/rss'
+  }
+
+  return getContentPath(pathname, locale)
+}
+
+function redirectTo(url: URL, from: string, to: string, reasons: string[], status = 301) {
+  url.pathname = to
+  logRedirect(from, to, status)
+
+  const response = NextResponse.redirect(url, status)
+  response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+
+  if (reasons.length > 0) {
+    response.headers.set('X-Redirect-Reason', reasons.join(','))
+  }
+
+  return response
 }
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
   const pathname = url.pathname
 
-  // Skip middleware for static files, API routes, and Next.js internals
-  if (
-    pathname.startsWith('/_next/') ||
-    pathname.startsWith('/api/') ||
-    pathname.startsWith('/static/') ||
-    pathname.includes('.') && !pathname.endsWith('.html') && !pathname.endsWith('.php') && !pathname.endsWith('.htm') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/robots') ||
-    pathname.startsWith('/sitemap')
-  ) {
+  if (shouldSkipMiddleware(pathname)) {
     return NextResponse.next()
   }
 
-  // Handle URL normalization and canonical redirects
   let shouldRedirect = false
   let newPathname = pathname
   let pathAlreadyModified = false
   const redirectReasons: string[] = []
 
-  // Strip tracking query parameters so crawlers land on canonical URLs
   const trackingParamNames = new Set(['gclid', 'fbclid', 'msclkid', 'igshid', 'ref', 'ref_src'])
   let removedTrackingParams = false
   for (const paramKey of [...url.searchParams.keys()]) {
@@ -46,7 +99,6 @@ export function middleware(request: NextRequest) {
     redirectReasons.push('tracking-param-cleanup')
   }
 
-  // Remove trailing slash (except for root)
   if (pathname !== '/' && pathname.endsWith('/')) {
     newPathname = pathname.slice(0, -1)
     shouldRedirect = true
@@ -54,7 +106,6 @@ export function middleware(request: NextRequest) {
     redirectReasons.push('trailing-slash-removal')
   }
 
-  // Handle double slashes
   if (pathname.includes('//')) {
     newPathname = pathname.replace(/\/+/g, '/')
     shouldRedirect = true
@@ -62,8 +113,20 @@ export function middleware(request: NextRequest) {
     redirectReasons.push('double-slash-cleanup')
   }
 
-  // Handle blog URL variations with proper 301 redirects
-  const blogRedirects: { [key: string]: string } = {
+  const pathToNormalize = pathAlreadyModified ? newPathname : pathname
+  const strippedPath = stripLocaleFromPath(pathToNormalize)
+  const activeLocale = strippedPath.locale
+  const contentPath = strippedPath.pathname
+
+  if (activeLocale !== defaultLocale && isArticlePath(contentPath)) {
+    url.pathname = contentPath
+    logRedirect(pathname, contentPath, 302)
+    const response = NextResponse.redirect(url, 302)
+    response.headers.set('X-Redirect-Reason', 'localized-article-fallback')
+    return response
+  }
+
+  const blogRedirects: Record<string, string> = {
     '/posts': '/blog',
     '/articles': '/blog',
     '/article': '/blog',
@@ -73,18 +136,16 @@ export function middleware(request: NextRequest) {
     '/index': '/',
     '/feed': '/rss',
     '/rss.xml': '/rss',
-    '/feed.xml': '/rss'
+    '/feed.xml': '/rss',
   }
 
-  // Check for exact matches first
-  if (!pathAlreadyModified && blogRedirects[pathname]) {
-    newPathname = blogRedirects[pathname]
+  if (!pathAlreadyModified && blogRedirects[contentPath]) {
+    newPathname = localizedRedirectPath(blogRedirects[contentPath], activeLocale)
     shouldRedirect = true
     pathAlreadyModified = true
     redirectReasons.push('url-structure-normalization')
   }
 
-  // Handle blog post URL variations
   if (!pathAlreadyModified) {
     const blogPostPatterns = [
       { pattern: /^\/posts\/(.+)$/, replacement: '/blog/$1', reason: 'posts-to-blog' },
@@ -93,12 +154,12 @@ export function middleware(request: NextRequest) {
       { pattern: /^\/blog\/post\/(.+)$/, replacement: '/blog/$1', reason: 'blog-post-cleanup' },
       { pattern: /^\/blog\/(.+)\.html$/, replacement: '/blog/$1', reason: 'html-extension-removal' },
       { pattern: /^\/blog\/(.+)\.php$/, replacement: '/blog/$1', reason: 'php-extension-removal' },
-      { pattern: /^\/blog\/(.+)\.aspx$/, replacement: '/blog/$1', reason: 'aspx-extension-removal' }
+      { pattern: /^\/blog\/(.+)\.aspx$/, replacement: '/blog/$1', reason: 'aspx-extension-removal' },
     ]
 
     for (const { pattern, replacement, reason } of blogPostPatterns) {
-      if (pattern.test(pathname)) {
-        newPathname = pathname.replace(pattern, replacement)
+      if (pattern.test(contentPath)) {
+        newPathname = localizedRedirectPath(contentPath.replace(pattern, replacement), activeLocale)
         shouldRedirect = true
         pathAlreadyModified = true
         redirectReasons.push(reason)
@@ -107,28 +168,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const normalizeSlug = (value: string) => {
-    let decoded = value
-    try {
-      decoded = decodeURIComponent(value)
-    } catch {
-      // Keep raw segment when decoding fails
-    }
-    const slug = slugify(decoded)
-    if (slug) {
-      return slug
-    }
-    return decoded.trim().toLowerCase().replace(/\s+/g, '-')
-  }
+  const nextPathToNormalize = pathAlreadyModified ? newPathname : pathToNormalize
+  const nextStrippedPath = stripLocaleFromPath(nextPathToNormalize)
+  const nextContentPath = nextStrippedPath.pathname
+  const nextLocale = nextStrippedPath.locale
 
-  const pathToNormalize = pathAlreadyModified ? newPathname : pathname
-
-  const legacyTagMatch = pathToNormalize.match(/^\/tag\/(.+)$/)
+  const legacyTagMatch = nextContentPath.match(/^\/tag\/(.+)$/)
   if (legacyTagMatch) {
     const normalizedTag = normalizeSlug(legacyTagMatch[1])
     if (normalizedTag) {
-      const canonicalPath = `/tags/${normalizedTag}`
-      if (canonicalPath !== pathToNormalize) {
+      const canonicalPath = localizePath(`/tags/${normalizedTag}`, nextLocale)
+      if (canonicalPath !== nextPathToNormalize) {
         newPathname = canonicalPath
         shouldRedirect = true
         pathAlreadyModified = true
@@ -137,12 +187,12 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const tagMatch = pathToNormalize.match(/^\/tags\/(.+)$/)
+  const tagMatch = nextContentPath.match(/^\/tags\/(.+)$/)
   if (tagMatch) {
     const normalizedTag = normalizeSlug(tagMatch[1])
     if (normalizedTag) {
-      const canonicalPath = `/tags/${normalizedTag}`
-      if (canonicalPath !== pathToNormalize) {
+      const canonicalPath = localizePath(`/tags/${normalizedTag}`, nextLocale)
+      if (canonicalPath !== nextPathToNormalize) {
         newPathname = canonicalPath
         shouldRedirect = true
         pathAlreadyModified = true
@@ -152,14 +202,14 @@ export function middleware(request: NextRequest) {
   }
 
   const legacyCategoryMatch =
-    pathToNormalize.match(/^\/category\/(.+)$/) ||
-    pathToNormalize.match(/^\/blog\/category\/(.+)$/)
+    nextContentPath.match(/^\/category\/(.+)$/) ||
+    nextContentPath.match(/^\/blog\/category\/(.+)$/)
 
   if (legacyCategoryMatch) {
     const normalizedCategory = normalizeSlug(legacyCategoryMatch[1])
     if (normalizedCategory) {
-      const canonicalPath = `/categories/${normalizedCategory}`
-      if (canonicalPath !== pathToNormalize) {
+      const canonicalPath = localizePath(`/categories/${normalizedCategory}`, nextLocale)
+      if (canonicalPath !== nextPathToNormalize) {
         newPathname = canonicalPath
         shouldRedirect = true
         pathAlreadyModified = true
@@ -168,12 +218,12 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const categoryMatch = pathToNormalize.match(/^\/categories\/(.+)$/)
+  const categoryMatch = nextContentPath.match(/^\/categories\/(.+)$/)
   if (categoryMatch) {
     const normalizedCategory = normalizeSlug(categoryMatch[1])
     if (normalizedCategory) {
-      const canonicalPath = `/categories/${normalizedCategory}`
-      if (canonicalPath !== pathToNormalize) {
+      const canonicalPath = localizePath(`/categories/${normalizedCategory}`, nextLocale)
+      if (canonicalPath !== nextPathToNormalize) {
         newPathname = canonicalPath
         shouldRedirect = true
         pathAlreadyModified = true
@@ -182,7 +232,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Handle WordPress and admin redirects
   if (!pathAlreadyModified) {
     const blockPatterns = [
       { pattern: /^\/wp-admin/, reason: 'wp-admin-block' },
@@ -190,12 +239,12 @@ export function middleware(request: NextRequest) {
       { pattern: /^\/wp-includes/, reason: 'wp-includes-block' },
       { pattern: /^\/admin/, reason: 'admin-block' },
       { pattern: /^\/login/, reason: 'login-block' },
-      { pattern: /^\/register/, reason: 'register-block' }
+      { pattern: /^\/register/, reason: 'register-block' },
     ]
 
     for (const { pattern, reason } of blockPatterns) {
-      if (pattern.test(pathname)) {
-        newPathname = '/'
+      if (pattern.test(nextContentPath)) {
+        newPathname = localizePath('/', nextLocale)
         shouldRedirect = true
         pathAlreadyModified = true
         redirectReasons.push(reason)
@@ -204,55 +253,21 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Perform redirect if needed
   if (shouldRedirect) {
-    url.pathname = newPathname
-    
-    // Log redirect for analysis
-    logRedirect(pathname, newPathname, 301)
-    
-    // Use 301 for SEO-friendly permanent redirects
-    const response = NextResponse.redirect(url, 301)
-    
-    // Add cache headers for redirect
-    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
-    
-    // Add redirect reason for debugging
-    if (redirectReasons.length > 0) {
-      response.headers.set('X-Redirect-Reason', redirectReasons.join(','))
-    }
-    
-    return response
+    return redirectTo(url, pathname, newPathname, redirectReasons)
   }
 
-  // Add canonical headers for proper pages
-  const response = NextResponse.next()
-  
-  // Add canonical headers to prevent duplicate content issues
-  if (pathname.startsWith('/blog/') && pathname !== '/blog') {
-    // This is a blog post, canonical is handled in metadata
-    response.headers.set('X-Canonical-Path', pathname)
-  } else if (pathname === '/blog' || pathname === '/') {
-    response.headers.set('X-Canonical-Path', pathname)
-  }
+  const response = intlMiddleware(request)
+  const canonicalPath = stripLocaleFromPath(pathname).pathname
 
-  // Add headers for SEO monitoring
+  response.headers.set('X-Canonical-Path', canonicalPath)
   response.headers.set('X-SEO-Processed', 'true')
-  
+
   return response
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - sitemap.xml, robots.txt (SEO files)
-     * - files with extensions (.png, .jpg, etc.)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|manifest.json|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js)$).*)',
   ],
 }

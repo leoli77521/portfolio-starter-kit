@@ -7,14 +7,12 @@ import {
   generateItemListSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Guides',
   description:
     'Structured learning guides covering AI development, SEO, performance, and practical web execution.',
-  alternates: {
-    canonical: `${baseUrl}/guides`,
-  },
   openGraph: {
     title: 'Guides | ToLearn Blog',
     description:
@@ -22,6 +20,10 @@ export const metadata: Metadata = {
     url: `${baseUrl}/guides`,
     type: 'website',
   },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/guides', pageMetadata)
 }
 
 const difficultyBadgeStyles = {
@@ -222,4 +224,3 @@ function GuideSection({
     </div>
   )
 }
-

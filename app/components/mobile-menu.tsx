@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import { localizePath, stripLocaleFromPath } from 'app/lib/i18n-paths'
+import { LanguageSwitcher } from './language-switcher'
 
 type NavItem = {
   href: string
@@ -93,7 +94,7 @@ export function MobileMenu({ navItems, exploreLinks }: MobileMenuProps) {
           />
 
           <div
-            className="fixed right-0 top-0 z-50 flex h-full w-[min(88vw,24rem)] flex-col bg-white px-5 py-5 shadow-2xl theme-dark:bg-slate-950 lg:hidden"
+            className="fixed right-0 top-0 z-50 flex h-full w-[min(88vw,24rem)] flex-col overflow-y-auto bg-white px-5 py-5 shadow-2xl theme-dark:bg-slate-950 lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label={t('MobileMenu.label')}
@@ -123,6 +124,10 @@ export function MobileMenu({ navItems, exploreLinks }: MobileMenuProps) {
                   <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
+            </div>
+
+            <div className="mt-5">
+              <LanguageSwitcher variant="mobile" />
             </div>
 
             <nav className="mt-6 space-y-2" aria-label="Primary mobile navigation">

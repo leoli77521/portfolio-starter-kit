@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowUpRight, Command, Search as SearchIcon, X } from 'lucide-react'
+import { localizePath } from 'app/lib/i18n-paths'
 
 interface SearchResult {
   slug: string
@@ -20,6 +22,8 @@ export function Search() {
   const [allPosts, setAllPosts] = useState<SearchResult[]>([])
   const searchRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const locale = useLocale()
+  const t = useTranslations('Search')
 
   useEffect(() => {
     async function loadPosts() {
@@ -108,12 +112,12 @@ export function Search() {
       <button
         onClick={() => setIsOpen((open) => !open)}
         className="utility-button px-3"
-        aria-label="Search articles"
-        title="Search articles"
+        aria-label={t('aria')}
+        title={t('aria')}
         type="button"
       >
         <SearchIcon className="h-4 w-4" />
-        <span className="hidden text-sm font-medium md:inline">Search</span>
+        <span className="hidden text-sm font-medium md:inline">{t('button')}</span>
         <span className="hidden items-center gap-1 rounded-full border border-slate-200/80 px-2 py-1 text-[0.68rem] text-slate-500 theme-dark:border-slate-800 theme-dark:text-slate-400 xl:inline-flex">
           <Command className="h-3 w-3" />
           K
@@ -124,7 +128,7 @@ export function Search() {
         <div
           className="surface-panel absolute right-0 z-50 mt-3 w-[min(92vw,30rem)] overflow-hidden"
           role="dialog"
-          aria-label="Search articles"
+          aria-label={t('aria')}
           aria-modal="true"
         >
           <div className="border-b border-slate-200/70 p-4 theme-dark:border-slate-800">
@@ -135,9 +139,9 @@ export function Search() {
                 type="search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search titles, summaries, and indexed content"
+                placeholder={t('placeholder')}
                 className="min-w-0 flex-1 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-400 theme-dark:text-slate-100 theme-dark:placeholder:text-slate-500"
-                aria-label="Search articles"
+                aria-label={t('aria')}
                 autoComplete="off"
               />
               {query ? (
@@ -145,31 +149,31 @@ export function Search() {
                   type="button"
                   onClick={() => setQuery('')}
                   className="inline-flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:text-slate-700 theme-dark:hover:text-slate-200"
-                  aria-label="Clear search"
+                  aria-label={t('clear')}
                 >
                   <X className="h-4 w-4" />
                 </button>
               ) : null}
             </div>
             <div className="mt-3 flex items-center justify-between text-xs text-slate-500 theme-dark:text-slate-400">
-              <span>Press Esc to close</span>
-              <span>Cmd/Ctrl + K</span>
+              <span>{t('closeHint')}</span>
+              <span>{t('shortcut')}</span>
             </div>
           </div>
 
           <div className="max-h-96 overflow-y-auto">
             {query.trim() === '' ? (
               <div className="px-5 py-10 text-center">
-                <p className="section-kicker">Start typing</p>
+                <p className="section-kicker">{t('startTitle')}</p>
                 <p className="mt-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
-                  Search the archive by title, summary, or indexed post content.
+                  {t('startBody')}
                 </p>
               </div>
             ) : results.length === 0 ? (
               <div className="px-5 py-10 text-center">
-                <p className="section-kicker">No results</p>
+                <p className="section-kicker">{t('emptyTitle')}</p>
                 <p className="mt-3 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
-                  No articles matched "{query}".
+                  {t('emptyBody', { query })}
                 </p>
               </div>
             ) : (
@@ -177,7 +181,7 @@ export function Search() {
                 {results.map((post, index) => (
                   <li key={post.slug}>
                     <Link
-                      href={`/blog/${post.slug}`}
+                  href={`/blog/${post.slug}`}
                       onClick={() => {
                         setIsOpen(false)
                         setQuery('')
@@ -215,18 +219,18 @@ export function Search() {
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-500 theme-dark:text-slate-400">
                   {totalMatches > results.length
-                    ? `Showing ${results.length} of ${totalMatches} results`
-                    : `${totalMatches} ${totalMatches === 1 ? 'result' : 'results'}`}
+                    ? t('showing', { shown: results.length, total: totalMatches })
+                    : t('resultCount', { count: totalMatches })}
                 </span>
                 <Link
-                  href="/blog"
+                  href={localizePath('/blog', locale)}
                   onClick={() => {
                     setIsOpen(false)
                     setQuery('')
                   }}
                   className="editorial-link"
                 >
-                  Open the full archive
+                  {t('openArchive')}
                 </Link>
               </div>
             </div>
@@ -236,4 +240,3 @@ export function Search() {
     </div>
   )
 }
-

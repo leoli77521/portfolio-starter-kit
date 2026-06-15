@@ -19,10 +19,12 @@ import { InArticleAd } from 'app/components/AdUnit'
 import Comments from 'app/components/comments'
 import type { FAQItem, HowToStep } from 'app/types'
 import { getCategorySlug } from 'app/lib/categories'
-import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
+import { buildSocialTitle, resolveOgImage, trimSeoTitle, trimSocialTitle } from 'app/lib/seo'
 import { findRelevantGuides } from 'app/lib/pseo-content'
 import {
   getFeaturedSeriesContextForPost,
+  getPrimaryTopicHubForPost,
+  getSiblingPostsForPost,
   postMatchesTopicHub,
   topicHubs,
 } from 'app/lib/topic-hubs'
@@ -134,7 +136,8 @@ interface PageProps {
 function buildDescription(
   category: string | undefined,
   summary: string | undefined,
-  title: string | undefined
+  title: string | undefined,
+  publishedAt: string | undefined
 ): string {
   const safeSummary = summary || 'Professional technology insights and practical solutions.'
   const lowerTitle = title?.toLowerCase() || ''
@@ -148,7 +151,8 @@ function buildDescription(
   } else if (lowerTitle.includes('guide') || lowerTitle.includes('tutorial') || lowerTitle.includes('how to')) {
     prefix = 'Learn how to: '
   } else if (lowerCategory.includes('ai')) {
-    prefix = '2026 update: '
+    const publishedYear = publishedAt ? new Date(publishedAt).getFullYear() : NaN
+    prefix = Number.isNaN(publishedYear) ? 'Latest analysis: ' : `${publishedYear} analysis: `
   }
 
   const suffixes: Record<string, string> = {
@@ -203,18 +207,27 @@ export function generateMetadata({ params }: PageProps): Metadata {
 
   const {
     title,
+    seoTitle: metadataSeoTitle,
+    seoDescription,
     publishedAt: publishedTime,
     updatedAt,
     summary: description,
     image,
   } = post.metadata
 
-  const seoTitle = trimSeoTitle(title)
-  const socialTitle = buildSocialTitle(seoTitle)
+  const seoTitle = trimSeoTitle(metadataSeoTitle || title)
+  const socialTitle = buildSocialTitle(trimSocialTitle(title))
   const modifiedTime = updatedAt || publishedTime
   const ogImage = resolveOgImage(image, title)
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
-  const optimizedDescription = buildDescription(post.metadata.category, description, title)
+  const optimizedDescription =
+    seoDescription ||
+    buildDescription(
+      post.metadata.category,
+      description,
+      title,
+      publishedTime
+    )
 
   return {
     title: seoTitle,
@@ -346,7 +359,17 @@ export default function Blog({ params }: PageProps) {
   const featuredSeriesNextPost = featuredSeriesContext?.nextSlug
     ? allPosts.find((item) => item.slug === featuredSeriesContext.nextSlug) || null
     : null
-  const primaryTopicHub = featuredSeriesContext?.hub || relatedTopicHubs[0] || null
+  const assignedPrimaryTopicHub = getPrimaryTopicHubForPost({
+    slug: cleanSlug,
+    metadata: {
+      category: currentCategory,
+      tags,
+    },
+  })
+  const primaryTopicHub = assignedPrimaryTopicHub || featuredSeriesContext?.hub || relatedTopicHubs[0] || null
+  const clusterSiblingPosts = getSiblingPostsForPost(cleanSlug, allPosts, 3)
+  const inArticleAdSlot = process.env.NEXT_PUBLIC_IN_ARTICLE_AD_SLOT?.trim() || ''
+  const shouldRenderInArticleAd = /^\d+$/.test(inArticleAdSlot)
   let nextStepCard = {
     label: 'Archive',
     title: 'Keep reading in the journal',
@@ -645,6 +668,7 @@ export default function Blog({ params }: PageProps) {
                 width={1024}
                 height={1024}
                 priority
+                unoptimized
                 sizes="(max-width: 1280px) 100vw, 900px"
                 className="h-auto w-full rounded-[1.6rem] border border-slate-200/70 object-cover theme-dark:border-slate-800/80"
               />
@@ -656,6 +680,51 @@ export default function Blog({ params }: PageProps) {
               <CustomMDX source={post.content} />
             </div>
           </article>
+
+          {primaryTopicHub ? (
+            <section className="surface-panel px-6 py-7 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Primary AI track</p>
+                  <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    Continue through {primaryTopicHub.title}
+                  </h2>
+                </div>
+                <Link href={`/topics/${primaryTopicHub.slug}`} className="editorial-link">
+                  Open the full hub
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                {primaryTopicHub.description}
+              </p>
+
+              {clusterSiblingPosts.length > 0 ? (
+                <div className="mt-6 grid gap-4 lg:grid-cols-3">
+                  {clusterSiblingPosts.map((siblingPost) => (
+                    <Link
+                      key={siblingPost.slug}
+                      href={`/blog/${siblingPost.slug}`}
+                      className="surface-card block px-5 py-5"
+                    >
+                      <p className="section-kicker">Same track</p>
+                      <h3 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                        {siblingPost.metadata.title}
+                      </h3>
+                      <p className="mt-3 line-clamp-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                        {siblingPost.metadata.summary}
+                      </p>
+                      <div className="mt-5 editorial-link">
+                        Read next
+                        <ArrowUpRight className="h-4 w-4" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+            </section>
+          ) : null}
 
           {howToSteps.length > 0 ? (
             <section className="surface-card px-6 py-7 md:px-8">
@@ -835,15 +904,17 @@ export default function Blog({ params }: PageProps) {
             </div>
           </section>
 
-          <div className="surface-card px-6 py-6">
-            <p className="section-kicker">Support</p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-              Sponsored placement
-            </h2>
-            <div className="mt-5">
-              <InArticleAd slot="YOUR_AD_SLOT_ID" />
+          {shouldRenderInArticleAd ? (
+            <div className="surface-card px-6 py-6">
+              <p className="section-kicker">Support</p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                Sponsored placement
+              </h2>
+              <div className="mt-5">
+                <InArticleAd slot={inArticleAdSlot} />
+              </div>
             </div>
-          </div>
+          ) : null}
 
           <SocialShare
             title={post.metadata.title}

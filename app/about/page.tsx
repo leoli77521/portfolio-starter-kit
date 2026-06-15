@@ -1,13 +1,19 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
 import { guides } from 'app/lib/guides'
 import { topicHubs } from 'app/lib/topic-hubs'
 import { baseUrl } from 'app/sitemap'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata = {
+const pageMetadata: Metadata = {
   title: 'About',
   description:
     'Learn what ToLearn covers, how the archive is structured, and what kind of work the site is for.',
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/about', pageMetadata)
 }
 
 const principles = [

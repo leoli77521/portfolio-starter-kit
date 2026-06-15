@@ -1,7 +1,9 @@
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowUpRight, Clock } from 'lucide-react'
 import { formatDate, truncateSummary } from 'app/lib/formatters'
 import { getCategoryColor } from 'app/lib/categories'
+import { getContentPath } from 'app/lib/i18n-paths'
 
 interface PostCardProps {
   post: {
@@ -29,15 +31,18 @@ const categoryBadgeStyles = {
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const locale = useLocale()
+  const t = useTranslations('Blog')
+  const common = useTranslations('Common')
   const summary = post.metadata.summary
     ? truncateSummary(post.metadata.summary, 180)
-    : 'Read the full article for the complete analysis.'
+    : t('fallbackSummary')
   const categoryTone = getCategoryColor(post.metadata.category || 'All')
 
   return (
     <article className="surface-card overflow-hidden">
       <Link
-        href={`/blog/${post.slug}`}
+        href={getContentPath(`/blog/${post.slug}`, locale)}
         className="group block px-6 py-6 md:px-7 md:py-7"
         title={post.metadata.title}
       >
@@ -55,7 +60,7 @@ export function PostCard({ post }: PostCardProps) {
               {post.readingTime ? (
                 <span className="inline-flex items-center gap-1">
                   <Clock className="h-3.5 w-3.5" />
-                  {post.readingTime} min read
+                  {common('readTime', { minutes: post.readingTime })}
                 </span>
               ) : null}
             </div>
@@ -70,7 +75,7 @@ export function PostCard({ post }: PostCardProps) {
           </div>
 
           <div className="flex shrink-0 items-center justify-between md:block">
-            <span className="section-kicker">Open article</span>
+            <span className="section-kicker">{t('openArticle')}</span>
             <span className="mt-2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 text-slate-500 transition-colors group-hover:border-indigo-300 group-hover:text-indigo-700 theme-dark:border-slate-800 theme-dark:text-slate-400 theme-dark:group-hover:border-indigo-500/60 theme-dark:group-hover:text-indigo-300">
               <ArrowUpRight className="h-4 w-4" />
             </span>
@@ -80,4 +85,3 @@ export function PostCard({ post }: PostCardProps) {
     </article>
   )
 }
-

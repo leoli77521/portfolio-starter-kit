@@ -1,19 +1,35 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import pseoData from '@/data/pseo_data.json'
+import { aiDirectories } from 'app/lib/ai-directories'
 import { getBlogPosts } from 'app/blog/utils'
 import { categories, getCategorySlug } from 'app/lib/categories'
 import { baseUrl } from 'app/lib/constants'
 import { guides } from 'app/lib/guides'
+import { locales, localizePath } from 'app/lib/i18n-paths'
 import { getMostRecentIsoString } from 'app/lib/seo'
 import { MIN_POSTS_FOR_INDEXED_TAG_PAGE, toTagSlug } from 'app/lib/tags'
-import { postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
 
 export { baseUrl } from 'app/lib/constants'
 
 const PROJECT_ROOT = process.cwd()
 const DEFAULT_LAST_MODIFIED = '2026-01-01T00:00:00.000Z'
 const MIN_POSTS_FOR_YEAR_PAGE = 3
+const LOCALIZED_SITEMAP_PATHS = new Set([
+  '/',
+  '/blog',
+  '/categories',
+  '/tags',
+  '/topics',
+  '/guides',
+  '/templates',
+  '/solutions',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms',
+])
 
 type BlogPost = ReturnType<typeof getBlogPosts>[number]
 
@@ -44,6 +60,29 @@ function getPostLastModified(post: BlogPost): string {
   return formatDateForSitemap(post.metadata.updatedAt || post.metadata.publishedAt)
 }
 
+function pathFromAbsoluteUrl(url: string): string {
+  const path = url.replace(baseUrl, '')
+  return path || '/'
+}
+
+function localizeSitemapRoutes<T extends { url: string }>(routes: T[]): T[] {
+  return routes.flatMap((route) => {
+    const path = pathFromAbsoluteUrl(route.url)
+
+    if (!LOCALIZED_SITEMAP_PATHS.has(path)) {
+      return [route]
+    }
+
+    return locales.map((locale) => {
+      const localizedPath = localizePath(path, locale)
+      return {
+        ...route,
+        url: `${baseUrl}${localizedPath === '/' ? '' : localizedPath}`,
+      }
+    })
+  })
+}
+
 export default async function sitemap() {
   const posts = getBlogPosts()
   const latestPostLastModified = getLatestTimestamp(...posts.map(getPostLastModified))
@@ -68,6 +107,14 @@ export default async function sitemap() {
     getFileLastModified('app/guides/page.tsx'),
     getFileLastModified('app/guides/[slug]/page.tsx'),
     getFileLastModified('app/lib/guides.ts')
+  )
+  const aiDirectorySourceLastModified = getLatestTimestamp(
+    getFileLastModified('app/ai-coding-agents/page.tsx'),
+    getFileLastModified('app/ai-tools/page.tsx'),
+    getFileLastModified('app/ai-models/page.tsx'),
+    getFileLastModified('app/components/ai-directory-page.tsx'),
+    getFileLastModified('app/lib/ai-directories.ts'),
+    getFileLastModified('data/ai-topic-clusters.json')
   )
   const pseoSourceLastModified = getLatestTimestamp(
     getFileLastModified('data/pseo_data.json'),
@@ -117,6 +164,12 @@ export default async function sitemap() {
       changeFrequency: 'weekly' as const,
       priority: 0.75,
     },
+    ...aiDirectories.map((directory) => ({
+      url: `${baseUrl}${directory.canonicalPath}`,
+      lastModified: aiDirectorySourceLastModified,
+      changeFrequency: 'weekly' as const,
+      priority: 0.78,
+    })),
     {
       url: `${baseUrl}/about`,
       lastModified: getFileLastModified('app/about/page.tsx'),
@@ -258,7 +311,7 @@ export default async function sitemap() {
       priority: number
     }>
   >((routes, topic) => {
-    const matchingPosts = posts.filter((post) => postMatchesTopicHub(post.metadata.tags || [], topic))
+    const matchingPosts = posts.filter((post) => postBelongsToTopicHub(post, topic))
 
     if (matchingPosts.length === 0) {
       return routes
@@ -314,8 +367,10 @@ export default async function sitemap() {
     priority: 0.6,
   }))
 
+  const localizedStaticRoutes = localizeSitemapRoutes(staticRoutes)
+
   return [
-    ...staticRoutes,
+    ...localizedStaticRoutes,
     ...apiRoutes,
     ...blogs,
     ...categoryRoutes,

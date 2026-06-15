@@ -1,4 +1,4 @@
-import { getTopicHub, postMatchesTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { getTopicHub, postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
 import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -18,7 +18,7 @@ function getMatchingPostsForHub(hub: NonNullable<ReturnType<typeof getTopicHub>>
   const allPosts = getBlogPosts()
 
   return allPosts
-    .filter((post) => postMatchesTopicHub(post.metadata.tags || [], hub))
+    .filter((post) => postBelongsToTopicHub(post, hub))
     .sort(
       (a, b) =>
         new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
@@ -57,17 +57,19 @@ export async function generateMetadata({
 
   const matchingPosts = getMatchingPostsForHub(hub)
   const shouldIndex = matchingPosts.length > 0
+  const metaTitle = hub.seoTitle || hub.title
+  const metaDescription = hub.seoDescription || hub.description
 
   return {
-    title: hub.title,
-    description: hub.description,
-    keywords: hub.targetKeywords,
+    title: metaTitle,
+    description: metaDescription,
+    keywords: Array.from(new Set([...hub.targetKeywords, ...(hub.coreTerms || [])])),
     alternates: {
       canonical: `${baseUrl}/topics/${hub.slug}`,
     },
     openGraph: {
-      title: `${hub.title} | ToLearn Blog`,
-      description: hub.description,
+      title: `${metaTitle} | ToLearn Blog`,
+      description: metaDescription,
       url: `${baseUrl}/topics/${hub.slug}`,
       type: 'website',
     },
@@ -95,6 +97,12 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
 
   const matchingPosts = getMatchingPostsForHub(hub)
   const shouldIndex = matchingPosts.length > 0
+  const guideSections = hub.guideSections || []
+  const checklist = hub.checklist
+  const faqItems = hub.faq || []
+  const conclusion = hub.conclusion
+  const coreTerms = hub.coreTerms || []
+  const referenceLinks = hub.referenceLinks || []
   const featuredPosts = (hub.featuredArticleSlugs?.length
     ? hub.featuredArticleSlugs
         .map((slug) => matchingPosts.find((post) => post.slug === slug))
@@ -150,13 +158,50 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
       position: index + 1,
     })),
   })
+  const faqSchema = faqItems.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${baseUrl}/topics/${hub.slug}#faq`,
+        mainEntity: faqItems.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer,
+          },
+        })),
+      }
+    : null
+  const howToSchema = checklist
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        '@id': `${baseUrl}/topics/${hub.slug}#checklist`,
+        name: checklist.title,
+        description: checklist.description,
+        step: checklist.items.map((item, index) => ({
+          '@type': 'HowToStep',
+          position: index + 1,
+          name: `Step ${index + 1}`,
+          text: item,
+        })),
+      }
+    : null
+  const schemas = [
+    breadcrumbSchema,
+    itemListSchema,
+    collectionPageSchema,
+    ...(faqSchema ? [faqSchema] : []),
+    ...(howToSchema ? [howToSchema] : []),
+  ]
 
   return (
     <section className="space-y-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: schemaToJsonLd([breadcrumbSchema, itemListSchema, collectionPageSchema]),
+          __html: schemaToJsonLd(schemas),
         }}
       />
 
@@ -184,7 +229,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
       <div className="surface-panel px-6 py-8 md:px-8 md:py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="section-kicker">Topic hub</p>
+            <p className="section-kicker">{guideSections.length ? 'Learning guide' : 'Topic hub'}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {hub.relatedCategories.slice(0, 2).map((category) => {
                 const tone = getCategoryColor(category)
@@ -202,7 +247,7 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
               {hub.title}
             </h1>
             <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
-              {hub.description}
+              {hub.seoDescription || hub.description}
             </p>
             {!shouldIndex ? (
               <p className="mt-3 text-sm leading-7 text-slate-500 theme-dark:text-slate-400">
@@ -213,6 +258,11 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            {hub.directoryHref ? (
+              <Link href={hub.directoryHref} className="editorial-link">
+                Open directory
+              </Link>
+            ) : null}
             <Link href="/topics" className="editorial-link">
               All topic hubs
             </Link>
@@ -259,6 +309,89 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
             </p>
           </div>
 
+          {guideSections.length > 0 ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Guide</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    SEO Fundamentals for 2026
+                  </h2>
+                </div>
+                <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  Start with the core search engine optimization signals that help a page get
+                  crawled, understood, trusted, and improved over time.
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-5">
+                {guideSections.map((section, index) => (
+                  <section
+                    key={section.title}
+                    className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/70"
+                  >
+                    <p className="section-kicker">Part {index + 1}</p>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                      {section.title}
+                    </h3>
+                    <div className="mt-4 space-y-3">
+                      {section.body.map((paragraph) => (
+                        <p
+                          key={paragraph}
+                          className="text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                    {section.bullets?.length ? (
+                      <ul className="mt-5 grid gap-3">
+                        {section.bullets.map((bullet) => (
+                          <li
+                            key={bullet}
+                            className="rounded-lg border border-slate-200/80 bg-white/85 px-4 py-3 text-sm leading-7 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-200"
+                          >
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </section>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {checklist ? (
+            <div id="checklist" className="surface-panel px-6 py-6 md:px-8">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="section-kicker">Checklist</p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                    {checklist.title}
+                  </h2>
+                </div>
+                <p className="max-w-2xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                  {checklist.description}
+                </p>
+              </div>
+
+              <ol className="mt-6 grid gap-3 md:grid-cols-2">
+                {checklist.items.map((item, index) => (
+                  <li
+                    key={item}
+                    className="flex gap-3 rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:text-slate-200"
+                  >
+                    <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-950 text-xs font-semibold text-white theme-dark:bg-white theme-dark:text-slate-950">
+                      {index + 1}
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
+
           {featuredPosts.length > 0 || learningGoals.length > 0 ? (
             <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)]">
               {featuredPosts.length > 0 ? (
@@ -271,8 +404,8 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
                       </h2>
                     </div>
                     <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-                      Follow these featured reads to move from architecture basics to migration
-                      discipline without losing the thread.
+                      {hub.readingOrderDescription ||
+                        'Follow these featured reads in order to move from fundamentals to deeper implementation without losing the thread.'}
                     </p>
                   </div>
 
@@ -311,8 +444,8 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
                     What You'll Learn
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-                    This hub is designed for developers who want to understand how coding agents
-                    work as systems, not just as model demos.
+                    {hub.learningGoalsDescription ||
+                      'Use these goals to move through the topic with a clear sense of what each section should help you understand.'}
                   </p>
                   <ul className="mt-6 space-y-3">
                     {learningGoals.map((goal) => (
@@ -329,17 +462,61 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
             </div>
           ) : null}
 
+          {faqItems.length > 0 ? (
+            <div id="faq" className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">FAQ</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                Common SEO Fundamentals Questions
+              </h2>
+              <div className="mt-6 grid gap-4">
+                {faqItems.map((item) => (
+                  <section
+                    key={item.question}
+                    className="rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/70"
+                  >
+                    <h3 className="text-lg font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                      {item.question}
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {item.answer}
+                    </p>
+                  </section>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {conclusion ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">Conclusion</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                {conclusion.title}
+              </h2>
+              <div className="mt-4 space-y-3">
+                {conclusion.body.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           <div className="surface-panel px-6 py-6 md:px-8">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="section-kicker">Archive</p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-                  All Articles in This Hub
+                  {guideSections.length ? 'Continue With Deeper Articles' : 'All Articles in This Hub'}
                 </h2>
               </div>
               <p className="max-w-xl text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-                Topic hubs sit between categories and tags: more curated than one label, less
-                rigid than a formal guide.
+                {guideSections.length
+                  ? 'Use these related articles to go deeper on SEO tooling, JavaScript rendering, AI-assisted workflows, and repeatable content refreshes.'
+                  : 'Topic hubs sit between categories and tags: more curated than one label, less rigid than a formal guide.'}
               </p>
             </div>
 
@@ -368,6 +545,46 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
         </div>
 
         <aside className="space-y-5">
+          {coreTerms.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Core terms</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {coreTerms.map((term) => (
+                  <span
+                    key={term}
+                    className="inline-flex rounded-full border border-slate-200/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300"
+                  >
+                    {term}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {referenceLinks.length > 0 ? (
+            <div className="surface-card px-5 py-5">
+              <p className="section-kicker">Reference sources</p>
+              <div className="mt-4 space-y-3">
+                {referenceLinks.map((reference) => (
+                  <a
+                    key={reference.href}
+                    href={reference.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
+                  >
+                    <span className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
+                      {reference.label}
+                    </span>
+                    <span className="mt-2 block text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
+                      {reference.description}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {sortedTags.length > 0 ? (
             <div className="surface-card px-5 py-5">
               <p className="section-kicker">Topics covered</p>
@@ -438,4 +655,3 @@ export default function TopicHubPage({ params }: { params: { slug: string } }) {
     </section>
   )
 }
-

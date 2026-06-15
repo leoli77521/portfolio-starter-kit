@@ -7,21 +7,23 @@ import {
   generateCollectionPageSchema,
   schemaToJsonLd,
 } from 'app/lib/schemas'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Solutions',
   description:
     'Browse portfolio template features such as dark mode, SEO, responsiveness, performance, and blog support.',
   keywords: ['portfolio features', 'dark mode portfolio', 'SEO portfolio', 'responsive portfolio'],
-  alternates: {
-    canonical: `${baseUrl}/solutions`,
-  },
   openGraph: {
     title: 'Solutions | ToLearn Blog',
     description: 'Feature-driven entry points for the portfolio template library.',
     type: 'website',
     url: `${baseUrl}/solutions`,
   },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/solutions', pageMetadata)
 }
 
 interface Feature {
@@ -142,4 +144,3 @@ export default function SolutionsPage() {
     </section>
   )
 }
-

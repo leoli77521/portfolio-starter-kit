@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ArrowUpRight, Mail } from 'lucide-react'
 
 export default function NewsletterForm() {
@@ -8,6 +9,7 @@ export default function NewsletterForm() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
+  const t = useTranslations('Newsletter')
 
   const subscribe = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -55,10 +57,10 @@ export default function NewsletterForm() {
         <div className="min-w-0 flex-1">
           <p className="section-kicker">Newsletter</p>
           <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-            Weekly analysis, not filler
+            {t('headline')}
           </h3>
           <p className="mt-2 text-sm leading-6 text-slate-600 theme-dark:text-slate-300">
-            One concise update on AI systems, search visibility, and modern web execution.
+            {t('description')}
           </p>
         </div>
       </div>
@@ -68,7 +70,7 @@ export default function NewsletterForm() {
           <div className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/90 p-2 theme-dark:border-slate-800 theme-dark:bg-slate-950/90">
             <input
               ref={inputRef}
-              aria-label="Email for newsletter"
+              aria-label={t('emailLabel')}
               placeholder="jane@example.com"
               type="email"
               autoComplete="email"
@@ -79,7 +81,7 @@ export default function NewsletterForm() {
               className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-950 text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 theme-dark:bg-slate-100 theme-dark:text-slate-950"
               type="submit"
               disabled={loading}
-              aria-label="Subscribe"
+              aria-label={t('subscribe')}
             >
               {loading ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white theme-dark:border-slate-400 theme-dark:border-t-slate-950" />
@@ -91,17 +93,17 @@ export default function NewsletterForm() {
 
           {error ? (
             <p className="mt-3 text-xs text-red-600 theme-dark:text-red-400">
-              Subscription failed. Please try again with a valid email.
+              {t('error')}
             </p>
           ) : (
             <p className="mt-3 text-xs text-slate-500 theme-dark:text-slate-400">
-              Concise weekly notes. No noisy autoresponder sequence.
+              {t('note')}
             </p>
           )}
         </form>
       ) : (
         <div className="mt-5 rounded-[1.25rem] border border-emerald-200/80 bg-emerald-50/90 px-4 py-4 text-sm text-emerald-800 theme-dark:border-emerald-900/80 theme-dark:bg-emerald-950/40 theme-dark:text-emerald-200">
-          Thanks. Check your inbox to confirm the subscription.
+          {t('success')}
         </div>
       )}
     </div>

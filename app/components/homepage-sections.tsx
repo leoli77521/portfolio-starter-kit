@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, ArrowUpRight, Bot, Code2, Route, Search, Sparkles } from 'lucide-react'
+import { getContentPath, localizePath } from 'app/lib/i18n-paths'
 import type {
   HomepageFeaturedSeries,
   HomepageGuidedPath,
@@ -12,6 +14,10 @@ export function HomepageStartHere({
 }: {
   items: HomepageStartHereItem[]
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+  const hrefFor = (href: string) => getContentPath(href, locale)
+
   if (items.length === 0) {
     return null
   }
@@ -20,18 +26,17 @@ export function HomepageStartHere({
     <section id="start-here" className="content-section pt-4">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="section-kicker">Start here</p>
+          <p className="section-kicker">{t('startKicker')}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-            The clearest way into the site
+            {t('startTitle')}
           </h2>
           <p className="section-copy mt-3 max-w-2xl">
-            New to ToLearn? Begin with a few entry points that show how the site thinks about AI
-            systems, search visibility, and practical execution.
+            {t('startBody')}
           </p>
         </div>
 
-        <Link href="/blog" className="editorial-link">
-          Browse the full journal
+        <Link href={localizePath('/blog', locale)} className="editorial-link">
+          {t('browseFull')}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -40,7 +45,7 @@ export function HomepageStartHere({
         {items.map((item) => (
           <Link
             key={item.href}
-            href={item.href}
+            href={hrefFor(item.href)}
             className="surface-card group block px-6 py-6"
           >
             <div className="flex items-start justify-between gap-4">
@@ -72,6 +77,10 @@ export function HomepageTrackExplorer({
 }: {
   tracks: HomepageTrack[]
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+  const common = useTranslations('Common')
+
   if (tracks.length === 0) {
     return null
   }
@@ -79,12 +88,12 @@ export function HomepageTrackExplorer({
   return (
     <section className="content-section">
       <div className="mb-8">
-        <p className="section-kicker">Explore by track</p>
+        <p className="section-kicker">{t('tracksKicker')}</p>
         <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-          Follow the part of the archive that matches your work
+          {t('tracksTitle')}
         </h2>
         <p className="section-copy mt-3 max-w-2xl">
-          Choose the lane you care about instead of scanning the archive cold.
+          {t('tracksBody')}
         </p>
       </div>
 
@@ -92,7 +101,7 @@ export function HomepageTrackExplorer({
         {tracks.map((track) => (
           <Link
             key={track.title}
-            href={track.href}
+            href={localizePath(track.href, locale)}
             className="surface-card group block px-6 py-6"
           >
             <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-100/80 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-900/80 theme-dark:text-slate-200">
@@ -115,10 +124,10 @@ export function HomepageTrackExplorer({
 
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="meta-chip normal-case tracking-normal">
-                {track.postCount} articles
+                {common('articles', { count: track.postCount })}
               </span>
               <span className="meta-chip normal-case tracking-normal">
-                {track.hubCount} hubs
+                {common('hubs', { count: track.hubCount })}
               </span>
             </div>
 
@@ -138,6 +147,10 @@ export function HomepageGuidedPaths({
 }: {
   paths: HomepageGuidedPath[]
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+  const common = useTranslations('Common')
+
   if (paths.length === 0) {
     return null
   }
@@ -145,12 +158,12 @@ export function HomepageGuidedPaths({
   return (
     <section className="content-section">
       <div className="mb-8">
-        <p className="section-kicker">Guided paths</p>
+        <p className="section-kicker">{t('guidedKicker')}</p>
         <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-          Curated topic hubs for readers who want structure
+          {t('guidedTitle')}
         </h2>
         <p className="section-copy mt-3 max-w-2xl">
-          Follow a path instead of browsing the archive blind.
+          {t('guidedBody')}
         </p>
       </div>
 
@@ -158,14 +171,16 @@ export function HomepageGuidedPaths({
         {paths.map((path) => (
           <Link
             key={path.slug}
-            href={path.href}
+            href={localizePath(path.href, locale)}
             className="surface-card group block px-6 py-6"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-100/80 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-900/80 theme-dark:text-slate-200">
                 <Route className="h-5 w-5" />
               </div>
-              <span className="meta-chip normal-case tracking-normal">{path.postCount} posts</span>
+              <span className="meta-chip normal-case tracking-normal">
+                {common('posts', { count: path.postCount })}
+              </span>
             </div>
 
             <h3 className="mt-5 text-2xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
@@ -204,6 +219,9 @@ export function HomepageFeaturedSeriesCard({
 }: {
   series: HomepageFeaturedSeries | null
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+
   if (!series) {
     return null
   }
@@ -213,7 +231,7 @@ export function HomepageFeaturedSeriesCard({
       <div className="surface-panel px-6 py-7 md:px-8">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-start">
           <div>
-            <p className="section-kicker">Featured series</p>
+            <p className="section-kicker">{t('seriesKicker')}</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
               {series.title}
             </h2>
@@ -221,42 +239,44 @@ export function HomepageFeaturedSeriesCard({
 
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="meta-chip normal-case tracking-normal">
-                {series.postCount}-part series
+                {t('seriesPart', { count: series.postCount })}
               </span>
               <span className="meta-chip normal-case tracking-normal">
-                Organized as a reading path
+                {t('seriesPath')}
               </span>
             </div>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
-                href={series.primaryHref}
+                href={getContentPath(series.primaryHref, locale)}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 theme-dark:bg-slate-100 theme-dark:text-slate-950"
               >
-                Start the series
+                {t('seriesStart')}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href={series.secondaryHref}
+                href={localizePath(series.secondaryHref, locale)}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200/80 px-6 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-indigo-300 hover:text-slate-950 theme-dark:border-slate-800 theme-dark:text-slate-300 theme-dark:hover:border-indigo-500/60 theme-dark:hover:text-white"
               >
-                View all related posts
+                {t('seriesAll')}
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
 
           <div className="surface-card px-5 py-5">
-            <p className="section-kicker">Reading order</p>
+            <p className="section-kicker">{t('readingOrder')}</p>
             <ol className="mt-5 space-y-3">
               {series.posts.map((post, index) => (
                 <li key={post.slug}>
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={getContentPath(`/blog/${post.slug}`, locale)}
                     className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 hover:bg-white theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60 theme-dark:hover:bg-slate-950"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="meta-chip normal-case tracking-normal">Part {index + 1}</span>
+                      <span className="meta-chip normal-case tracking-normal">
+                        {t('part', { index: index + 1 })}
+                      </span>
                       <span className="text-sm font-semibold text-slate-900 theme-dark:text-slate-100">
                         {post.title}
                       </span>
@@ -273,24 +293,25 @@ export function HomepageFeaturedSeriesCard({
 }
 
 export function HomepageMiniAbout() {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+
   return (
     <section className="content-section">
       <div className="surface-panel flex flex-col gap-4 px-6 py-6 md:flex-row md:items-end md:justify-between md:px-8">
         <div className="max-w-3xl">
-          <p className="section-kicker">Why ToLearn exists</p>
+          <p className="section-kicker">{t('whyKicker')}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
-            Signal-first notes for builders
+            {t('whyTitle')}
           </h2>
           <p className="section-copy mt-3">
-            ToLearn is a running notebook for builders who care more about signal than hype. The
-            goal is simple: make product shifts, technical decisions, and execution patterns easier
-            to understand without turning every post into noise.
+            {t('whyBody')}
           </p>
         </div>
 
-        <Link href="/about" className="editorial-link">
+        <Link href={localizePath('/about', locale)} className="editorial-link">
           <Sparkles className="h-4 w-4" />
-          Read about the project
+          {t('whyLink')}
         </Link>
       </div>
     </section>

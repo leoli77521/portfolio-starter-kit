@@ -1,6 +1,7 @@
 import { defaultOgImage } from 'app/lib/seo'
 import { baseUrl } from './sitemap'
 import type { Metadata } from 'next'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { getBlogPosts } from 'app/blog/utils'
 import { HeroSection } from 'app/components/hero-section'
 import {
@@ -19,51 +20,65 @@ import {
 import { LatestPostsList } from 'app/components/latest-posts-list'
 import { NewsletterCTA } from 'app/components/newsletter-cta'
 import { topicHubs } from 'app/lib/topic-hubs'
+import {
+  getAbsoluteLocalizedAlternates,
+  getCanonicalUrl,
+  getLocaleLanguageTag,
+  getLocaleOpenGraph,
+} from 'app/lib/i18n-paths'
 
-export const metadata: Metadata = {
-  title: 'ToLearn Blog | AI, Search, and Modern Web Work',
-  description:
-    'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
-  keywords: [
-    'AI systems',
-    'coding agents',
-    'search visibility',
-    'technical SEO',
-    'modern web execution',
-    'developer workflows',
-    'AI architecture analysis',
-    'web performance',
-  ],
-  alternates: {
-    canonical: baseUrl,
-  },
-  openGraph: {
-    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
-    description:
-      'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
-    url: baseUrl,
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'ToLearn Tech Blog',
-    images: [
-      {
-        url: defaultOgImage,
-        width: 1200,
-        height: 630,
-        alt: 'ToLearn Blog homepage preview',
-      },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'Metadata' })
+  const title = t('homeTitle')
+  const description = t('homeDescription')
+  const canonicalUrl = getCanonicalUrl('/', locale, baseUrl)
+
+  return {
+    title,
+    description,
+    keywords: [
+      'AI systems',
+      'coding agents',
+      'search visibility',
+      'technical SEO',
+      'modern web execution',
+      'developer workflows',
+      'AI architecture analysis',
+      'web performance',
     ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'ToLearn Blog | AI, Search, and Modern Web Work',
-    description:
-      'Practical analysis of AI systems, coding agents, search visibility, technical SEO, and modern web execution for builders.',
-    images: [defaultOgImage],
-  },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: getAbsoluteLocalizedAlternates('/', baseUrl),
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: 'website',
+      locale: getLocaleOpenGraph(locale),
+      siteName: 'ToLearn Tech Blog',
+      images: [
+        {
+          url: defaultOgImage,
+          width: 1200,
+          height: 630,
+          alt: 'ToLearn Blog homepage preview',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [defaultOgImage],
+    },
+  }
 }
 
-export default function Page() {
+export default async function Page() {
+  const locale = await getLocale()
+  const metadataT = await getTranslations({ locale, namespace: 'Metadata' })
   const allPosts = getBlogPosts().sort(
     (a, b) =>
       new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
@@ -71,6 +86,10 @@ export default function Page() {
   const trackData = getHomepageTrackData(allPosts)
   const guidedPaths = getHomepageGuidedPaths(allPosts)
   const featuredSeries = getHomepageFeaturedSeries(allPosts)
+  const canonicalUrl = getCanonicalUrl('/', locale, baseUrl)
+  const blogUrl = getCanonicalUrl('/blog', locale, baseUrl)
+  const searchUrl = getCanonicalUrl('/search', locale, baseUrl)
+  const languageTag = getLocaleLanguageTag(locale)
 
   const organization = {
     '@type': 'Organization',
@@ -91,13 +110,12 @@ export default function Page() {
     '@id': `${baseUrl}/#website`,
     name: 'ToLearn Blog',
     alternateName: 'ToLearn Tech Blog',
-    description:
-      'Signal-first analysis covering AI systems, coding agents, search visibility, and modern web execution for builders.',
-    url: baseUrl,
-    inLanguage: 'en-US',
+    description: metadataT('rootDescription'),
+    url: canonicalUrl,
+    inLanguage: languageTag,
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${baseUrl}/search?q={search_term_string}`,
+      target: `${searchUrl}?q={search_term_string}`,
       'query-input': 'required name=search_term_string'
     },
     publisher: organization,
@@ -107,14 +125,14 @@ export default function Page() {
       name: 'ToLearn Tech Blog',
       description:
         'Practical analysis, implementation notes, and strategic writeups on AI systems, search visibility, and modern web execution.',
-      url: `${baseUrl}/blog`,
+      url: blogUrl,
       author: organization,
       publisher: organization,
       isPartOf: {
         '@id': `${baseUrl}/#website`,
       },
       keywords: ['AI systems', 'coding agents', 'search visibility', 'technical SEO', 'modern web execution'],
-      inLanguage: 'en-US'
+      inLanguage: languageTag
     }
   }
 

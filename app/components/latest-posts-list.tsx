@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, ArrowUpRight, Clock } from 'lucide-react'
 import { calculateReadingTime, formatDate, getBlogPosts } from 'app/blog/utils'
 import { truncateSummary } from 'app/lib/formatters'
 import { getCategoryColor } from 'app/lib/categories'
+import { getContentPath, localizePath } from 'app/lib/i18n-paths'
 
 const categoryBadgeStyles = {
   gray: 'border-slate-200/80 bg-slate-100/90 text-slate-600 theme-dark:border-slate-800 theme-dark:bg-slate-900 theme-dark:text-slate-300',
@@ -22,6 +24,9 @@ export function LatestPostsList({
   limit?: number
   skipFirst?: number
 }) {
+  const locale = useLocale()
+  const t = useTranslations('Home')
+  const common = useTranslations('Common')
   const posts = getBlogPosts()
     .sort(
       (a, b) =>
@@ -37,17 +42,17 @@ export function LatestPostsList({
     <section className="content-section pt-4">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="section-kicker">Latest dispatches</p>
+          <p className="section-kicker">{t('latestKicker')}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
-            Fresh notes from the notebook
+            {t('latestTitle')}
           </h2>
           <p className="section-copy mt-3 max-w-2xl">
-            The newest analysis across AI systems, search visibility, and modern web execution.
+            {t('latestBody')}
           </p>
         </div>
 
-        <Link href="/blog" className="editorial-link">
-          See every post
+        <Link href={localizePath('/blog', locale)} className="editorial-link">
+          {t('latestLink')}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -59,7 +64,7 @@ export function LatestPostsList({
           return (
             <article key={post.slug} className="surface-card overflow-hidden">
               <Link
-                href={`/blog/${post.slug}`}
+                href={getContentPath(`/blog/${post.slug}`, locale)}
                 className="group block px-5 py-5 md:px-6 md:py-6"
                 title={post.metadata.title}
               >
@@ -92,7 +97,7 @@ export function LatestPostsList({
 
                 <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-[0.16em] text-slate-500 theme-dark:text-slate-400">
                   <Clock className="h-3.5 w-3.5" />
-                  {calculateReadingTime(post.content)} min read
+                  {common('readTime', { minutes: calculateReadingTime(post.content) })}
                 </div>
               </Link>
             </article>

@@ -7,15 +7,16 @@ import {
   getTagCounts,
   toTagSlug,
 } from 'app/lib/tags'
-import { baseUrl } from 'app/sitemap'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Tags',
   description:
     'Browse the ToLearn archive by tag to find recurring themes, tools, and technical patterns.',
-  alternates: {
-    canonical: `${baseUrl}/tags`,
-  },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/tags', pageMetadata)
 }
 
 export default function TagsPage() {
@@ -185,4 +186,3 @@ export default function TagsPage() {
     </section>
   )
 }
-

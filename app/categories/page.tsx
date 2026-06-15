@@ -3,15 +3,16 @@ import type { Metadata } from 'next'
 import { getBlogPosts } from 'app/blog/utils'
 import { categories, getCategoryColor, getCategorySlug } from 'app/lib/categories'
 import { getCategoryDescription } from 'app/lib/category-descriptions'
-import { baseUrl } from 'app/sitemap'
+import { withLocalizedMetadata } from 'app/lib/i18n-metadata'
 
-export const metadata: Metadata = {
+const pageMetadata: Metadata = {
   title: 'Categories',
   description:
     'Browse ToLearn by category, from AI systems and web development to search visibility and productivity.',
-  alternates: {
-    canonical: `${baseUrl}/categories`,
-  },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return withLocalizedMetadata('/categories', pageMetadata)
 }
 
 const categoryBadgeStyles = {
@@ -159,4 +160,3 @@ export default function CategoriesPage() {
     </section>
   )
 }
-

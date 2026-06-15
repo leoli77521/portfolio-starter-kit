@@ -18,6 +18,8 @@ export type ArticleRating = {
 
 export type BlogMetadata = {
   title: string
+  seoTitle?: string
+  seoDescription?: string
   publishedAt: string
   updatedAt?: string
   summary: string

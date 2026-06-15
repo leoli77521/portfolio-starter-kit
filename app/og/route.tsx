@@ -34,38 +34,38 @@ function getThemeColors(type: ReturnType<typeof detectContentType>): {
   gradientStart: string
   gradientEnd: string
   accent: string
-  emoji: string
+  label: string
 } {
   const themes = {
     ai: {
       gradientStart: '#0A0F1C',
       gradientEnd: '#1E1B4B',
       accent: '#8B5CF6',
-      emoji: '🤖',
+      label: 'AI',
     },
     seo: {
       gradientStart: '#0F172A',
       gradientEnd: '#1E3A5F',
       accent: '#22C55E',
-      emoji: '📈',
+      label: 'SEO',
     },
     coding: {
       gradientStart: '#0C0C0C',
       gradientEnd: '#1A1A2E',
       accent: '#6366F1',
-      emoji: '💻',
+      label: 'DEV',
     },
     guide: {
       gradientStart: '#0F172A',
       gradientEnd: '#1E293B',
       accent: '#F59E0B',
-      emoji: '📖',
+      label: 'GUIDE',
     },
     default: {
       gradientStart: '#0A0F1C',
       gradientEnd: '#1E293B',
       accent: '#6366F1',
-      emoji: '📝',
+      label: 'TL',
     },
   }
   return themes[type]
@@ -124,7 +124,7 @@ export async function GET(request: Request) {
                   background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accent}80 100%)`,
                 }}
               >
-                <span tw="text-3xl">{theme.emoji}</span>
+                <span tw="text-2xl font-bold text-white">{theme.label}</span>
               </div>
               <span tw="text-2xl font-bold text-white opacity-90">ToLearn Blog</span>
             </div>

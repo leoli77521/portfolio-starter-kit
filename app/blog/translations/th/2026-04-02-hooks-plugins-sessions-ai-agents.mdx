@@ -1,0 +1,46 @@
+---
+title: "Hooks, Plugins และ Sessions ใน AI Coding Agents"
+summary: "Hooks, plugin registries และ persistent sessions ทำให้ AI coding assistant กลายเป็นแพลตฟอร์มที่ขยายได้ ไม่ใช่แค่ demo ครั้งเดียว"
+seoTitle: "Hooks, Plugins และ Sessions สำหรับ AI Coding Agents"
+seoDescription: "อธิบายว่า hooks, plugins และ session persistence ทำให้ coding agent ขยาย ควบคุม และ resume งานได้อย่างไร"
+faq: [{"question":"ทำไม hooks สำคัญ?","answer":"Hooks ให้ runtime แทรกก่อนและหลัง tool execution เพื่อ policy checks, logging, mutation และ workflow control"},{"question":"Plugins มีบทบาทอะไร?","answer":"Plugins package tools, commands และ lifecycle behavior เพื่อเพิ่มความสามารถโดยไม่ต้อง hard-code ใน core runtime"},{"question":"ทำไม sessions สำคัญมาก?","answer":"งานเขียนโค้ดจริงกินหลาย turn ถ้าไม่มี session persistence และ resume workflow ยาวจะเปราะบาง"}]
+howto: [{"name":"วาง hooks รอบ action ที่เสี่ยง","text":"Shell, file writes และ remote actions ควรถูกตรวจได้ก่อนและหลัง execution"},{"name":"Package extension logic ให้สะอาด","text":"ใช้ plugin manifests, command registration และ explicit permissions"},{"name":"ออกแบบเพื่อ resume","text":"Persist transcripts, session IDs และ state transitions เพื่อให้กลับมาทำต่อได้"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Hooks, Plugins และ Sessions ใน AI Coding Agents
+
+Toy coding agent ตอบคำถามได้ อาจแก้ไฟล์ได้ แล้วก็ลืมแทบทุกอย่างเมื่อจบ interaction
+
+Platform-grade coding agent ต่างออกไป มันขยายได้ ถูก intercept ได้ resume ได้ และ supervise ได้
+
+## แผนที่ซีรีส์
+
+1. [Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins และ Sessions ใน AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Hooks คือจุดที่ policy เจอกับ action
+
+Hooks อยู่ระหว่าง intent และ execution มันรันก่อน tool หลังสำเร็จ หรือหลังล้มเหลวได้ ทำให้ runtime มีที่สำหรับตรวจ input ปฏิเสธ action เสี่ยง ขอ review เพิ่ม emit logs หรือ trigger behavior ถัดไป
+
+Coding agents ไม่ได้สร้างข้อความอย่างเดียว มันทำ action ที่มี side effects เมื่อ agent รัน shell แก้ไฟล์ เรียก remote service หรือส่งงานให้ sub-agent ลำดับ execution จะกลายเป็น product logic
+
+## Plugins ทำให้การขยายควบคุมได้
+
+Agent เริ่มเป็น platform เมื่อไม่จำกัดแค่ built-in capability แต่รองรับ extension ที่มี manifest, commands, tools, permissions และ lifecycle behavior
+
+Plugins ทำให้ทีมต่อ internal systems ได้โดยไม่ต้อง fork core runtime แต่ต้องมี permissions, namespaces และ audit trails ชัด ไม่เช่นนั้น extensibility จะกลายเป็นความวุ่นวาย
+
+## Sessions รองรับงานยาว
+
+งานเขียนโค้ดไม่ใช่คำถามเดียว มันคืออ่าน วางแผน แก้ ทดสอบ fail ซ่อม แล้วทำต่อ ถ้าไม่มี session agent จะเหมือนเริ่มใหม่ทุกครั้ง
+
+Session layer ที่ดีเก็บ transcript, tool outputs, session IDs, permission decisions และ state ที่จำเป็นต่อ resume นี่ไม่ใช่แค่ chat history แต่คือ work continuity
+
+## สรุป
+
+Hooks ให้ control Plugins ให้ growth Sessions ให้ time ทั้งสามอย่างรวมกันทำให้ AI coding assistant กลายเป็น platform ที่เข้าไปอยู่ใน engineering process จริงได้

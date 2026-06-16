@@ -1,0 +1,50 @@
+---
+title: "ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน"
+summary: "Parity repo ของ Claw Code แสดงว่าทำไม coding agent สมัยใหม่มักให้ Rust ดูแล runtime core และให้ Python ดูแล orchestration, compatibility และ migration"
+seoTitle: "Rust และ Python ในสถาปัตยกรรม AI Coding Agent"
+seoDescription: "อธิบายว่าทำไม Rust เหมาะกับ runtime และ trust boundary ส่วน Python เหมาะกับ orchestration, parity reports และ migration"
+faq: [{"question":"ทำไมไม่สร้าง agent ทั้งหมดด้วยภาษาเดียว?","answer":"เพราะความต้องการหลากหลาย เส้นทางที่สำคัญต่อ runtime และความปลอดภัยเหมาะกับ Rust ส่วน orchestration และ migration มักเขียนด้วย Python ได้เร็วกว่า"},{"question":"ฝั่ง Python มักทำอะไร?","answer":"Compatibility shims, inventories, parity reports และ migration scripts เป็นหน้าที่ที่พบได้บ่อย"},{"question":"Multi-language stack ดีกว่าเสมอไหม?","answer":"ไม่เสมอ มันช่วยเมื่อ boundary ชัดและ responsibility แยกกันจริง"}]
+howto: [{"name":"แยก runtime ออกจาก migration","text":"ให้ core execution loop และ safety-sensitive primitives เสถียร แล้วแยก compatibility work ออกไป"},{"name":"ให้ trust boundary มีเจ้าของชัดเจน","text":"Permissions, tool execution และ session integrity ควรอยู่ใน runtime ที่รับผิดชอบชัดเจน"},{"name":"เขียน boundary ให้ชัด","text":"ทีมจะมีปัญหาเมื่อ Python และ Rust ซ้อนหน้าที่กันโดยไม่ตั้งใจ"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน
+
+รายละเอียดที่น่าสนใจที่สุดอย่างหนึ่งใน Claw Code parity repo ไม่ใช่ benchmark แต่คือการแบ่งภาษา
+
+โปรเจกต์นี้ไม่ได้พยายามทำทุกอย่างในภาษาเดียว แต่เผย pattern ที่ทีม AI infrastructure จำนวนมากน่าจะใช้มากขึ้น: **Rust สำหรับ runtime core, Python สำหรับ orchestration, compatibility และ migration**
+
+## แผนที่ซีรีส์
+
+1. [Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins และ Sessions ใน AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## ภาษาเดียวเริ่มไม่พอเมื่อเป็น agent
+
+ช่วง prototype ภาษาเดียวสะดวก แต่เมื่อเป็น agent ระบบต้องรับทั้ง prompt experimentation, filesystem access, shell, streaming model IO, permissions, external tools, long-running reliability และแรงกดดันจาก migration
+
+ภาษาเดียวมัก optimize ทุกอย่างไม่ได้ดีพอ บางครั้ง runtime หลวมเกินไป บางครั้ง iteration layer แข็งเกินไป Claw Code แสดงทางสายกลางที่มีวินัยกว่า
+
+## Rust เป็นเจ้าของ trust boundary
+
+Rust workspace มี crate อย่าง `api`, `commands`, `compat-harness`, `plugins`, `runtime`, `telemetry` และ `tools` สิ่งนี้บอกว่าทีมต้องการ guarantee ที่แข็งแรงตรงไหน
+
+Rust เหมาะกับ CLI binary, argument parsing, conversation runtime, tool execution, permission modes, hooks, MCP transport, API plumbing และ telemetry กล่าวอีกแบบคือ Rust ถือ trust boundary
+
+ถ้า agent อ่านไฟล์ แก้ไฟล์ รัน process ต่อ remote service และ resume session ได้ runtime behavior ก็ไม่ใช่ implementation detail อีกต่อไป มันคือผลิตภัณฑ์
+
+## Python ทำให้ migration มองเห็นได้
+
+Python สำคัญเพราะ migration ต้องการการเขียนที่เร็ว Inventories, manifests, gap reports, compatibility checks และ orchestration scripts เปลี่ยนบ่อย Python จึงเหมาะกับการทำให้สถานะ migration อ่านออก
+
+Boundary คือหัวใจ Rust ควร execute และ protect ส่วน Python ควร count, compare, report และช่วย transition เมื่อแยกแบบนี้ multi-language stack จะลดความเสี่ยง แทนที่จะเพิ่มความซับซ้อน
+
+## สรุป
+
+คำถามไม่ใช่ Rust หรือ Python แต่คือชั้นไหนต้อง predictable, safe และ long-lived และชั้นไหนต้อง iterate เร็ว
+
+Coding agents สมัยใหม่เริ่มคล้ายระบบปฏิบัติการขนาดเล็ก มันต้องการทั้ง runtime guarantees และ migration tools Claw Code แสดงวิธีแบ่งเส้นนี้อย่างค่อนข้างชัดเจน

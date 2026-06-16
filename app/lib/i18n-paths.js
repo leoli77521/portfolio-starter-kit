@@ -120,23 +120,12 @@ function getContentPath(pathname, locale = defaultLocale) {
   const {path, suffix} = splitPathSuffix(strippedPathname)
   const normalizedPath = normalizePath(path)
 
-  if (isArticlePath(normalizedPath)) {
-    return `${normalizedPath}${suffix}`
-  }
-
   return localizePath(`${normalizedPath}${suffix}`, locale)
 }
 
 function getLocalizedAlternates(pathname) {
   const {path} = splitPathSuffix(stripLocaleFromPath(pathname).pathname)
   const normalizedPath = normalizePath(path)
-
-  if (isArticlePath(normalizedPath)) {
-    return {
-      [localeLanguageTags.en]: normalizedPath,
-      'x-default': normalizedPath,
-    }
-  }
 
   const alternates = {}
   locales.forEach((locale) => {

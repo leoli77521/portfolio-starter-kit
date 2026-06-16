@@ -1,0 +1,48 @@
+---
+title: "Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams"
+summary: "Der Claw-Code-Parity-Workflow zeigt, wie Teams komplexe Agent-Systeme neu bauen können, ohne in vage Rewrite-Erzählungen oder bloße Kopien abzurutschen."
+seoTitle: "Clean-Room-Rewrites und Parity Audits für AI Agents"
+seoDescription: "Wie Manifeste, Inventare und Gap Reports helfen, AI-Agent-Rewrites kontrolliert und prüfbar zu migrieren."
+faq: [{"question":"Warum scheitern große Agent-Rewrites oft?","answer":"Teams rekonstruieren Verhalten aus Erinnerung, schreiben zu viel auf einmal um und verlieren aus dem Blick, welche Fähigkeiten für Parity wirklich zählen."},{"question":"Was macht ein Parity Audit?","answer":"Es macht Lücken sichtbar, indem Commands, Tools, Dateien, Subsysteme oder Verhaltensweisen verglichen werden."},{"question":"Warum ist das über Claw Code hinaus relevant?","answer":"Viele AI-Teams bauen Stacks über Sprachen, Provider oder Vertrauensgrenzen hinweg neu und brauchen Disziplin, um Verhalten zu erhalten."}]
+howto: [{"name":"Oberfläche vor dem Rewrite definieren","text":"Commands, Tools, Flows und Vertrauensgrenzen müssen vor dem Austausch der Implementierung beschrieben werden."},{"name":"Parity explizit verfolgen","text":"Manifeste, Snapshots und Gap Reports zeigen, was gespiegelt ist und was noch fehlt."},{"name":"Schichtweise migrieren","text":"Runtime, Tools, Integrationen und Memory sollten mit klaren Checkpoints migriert werden."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams
+
+Die meisten Rewrites scheitern, bevor der Code scheitert. Sie scheitern in der Planung.
+
+Teams wollen einen alten Stack ersetzen, die Sprache wechseln oder um einen neuen Modellanbieter herum neu bauen. Dann merken sie, dass sie gar nicht diszipliniert beschreiben können, was das alte System tatsächlich getan hat.
+
+Genau deshalb ist die Parity-Denkweise im Claw-Code-Repository so interessant.
+
+## Serienkarte
+
+1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Warum Rewrites driften
+
+Das klassische Rewrite-Problem ist semantische Drift. Das neue System startet mit einem starken Versprechen: schneller, sicherer, sauberer, moderner. Dann verschwinden alte Verhaltensweisen unbemerkt. Ein Command fehlt, ein Tool verhält sich anders, ein Session-Resume bricht, ein Edge Case wurde nie dokumentiert.
+
+Ab diesem Moment ist der Rewrite kein kontrollierter Übergang mehr, sondern ein Produkt mit unsicherer Treue.
+
+## Parity Audit macht Migration zählbar
+
+Ein Parity Audit verwandelt Migration von Erzählung in Buchhaltung. Statt zu sagen, man sei fast feature-complete, kann das Team fragen: Wie viele Commands sind gespiegelt? Welche Tools fehlen? Welche Subsysteme sind abgedeckt? Welche Lücken sind strategisch und welche versehentlich?
+
+Das ändert die Diskussion. Fortschritt wird konkret.
+
+## Clean-room heißt nicht blind kopieren
+
+Ein Clean-Room-Rewrite kopiert nicht Zeile für Zeile. Er definiert die Verhaltensoberfläche und baut sie in einer neuen Architektur nach. So kann das Team Sprache, Runtime und interne Struktur ändern, ohne Nutzerverhalten versehentlich zu zerstören.
+
+Für AI Agents ist das besonders wichtig, weil Commands, Tools, Permissions, Sessions, Plugins, MCP und Prompt-Flows eng zusammenwirken.
+
+## Fazit
+
+Teams, die Agent-Systeme neu bauen, sollten zuerst die Oberfläche messen: Welche Fähigkeiten müssen bleiben, welche dürfen sich ändern, welche Lücken sind sichtbar? Manifeste, Inventare und Gap Reports sind keine Bürokratie. Sie sind die Sicherheitsgurte einer Migration.

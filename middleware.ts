@@ -9,6 +9,7 @@ import {
   localizePath,
   stripLocaleFromPath,
 } from './app/lib/i18n-paths'
+import { hasKnownPostTranslation } from './app/lib/blog-translation-manifest'
 
 const intlMiddleware = createMiddleware(routing)
 
@@ -119,11 +120,22 @@ export function middleware(request: NextRequest) {
   const contentPath = strippedPath.pathname
 
   if (activeLocale !== defaultLocale && isArticlePath(contentPath)) {
-    url.pathname = contentPath
-    logRedirect(pathname, contentPath, 302)
-    const response = NextResponse.redirect(url, 302)
-    response.headers.set('X-Redirect-Reason', 'localized-article-fallback')
-    return response
+    const articleMatch = contentPath.match(/^\/blog\/([^/]+)$/)
+    let slug = articleMatch?.[1] || ''
+
+    try {
+      slug = decodeURIComponent(slug)
+    } catch {
+      // Keep the raw slug when decoding fails.
+    }
+
+    if (!hasKnownPostTranslation(slug, activeLocale)) {
+      url.pathname = contentPath
+      logRedirect(pathname, contentPath, 302)
+      const response = NextResponse.redirect(url, 302)
+      response.headers.set('X-Redirect-Reason', 'localized-article-fallback')
+      return response
+    }
   }
 
   const blogRedirects: Record<string, string> = {

@@ -28,6 +28,8 @@ export type BlogMetadata = {
   tags?: string[]
   faq?: FAQItem[] | string
   howto?: HowToStep[] | string
+  sourceUpdatedAt?: string
+  translatedAt?: string
   rating?: ArticleRating | number  // Article rating for schema.org (number = value, defaults count)
 }
 
@@ -35,6 +37,11 @@ export type BlogPost = {
   slug: string
   metadata: BlogMetadata
   content: string
+  locale?: string
+  requestedLocale?: string
+  isTranslated?: boolean
+  availableLocales?: string[]
+  href?: string
 }
 
 // Category types
@@ -98,6 +105,7 @@ export type SearchResult = {
   title: string
   summary: string
   publishedAt: string
+  href?: string
 }
 
 // API response types

@@ -7,8 +7,8 @@ import { CustomMDX } from 'app/components/mdx'
 import { TableOfContents } from 'app/components/toc'
 import {
   formatDate,
+  getBlogPost,
   getBlogPosts,
-  resolveBlogSlug,
   getHeadings,
   calculateReadingTime,
 } from 'app/blog/utils'
@@ -20,6 +20,14 @@ import Comments from 'app/components/comments'
 import type { FAQItem, HowToStep } from 'app/types'
 import { getCategorySlug } from 'app/lib/categories'
 import { buildSocialTitle, resolveOgImage, trimSeoTitle, trimSocialTitle } from 'app/lib/seo'
+import {
+  defaultLocale,
+  getLocaleLanguageTag,
+  getLocaleOpenGraph,
+  isLocale,
+  localizePath,
+} from 'app/lib/i18n-paths'
+import { getAbsoluteArticleAlternates, getArticlePath } from 'app/lib/blog-i18n'
 import { findRelevantGuides } from 'app/lib/pseo-content'
 import {
   getFeaturedSeriesContextForPost,
@@ -122,7 +130,7 @@ function normalizeHowToSteps(value: unknown): HowToStep[] {
 }
 
 export async function generateStaticParams() {
-  const posts = getBlogPosts()
+  const posts = getBlogPosts(defaultLocale)
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -131,6 +139,17 @@ export async function generateStaticParams() {
 
 interface PageProps {
   params: { slug: string }
+}
+
+export interface ArticlePageProps {
+  params: {
+    slug: string
+    locale?: string
+  }
+}
+
+function getArticleLocale(params: ArticlePageProps['params']) {
+  return params.locale && isLocale(params.locale) ? params.locale : defaultLocale
 }
 
 function buildDescription(
@@ -184,22 +203,12 @@ function buildDescription(
   return `${prefix}${optimizedSummary}${suffix}`
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const allPosts = getBlogPosts()
+export function generateArticleMetadata({ params }: ArticlePageProps): Metadata {
   const requestedSlug = params.slug
-  const normalizedSlug = resolveBlogSlug(requestedSlug)
-
-  let post = allPosts.find((item) => item.slug === normalizedSlug)
-
-  if (!post) {
-    try {
-      const decodedSlug = decodeURIComponent(requestedSlug)
-      const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
-      post = allPosts.find((item) => item.slug === decodedNormalizedSlug)
-    } catch {
-      return {}
-    }
-  }
+  const locale = getArticleLocale(params)
+  const post = getBlogPost(requestedSlug, locale, {
+    fallbackToDefault: locale === defaultLocale,
+  })
 
   if (!post) {
     return {}
@@ -219,7 +228,8 @@ export function generateMetadata({ params }: PageProps): Metadata {
   const socialTitle = buildSocialTitle(trimSocialTitle(title))
   const modifiedTime = updatedAt || publishedTime
   const ogImage = resolveOgImage(image, title)
-  const canonicalUrl = `${baseUrl}/blog/${post.slug}`
+  const articlePath = getArticlePath(post.slug, locale)
+  const canonicalUrl = `${baseUrl}${articlePath}`
   const optimizedDescription =
     seoDescription ||
     buildDescription(
@@ -245,6 +255,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
       authors: ['ToLearn Blog'],
       section: 'Technology Articles',
       url: canonicalUrl,
+      locale: getLocaleOpenGraph(locale),
       images: [
         {
           url: ogImage,
@@ -263,6 +274,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
     },
     alternates: {
       canonical: canonicalUrl,
+      languages: getAbsoluteArticleAlternates(post.slug, baseUrl),
     },
     robots: {
       index: true,
@@ -280,28 +292,26 @@ export function generateMetadata({ params }: PageProps): Metadata {
   }
 }
 
-export default function Blog({ params }: PageProps) {
-  const allPosts = getBlogPosts()
+export function generateMetadata({ params }: PageProps): Metadata {
+  return generateArticleMetadata({
+    params: {
+      ...params,
+      locale: defaultLocale,
+    },
+  })
+}
+
+export function BlogArticle({ params }: ArticlePageProps) {
   const requestedSlug = params.slug
-  const normalizedSlug = resolveBlogSlug(requestedSlug)
+  const locale = getArticleLocale(params)
+  const post = getBlogPost(requestedSlug, locale, {
+    fallbackToDefault: locale === defaultLocale,
+  })
 
-  let post = allPosts.find((item) => item.slug === normalizedSlug)
-
-  if (post && requestedSlug !== post.slug) {
-    redirect(`/blog/${post.slug}`)
-  }
-
-  if (!post) {
-    try {
-      const decodedSlug = decodeURIComponent(requestedSlug)
-      const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
-      post = allPosts.find((item) => item.slug === decodedNormalizedSlug)
-
-      if (post && requestedSlug !== post.slug) {
-        redirect(`/blog/${post.slug}`)
-      }
-    } catch {
-      notFound()
+  if (!post && locale !== defaultLocale) {
+    const fallbackPost = getBlogPost(requestedSlug, defaultLocale)
+    if (fallbackPost) {
+      redirect(getArticlePath(fallbackPost.slug, defaultLocale))
     }
   }
 
@@ -309,7 +319,16 @@ export default function Blog({ params }: PageProps) {
     notFound()
   }
 
+  if (requestedSlug !== post.slug) {
+    redirect(getArticlePath(post.slug, locale))
+  }
+
+  const allPosts = getBlogPosts(locale)
   const cleanSlug = post.slug
+  const articlePath = getArticlePath(cleanSlug, locale)
+  const articleUrl = `${baseUrl}${articlePath}`
+  const hrefFor = (href: string) => localizePath(href, locale)
+  const articleHrefFor = (slug: string) => getArticlePath(slug, locale)
   const headings = getHeadings(post.content)
   const readingTime = calculateReadingTime(post.content)
   const wordCount = post.content.trim().split(/\s+/).filter(Boolean).length
@@ -320,7 +339,7 @@ export default function Blog({ params }: PageProps) {
   const normalizedTagSet = new Set(tags.map((tag) => normalizeTagName(tag).toLowerCase()))
   const currentCategory = post.metadata.category
   const categoryHref = currentCategory
-    ? `/categories/${getCategorySlug(currentCategory)}`
+    ? hrefFor(`/categories/${getCategorySlug(currentCategory)}`)
     : null
   const relatedGuides = findRelevantGuides({
     terms: [post.metadata.title, post.metadata.summary, currentCategory || '', ...tags],
@@ -374,7 +393,7 @@ export default function Blog({ params }: PageProps) {
     label: 'Archive',
     title: 'Keep reading in the journal',
     description: 'Move from this article into the broader archive and scan adjacent work.',
-    href: '/blog',
+    href: hrefFor('/blog'),
     cta: 'Open the journal',
   }
 
@@ -383,7 +402,7 @@ export default function Blog({ params }: PageProps) {
       label: `Step ${featuredSeriesContext.index + 2} of ${featuredSeriesContext.total}`,
       title: 'Continue the series',
       description: `Move to the next entry in ${featuredSeriesContext.hub.seriesTitle || featuredSeriesContext.hub.title}.`,
-      href: `/blog/${featuredSeriesNextPost.slug}`,
+      href: articleHrefFor(featuredSeriesNextPost.slug),
       cta: 'Read the next article',
     }
   } else if (featuredSeriesContext) {
@@ -391,7 +410,7 @@ export default function Blog({ params }: PageProps) {
       label: `${featuredSeriesContext.total}-part series`,
       title: 'View the full series',
       description: `See the complete reading path inside ${featuredSeriesContext.hub.seriesTitle || featuredSeriesContext.hub.title}.`,
-      href: `/topics/${featuredSeriesContext.hub.slug}`,
+      href: hrefFor(`/topics/${featuredSeriesContext.hub.slug}`),
       cta: 'Open the series',
     }
   } else if (relatedGuides[0]) {
@@ -399,7 +418,7 @@ export default function Blog({ params }: PageProps) {
       label: relatedGuides[0].difficulty,
       title: 'Read a structured guide',
       description: 'Jump from this article into a more structured learning path.',
-      href: `/guides/${relatedGuides[0].slug}`,
+      href: hrefFor(`/guides/${relatedGuides[0].slug}`),
       cta: 'Open the guide',
     }
   }
@@ -421,7 +440,7 @@ export default function Blog({ params }: PageProps) {
     {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
-      '@id': `${baseUrl}/blog/${cleanSlug}#article`,
+      '@id': `${articleUrl}#article`,
       headline: post.metadata.title,
       description: post.metadata.summary,
       image: {
@@ -441,11 +460,11 @@ export default function Blog({ params }: PageProps) {
       publisher: organization,
       mainEntityOfPage: {
         '@type': 'WebPage',
-        '@id': `${baseUrl}/blog/${cleanSlug}`,
+        '@id': articleUrl,
       },
-      url: `${baseUrl}/blog/${cleanSlug}`,
+      url: articleUrl,
       isPartOf: {
-        '@id': `${baseUrl}/blog/#blog`,
+        '@id': `${baseUrl}${hrefFor('/blog')}#blog`,
       },
       wordCount,
       timeRequired: `PT${readingTime}M`,
@@ -453,7 +472,7 @@ export default function Blog({ params }: PageProps) {
         ? post.metadata.tags
         : ['programming technology', 'AI artificial intelligence', 'SEO optimization', 'web development'],
       articleSection: post.metadata.category || 'Technology Articles',
-      inLanguage: 'en-US',
+      inLanguage: getLocaleLanguageTag(locale),
       isAccessibleForFree: true,
       speakable: {
         '@type': 'SpeakableSpecification',
@@ -474,21 +493,21 @@ export default function Blog({ params }: PageProps) {
           '@type': 'ListItem',
           position: 2,
           name: 'Blog',
-          item: `${baseUrl}/blog`,
+          item: `${baseUrl}${hrefFor('/blog')}`,
         },
         {
           '@type': 'ListItem',
           position: 3,
           name: post.metadata.title,
-          item: `${baseUrl}/blog/${cleanSlug}`,
+          item: articleUrl,
         },
       ],
     },
     {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      '@id': `${baseUrl}/blog/${cleanSlug}`,
-      url: `${baseUrl}/blog/${cleanSlug}`,
+      '@id': articleUrl,
+      url: articleUrl,
       name: post.metadata.title,
       description: post.metadata.summary,
       isPartOf: {
@@ -508,7 +527,7 @@ export default function Blog({ params }: PageProps) {
     structuredData.push({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      '@id': `${baseUrl}/blog/${cleanSlug}#faq`,
+      '@id': `${articleUrl}#faq`,
       mainEntity: faqItems.map((item) => ({
         '@type': 'Question',
         name: item.question,
@@ -524,7 +543,7 @@ export default function Blog({ params }: PageProps) {
     structuredData.push({
       '@context': 'https://schema.org',
       '@type': 'HowTo',
-      '@id': `${baseUrl}/blog/${cleanSlug}#howto`,
+      '@id': `${articleUrl}#howto`,
       name: post.metadata.title,
       description: post.metadata.summary,
       step: howToSteps.map((step, index) => ({
@@ -533,7 +552,7 @@ export default function Blog({ params }: PageProps) {
         name: step.name || `Step ${index + 1}`,
         text: step.text,
       })),
-      inLanguage: 'en-US',
+      inLanguage: getLocaleLanguageTag(locale),
     })
   }
 
@@ -545,6 +564,7 @@ export default function Blog({ params }: PageProps) {
     tags: item.metadata.tags,
     publishedAt: item.metadata.publishedAt,
     readingTime: calculateReadingTime(item.content),
+    href: item.href,
   }))
 
   const currentPostData = {
@@ -555,6 +575,7 @@ export default function Blog({ params }: PageProps) {
     tags,
     publishedAt: post.metadata.publishedAt,
     readingTime,
+    href: articlePath,
   }
 
   return (
@@ -574,13 +595,13 @@ export default function Blog({ params }: PageProps) {
           <nav className="text-sm" aria-label="Breadcrumb navigation">
             <ol className="flex flex-wrap items-center gap-2 text-slate-500 theme-dark:text-slate-400">
               <li>
-                <Link href="/" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
+                <Link href={hrefFor('/')} className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
                   Home
                 </Link>
               </li>
               <li>/</li>
               <li>
-                <Link href="/blog" className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
+                <Link href={hrefFor('/blog')} className="transition-colors hover:text-slate-950 theme-dark:hover:text-white">
                   Blog
                 </Link>
               </li>
@@ -601,7 +622,7 @@ export default function Blog({ params }: PageProps) {
               {tags.slice(0, 2).map((tag) => (
                 <Link
                   key={tag}
-                  href={`/tags/${toTagSlug(tag)}`}
+                  href={hrefFor(`/tags/${toTagSlug(tag)}`)}
                   className="meta-chip normal-case tracking-[0.04em]"
                 >
                   {tag}
@@ -677,7 +698,7 @@ export default function Blog({ params }: PageProps) {
 
           <article className="surface-panel px-6 py-8 md:px-10 md:py-10">
             <div className="prose max-w-none">
-              <CustomMDX source={post.content} />
+              <CustomMDX source={post.content} locale={locale} />
             </div>
           </article>
 
@@ -690,7 +711,7 @@ export default function Blog({ params }: PageProps) {
                     Continue through {primaryTopicHub.title}
                   </h2>
                 </div>
-                <Link href={`/topics/${primaryTopicHub.slug}`} className="editorial-link">
+                <Link href={hrefFor(`/topics/${primaryTopicHub.slug}`)} className="editorial-link">
                   Open the full hub
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -705,7 +726,7 @@ export default function Blog({ params }: PageProps) {
                   {clusterSiblingPosts.map((siblingPost) => (
                     <Link
                       key={siblingPost.slug}
-                      href={`/blog/${siblingPost.slug}`}
+                      href={articleHrefFor(siblingPost.slug)}
                       className="surface-card block px-5 py-5"
                     >
                       <p className="section-kicker">Same track</p>
@@ -797,7 +818,7 @@ export default function Blog({ params }: PageProps) {
                       {relatedGuides.map((guide) => (
                         <Link
                           key={guide.slug}
-                          href={`/guides/${guide.slug}`}
+                          href={hrefFor(`/guides/${guide.slug}`)}
                           className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
                         >
                           <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
@@ -819,7 +840,7 @@ export default function Blog({ params }: PageProps) {
                       {relatedTopicHubs.map((hub) => (
                         <Link
                           key={hub.slug}
-                          href={`/topics/${hub.slug}`}
+                          href={hrefFor(`/topics/${hub.slug}`)}
                           className="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 px-4 py-4 transition-colors hover:border-indigo-300 theme-dark:border-slate-800 theme-dark:bg-slate-950/70 theme-dark:hover:border-indigo-500/60"
                         >
                           <div className="text-sm font-semibold text-slate-950 theme-dark:text-slate-100">
@@ -867,7 +888,7 @@ export default function Blog({ params }: PageProps) {
               </Link>
 
               <Link
-                href={primaryTopicHub ? `/topics/${primaryTopicHub.slug}` : '/topics'}
+                href={primaryTopicHub ? hrefFor(`/topics/${primaryTopicHub.slug}`) : hrefFor('/topics')}
                 className="surface-card block px-5 py-5"
               >
                 <p className="section-kicker">
@@ -887,7 +908,7 @@ export default function Blog({ params }: PageProps) {
                 </div>
               </Link>
 
-              <Link href="/#newsletter" className="surface-card block px-5 py-5">
+              <Link href={hrefFor('/#newsletter')} className="surface-card block px-5 py-5">
                 <p className="section-kicker">Weekly brief</p>
                 <h3 className="mt-3 text-xl font-semibold text-slate-950 theme-dark:text-white">
                   Get the weekly brief
@@ -918,7 +939,7 @@ export default function Blog({ params }: PageProps) {
 
           <SocialShare
             title={post.metadata.title}
-            url={`${baseUrl}/blog/${cleanSlug}`}
+            url={articleUrl}
             summary={post.metadata.summary}
           />
 
@@ -926,6 +947,7 @@ export default function Blog({ params }: PageProps) {
             currentSlug={cleanSlug}
             posts={relatedPostsData}
             currentPost={currentPostData}
+            locale={locale}
           />
 
           <Comments />
@@ -976,7 +998,7 @@ export default function Blog({ params }: PageProps) {
                     {tags.map((tag) => (
                       <Link
                         key={tag}
-                        href={`/tags/${toTagSlug(tag)}`}
+                        href={hrefFor(`/tags/${toTagSlug(tag)}`)}
                         className="meta-chip normal-case tracking-[0.04em]"
                       >
                         {tag}
@@ -993,4 +1015,8 @@ export default function Blog({ params }: PageProps) {
       </div>
     </section>
   )
+}
+
+export default function Blog({ params }: PageProps) {
+  return <BlogArticle params={{ ...params, locale: defaultLocale }} />
 }

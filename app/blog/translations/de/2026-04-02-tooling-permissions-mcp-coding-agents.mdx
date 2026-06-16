@@ -1,0 +1,54 @@
+---
+title: "Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird"
+summary: "Ein Coding-Modell wird erst dann zu einem echten Agent, wenn Tool-Ausführung, Permission Policy und MCP-Integration als ein kohärentes System entworfen werden."
+seoTitle: "Tools, Permissions und MCP für AI Coding Agents"
+seoDescription: "Warum Tool-Design, Berechtigungen und MCP zusammen bestimmen, ob ein Coding Agent sicher und nützlich handeln kann."
+faq: [{"question":"Warum sind Tools wichtiger als reine Modellqualität?","answer":"Tools bestimmen, was der Agent tatsächlich tun kann: Code lesen, Dateien ändern, suchen, Kommandos ausführen und externe Systeme verbinden."},{"question":"Warum ist Permission Design Teil des Produkts?","answer":"Vertrauen bestimmt Nutzbarkeit. Wenn Nutzer nicht verstehen, was ein Agent ausführen darf, werden sie ihm keine ernsthafte Arbeit geben."},{"question":"Was verändert MCP?","answer":"MCP standardisiert externe Fähigkeiten als Erweiterungsfläche, statt für jede Integration eigenen Klebstoff zu bauen."}]
+howto: [{"name":"Tool-Oberfläche explizit modellieren","text":"Vor neuen Tools sollte klar sein, was der Agent lesen, schreiben, ausführen, abrufen und delegieren darf."},{"name":"Berechtigungen an Fähigkeiten binden","text":"Jedes wichtige Tool braucht ein klares Risikoniveau."},{"name":"MCP als Capability Bus behandeln","text":"MCP sollte die Umgebung bewusst erweitern, nicht zufällige Integrationen anhängen."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird
+
+Ein Modell wird nicht dadurch zum Coding Agent, dass es besseren Code vorschlägt. Es wird erst dann zum Agent, wenn es kontrolliert auf die Welt wirken kann.
+
+Dafür müssen drei Dinge zusammenkommen: eine Tool-Oberfläche, ein Berechtigungssystem und eine Integrationsschicht für externe Fähigkeiten. Claw Code ist ein gutes Beispiel, weil alle drei im öffentlichen Parity-Repository sichtbar werden.
+
+## Serienkarte
+
+1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Ein Tool ist ein Versprechen
+
+Ein Tool ist im Agent-Kontext kein beliebiger Funktionsaufruf. Es ist ein Versprechen, dass der Agent etwas Konkretes und Wiederholbares tun kann: Dateien lesen, Dateien bearbeiten, Suchen ausführen, Shell-Kommandos starten, Webinhalte abrufen, Subagents delegieren oder Konfiguration prüfen.
+
+Sobald ein Modell solche Fähigkeiten erhält, fragt der Nutzer nicht mehr nur nach Ideen. Er erwartet Ergebnisse. Der Tool Layer definiert daher die reale Handlungsfläche des Produkts.
+
+## Grobe Tool-Oberflächen brechen schnell
+
+Ein einziges Shell-Tool für alles wirkt am Anfang einfach. Später wird es gefährlich. Berechtigungen werden unlesbar, Audit Trails verschwimmen, Fehler sind schwer zu klassifizieren und Nutzer verlieren Vertrauen.
+
+Der bessere Ansatz ist kompositionell: Lesen und Schreiben trennen, lokale und Netzwerkaktionen trennen, eingebaute und erweiterte Tools trennen, riskante und harmlose Fähigkeiten getrennt genehmigen.
+
+## Berechtigungen sind Produktdesign
+
+Berechtigungen bestimmen, ob Nutzer den Agent beaufsichtigen können. Ein Agent, der Dateien liest, ist nützlich. Ein Agent, der Dateien schreibt, ist mächtiger. Ein Agent, der Shell-Kommandos ausführt, ist noch nützlicher und riskanter.
+
+Das System muss sichtbar machen, was gelesen, geändert, ausgeführt oder ins Netzwerk geschickt wird. Permission Design ist deshalb keine nachträgliche Sicherheitsschicht. Es ist ein zentraler Teil der Erfahrung.
+
+## MCP als Capability Bus
+
+MCP macht externe Fähigkeiten standardisierter erreichbar. Für Coding Agents ist das wichtig, weil sie langfristig Dokumentation, Issues, Datenbanken, Monitoring, Deployment und interne Werkzeuge verbinden müssen.
+
+Ohne Standardfläche wird jede Integration ein Einzelfall. Mit MCP können Fähigkeiten, Berechtigungen und Auditierbarkeit um klarere Grenzen herum entworfen werden.
+
+## Fazit
+
+Tools, Permissions und MCP müssen gemeinsam entworfen werden. Tools sagen, was der Agent tun kann. Permissions sagen, unter welchen Bedingungen. MCP sagt, wie sich diese Fähigkeiten erweitern lassen.
+
+Erst diese Kombination verwandelt ein codingfähiges Modell in ein System, dem Nutzer echte Engineering-Aufgaben anvertrauen können.

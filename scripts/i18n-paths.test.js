@@ -31,8 +31,8 @@ test('locale stripping returns the content path and locale', () => {
   assert.deepEqual(stripLocaleFromPath('/blog'), {locale: 'en', pathname: '/blog'})
 })
 
-test('article content paths stay English-only in phase one', () => {
-  assert.equal(getContentPath('/blog/example-post', 'zh'), '/blog/example-post')
+test('article content paths can use locale prefixes after translation rollout', () => {
+  assert.equal(getContentPath('/blog/example-post', 'zh'), '/zh/blog/example-post')
   assert.equal(getContentPath('/blog/example-post', 'en'), '/blog/example-post')
   assert.equal(getContentPath('/topics', 'th'), '/th/topics')
 })
@@ -51,6 +51,11 @@ test('localized alternates include all UI locales for localizable pages', () => 
   })
   assert.deepEqual(getLocalizedAlternates('/blog/example-post'), {
     'en-US': '/blog/example-post',
+    'zh-CN': '/zh/blog/example-post',
+    'de-DE': '/de/blog/example-post',
+    'fr-FR': '/fr/blog/example-post',
+    'th-TH': '/th/blog/example-post',
+    'pt-BR': '/pt/blog/example-post',
     'x-default': '/blog/example-post',
   })
 })

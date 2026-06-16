@@ -27,7 +27,7 @@ export function LatestPostsList({
   const locale = useLocale()
   const t = useTranslations('Home')
   const common = useTranslations('Common')
-  const posts = getBlogPosts()
+  const posts = getBlogPosts(locale)
     .sort(
       (a, b) =>
         new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
@@ -64,7 +64,7 @@ export function LatestPostsList({
           return (
             <article key={post.slug} className="surface-card overflow-hidden">
               <Link
-                href={getContentPath(`/blog/${post.slug}`, locale)}
+                href={post.href || getContentPath(`/blog/${post.slug}`, locale)}
                 className="group block px-5 py-5 md:px-6 md:py-6"
                 title={post.metadata.title}
               >

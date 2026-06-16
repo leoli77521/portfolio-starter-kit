@@ -1,0 +1,50 @@
+---
+title: "Clean-room rewrites e auditorias de parity para equipes de agentes de IA"
+summary: "O workflow de parity do Claw Code mostra como reconstruir sistemas de agentes complexos sem cair em rewrites vagos ou cópias sem disciplina."
+seoTitle: "Clean-room rewrites e parity audits para agentes de IA"
+seoDescription: "Como manifests, inventários e gap reports ajudam equipes de IA a migrar agentes complexos preservando comportamento."
+faq: [{"question":"Por que grandes rewrites de agentes falham?","answer":"Equipes tentam recriar comportamento de memória, reescrevem demais de uma vez e perdem de vista quais capacidades realmente importam para parity."},{"question":"O que uma auditoria de parity faz?","answer":"Ela torna lacunas visíveis comparando comandos, ferramentas, arquivos, subsistemas ou comportamentos."},{"question":"Por que isso vale além do Claw Code?","answer":"Muitas equipes de IA estão reconstruindo stacks entre linguagens, provedores e fronteiras de confiança, e precisam preservar comportamento."}]
+howto: [{"name":"Defina a superfície antes do rewrite","text":"Liste comandos, ferramentas, fluxos e fronteiras de confiança antes de trocar a implementação."},{"name":"Acompanhe parity explicitamente","text":"Use manifests, snapshots e gap reports para mostrar o que já foi espelhado e o que falta."},{"name":"Migre por camada","text":"Runtime, ferramentas, integrações e memória precisam de checkpoints claros."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Clean-room rewrites e auditorias de parity para equipes de agentes de IA
+
+A maioria dos rewrites falha antes do código. Falha no planejamento.
+
+Uma equipe quer substituir um stack antigo, trocar de linguagem ou reconstruir em torno de um novo provedor de modelo. Então descobre que não consegue descrever com disciplina o que o sistema antigo realmente fazia.
+
+É por isso que a mentalidade de parity no repositório do Claw Code é tão interessante.
+
+## Mapa da série
+
+1. [O que o Claw Code revela sobre a arquitetura de agentes de codificação com IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Por que agentes de codificação com IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Ferramentas, permissões e MCP: como um agente de codificação se torna real](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins e sessões em agentes de codificação com IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites e auditorias de parity para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Por que rewrites derivam
+
+O problema clássico é a deriva semântica. O novo sistema promete ser mais rápido, seguro e moderno. Depois, comportamentos antigos somem sem rastreio: um comando falta, uma ferramenta muda, uma sessão não retoma, um edge case nunca foi escrito.
+
+Nesse ponto, o rewrite deixa de ser uma migração controlada e vira um produto com fidelidade incerta.
+
+## Parity audit torna a migração contável
+
+Uma auditoria de parity transforma migração em contabilidade. Em vez de dizer que está quase completo, a equipe pergunta: quantos comandos foram espelhados? Quais ferramentas faltam? Quais subsistemas estão cobertos? Quais lacunas são estratégicas?
+
+O progresso fica concreto.
+
+## Clean-room não é copiar cegamente
+
+Um clean-room rewrite não copia linha por linha. Ele define a superfície comportamental e a reconstrói em uma arquitetura melhor. Assim, a equipe muda linguagem, runtime e estrutura interna sem quebrar sem querer aquilo que usuários dependem.
+
+Para agentes de IA isso é crucial, porque comandos, ferramentas, permissões, sessões, plugins, MCP e prompts se combinam de forma apertada.
+
+## Conclusão
+
+Antes de reconstruir um agente, meça sua superfície real. Quais capacidades precisam permanecer? Quais podem mudar? Como tornar gaps visíveis?
+
+Manifests, inventários e gap reports não são burocracia. São os guardrails de uma migração séria.

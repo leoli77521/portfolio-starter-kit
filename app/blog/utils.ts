@@ -9,6 +9,13 @@ import {
   createCleanSlug as createCleanSlugUtil,
 } from '@/app/lib/formatters'
 import { normalizeTagName } from 'app/lib/tag-utils'
+import { defaultLocale, isLocale } from 'app/lib/i18n-paths'
+import {
+  getArticlePath,
+  getAvailablePostLocales,
+  getPostTranslationPath,
+  hasPostTranslation,
+} from 'app/lib/blog-i18n'
 
 // Re-export from formatters for backward compatibility
 export { slugify } from '@/app/lib/formatters'
@@ -103,7 +110,29 @@ type BlogPost = {
   metadata: Metadata
   slug: string
   content: string
+  locale: string
+  requestedLocale: string
+  isTranslated: boolean
+  availableLocales: string[]
+  href: string
 }
+
+type GetBlogPostOptions = {
+  fallbackToDefault?: boolean
+}
+
+const translatableMetadataKeys: Array<keyof Metadata> = [
+  'title',
+  'summary',
+  'seoTitle',
+  'seoDescription',
+  'faq',
+  'howto',
+  'sourceUpdatedAt',
+  'translatedAt',
+]
+
+const postsDirectory = path.join(process.cwd(), 'app', 'blog', 'posts')
 
 function getMDXData(dir: string): BlogPost[] {
   const mdxFiles = getMDXFiles(dir)
@@ -115,20 +144,109 @@ function getMDXData(dir: string): BlogPost[] {
       metadata,
       slug,
       content,
+      locale: defaultLocale,
+      requestedLocale: defaultLocale,
+      isTranslated: false,
+      availableLocales: getAvailablePostLocales(slug),
+      href: getArticlePath(slug, defaultLocale),
     }
   })
 }
 
-export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+function getSafeLocale(locale = defaultLocale) {
+  return isLocale(locale) ? locale : defaultLocale
 }
 
-export function getBlogPostsMetadata() {
-  const posts = getBlogPosts()
+function mergeTranslationMetadata(source: Metadata, translation: Partial<Metadata>): Metadata {
+  const merged = { ...source }
+
+  translatableMetadataKeys.forEach((key) => {
+    const value = translation[key]
+    if (value !== undefined && value !== '') {
+      ;(merged as any)[key] = value
+    }
+  })
+
+  return merged
+}
+
+function localizePost(post: BlogPost, locale = defaultLocale): BlogPost {
+  const safeLocale = getSafeLocale(locale)
+  const availableLocales = getAvailablePostLocales(post.slug)
+
+  if (safeLocale === defaultLocale || !hasPostTranslation(post.slug, safeLocale)) {
+    return {
+      ...post,
+      locale: defaultLocale,
+      requestedLocale: safeLocale,
+      isTranslated: false,
+      availableLocales,
+      href: getArticlePath(post.slug, safeLocale),
+    }
+  }
+
+  const { metadata, content } = readMDXFile(getPostTranslationPath(post.slug, safeLocale))
+
+  return {
+    ...post,
+    metadata: mergeTranslationMetadata(post.metadata, metadata),
+    content,
+    locale: safeLocale,
+    requestedLocale: safeLocale,
+    isTranslated: true,
+    availableLocales,
+    href: getArticlePath(post.slug, safeLocale),
+  }
+}
+
+export function getBlogPosts(locale = defaultLocale) {
+  const safeLocale = getSafeLocale(locale)
+  return getMDXData(postsDirectory).map((post) => localizePost(post, safeLocale))
+}
+
+export function getBlogPost(
+  requestedSlug: string,
+  locale = defaultLocale,
+  options: GetBlogPostOptions = {}
+) {
+  const { fallbackToDefault = true } = options
+  const safeLocale = getSafeLocale(locale)
+  const normalizedSlug = resolveBlogSlug(requestedSlug)
+  const posts = getMDXData(postsDirectory)
+  let post = posts.find((item) => item.slug === normalizedSlug)
+
+  if (!post) {
+    try {
+      const decodedSlug = decodeURIComponent(requestedSlug)
+      const decodedNormalizedSlug = resolveBlogSlug(decodedSlug)
+      post = posts.find((item) => item.slug === decodedNormalizedSlug)
+    } catch {
+      return null
+    }
+  }
+
+  if (!post) {
+    return null
+  }
+
+  if (safeLocale !== defaultLocale && !hasPostTranslation(post.slug, safeLocale) && !fallbackToDefault) {
+    return null
+  }
+
+  return localizePost(post, safeLocale)
+}
+
+export function getBlogPostsMetadata(locale = defaultLocale) {
+  const posts = getBlogPosts(locale)
   return posts.map((post) => ({
     slug: post.slug,
     metadata: post.metadata,
     readingTime: calculateReadingTime(post.content),
+    locale: post.locale,
+    requestedLocale: post.requestedLocale,
+    isTranslated: post.isTranslated,
+    availableLocales: post.availableLocales,
+    href: post.href,
   }))
 }
 

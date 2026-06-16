@@ -6,7 +6,8 @@ import { getBlogPosts } from 'app/blog/utils'
 import { categories, getCategorySlug } from 'app/lib/categories'
 import { baseUrl } from 'app/lib/constants'
 import { guides } from 'app/lib/guides'
-import { locales, localizePath } from 'app/lib/i18n-paths'
+import { defaultLocale, locales, localizePath } from 'app/lib/i18n-paths'
+import { getArticlePath } from 'app/lib/blog-i18n'
 import { getMostRecentIsoString } from 'app/lib/seo'
 import { MIN_POSTS_FOR_INDEXED_TAG_PAGE, toTagSlug } from 'app/lib/tags'
 import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
@@ -212,6 +213,19 @@ export default async function sitemap() {
     priority: 0.7,
   }))
 
+  const localizedBlogs = locales
+    .filter((locale) => locale !== defaultLocale)
+    .flatMap((locale) =>
+      getBlogPosts(locale)
+        .filter((post) => post.isTranslated)
+        .map((post) => ({
+          url: `${baseUrl}${getArticlePath(post.slug, locale)}`,
+          lastModified: getLatestTimestamp(getPostLastModified(post), post.metadata.translatedAt),
+          changeFrequency: 'weekly' as const,
+          priority: 0.65,
+        }))
+    )
+
   const tagCounts = new Map<string, number>()
   const categoryNames = new Set<string>()
   const categoryYearCounts: Record<string, Record<number, number>> = {}
@@ -373,6 +387,7 @@ export default async function sitemap() {
     ...localizedStaticRoutes,
     ...apiRoutes,
     ...blogs,
+    ...localizedBlogs,
     ...categoryRoutes,
     ...categoryYearRoutes,
     ...tagRoutes,

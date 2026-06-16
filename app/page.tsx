@@ -79,7 +79,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page() {
   const locale = await getLocale()
   const metadataT = await getTranslations({ locale, namespace: 'Metadata' })
-  const allPosts = getBlogPosts().sort(
+  const allPosts = getBlogPosts(locale).sort(
     (a, b) =>
       new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
   )

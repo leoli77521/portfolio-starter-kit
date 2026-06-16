@@ -1,6 +1,26 @@
 
 const fs = require('fs');
 const path = require('path');
+const {
+  defaultLocale,
+  locales,
+} = require('../app/lib/i18n-paths');
+const {
+  getArticlePath,
+  getPostTranslationPath,
+  hasPostTranslation,
+} = require('../app/lib/blog-i18n');
+
+const translatableMetadataKeys = [
+  'title',
+  'summary',
+  'seoTitle',
+  'seoDescription',
+  'faq',
+  'howto',
+  'sourceUpdatedAt',
+  'translatedAt',
+];
 
 // Helper function to process MDX files
 // Copied slightly modified from app/blog/utils.ts to avoid TS compilation issues and import complexity in a standalone script
@@ -71,31 +91,71 @@ function createCleanSlug(filename) {
     .replace(/^-|-$/g, '');
 }
 
+function mergeTranslationMetadata(source, translation) {
+  const merged = { ...source };
+
+  translatableMetadataKeys.forEach((key) => {
+    if (translation[key] !== undefined && translation[key] !== '') {
+      merged[key] = translation[key];
+    }
+  });
+
+  return merged;
+}
+
+function toPlainText(content) {
+  return content
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/[*_#\[\]()]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .substring(0, 5000);
+}
+
+function buildSearchEntry({ slug, metadata, content, locale }) {
+  return {
+    slug,
+    title: metadata.title,
+    summary: metadata.summary,
+    publishedAt: metadata.publishedAt,
+    href: getArticlePath(slug, locale),
+    locale,
+    isTranslated: locale !== defaultLocale && hasPostTranslation(slug, locale),
+    content: toPlainText(content)
+  };
+}
+
+function buildSearchIndexForLocale(sourcePosts, locale) {
+  return sourcePosts.map((sourcePost) => {
+    if (locale !== defaultLocale && hasPostTranslation(sourcePost.slug, locale)) {
+      const translation = readMDXFile(getPostTranslationPath(sourcePost.slug, locale));
+      return buildSearchEntry({
+        slug: sourcePost.slug,
+        metadata: mergeTranslationMetadata(sourcePost.metadata, translation.metadata),
+        content: translation.content,
+        locale,
+      });
+    }
+
+    return buildSearchEntry({
+      slug: sourcePost.slug,
+      metadata: sourcePost.metadata,
+      content: sourcePost.content,
+      locale: defaultLocale,
+    });
+  });
+}
+
 function generateSearchIndex() {
   const postsDirectory = path.join(process.cwd(), 'app', 'blog', 'posts');
   const mdxFiles = getMDXFiles(postsDirectory);
-  
-  const searchIndex = mdxFiles.map((file) => {
+
+  const sourcePosts = mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(postsDirectory, file));
     const slug = createCleanSlug(file);
 
-    // Simple plain text extraction: remove code blocks, html tags, etc.
-    // This is a naive heuristic for "content" search
-    const plainText = content
-      .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-      .replace(/<[^>]*>/g, '') // Remove HTML tags
-      .replace(/[*_#\[\]()]/g, '') // Remove basic markdown syntax
-      .replace(/\s+/g, ' ') // Collapse whitespace
-      .trim()
-      .substring(0, 5000); // Truncate to reasonable length per post to keep index size down
-
-    return {
-      slug,
-      title: metadata.title,
-      summary: metadata.summary,
-      publishedAt: metadata.publishedAt,
-      content: plainText
-    };
+    return { slug, metadata, content };
   });
 
   const publicDir = path.join(process.cwd(), 'public');
@@ -103,9 +163,19 @@ function generateSearchIndex() {
     fs.mkdirSync(publicDir);
   }
 
-  fs.writeFileSync(path.join(publicDir, 'search-index.json'), JSON.stringify(searchIndex));
-  fs.writeFileSync(path.join(publicDir, 'search-index.en.json'), JSON.stringify(searchIndex));
-  console.log(`Generated search-index.json with ${searchIndex.length} posts.`);
+  const indexes = Object.fromEntries(
+    locales.map((locale) => [locale, buildSearchIndexForLocale(sourcePosts, locale)])
+  );
+
+  fs.writeFileSync(path.join(publicDir, 'search-index.json'), JSON.stringify(indexes.en));
+
+  Object.entries(indexes).forEach(([locale, index]) => {
+    fs.writeFileSync(path.join(publicDir, `search-index.${locale}.json`), JSON.stringify(index));
+  });
+
+  console.log(
+    `Generated search indexes for ${locales.join(', ')} with ${sourcePosts.length} posts each.`
+  );
 }
 
 generateSearchIndex();

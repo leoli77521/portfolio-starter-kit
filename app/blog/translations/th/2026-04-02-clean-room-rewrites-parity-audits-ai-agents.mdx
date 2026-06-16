@@ -1,0 +1,50 @@
+---
+title: "Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent"
+summary: "Workflow แบบ parity ของ Claw Code เป็นตัวอย่างที่ดีสำหรับทีมที่ต้อง rebuild หรือ migrate agent system ซับซ้อนโดยไม่ให้ rewrite drift"
+seoTitle: "Clean-Room Rewrites และ Parity Audits สำหรับ AI Agents"
+seoDescription: "เรียนรู้ว่าการใช้ manifests, inventories และ gap reports ช่วยควบคุมความเสี่ยงของการ rewrite AI agent system อย่างไร"
+faq: [{"question":"ทำไม rewrite ขนาดใหญ่ของ agent มักล้มเหลว?","answer":"ทีมมัก rebuild behavior จากความจำ rewrite มากเกินไปในครั้งเดียว และไม่ชัดว่า capability ไหนสำคัญต่อ parity"},{"question":"Parity audit ทำอะไร?","answer":"มันทำให้ gap มองเห็นได้ โดยเทียบ commands, tools, files, subsystems หรือ behaviors"},{"question":"ทำไมเรื่องนี้สำคัญนอกเหนือจาก Claw Code?","answer":"หลายทีม AI กำลัง rebuild stack ข้ามภาษา provider หรือ trust boundary และต้องรักษา behavior เดิมไว้"}]
+howto: [{"name":"นิยาม surface ก่อน rewrite","text":"ระบุ commands, tools, flows และ trust boundaries ที่สำคัญก่อนเปลี่ยน implementation"},{"name":"Track parity แบบ explicit","text":"ใช้ manifests, snapshots และ gap reports ให้เห็นว่า mirror อะไรแล้วและยังขาดอะไร"},{"name":"Migrate ทีละ layer","text":"Runtime, tools, integrations และ memory ควรมี checkpoints ชัดเจน"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent
+
+Rewrite ส่วนใหญ่ล้มเหลวก่อน code จะล้มเหลว มันล้มเหลวตั้งแต่ planning
+
+ทีมอยากแทนที่ stack เก่า เปลี่ยนภาษา หรือ rebuild รอบ model provider ใหม่ แล้วจึงพบว่าตัวเองไม่มีวิธีอธิบายอย่างมีวินัยว่าระบบเก่าทำอะไรจริง
+
+นั่นคือเหตุผลที่ parity mindset ใน Claw Code repo น่าสนใจมาก
+
+## แผนที่ซีรีส์
+
+1. [Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins และ Sessions ใน AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## ทำไม rewrites drift
+
+ปัญหา rewrite แบบคลาสสิกคือ semantic drift ระบบใหม่เริ่มด้วยสัญญาว่าเร็วกว่า ปลอดภัยกว่า สะอาดกว่า ทันสมัยกว่า แล้ว behavior เก่าค่อย ๆ หายไปโดยไม่มีใครเห็น command บางตัวหาย tool บางตัวเปลี่ยน behavior session resume พัง หรือ edge case หายเพราะไม่มีใครจดไว้
+
+เมื่อถึงจุดนั้น rewrite จะไม่ใช่ migration ที่ควบคุมได้ แต่เป็นผลิตภัณฑ์ที่ fidelity ไม่แน่นอน
+
+## Parity audit ทำให้ migration นับได้
+
+Parity audit เปลี่ยน migration จาก storytelling เป็น accounting แทนที่จะบอกว่าเกือบ feature-complete ทีมถามได้ว่า mirror commands ไปกี่ตัว tools ไหนยังขาด subsystem ไหนครอบคลุมแล้ว gap ไหนตั้งใจและ gap ไหนเป็นอุบัติเหตุ
+
+Progress จึงกลายเป็นสิ่งที่ถกกันได้แบบ concrete
+
+## Clean-room ไม่ใช่การ copy แบบตาบอด
+
+Clean-room rewrite ไม่ใช่การคัดลอกทีละบรรทัด แต่คือการนิยาม behavior surface แล้วสร้างใหม่ใน architecture ที่ดีกว่า ทีมจึงเปลี่ยนภาษา runtime และโครงสร้างภายในได้โดยไม่ทำลาย behavior ที่ผู้ใช้พึ่งพาโดยไม่ตั้งใจ
+
+สำหรับ AI agents เรื่องนี้สำคัญมาก เพราะ commands, tools, permissions, sessions, plugins, MCP และ prompt flows เชื่อมกันแน่น
+
+## สรุป
+
+ก่อน rebuild agent system ให้ถามว่าพื้นผิวจริงของระบบคืออะไร capability ไหนต้องอยู่ capability ไหนควรเปลี่ยน และจะทำให้ gaps มองเห็นได้อย่างไร
+
+Manifests, inventories และ gap reports ไม่ใช่งานเอกสารไร้ค่า แต่เป็น guardrails ของ migration ที่จริงจัง

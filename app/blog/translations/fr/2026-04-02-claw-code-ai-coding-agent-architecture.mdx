@@ -1,0 +1,59 @@
+---
+title: "Ce que Claw Code révèle sur l'architecture des agents de codage IA"
+summary: "Les documents publics de Claw Code et son dépôt de parity montrent les couches système dont les agents de codage IA modernes ont besoin au-delà du modèle."
+seoTitle: "Claw Code et l'architecture des agents de codage IA"
+seoDescription: "Analyse de la runtime, des outils, des permissions, des sessions, des plugins et de MCP dans Claw Code comme modèle d'architecture pour les agents de codage."
+faq: [{"question":"Pourquoi étudier Claw Code si le dépôt principal est verrouillé ?","answer":"Parce que le dépôt public de parity expose encore les éléments d'architecture importants : runtime, outils, permissions, sessions et stratégie de migration."},{"question":"Quelle est la leçon principale ?","answer":"Un agent de codage n'est pas seulement un bon modèle. C'est un système composé d'une boucle runtime, d'outils, de permissions, de mémoire et de points d'extension."},{"question":"L'article parle-t-il de benchmarks ?","answer":"Non. Il parle d'architecture produit et système : comment assembler un agent capable de travailler de manière sûre et répétable."}]
+howto: [{"name":"Étudier d'abord la frontière runtime","text":"Avant de comparer les modèles, cartographiez l'interface, la boucle runtime, l'exécution des outils et la persistance."},{"name":"Identifier les surfaces de confiance","text":"Regardez comment le système gère les permissions, les validations d'outils, les hooks et le sandboxing."},{"name":"Évaluer tôt l'extensibilité","text":"Un agent devient stratégique lorsqu'il peut ajouter des outils, plugins, serveurs MCP et workflows réutilisables sans devenir chaotique."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Ce que Claw Code révèle sur l'architecture des agents de codage IA
+
+Si l'on suit uniquement les sorties de modèles, les outils de codage IA semblent presque simples : un modèle meilleur, une démo plus rapide, un score qui monte. La question la plus intéressante est ailleurs : **que faut-il autour d'un modèle pour qu'il devienne un véritable agent de codage ?**
+
+Claw Code mérite donc d'être étudié. Au **2 avril 2026**, le dépôt principal indique qu'il est temporairement verrouillé pendant un transfert de propriété et renvoie vers [`ultraworkers/claw-code-parity`](https://github.com/ultraworkers/claw-code-parity). Avec la documentation de [claw-code.codes](https://claw-code.codes/), cela suffit pour voir la forme du système.
+
+## Carte de la série
+
+Cet article fait partie de **Inside the AI Coding Agent Stack** :
+
+1. [Ce que Claw Code révèle sur l'architecture des agents de codage IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Pourquoi les agents de codage IA utilisent Rust et Python ensemble](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Outils, permissions et MCP : comment un agent de codage devient réel](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins et sessions dans les agents de codage IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites et audits de parity pour les équipes d'agents IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Le vrai produit est le harnais autour du modèle
+
+Ce qui rend un agent utile n'est pas seulement le modèle, mais le harnais qui l'entoure :
+
+- l'interface de commande
+- la boucle runtime
+- le registre d'outils
+- le modèle de permissions
+- la couche de session
+- les points d'extension
+
+Claw Code montre cette anatomie. Le workspace Rust sépare `api`, `commands`, `runtime`, `tools`, `plugins` et `telemetry`, tandis que la couche Python garde des inventaires, manifests et rapports de parity. Ce n'est pas une organisation décorative : c'est le signe que les agents deviennent des environnements d'exécution, pas seulement des assistants ponctuels.
+
+## Interface, runtime et outils
+
+Un agent orienté terminal expose plus franchement sa mécanique qu'un copilot silencieux dans un éditeur. Les slash commands, reprises de session, IDs de session, diffs, sorties d'outils et validations sont des contrôles opérationnels.
+
+La boucle runtime transforme ensuite les sorties du modèle en actions contrôlées. Elle décide quand appeler un outil, quand demander une confirmation, quand arrêter une action risquée et comment réinjecter les erreurs dans le modèle.
+
+Le registre d'outils définit la surface réelle du produit : lire des fichiers, modifier du code, lancer une commande shell, se connecter à MCP ou exporter une session. Plus cette surface est puissante, plus les permissions et l'audit deviennent importants.
+
+## Sessions et extensibilité
+
+Le travail de programmation s'étend sur plusieurs tours. Lire, planifier, modifier, tester, échouer, réparer et reprendre exige une continuité. Les sessions stockent transcript, sorties d'outils, permissions et état nécessaire à la reprise.
+
+Les hooks, plugins et MCP rendent ensuite l'agent adaptable. Les équipes veulent connecter documentation interne, CI, bases de données, monitoring et déploiement. Sans points d'extension, l'agent reste fermé. Avec eux, il devient un environnement de travail.
+
+## Conclusion
+
+Claw Code rappelle que la concurrence entre agents de codage ne se joue pas uniquement au niveau du modèle. Les vraies différences apparaissent dans la runtime, les outils, les permissions, les sessions, les plugins, MCP et la discipline de migration.
+
+Pour évaluer un agent, il ne suffit donc pas de demander s'il écrit du bon code. Il faut demander comment il agit, comment il est limité, comment il se reprend et comment il s'intègre dans un processus d'ingénierie réel.

@@ -4,6 +4,8 @@ import { highlight } from 'sugar-high'
 import React from 'react'
 import remarkGfm from 'remark-gfm'
 import { slugify } from '@/app/lib/formatters'
+import { getArticlePath } from 'app/lib/blog-i18n'
+import { defaultLocale, localizePath } from 'app/lib/i18n-paths'
 import { getDescriptiveImageAlt } from 'app/lib/seo'
 import type {
   TableProps,
@@ -44,28 +46,56 @@ function Table({ data }: TableProps) {
   )
 }
 
-function CustomLink({ href = '', children, ...props }: CustomLinkProps) {
-  if (href.startsWith('/')) {
-    return (
-      <Link href={href} {...props}>
-        {children}
-      </Link>
-    )
+function getLocalizedMdxHref(href: string, locale: string) {
+  if (!href.startsWith('/')) {
+    return href
   }
 
-  if (href.startsWith('#')) {
+  const articleMatch = href.match(/^\/blog\/([^/?#]+)(.*)$/)
+  if (articleMatch) {
+    let slug = articleMatch[1]
+    const suffix = articleMatch[2] || ''
+
+    try {
+      slug = decodeURIComponent(slug)
+    } catch {
+      // Keep the raw slug when decoding fails.
+    }
+
+    return `${getArticlePath(slug, locale)}${suffix}`
+  }
+
+  return localizePath(href, locale)
+}
+
+function createCustomLink(locale: string) {
+  function CustomLink({ href = '', children, ...props }: CustomLinkProps) {
+    if (href.startsWith('/')) {
+      return (
+        <Link href={getLocalizedMdxHref(href, locale)} {...props}>
+          {children}
+        </Link>
+      )
+    }
+
+    if (href.startsWith('#')) {
+      return (
+        <a href={href} {...props}>
+          {children}
+        </a>
+      )
+    }
+
     return (
-      <a href={href} {...props}>
+      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
         {children}
       </a>
     )
   }
 
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-      {children}
-    </a>
-  )
+  CustomLink.displayName = 'CustomLink'
+
+  return CustomLink
 }
 
 function RoundedImage({ alt, src, className, loading, decoding, ...props }: RoundedImageProps) {
@@ -127,7 +157,7 @@ function createHeading(level: number) {
   return Heading
 }
 
-const components = {
+const baseComponents = {
   h1: createHeading(2),
   h2: createHeading(3),
   h3: createHeading(4),
@@ -135,7 +165,6 @@ const components = {
   h5: createHeading(6),
   h6: createHeading(6),
   Image: RoundedImage,
-  a: CustomLink,
   code: Code,
   img: ({ alt, src, loading, decoding, ...props }: any) => (
     // eslint-disable-next-line @next/next/no-img-element
@@ -152,9 +181,14 @@ const components = {
 
 interface CustomMDXProps extends Omit<MDXRemoteProps, 'components'> {
   components?: MDXComponents
+  locale?: string
 }
 
-export function CustomMDX({ components: userComponents, ...props }: CustomMDXProps) {
+export function CustomMDX({
+  components: userComponents,
+  locale = defaultLocale,
+  ...props
+}: CustomMDXProps) {
   return (
     <MDXRemote
       {...props}
@@ -163,7 +197,7 @@ export function CustomMDX({ components: userComponents, ...props }: CustomMDXPro
           remarkPlugins: [remarkGfm],
         },
       }}
-      components={{ ...components, ...(userComponents || {}) }}
+      components={{ ...baseComponents, a: createCustomLink(locale), ...(userComponents || {}) }}
     />
   )
 }

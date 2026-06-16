@@ -17,6 +17,7 @@ interface Post {
     category?: string
   }
   readingTime?: number
+  href?: string
 }
 
 interface PostsWithFilterProps {

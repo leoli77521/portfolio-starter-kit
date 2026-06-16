@@ -8,6 +8,7 @@ const {
   stripLocaleFromPath,
   getContentPath,
   getLocalizedAlternates,
+  shouldUseLocaleRouting,
 } = require('../app/lib/i18n-paths')
 
 test('default locale keeps existing root URLs unchanged', () => {
@@ -37,6 +38,26 @@ test('article content paths can use locale prefixes after translation rollout', 
   assert.equal(getContentPath('/topics', 'th'), '/th/topics')
 })
 
+test('dynamic non-article routes stay English until localized routes exist', () => {
+  assert.equal(localizePath('/categories/ai-technology', 'zh'), '/categories/ai-technology')
+  assert.equal(localizePath('/tags/ai-coding-agents', 'de'), '/tags/ai-coding-agents')
+  assert.equal(localizePath('/topics/ai-coding-agent-stack', 'fr'), '/topics/ai-coding-agent-stack')
+  assert.equal(localizePath('/guides/seo-optimization-complete-guide', 'pt'), '/guides/seo-optimization-complete-guide')
+  assert.equal(getContentPath('/blog/example-post', 'th'), '/th/blog/example-post')
+})
+
+test('dynamic non-article routes bypass locale middleware', () => {
+  assert.equal(shouldUseLocaleRouting('/categories/ai-technology'), false)
+  assert.equal(shouldUseLocaleRouting('/tags/ai-coding-agents'), false)
+  assert.equal(shouldUseLocaleRouting('/topics/ai-coding-agent-stack'), false)
+  assert.equal(shouldUseLocaleRouting('/guides/seo-optimization-complete-guide'), false)
+  assert.equal(shouldUseLocaleRouting('/templates/nextjs/developer'), false)
+  assert.equal(shouldUseLocaleRouting('/solutions/performance'), false)
+  assert.equal(shouldUseLocaleRouting('/blog/example-post'), true)
+  assert.equal(shouldUseLocaleRouting('/zh/blog/example-post'), true)
+  assert.equal(shouldUseLocaleRouting('/zh/categories'), true)
+})
+
 test('localized alternates include all UI locales for localizable pages', () => {
   assert.equal(isLocale('zh'), true)
   assert.equal(isLocale('en-US'), false)
@@ -57,5 +78,9 @@ test('localized alternates include all UI locales for localizable pages', () => 
     'th-TH': '/th/blog/example-post',
     'pt-BR': '/pt/blog/example-post',
     'x-default': '/blog/example-post',
+  })
+  assert.deepEqual(getLocalizedAlternates('/topics/ai-coding-agent-stack'), {
+    'en-US': '/topics/ai-coding-agent-stack',
+    'x-default': '/topics/ai-coding-agent-stack',
   })
 })

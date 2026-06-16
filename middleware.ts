@@ -7,6 +7,7 @@ import {
   getContentPath,
   isArticlePath,
   localizePath,
+  shouldUseLocaleRouting,
   stripLocaleFromPath,
 } from './app/lib/i18n-paths'
 import { hasKnownPostTranslation } from './app/lib/blog-translation-manifest'
@@ -269,8 +270,25 @@ export function middleware(request: NextRequest) {
     return redirectTo(url, pathname, newPathname, redirectReasons)
   }
 
-  const response = intlMiddleware(request)
   const canonicalPath = stripLocaleFromPath(pathname).pathname
+
+  if (canonicalPath !== pathname && !shouldUseLocaleRouting(canonicalPath)) {
+    url.pathname = canonicalPath
+    logRedirect(pathname, canonicalPath, 302)
+
+    const response = NextResponse.redirect(url, 302)
+    response.headers.set('X-Redirect-Reason', 'localized-route-fallback')
+    return response
+  }
+
+  if (!shouldUseLocaleRouting(canonicalPath)) {
+    const response = NextResponse.next()
+    response.headers.set('X-Canonical-Path', canonicalPath)
+    response.headers.set('X-SEO-Processed', 'true')
+    return response
+  }
+
+  const response = intlMiddleware(request)
 
   response.headers.set('X-Canonical-Path', canonicalPath)
   response.headers.set('X-SEO-Processed', 'true')

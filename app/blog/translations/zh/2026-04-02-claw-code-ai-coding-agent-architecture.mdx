@@ -1,0 +1,108 @@
+---
+title: "Claw Code 揭示的 AI 编码代理架构"
+summary: "Claw Code 的公开文档和 parity 仓库展示了现代 AI 编码代理在模型层之外真正需要的系统结构。"
+seoTitle: "Claw Code 与 AI 编码代理架构"
+seoDescription: "解析 Claw Code parity 仓库里的运行时、工具、权限、会话和插件架构，理解 AI 编码代理如何从模型变成系统。"
+faq: [{"question":"为什么主仓库暂时锁定时，Claw Code 仍然值得研究？","answer":"因为公开的 parity 仓库仍然暴露了关键架构模式，包括运行时、工具集成、权限、会话和迁移策略。"},{"question":"这篇文章最核心的结论是什么？","answer":"编码代理不是一个更强的模型，而是由运行时循环、工具层、权限边界、记忆和扩展点组成的完整系统。"},{"question":"这篇文章是在比较基准分数吗？","answer":"不是。它关注产品和系统架构，也就是代理如何被组装成可以安全、反复执行真实工作的环境。"}]
+howto: [{"name":"先研究运行时边界","text":"在比较模型之前，先画出接口、运行时循环、工具执行路径和持久化层。"},{"name":"检查信任表面","text":"评估权限、工具审批、hooks 和沙箱机制，确认系统能否承担生产级工作。"},{"name":"尽早评估可扩展性","text":"真正有战略价值的编码代理，必须能增加工具、插件、MCP 服务器和可复用工作流，而不会让系统失控。"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Claw Code 揭示的 AI 编码代理架构
+
+如果只盯着模型发布，AI 编码工具很容易显得过分简单。
+
+模型更强了，演示更快了，榜单数字涨了，社交媒体争论几天，然后大家继续追下一次发布。但真正有价值的问题不是这个月哪个模型最强，而是：**一个模型周围需要什么，才会变成严肃的编码代理？**
+
+这就是 Claw Code 值得研究的原因。
+
+截至 **2026 年 4 月 2 日**，主 GitHub 仓库显示因为所有权转移而暂时锁定，并把公开维护指向 [`ultraworkers/claw-code-parity`](https://github.com/ultraworkers/claw-code-parity)。这个 parity 仓库再加上 [claw-code.codes](https://claw-code.codes/) 的官方文档，已经足够看清系统轮廓。
+
+这个轮廓很重要，因为它和优秀 AI 编码代理正在收敛的架构模式非常相似。
+
+## 系列地图
+
+本文属于 **Inside the AI Coding Agent Stack** 系列：
+
+1. [Claw Code 揭示的 AI 编码代理架构](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [为什么 AI 编码代理会同时使用 Rust 和 Python](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [工具、权限与 MCP：编码代理如何变成真实系统](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [AI 编码代理中的 Hooks、插件与会话](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [面向 AI 代理团队的 Clean-Room 重写与 Parity Audit](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## 真正的产品是模型外壳
+
+编码代理的价值不只来自模型，而来自模型周围的 harness：
+
+- 用户与系统交互的命令表面
+- 决定下一步行动的运行时循环
+- 把意图转换成动作的工具注册表
+- 定义信任边界的权限模型
+- 让多轮工作保持连贯的会话层
+- 让团队可以逐步适配系统的扩展点
+
+很多 AI 产品讨论仍然低估了这一层。我们在讨论 [GPT-5.4 与 Codex 作为 agent stack](/blog/2026-03-09-gpt-5-4-codex-agent-stack) 时也表达过类似观点。Claw Code 的价值在于，它从另一个方向展示了同一种结构：不是一个打磨过的发布故事，而是系统解剖图。
+
+## 一张图看懂这套栈
+
+可以把项目简化成这样的层级：
+
+```text
+User
+  -> CLI / REPL
+     -> Conversation runtime
+        -> Permission policy
+        -> Tool registry
+        -> MCP clients and external servers
+        -> Hooks and plugins
+        -> Session persistence and transcript history
+```
+
+公开 parity 仓库尤其清楚地展示了这一点。Rust workspace 被拆成 `api`、`commands`、`runtime`、`tools`、`plugins`、`telemetry` 和 CLI binary 等职责清晰的 crate。Python 层则负责 inventory、manifest 和 parity report，让重写过程在演进时仍然可读。
+
+这不是随手拆目录，而是说明编码代理正在变成一种操作环境，而不是一次性助手。
+
+## 第一层：接口仍然重要
+
+最容易犯的错误，是把界面当成装饰。
+
+终端优先的编码代理与编辑器 copilot 的行为不同，因为界面会决定系统能诚实暴露哪些控制面。slash command、resume flow、prompt mode、session switch、status view、export command 都不只是 UX 点缀，它们是操作控制。
+
+终端代理因此会和 IDE 原生助手产生不同气质：权限、diff、session ID、hook、工具输出、后台任务和恢复上下文都能更直接地暴露给用户。用户能看到机器如何运转，也就更容易监督长时间运行的工作。
+
+## 第二层：运行时循环定义代理行为
+
+模型本身只会生成下一段文本。运行时循环负责把模型输出变成受控行动。
+
+它需要决定什么时候询问用户，什么时候调用工具，什么时候写文件，什么时候停止，什么时候把错误反馈回模型，什么时候因为风险过高而暂停。没有这一层，所谓编码代理只是带工具的聊天窗口。
+
+Claw Code 这类项目让人看到：真正重要的是模型、工具和状态之间的循环。运行时越清晰，系统越容易调试、审计和恢复。
+
+## 第三层：工具层是产品的实际边界
+
+编码代理能否完成真实工作，取决于工具层。
+
+文件读取、编辑、搜索、shell 执行、网络访问、MCP 服务器、插件命令、遥测与导出，这些都定义了代理能够触碰世界的方式。工具越强，权限和审计就越重要。
+
+这也是为什么好的代理不会把所有能力塞进一个大而模糊的 shell 工具。它会把能力分解成可理解、可授权、可记录的动作，让用户知道代理正在做什么，也知道什么时候需要介入。
+
+## 第四层：会话让工作跨越一次对话
+
+真实编码工作往往不是一问一答。它可能包含阅读、计划、修改、测试、失败、恢复、继续和总结。
+
+因此会话不是锦上添花，而是代理产品的基础设施。一个严肃系统必须保存 transcript、工具输出、状态转移、选择过的权限，以及恢复时需要的上下文。否则用户每次回来都要重新解释项目，代理也无法承担更长的任务。
+
+## 第五层：扩展点决定长期价值
+
+hooks、插件和 MCP 之所以重要，是因为它们让代理从单一产品变成平台。
+
+团队不会永远满足于内置工具。他们会想接入内部文档、CI、数据库、监控、设计系统、部署平台和代码审查流程。没有扩展点，代理很快会被具体团队的工作方式卡住；有了扩展点，它才能成为组织自己的工程环境。
+
+## 结论
+
+Claw Code 最有价值的地方，不是证明某个模型或某个仓库本身有多强，而是提醒我们：AI 编码代理的竞争不只发生在模型层。
+
+真正的差异会出现在模型外的系统结构里：运行时、工具、权限、会话、插件、MCP、审计和迁移纪律。
+
+当你评估一个编码代理时，不要只问它能不能写出漂亮代码。还要问：它如何行动、如何被限制、如何被恢复、如何被扩展，以及如何让用户在长期工作中保持控制。

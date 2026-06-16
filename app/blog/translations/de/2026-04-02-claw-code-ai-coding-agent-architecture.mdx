@@ -1,0 +1,59 @@
+---
+title: "Was Claw Code über die Architektur von AI Coding Agents zeigt"
+summary: "Die öffentlichen Claw-Code-Dokumente und das Parity-Repository zeigen, welche Systemschichten moderne AI Coding Agents jenseits des Modells brauchen."
+seoTitle: "Claw Code und die Architektur von AI Coding Agents"
+seoDescription: "Eine Analyse von Runtime, Tools, Berechtigungen, Sessions, Plugins und MCP in Claw Code als Blaupause für moderne Coding Agents."
+faq: [{"question":"Warum ist Claw Code trotz gesperrtem Hauptrepository interessant?","answer":"Weil das öffentliche Parity-Repository die entscheidenden Architekturbausteine sichtbar macht: Runtime, Tools, Berechtigungen, Sessions und Migrationsdisziplin."},{"question":"Was ist die wichtigste Lektion?","answer":"Ein Coding Agent ist nicht nur ein starkes Modell, sondern ein System aus Runtime Loop, Tool Layer, Permission Gates, Memory und Erweiterungspunkten."},{"question":"Geht es hier um Benchmarks?","answer":"Nein. Es geht um Produkt- und Systemarchitektur: wie ein Agent so zusammengesetzt wird, dass er sicher und wiederholbar arbeiten kann."}]
+howto: [{"name":"Runtime-Grenzen zuerst untersuchen","text":"Bevor Modelle verglichen werden, sollten Interface, Runtime Loop, Tool-Ausführung und Persistenzschicht kartiert werden."},{"name":"Vertrauensflächen prüfen","text":"Berechtigungen, Tool-Freigaben, Hooks und Sandboxing entscheiden, ob ein Agent produktionsreif wirken kann."},{"name":"Erweiterbarkeit früh bewerten","text":"Ein strategisch nützlicher Agent muss Tools, Plugins, MCP-Server und wiederverwendbare Workflows aufnehmen können."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Was Claw Code über die Architektur von AI Coding Agents zeigt
+
+Wer nur Modell-Releases verfolgt, unterschätzt schnell, was ein Coding Agent wirklich ist. Ein besseres Modell erscheint, eine Demo läuft schneller, ein Benchmark steigt. Doch die interessantere Frage lautet: **Was muss um ein Modell herum existieren, damit daraus ein ernstzunehmender Coding Agent wird?**
+
+Claw Code ist deshalb ein gutes Studienobjekt. Am **2. April 2026** verweist das gesperrte Hauptrepository auf [`ultraworkers/claw-code-parity`](https://github.com/ultraworkers/claw-code-parity). Zusammen mit den Dokumenten auf [claw-code.codes](https://claw-code.codes/) zeigt dieses Repository eine Architektur, die vielen modernen Agents ähnelt.
+
+## Serienkarte
+
+Dieser Beitrag gehört zu **Inside the AI Coding Agent Stack**:
+
+1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Das eigentliche Produkt ist der Harness
+
+Der Wert eines Coding Agents liegt nicht nur im Modell, sondern im Harness darum herum:
+
+- die Kommandooberfläche
+- der Runtime Loop
+- die Tool Registry
+- das Berechtigungsmodell
+- die Session-Schicht
+- die Erweiterungspunkte für Teams
+
+Diese Schichten entscheiden, ob ein Agent nur Antworten gibt oder tatsächlich Arbeit ausführen kann. Claw Code macht diese Anatomie sichtbar: Rust-Crates für `api`, `commands`, `runtime`, `tools`, `plugins` und `telemetry`, dazu eine Python-Schicht für Inventare, Manifeste und Parity-Berichte.
+
+## Interface, Runtime und Tool Layer
+
+Ein terminalbasierter Agent zeigt mehr von seiner Maschine als ein stiller Editor-Copilot. Slash Commands, Resume-Flows, Session IDs, Diffs, Tool-Ausgaben und Freigaben sind keine Dekoration. Sie sind operative Steuerflächen.
+
+Darunter entscheidet der Runtime Loop, wann das Modell antwortet, wann ein Tool läuft, wann ein Risiko gestoppt wird und wann der Nutzer gefragt werden muss. Ohne diese Schleife ist ein Agent nur Chat mit angehängten Funktionen.
+
+Der Tool Layer ist die reale Grenze des Produkts. Dateien lesen, Code ändern, Shell-Kommandos starten, MCP-Server verbinden und Sessions exportieren sind konkrete Handlungen. Je stärker diese Tools werden, desto wichtiger werden Berechtigungen, Auditierbarkeit und Wiederherstellung.
+
+## Sessions und Erweiterbarkeit
+
+Echte Programmierarbeit besteht aus vielen Schritten: verstehen, planen, ändern, testen, fehlschlagen, reparieren und fortsetzen. Deshalb sind Sessions keine Komfortfunktion. Sie halten Transcript, Tool-Ausgaben, Zustände und Berechtigungen zusammen, damit Arbeit über mehrere Runden hinweg kohärent bleibt.
+
+Hooks, Plugins und MCP machen den Agent schließlich anpassbar. Teams wollen interne Dokumentation, CI, Datenbanken, Monitoring und Deployment-Systeme anbinden. Ohne Erweiterungspunkte bleibt der Agent ein geschlossenes Werkzeug. Mit ihnen wird er zu einer Arbeitsumgebung.
+
+## Fazit
+
+Claw Code erinnert daran, dass der Wettbewerb bei Coding Agents nicht nur auf Modellebene stattfindet. Die wichtigen Unterschiede entstehen in Runtime, Tools, Permissions, Sessions, Plugins, MCP und Migrationsdisziplin.
+
+Wer einen Coding Agent bewertet, sollte daher nicht nur fragen, ob er guten Code schreibt. Entscheidend ist, wie er handelt, wie er begrenzt wird, wie er wieder aufgenommen werden kann und wie er sich in reale Engineering-Prozesse einfügt.

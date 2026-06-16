@@ -1,0 +1,52 @@
+---
+title: "Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร"
+summary: "โมเดลเขียนโค้ดจะกลายเป็น agent จริงก็ต่อเมื่อ tool execution, permission policy และ MCP integration ถูกออกแบบเป็นระบบเดียวกัน"
+seoTitle: "Tools, Permissions และ MCP สำหรับ AI Coding Agents"
+seoDescription: "อธิบายว่า tool design, permissions และ MCP ทำให้ coding agent ลงมือในโลกจริงได้อย่างปลอดภัยอย่างไร"
+faq: [{"question":"ทำไม tools สำคัญกว่า model quality อย่างเดียว?","answer":"เพราะ tools กำหนดว่า agent ทำอะไรได้จริง เช่น อ่านโค้ด แก้ไฟล์ ค้นหา รันคำสั่ง และต่อระบบภายนอก"},{"question":"ทำไม permission design เป็นส่วนหนึ่งของ product?","answer":"ความไว้วางใจกำหนด usability ถ้าผู้ใช้ไม่เข้าใจว่า agent ทำอะไรได้ เขาจะไม่ฝากงานสำคัญให้"},{"question":"MCP เปลี่ยนอะไร?","answer":"MCP ทำให้ external capabilities กลายเป็น extension surface ที่เป็นมาตรฐานกว่า แทนที่จะต้องเขียน integration เฉพาะทุกครั้ง"}]
+howto: [{"name":"Model tool surface ให้ชัด","text":"ก่อนเพิ่ม tool ให้เขียนว่า agent อ่าน เขียน execute fetch และ delegate อะไรได้บ้าง"},{"name":"ผูก permissions กับ capabilities","text":"Tool สำคัญทุกตัวควรมี risk level ที่เข้าใจง่าย"},{"name":"ใช้ MCP เป็น capability bus","text":"ให้ MCP ขยาย environment ของ agent อย่างตั้งใจ ไม่ใช่แปะ integration แบบเฉพาะกิจ"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร
+
+โมเดลไม่ได้กลายเป็น coding agent เพียงเพราะเขียนโค้ดดีขึ้น มันจะกลายเป็น agent เมื่อมีวิธีที่ถูกควบคุมในการลงมือกับ environment รอบตัว
+
+สามสิ่งต้องมาพร้อมกัน: tool surface, permission system และ integration layer สำหรับ external capabilities
+
+## แผนที่ซีรีส์
+
+1. [Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins และ Sessions ใน AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Tool คือคำสัญญา
+
+ใน agent system tool ไม่ใช่แค่ function call แต่เป็นคำสัญญาว่า agent ทำบางอย่างได้จริงและทำซ้ำได้ เช่น อ่านไฟล์ แก้ไฟล์ ค้นหา รัน shell ดึงข้อมูลเว็บ ส่งงานให้ sub-agent หรือ inspect configuration
+
+เมื่อโมเดลมีความสามารถเหล่านี้ ผู้ใช้ไม่ได้ขอแค่ไอเดียอีกต่อไป เขาคาดหวัง outcome ดังนั้น tool layer จึงกำหนด operating surface จริงของผลิตภัณฑ์
+
+## Tool ที่หยาบเกินไปจะพัง
+
+การมี shell tool ตัวเดียวทำทุกอย่างดูง่ายในช่วงแรก แต่ต่อมาจะทำให้ permissions อ่านยาก audit trail ไม่ชัด error แยกประเภทยาก และผู้ใช้ไม่มั่นใจ
+
+Pattern ที่ดีกว่าคือแยก read/write, local/network, built-in/extension และ low-risk/high-risk actions ออกจากกัน
+
+## Permissions คือ product experience
+
+Agent ที่อ่านไฟล์ได้มีประโยชน์ Agent ที่เขียนไฟล์ได้ทรงพลังกว่า Agent ที่รัน shell ได้ยิ่งมีทั้งคุณค่าและความเสี่ยง
+
+ระบบต้องทำให้ผู้ใช้เห็นว่า action จะอ่านอะไร แก้อะไร execute อะไร หรือส่งข้อมูลออก network หรือไม่ Permission design จึงไม่ใช่ security patch ท้ายสุด แต่เป็นหัวใจของ supervision
+
+## MCP เป็น capability bus
+
+MCP ทำให้ external capabilities เชื่อมต่อได้เป็นมาตรฐานขึ้น Agent ระยะยาวต้องต่อ documentation, issues, databases, monitoring, deployment และ internal tools ถ้าไม่มี surface แบบนี้ integration จะกลายเป็น glue เฉพาะกิจ
+
+## สรุป
+
+Tools บอกว่า agent ทำอะไรได้ Permissions บอกว่าทำได้ภายใต้เงื่อนไขไหน MCP บอกว่าจะขยายความสามารถเหล่านั้นอย่างไร
+
+สามสิ่งนี้รวมกันจึงเปลี่ยน coding model ให้เป็นระบบที่ผู้ใช้ฝากงาน engineering จริงได้

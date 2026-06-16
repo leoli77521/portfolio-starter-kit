@@ -1,0 +1,46 @@
+---
+title: "Hooks, Plugins und Sessions in AI Coding Agents"
+summary: "Hooks, Plugin-Registries und persistente Sessions machen aus einem AI Coding Assistant eine erweiterbare Plattform statt einer einmaligen Demo."
+seoTitle: "Hooks, Plugins und Sessions für AI Coding Agents"
+seoDescription: "Wie Hooks, Plugins und Session Persistence Coding Agents erweiterbar, kontrollierbar und fortsetzbar machen."
+faq: [{"question":"Warum sind Hooks wichtig?","answer":"Hooks können vor und nach Tool-Ausführung eingreifen und Platz für Policies, Logging, Mutation und Workflow-Kontrolle schaffen."},{"question":"Welche Rolle haben Plugins?","answer":"Plugins verpacken Tools, Commands und Lifecycle-Verhalten, ohne alles in die Core Runtime zu schreiben."},{"question":"Warum sind Sessions so wichtig?","answer":"Echte Coding-Arbeit dauert viele Runden. Ohne Persistenz, Resume und Transcript-Kontinuität werden lange Agent-Workflows fragil."}]
+howto: [{"name":"Hooks um riskante Aktionen legen","text":"Shell, Datei-Schreibzugriffe und Remote-Aktionen sollten vor und nach Ausführung prüfbar sein."},{"name":"Erweiterungen sauber paketieren","text":"Plugin-Manifeste, Commands und explizite Permissions verhindern verstreute Speziallogik."},{"name":"Auf Wiederaufnahme auslegen","text":"Transcript, Session IDs und Zustandswechsel müssen persistiert werden."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Hooks, Plugins und Sessions in AI Coding Agents
+
+Ein Spielzeug-Agent beantwortet Fragen, ändert vielleicht eine Datei und vergisst danach fast alles. Ein plattformfähiger Coding Agent kann erweitert, abgefangen, fortgesetzt und überwacht werden.
+
+Genau hier kommen Hooks, Plugins und Sessions ins Spiel. Sie sind keine Show-Funktionen, sondern Infrastruktur.
+
+## Serienkarte
+
+1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Hooks verbinden Policy und Aktion
+
+Hooks sitzen zwischen Absicht und Ausführung. Sie können vor einem Tool, nach Erfolg oder nach Fehler laufen. Dadurch erhält die Runtime einen Ort, um Eingaben zu prüfen, riskante Aktionen abzulehnen, zusätzliche Freigaben zu verlangen, Logs zu schreiben oder Folgeaktionen auszulösen.
+
+Das ist wichtig, weil Coding Agents nicht nur Text erzeugen. Sie führen Aktionen mit Nebenwirkungen aus. Sobald Shell, Dateisystem, Remote Services oder Subagents beteiligt sind, wird Ausführungsreihenfolge zu Produktlogik.
+
+## Plugins machen Erweiterung beherrschbar
+
+Ein Agent überschreitet eine wichtige Schwelle, wenn er nicht nur eine feste Menge eingebauter Fähigkeiten hat, sondern Erweiterungen mit Manifesten, Commands, Tools, Permissions und Lifecycle-Verhalten unterstützt.
+
+Plugins erlauben Teams, interne Systeme anzubinden, ohne die Core Runtime zu forken. Gleichzeitig brauchen Plugins klare Berechtigungen, Namespaces und Audit Trails. Sonst wird Erweiterbarkeit schnell zur Unordnung.
+
+## Sessions tragen lange Arbeit
+
+Programmieren ist selten eine einzelne Frage. Es besteht aus Lesen, Planen, Ändern, Testen, Fehlern, Reparieren und Fortsetzen. Ohne Session-Schicht wacht der Agent jedes Mal neu auf.
+
+Eine ernsthafte Session-Schicht speichert Transcript, Tool-Ausgaben, Session IDs, Berechtigungsentscheidungen und genug Zustand für Resume. Das ist nicht nur Chat-Historie, sondern Arbeitskontinuität.
+
+## Fazit
+
+Hooks erlauben Kontrolle, Plugins erlauben Wachstum, Sessions erlauben Zeit. Zusammen verwandeln sie einen AI Coding Assistant in eine Plattform, die in reale Engineering-Prozesse eingebettet werden kann.

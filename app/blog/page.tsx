@@ -46,7 +46,7 @@ export default async function Page() {
   const locale = await getLocale()
   const t = await getTranslations({ locale, namespace: 'Blog' })
   const common = await getTranslations({ locale, namespace: 'Common' })
-  const posts = getBlogPostsMetadata()
+  const posts = getBlogPostsMetadata(locale)
   const canonicalUrl = getCanonicalUrl('/blog', locale, baseUrl)
   const hrefFor = (href: string) => localizePath(href, locale)
 
@@ -72,7 +72,7 @@ export default async function Page() {
     itemListElement: posts.map((post, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}${post.href || `/blog/${post.slug}`}`,
       name: post.metadata.title,
     })),
   }

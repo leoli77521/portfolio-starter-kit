@@ -1,0 +1,50 @@
+---
+title: "Pourquoi les agents de codage IA utilisent Rust et Python ensemble"
+summary: "Le dépôt de parity de Claw Code montre pourquoi les agents modernes confient souvent le noyau runtime à Rust et l'orchestration, la compatibilité et la migration à Python."
+seoTitle: "Rust et Python dans l'architecture des agents de codage IA"
+seoDescription: "Comment Rust sécurise les chemins runtime critiques tandis que Python rend l'orchestration, les rapports de parity et la migration plus rapides."
+faq: [{"question":"Pourquoi ne pas tout construire dans un seul langage ?","answer":"Parce que les besoins sont mixtes. Les chemins critiques et sensibles à la sécurité profitent de Rust, tandis que l'orchestration et la migration s'expriment souvent plus vite en Python."},{"question":"Que fait généralement la couche Python ?","answer":"Elle gère les shims de compatibilité, les inventaires, les rapports de parity et les scripts de migration."},{"question":"Un stack multi-langage est-il automatiquement meilleur ?","answer":"Non. Il n'aide que si la frontière est volontaire et si les responsabilités sont clairement séparées."}]
+howto: [{"name":"Séparer runtime et migration","text":"Gardez le coeur d'exécution stable et isolez la logique de compatibilité ou de parity."},{"name":"Choisir un langage pour la frontière de confiance","text":"Permissions, exécution d'outils et intégrité des sessions doivent avoir une responsabilité runtime claire."},{"name":"Documenter la frontière","text":"Les équipes souffrent lorsque Python et Rust se recouvrent au hasard."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Pourquoi les agents de codage IA utilisent Rust et Python ensemble
+
+L'un des détails les plus révélateurs du dépôt public de Claw Code n'est pas un benchmark. C'est le partage des langages.
+
+Le projet ne tente pas de tout résoudre dans une seule couche. Il montre un modèle que beaucoup d'équipes d'infrastructure IA adopteront probablement : **Rust pour le noyau runtime, Python pour l'orchestration, la compatibilité et la migration.**
+
+## Carte de la série
+
+1. [Ce que Claw Code révèle sur l'architecture des agents de codage IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Pourquoi les agents de codage IA utilisent Rust et Python ensemble](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Outils, permissions et MCP : comment un agent de codage devient réel](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins et sessions dans les agents de codage IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites et audits de parity pour les équipes d'agents IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Pourquoi un seul langage devient insuffisant
+
+Au stade du prototype, un seul langage est confortable. Au stade de l'agent, le système doit porter simultanément expérimentation de prompts, accès au système de fichiers, shell, streaming modèle, permissions, outils externes, fiabilité longue durée et migration depuis d'anciens systèmes.
+
+Un langage unique optimise rarement tous ces objectifs. La runtime devient trop souple ou la couche d'itération trop rigide. Claw Code montre un compromis plus discipliné.
+
+## Rust possède la frontière de confiance
+
+Le workspace Rust expose des crates comme `api`, `commands`, `compat-harness`, `plugins`, `runtime`, `telemetry` et `tools`. Cela indique où l'équipe veut des garanties fortes.
+
+Rust convient au binaire CLI, au parsing, à la boucle de conversation, aux définitions d'outils, aux modes de permissions, aux hooks, au transport MCP, à l'API et à la télémétrie. En pratique, Rust possède la frontière de confiance.
+
+Si un agent peut lire, écrire, exécuter, se connecter à des services et reprendre des sessions, le comportement runtime devient le produit.
+
+## Python rend la migration lisible
+
+Python reste précieux parce que la migration demande de l'expression rapide : inventaires, manifests, rapports de gap, contrôles de compatibilité et orchestration. Cette couche rend visible ce qui est déjà couvert et ce qui manque encore.
+
+La clé est la frontière. Rust exécute et protège ; Python compte, compare, rapporte et aide au passage. Quand cette séparation est claire, le stack multi-langage réduit le risque au lieu de l'ajouter.
+
+## Conclusion
+
+La bonne question n'est pas Rust ou Python. Elle est : quelle couche doit être prévisible, sûre et durable, et quelle couche doit itérer vite ?
+
+Les agents de codage modernes ressemblent à de petits systèmes d'exploitation. Ils ont besoin à la fois de garanties runtime et d'outils de migration. Claw Code montre une manière nette de combiner les deux.

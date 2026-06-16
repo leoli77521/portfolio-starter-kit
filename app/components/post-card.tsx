@@ -16,6 +16,7 @@ interface PostCardProps {
       image?: string
     }
     readingTime?: number
+    href?: string
   }
 }
 
@@ -42,7 +43,7 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <article className="surface-card overflow-hidden">
       <Link
-        href={getContentPath(`/blog/${post.slug}`, locale)}
+        href={post.href || getContentPath(`/blog/${post.slug}`, locale)}
         className="group block px-6 py-6 md:px-7 md:py-7"
         title={post.metadata.title}
       >

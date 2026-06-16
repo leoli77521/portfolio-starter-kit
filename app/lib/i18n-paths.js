@@ -28,6 +28,22 @@ const localeLabels = Object.freeze({
   pt: 'Português',
 })
 
+const localizableStaticPaths = Object.freeze(new Set([
+  '/',
+  '/blog',
+  '/categories',
+  '/tags',
+  '/topics',
+  '/guides',
+  '/templates',
+  '/solutions',
+  '/about',
+  '/contact',
+  '/privacy',
+  '/terms',
+  '/search',
+]))
+
 function isLocale(value) {
   return typeof value === 'string' && locales.includes(value)
 }
@@ -102,7 +118,7 @@ function localizePath(pathname, locale = defaultLocale) {
   const {path, suffix} = splitPathSuffix(stripped.pathname)
   const normalizedPath = normalizePath(path)
 
-  if (safeLocale === defaultLocale) {
+  if (safeLocale === defaultLocale || !isLocalizablePath(normalizedPath)) {
     return `${normalizedPath}${suffix}`
   }
 
@@ -115,14 +131,20 @@ function isArticlePath(pathname) {
   return /^\/blog\/[^/]+$/.test(normalizedPath)
 }
 
+function isLocalizablePath(pathname) {
+  const normalizedPath = normalizePath(stripLocaleFromPath(pathname).pathname)
+  return localizableStaticPaths.has(normalizedPath) || isArticlePath(normalizedPath)
+}
+
+function shouldUseLocaleRouting(pathname) {
+  const {path} = splitPathSuffix(stripLocaleFromPath(pathname).pathname)
+  return isLocalizablePath(normalizePath(path))
+}
+
 function getContentPath(pathname, locale = defaultLocale) {
   const strippedPathname = stripLocaleFromPath(pathname).pathname
   const {path, suffix} = splitPathSuffix(strippedPathname)
   const normalizedPath = normalizePath(path)
-
-  if (isArticlePath(normalizedPath)) {
-    return `${normalizedPath}${suffix}`
-  }
 
   return localizePath(`${normalizedPath}${suffix}`, locale)
 }
@@ -131,7 +153,7 @@ function getLocalizedAlternates(pathname) {
   const {path} = splitPathSuffix(stripLocaleFromPath(pathname).pathname)
   const normalizedPath = normalizePath(path)
 
-  if (isArticlePath(normalizedPath)) {
+  if (!isLocalizablePath(normalizedPath)) {
     return {
       [localeLanguageTags.en]: normalizedPath,
       'x-default': normalizedPath,
@@ -172,6 +194,8 @@ module.exports = {
   getLocaleOpenGraph,
   getLocaleLabel,
   isArticlePath,
+  isLocalizablePath,
+  shouldUseLocaleRouting,
   localizePath,
   stripLocaleFromPath,
   getContentPath,

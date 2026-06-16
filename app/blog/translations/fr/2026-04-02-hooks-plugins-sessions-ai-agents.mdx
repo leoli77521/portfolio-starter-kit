@@ -1,0 +1,46 @@
+---
+title: "Hooks, plugins et sessions dans les agents de codage IA"
+summary: "Les hooks, registres de plugins et sessions persistantes transforment un assistant de codage IA en plateforme extensible."
+seoTitle: "Hooks, plugins et sessions pour agents de codage IA"
+seoDescription: "Comment hooks, plugins et persistance de session rendent un agent de codage extensible, contrôlable et reprenable."
+faq: [{"question":"Pourquoi les hooks comptent-ils ?","answer":"Ils permettent d'intervenir avant et après l'exécution d'un outil pour appliquer des politiques, journaliser, modifier ou contrôler le workflow."},{"question":"Quel est le rôle des plugins ?","answer":"Ils emballent outils, commandes et comportements de cycle de vie sans tout coder dans la runtime centrale."},{"question":"Pourquoi les sessions sont-elles essentielles ?","answer":"Le vrai travail de codage traverse beaucoup de tours. Sans persistance et reprise, les workflows longs deviennent fragiles."}]
+howto: [{"name":"Ajouter des hooks autour des actions risquées","text":"Shell, écriture de fichiers et actions distantes doivent être vérifiables avant et après exécution."},{"name":"Emballer les extensions proprement","text":"Manifests de plugins, commandes et permissions explicites évitent de disperser la logique."},{"name":"Concevoir pour la reprise","text":"Transcripts, IDs de session et transitions d'état doivent être persistés."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Hooks, plugins et sessions dans les agents de codage IA
+
+Un agent jouet répond à des questions, modifie peut-être un fichier, puis oublie presque tout. Un agent de niveau plateforme peut être étendu, intercepté, repris et supervisé.
+
+C'est là que les hooks, plugins et sessions deviennent essentiels.
+
+## Carte de la série
+
+1. [Ce que Claw Code révèle sur l'architecture des agents de codage IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Pourquoi les agents de codage IA utilisent Rust et Python ensemble](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Outils, permissions et MCP : comment un agent de codage devient réel](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins et sessions dans les agents de codage IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites et audits de parity pour les équipes d'agents IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Les hooks relient politique et action
+
+Les hooks se placent entre l'intention et l'exécution. Ils peuvent s'exécuter avant un outil, après un succès ou après une erreur. Cela donne à la runtime un endroit pour inspecter les entrées, refuser une action risquée, demander une validation, écrire des logs ou déclencher une suite.
+
+Les agents de codage n'écrivent pas seulement du texte. Ils produisent des effets. Dès qu'ils lancent un shell, modifient des fichiers ou appellent des services, l'ordre d'exécution devient de la logique produit.
+
+## Les plugins rendent l'extension gouvernable
+
+Un agent franchit un seuil lorsqu'il ne livre plus seulement des capacités intégrées, mais accepte des extensions avec manifests, commandes, outils, permissions et comportements de cycle de vie.
+
+Les plugins permettent de connecter des systèmes internes sans forker la runtime. Mais ils doivent avoir des permissions, namespaces et traces d'audit clairs. Sinon, l'extensibilité devient du désordre.
+
+## Les sessions portent le travail long
+
+Coder n'est pas une question unique. C'est lire, planifier, modifier, tester, échouer, réparer et reprendre. Sans session, l'agent se réveille neuf à chaque fois.
+
+Une bonne session conserve transcript, sorties d'outils, ID de session, décisions de permissions et état utile à la reprise. Ce n'est pas seulement de l'historique de chat : c'est la continuité du travail.
+
+## Conclusion
+
+Les hooks donnent du contrôle, les plugins donnent de la croissance, les sessions donnent du temps. Ensemble, ils transforment un assistant IA en plateforme capable d'entrer dans de vrais processus d'ingénierie.

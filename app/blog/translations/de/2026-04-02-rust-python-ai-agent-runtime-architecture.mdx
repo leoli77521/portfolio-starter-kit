@@ -1,0 +1,50 @@
+---
+title: "Warum AI Coding Agents Rust und Python gemeinsam nutzen"
+summary: "Das Claw-Code-Parity-Repository zeigt, warum moderne Coding Agents häufig Rust für den Runtime-Kern und Python für Orchestrierung, Kompatibilität und Migration verwenden."
+seoTitle: "Rust und Python in der Architektur von AI Coding Agents"
+seoDescription: "Wie Rust Runtime-Grenzen absichert und Python Migration, Parity-Berichte und Orchestrierung in einem Coding-Agent-Stack beschleunigt."
+faq: [{"question":"Warum nicht alles in einer Sprache bauen?","answer":"Weil die Anforderungen gemischt sind. Runtime-kritische und sicherheitsrelevante Pfade profitieren von Rust, während Orchestrierung und Migration oft schneller in Python ausgedrückt werden."},{"question":"Was übernimmt die Python-Seite?","answer":"Kompatibilitäts-Shims, Inventare, Parity-Berichte und Migrations-Skripte sind typische Python-Aufgaben."},{"question":"Macht ein mehrsprachiger Stack automatisch alles besser?","answer":"Nein. Er hilft nur, wenn die Grenze bewusst gezogen und die Verantwortung sauber getrennt ist."}]
+howto: [{"name":"Runtime und Migration trennen","text":"Der Kernloop und sicherheitsrelevante Primitive sollten stabil bleiben, während Kompatibilitätsarbeit isoliert wird."},{"name":"Eine Sprache für die Vertrauensgrenze wählen","text":"Berechtigungen, Tool-Ausführung und Session-Integrität brauchen eine klare Runtime-Verantwortung."},{"name":"Grenzen dokumentieren","text":"Teams geraten in Schwierigkeiten, wenn Rust und Python zufällig dieselben Verantwortungen teilen."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Warum AI Coding Agents Rust und Python gemeinsam nutzen
+
+Eines der aufschlussreichsten Details im öffentlichen Claw-Code-Parity-Repository ist nicht ein Benchmark, sondern die Sprachaufteilung.
+
+Das Projekt versucht nicht, alles in einer Schicht zu lösen. Stattdessen zeigt es ein Muster, das viele AI-Infrastrukturteams übernehmen dürften: **Rust für den Runtime-Kern, Python für Orchestrierung, Kompatibilität und Migration.**
+
+## Serienkarte
+
+1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Warum eine Sprache oft nicht mehr reicht
+
+In der Prototypenphase ist eine Sprache angenehm. Im Agent-Stadium ändern sich die Anforderungen. Das System muss Prompt-Experimente, Dateisystemzugriff, Shell-Kommandos, Streaming-Modell-IO, Berechtigungen, externe Tools, lange Laufzeiten und Migration von älteren Systemen gleichzeitig tragen.
+
+Eine einzige Sprache optimiert selten alles gleich gut. Entweder wird die Runtime zu locker oder die Iterationsschicht zu starr. Claw Code zeigt einen disziplinierteren Kompromiss.
+
+## Rust besitzt die Vertrauensgrenze
+
+Der Rust-Workspace enthält Crates wie `api`, `commands`, `compat-harness`, `plugins`, `runtime`, `telemetry` und `tools`. Das signalisiert, wo harte Garantien gebraucht werden.
+
+Rust eignet sich für CLI-Binary, Argumentverarbeitung, Runtime Loop, Tool-Ausführung, Permission Modes, Hooks, MCP-Transport, API-Plumbing und Telemetrie. Diese Schicht besitzt die Vertrauensgrenze: Sie entscheidet, was gelesen, geschrieben, ausgeführt und fortgesetzt werden darf.
+
+Wenn ein Agent Prozesse starten, Dateien ändern und Sessions wieder aufnehmen kann, ist Runtime-Verhalten kein Implementierungsdetail mehr. Es ist das Produkt.
+
+## Python macht Migration sichtbar
+
+Python bleibt wichtig, weil Migrationsarbeit schnell ausgedrückt werden muss. Inventare, Manifeste, Gap Reports, Kompatibilitätsprüfungen und kleine Orchestrierungswerkzeuge ändern sich häufig. Python gibt Teams ein schnelles Medium, um diese Sichtbarkeit herzustellen.
+
+Die Grenze ist entscheidend. Python sollte nicht zufällig dieselbe Sicherheitslogik besitzen wie Rust. Besser ist: Rust führt aus und schützt, Python zählt, vergleicht, berichtet und hilft beim Übergang.
+
+## Die Lehre
+
+Die Frage lautet nicht: Rust oder Python? Die Frage lautet: Welche Schicht muss vorhersehbar, sicher und langlebig sein, und welche Schicht muss schnell iterieren können?
+
+Moderne Coding Agents ähneln kleinen Betriebssystemen. Sie brauchen Runtime-Garantien und Migrationswerkzeuge zugleich. Claw Code zeigt, wie eine saubere Sprachgrenze diese beiden Ziele verbinden kann.

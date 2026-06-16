@@ -1,0 +1,46 @@
+---
+title: "Hooks, plugins e sessões em agentes de codificação com IA"
+summary: "Hooks, registros de plugins e sessões persistentes transformam um assistente de codificação com IA em uma plataforma extensível."
+seoTitle: "Hooks, plugins e sessões para agentes de codificação com IA"
+seoDescription: "Como hooks, plugins e persistência de sessão tornam agentes de codificação extensíveis, controláveis e retomáveis."
+faq: [{"question":"Por que hooks importam?","answer":"Hooks permitem interceptar antes e depois da execução de ferramentas, criando espaço para políticas, logs, mutação e controle de workflow."},{"question":"Qual é o papel dos plugins?","answer":"Plugins empacotam ferramentas, comandos e comportamentos de ciclo de vida sem colocar tudo no runtime central."},{"question":"Por que sessões são essenciais?","answer":"Trabalho real de codificação atravessa muitos turnos. Sem persistência e retomada, workflows longos ficam frágeis."}]
+howto: [{"name":"Adicione hooks em ações arriscadas","text":"Shell, escrita de arquivos e ações remotas devem ser verificáveis antes e depois da execução."},{"name":"Empacote extensões de forma limpa","text":"Use manifests de plugins, registro de comandos e permissões explícitas."},{"name":"Projete para retomada","text":"Persistir transcripts, IDs de sessão e transições de estado permite continuar o trabalho."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Hooks, plugins e sessões em agentes de codificação com IA
+
+Um agente de brinquedo responde perguntas, talvez edite um arquivo, e depois esquece quase tudo. Um agente de nível plataforma pode ser estendido, interceptado, retomado e supervisionado.
+
+Hooks, plugins e sessões são a infraestrutura que torna isso possível.
+
+## Mapa da série
+
+1. [O que o Claw Code revela sobre a arquitetura de agentes de codificação com IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Por que agentes de codificação com IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Ferramentas, permissões e MCP: como um agente de codificação se torna real](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins e sessões em agentes de codificação com IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites e auditorias de parity para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Hooks conectam política e ação
+
+Hooks ficam entre intenção e execução. Eles podem rodar antes de uma ferramenta, depois do sucesso ou depois de uma falha. Assim, o runtime ganha um lugar para inspecionar entradas, negar ações arriscadas, pedir revisão, emitir logs ou disparar comportamento posterior.
+
+Agentes de codificação não geram apenas texto. Eles executam ações com efeitos colaterais. Quando shell, arquivos, serviços remotos ou subagentes entram no fluxo, a ordem de execução vira lógica de produto.
+
+## Plugins tornam expansão governável
+
+Um agente cruza uma fronteira importante quando deixa de ter apenas capacidades internas e passa a aceitar extensões com manifests, comandos, ferramentas, permissões e comportamento de ciclo de vida.
+
+Plugins deixam equipes conectar sistemas internos sem fazer fork do runtime central. Mas precisam de permissões, namespaces e auditoria claros; caso contrário, extensibilidade vira bagunça.
+
+## Sessões carregam trabalho longo
+
+Programar raramente é uma pergunta única. É ler, planejar, alterar, testar, falhar, corrigir e continuar. Sem sessão, o agente acorda novo a cada interação.
+
+Uma boa camada de sessão preserva transcript, saídas de ferramentas, IDs de sessão, decisões de permissão e estado útil para retomada. Isso não é apenas histórico de chat; é continuidade de trabalho.
+
+## Conclusão
+
+Hooks dão controle, plugins dão crescimento, sessões dão tempo. Juntos, transformam um assistente de IA em uma plataforma que entra em processos reais de engenharia.

@@ -1,0 +1,61 @@
+---
+title: "Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent"
+summary: "เอกสารสาธารณะและ parity repo ของ Claw Code แสดงให้เห็นว่า AI Coding Agent สมัยใหม่ต้องมีชั้นระบบอะไรบ้างนอกเหนือจากตัวโมเดล"
+seoTitle: "Claw Code และสถาปัตยกรรม AI Coding Agent"
+seoDescription: "วิเคราะห์ runtime, tools, permissions, sessions, plugins และ MCP จาก Claw Code เพื่อเข้าใจโครงสร้างของ AI Coding Agent"
+faq: [{"question":"ทำไม Claw Code ยังน่าศึกษา แม้ repo หลักจะถูกล็อกชั่วคราว?","answer":"เพราะ parity repo สาธารณะยังเปิดให้เห็น pattern สำคัญ เช่น runtime, tools, permissions, sessions และวิธีคิดเรื่อง migration"},{"question":"บทเรียนหลักคืออะไร?","answer":"Coding agent ไม่ใช่แค่โมเดลที่เก่งขึ้น แต่เป็นระบบที่มี runtime loop, tool layer, permission gates, memory และ extension points"},{"question":"บทความนี้พูดถึง benchmark หรือไม่?","answer":"ไม่ใช่ จุดสำคัญคือ architecture ของผลิตภัณฑ์และระบบ ว่า agent ถูกประกอบอย่างไรให้ทำงานจริงได้อย่างปลอดภัย"}]
+howto: [{"name":"ดูขอบเขต runtime ก่อน","text":"ก่อนเทียบโมเดล ให้ map interface, runtime loop, tool execution path และ persistence layer"},{"name":"ตรวจ trust surface","text":"ดูว่าระบบจัดการ permissions, tool approval, hooks และ sandboxing อย่างไร"},{"name":"ประเมิน extensibility ตั้งแต่ต้น","text":"Agent ที่มีคุณค่าระยะยาวต้องเพิ่ม tools, plugins, MCP servers และ workflows ได้โดยไม่ทำให้ระบบวุ่นวาย"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent
+
+ถ้ามองแค่การเปิดตัวโมเดลใหม่ เครื่องมือเขียนโค้ดด้วย AI อาจดูเรียบง่ายเกินจริง โมเดลดีขึ้น เดโมเร็วขึ้น benchmark สูงขึ้น แล้วทุกคนก็รอรุ่นถัดไป
+
+คำถามที่สำคัญกว่านั้นคือ: **รอบตัวโมเดลต้องมีอะไรบ้าง ก่อนที่มันจะกลายเป็น coding agent ที่ใช้งานจริงได้?**
+
+Claw Code จึงเป็นกรณีศึกษาที่ดี ณ วันที่ **2 เมษายน 2026** repo หลักแจ้งว่าถูกล็อกชั่วคราวระหว่างการโอน ownership และชี้ไปที่ [`ultraworkers/claw-code-parity`](https://github.com/ultraworkers/claw-code-parity) เมื่อรวมกับเอกสารที่ [claw-code.codes](https://claw-code.codes/) ก็เห็นโครงสร้างระบบได้ชัดพอ
+
+## แผนที่ซีรีส์
+
+บทความนี้เป็นส่วนหนึ่งของ **Inside the AI Coding Agent Stack**:
+
+1. [Claw Code บอกอะไรเกี่ยวกับสถาปัตยกรรม AI Coding Agent](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [ทำไม AI Coding Agent ใช้ Rust และ Python ร่วมกัน](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Permissions และ MCP: Coding Agent กลายเป็นของจริงได้อย่างไร](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins และ Sessions ใน AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room Rewrites และ Parity Audits สำหรับทีม AI Agent](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## ผลิตภัณฑ์จริงคือ harness รอบโมเดล
+
+สิ่งที่ทำให้ coding agent มีประโยชน์ไม่ใช่แค่โมเดล แต่คือ harness รอบโมเดล:
+
+- command surface ที่ผู้ใช้คุยกับระบบ
+- runtime loop ที่ตัดสินใจขั้นต่อไป
+- tool registry ที่แปลงเจตนาเป็น action
+- permission model ที่กำหนด trust boundary
+- session layer ที่ทำให้งานต่อเนื่อง
+- extension points ที่ให้ทีมปรับระบบตาม workflow ของตัวเอง
+
+Claw Code ทำให้ anatomy นี้มองเห็นได้ชัด Rust workspace ถูกแบ่งเป็น crate เช่น `api`, `commands`, `runtime`, `tools`, `plugins` และ `telemetry` ส่วน Python layer ใช้กับ inventories, manifests และ parity reports เพื่อให้การ rewrite อ่านออกและตรวจสอบได้
+
+## Interface, runtime และ tools
+
+Terminal-first agent แสดงกลไกภายในมากกว่า editor copilot แบบเงียบ ๆ Slash commands, resume flows, session IDs, diffs, tool output และ approvals ไม่ใช่ของตกแต่ง แต่เป็น operational controls
+
+ชั้น runtime loop มีหน้าที่เปลี่ยน output ของโมเดลให้เป็น action ที่ถูกควบคุม เช่น เมื่อไรควรถามผู้ใช้ เมื่อไรควรเรียก tool เมื่อไรควรหยุดเพราะเสี่ยง และเมื่อไรควรส่ง error กลับเข้าโมเดล
+
+Tool layer คือขอบเขตจริงของผลิตภัณฑ์ การอ่านไฟล์ แก้โค้ด รัน shell เชื่อม MCP server หรือ export session ล้วนเป็น action จริง ยิ่ง tool แรงขึ้น permissions และ audit ก็ยิ่งสำคัญ
+
+## Sessions และ extensibility
+
+งานเขียนโค้ดจริงไม่ได้จบในหนึ่งคำถาม มันมีการอ่าน วางแผน แก้ ทดสอบ ล้มเหลว ซ่อม และทำต่อ Session จึงไม่ใช่แค่ประวัติแชต แต่เป็นชั้นที่เก็บ transcript, tool output, state และ permission decisions เพื่อให้งานกลับมาทำต่อได้
+
+Hooks, plugins และ MCP ทำให้ agent ปรับเข้ากับองค์กรได้ ทีมต้องการต่อเอกสารภายใน CI ฐานข้อมูล monitoring deployment และเครื่องมือเฉพาะของตัวเอง ถ้าไม่มี extension points agent จะเป็นเครื่องมือปิด ถ้ามี มันจะเริ่มเป็น working environment
+
+## สรุป
+
+Claw Code เตือนว่า competition ของ coding agent ไม่ได้อยู่แค่โมเดล แต่อยู่ที่ runtime, tools, permissions, sessions, plugins, MCP และวินัยในการ migration
+
+เวลาประเมิน coding agent อย่าถามแค่ว่าเขียนโค้ดเก่งไหม ให้ถามด้วยว่า agent ลงมืออย่างไร ถูกจำกัดอย่างไร กลับมาทำต่อได้อย่างไร และเข้ากับ engineering workflow จริงได้แค่ไหน

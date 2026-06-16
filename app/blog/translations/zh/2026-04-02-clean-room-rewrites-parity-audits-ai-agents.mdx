@@ -1,0 +1,94 @@
+---
+title: "面向 AI 代理团队的 Clean-Room 重写与 Parity Audit"
+summary: "Claw Code 的 parity 工作流为复杂代理系统的重建和迁移提供了强模型，避免重写变成模糊叙事或照抄旧实现。"
+seoTitle: "AI 代理团队的 Clean-Room 重写与 Parity Audit"
+seoDescription: "学习 Claw Code parity repo 暴露出的迁移纪律：用 manifest、inventory 和 gap report 控制 AI 代理系统重写风险。"
+faq: [{"question":"大型代理重写为什么经常失败？","answer":"因为团队凭记忆重建行为，一次性重写太多，并且没有明确哪些能力对 parity 真正重要。"},{"question":"Parity audit 做什么？","answer":"它通过比较命令、工具、文件、子系统或行为，让迁移差距可见，避免进度只停留在口号上。"},{"question":"这为什么不只适用于 Claw Code？","answer":"很多 AI 团队正在跨语言、供应商或信任边界重建栈，都需要一种保留行为同时替换实现的纪律。"}]
+howto: [{"name":"先定义表面再重写","text":"在替换实现之前，列出真正重要的命令、工具、流程和信任边界。"},{"name":"显式追踪 parity","text":"使用 manifest、snapshot 和 gap report，让所有人看到已经镜像了什么、还有什么不同。"},{"name":"按层迁移，不按热情迁移","text":"给运行时、工具、集成和记忆层设置明确检查点，不要尝试一次性巨型迁移。"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# 面向 AI 代理团队的 Clean-Room 重写与 Parity Audit
+
+大多数重写在代码失败之前就已经失败了。
+
+它们失败在计划阶段。
+
+团队兴奋地想替换旧栈、切换语言，或围绕新的模型供应商重建系统。然后他们遇到同一堵墙：他们其实没有一种有纪律的方式描述旧系统到底做了什么。
+
+这就是为什么 Claw Code parity 仓库里最有意思的东西，可能不是运行时本身，而是 parity 思维。
+
+## 系列地图
+
+本文属于 **Inside the AI Coding Agent Stack** 系列：
+
+1. [Claw Code 揭示的 AI 编码代理架构](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [为什么 AI 编码代理会同时使用 Rust 和 Python](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [工具、权限与 MCP：编码代理如何变成真实系统](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [AI 编码代理中的 Hooks、插件与会话](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [面向 AI 代理团队的 Clean-Room 重写与 Parity Audit](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## 重写为什么会漂移
+
+经典重写问题不只是工程风险，而是语义漂移。
+
+新系统一开始往往有清晰口号：更快、更安全、更干净、更现代。然后旧行为开始以无法追踪的方式消失：
+
+- 某个命令不见了
+- 某个工具行为变了
+- prompt flow 形状不同
+- session 无法正确恢复
+- 一个边界场景因为没人写下来而被遗忘
+
+到这一步，“重写”就变成了一个不确定产品的品牌名。
+
+Parity 工作之所以重要，正是因为它能抵抗这种漂移。
+
+## Parity audit 强制精确
+
+Parity audit 听起来不华丽，但它做了一件关键的事：把迁移从讲故事变成记账。
+
+团队不再只说“我们基本 feature-complete”，而是能问：
+
+- 有多少命令已经镜像？
+- 有多少工具已经镜像？
+- 哪些目录或子系统已覆盖？
+- 哪些行为仍然故意缺失？
+- 哪些 gap 是战略选择，哪些只是遗漏？
+
+这会立刻改变重写的讨论方式。进度可以被具体争论，而不是依赖信心。
+
+## Claw Code 的公开工作流说明了什么
+
+公开 parity 仓库展示了一种迁移模式：
+
+- 保留当前实现层
+- 维护命令和工具 inventory snapshot
+- 生成 manifest 与 summary
+- 运行 parity audit
+- 保留明确的 gap document
+
+这很重要，因为它让团队在改变实现时仍能持续回答一个问题：新系统与旧系统到底差在哪里？
+
+## Clean-room 不是盲目复制
+
+Clean-room rewrite 不等于逐行复制旧系统，也不是凭感觉重写。
+
+它的重点是把行为表面定义清楚，然后用新的实现重新满足这些行为。这样团队可以改变语言、运行时和内部结构，同时避免无意间破坏用户依赖的能力。
+
+对 AI 代理尤其如此。代理系统往往包含命令、工具、权限、会话、插件、MCP、遥测和 prompt flow。任何一个层的细微变化都可能改变用户体验和信任边界。
+
+## 对 AI 团队的迁移建议
+
+如果你在重建代理系统，不要先问“我们能不能更快重写”。先问：
+
+- 系统的真实表面是什么？
+- 哪些行为必须保持？
+- 哪些行为应该故意改变？
+- 如何让 gap 对所有人可见？
+- 哪些测试、manifest 或 audit 能证明迁移没有漂移？
+
+重写的目标不是看起来更现代，而是在更好的架构里保留关键行为。
+
+Claw Code parity 工作流提醒我们：在 AI 代理时代，迁移纪律会成为产品能力的一部分。能清楚解释 parity 的团队，更有机会把复杂系统安全地带到下一代架构中。

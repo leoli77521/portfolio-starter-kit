@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { ArrowUpRight, Clock3 } from 'lucide-react'
 import { formatDate } from 'app/blog/utils'
 import { findSimilarPosts, type PostForSimilarity, type SimilarityResult } from 'app/lib/content-similarity'
+import { defaultLocale, localizePath } from 'app/lib/i18n-paths'
+import { getArticlePath } from 'app/lib/blog-i18n'
 
 interface RelatedPost {
   slug: string
@@ -11,15 +13,17 @@ interface RelatedPost {
   tags?: string[]
   publishedAt?: string
   readingTime?: number
+  href?: string
 }
 
 interface RelatedPostsProps {
   currentSlug: string
   posts: RelatedPost[]
   currentPost?: RelatedPost
+  locale?: string
 }
 
-export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsProps) {
+export function RelatedPosts({ currentSlug, posts, currentPost, locale = defaultLocale }: RelatedPostsProps) {
   const current = currentPost || posts.find((post) => post.slug === currentSlug)
 
   if (!current) {
@@ -36,6 +40,7 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
       tags: current.tags,
     },
     readingTime: current.readingTime,
+    href: current.href,
   }
 
   const allPostsForSimilarity: PostForSimilarity[] = posts.map((post) => ({
@@ -48,6 +53,7 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
       tags: post.tags,
     },
     readingTime: post.readingTime,
+    href: post.href,
   }))
 
   const similarPosts: SimilarityResult[] = findSimilarPosts(
@@ -70,7 +76,7 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
           </h2>
         </div>
 
-        <Link href="/blog" className="editorial-link">
+        <Link href={localizePath('/blog', locale)} className="editorial-link">
           Browse the full archive
           <ArrowUpRight className="h-4 w-4" />
         </Link>
@@ -85,7 +91,7 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
           return (
             <Link
               key={post.slug}
-              href={`/blog/${post.slug}`}
+              href={post.href || getArticlePath(post.slug, locale)}
               className="surface-card group block px-6 py-6"
               title={post.metadata.title}
             >
@@ -130,4 +136,3 @@ export function RelatedPosts({ currentSlug, posts, currentPost }: RelatedPostsPr
     </section>
   )
 }
-

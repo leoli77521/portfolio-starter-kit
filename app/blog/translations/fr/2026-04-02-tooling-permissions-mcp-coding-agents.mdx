@@ -1,0 +1,54 @@
+---
+title: "Outils, permissions et MCP : comment un agent de codage devient réel"
+summary: "Un modèle de codage ne devient un agent réel que lorsque l'exécution des outils, les permissions et MCP forment un système cohérent."
+seoTitle: "Outils, permissions et MCP pour les agents de codage IA"
+seoDescription: "Pourquoi la conception des outils, des permissions et de MCP détermine la capacité d'un agent de codage à agir de manière sûre."
+faq: [{"question":"Pourquoi les outils sont-ils plus importants que la qualité brute du modèle ?","answer":"Parce qu'ils déterminent ce que l'agent peut réellement faire : lire du code, modifier des fichiers, chercher, exécuter des commandes et connecter des systèmes externes."},{"question":"Pourquoi les permissions font-elles partie du produit ?","answer":"La confiance détermine l'usage. Si les utilisateurs ne comprennent pas ce que l'agent peut exécuter, ils ne lui confieront pas de travail sérieux."},{"question":"Que change MCP ?","answer":"MCP transforme les capacités externes en surface d'extension plus standard, au lieu d'écrire une intégration ad hoc pour chaque outil."}]
+howto: [{"name":"Modéliser explicitement la surface d'outils","text":"Avant d'ajouter des outils, écrivez ce que l'agent peut lire, écrire, exécuter, récupérer et déléguer."},{"name":"Lier permissions et capacités","text":"Chaque outil important doit correspondre à un niveau de risque clair."},{"name":"Traiter MCP comme un bus de capacités","text":"Utilisez MCP pour étendre l'environnement de l'agent de manière contrôlée."}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# Outils, permissions et MCP : comment un agent de codage devient réel
+
+Un modèle ne devient pas agent parce qu'il écrit mieux du code. Il devient agent lorsqu'il obtient une manière contrôlée d'agir sur son environnement.
+
+Trois éléments doivent se rejoindre : une surface d'outils, un système de permissions et une couche d'intégration pour les capacités externes. Claw Code est utile parce que ces trois éléments apparaissent clairement dans son dépôt de parity.
+
+## Carte de la série
+
+1. [Ce que Claw Code révèle sur l'architecture des agents de codage IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Pourquoi les agents de codage IA utilisent Rust et Python ensemble](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Outils, permissions et MCP : comment un agent de codage devient réel](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, plugins et sessions dans les agents de codage IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-room rewrites et audits de parity pour les équipes d'agents IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## Un outil est une promesse
+
+Dans un agent, un outil n'est pas un simple appel de fonction. C'est une promesse : l'agent peut faire quelque chose de concret et répétable. Lire des fichiers, les modifier, chercher, lancer un shell, récupérer le web, déléguer à un sous-agent ou inspecter une configuration.
+
+Dès que le modèle possède ces capacités, l'utilisateur ne demande plus seulement des idées. Il attend des résultats. La couche d'outils définit donc la surface d'action réelle.
+
+## Les outils grossiers se cassent vite
+
+Un seul outil shell pour tout faire paraît simple au début. Puis les permissions deviennent illisibles, les traces d'audit se brouillent, les erreurs sont difficiles à classer et les utilisateurs perdent confiance.
+
+Le meilleur modèle est compositionnel : séparer lecture et écriture, actions locales et réseau, outils intégrés et extensions, actions risquées et actions simples.
+
+## Les permissions sont une expérience produit
+
+Un agent qui lit les fichiers est utile. Un agent qui écrit est plus puissant. Un agent qui exécute le shell est encore plus utile et plus risqué.
+
+Le système doit rendre visible ce qui sera lu, modifié, exécuté ou envoyé au réseau. Les permissions ne sont donc pas un verrou ajouté à la fin. Elles sont au centre de la supervision.
+
+## MCP comme bus de capacités
+
+MCP donne une surface plus standard pour connecter documentation, issues, bases de données, monitoring, déploiement et outils internes. Sans cette surface, chaque intégration devient du code de colle spécifique.
+
+Avec MCP, les capacités externes peuvent être gouvernées avec des frontières plus claires.
+
+## Conclusion
+
+Outils, permissions et MCP doivent être conçus ensemble. Les outils disent ce que l'agent peut faire. Les permissions disent dans quelles conditions. MCP dit comment étendre cet ensemble.
+
+C'est cette combinaison qui transforme un modèle capable de coder en système auquel on peut confier un vrai travail d'ingénierie.

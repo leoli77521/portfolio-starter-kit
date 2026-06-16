@@ -4,6 +4,7 @@ export interface PostForSimilarity {
   slug: string
   metadata: BlogMetadata
   readingTime?: number
+  href?: string
 }
 
 export interface SimilarityResult {

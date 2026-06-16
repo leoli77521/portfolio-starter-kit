@@ -8,6 +8,7 @@ const {
   stripLocaleFromPath,
   getContentPath,
   getLocalizedAlternates,
+  shouldUseLocaleRouting,
 } = require('../app/lib/i18n-paths')
 
 test('default locale keeps existing root URLs unchanged', () => {
@@ -31,10 +32,30 @@ test('locale stripping returns the content path and locale', () => {
   assert.deepEqual(stripLocaleFromPath('/blog'), {locale: 'en', pathname: '/blog'})
 })
 
-test('article content paths stay English-only in phase one', () => {
-  assert.equal(getContentPath('/blog/example-post', 'zh'), '/blog/example-post')
+test('article content paths can use locale prefixes after translation rollout', () => {
+  assert.equal(getContentPath('/blog/example-post', 'zh'), '/zh/blog/example-post')
   assert.equal(getContentPath('/blog/example-post', 'en'), '/blog/example-post')
   assert.equal(getContentPath('/topics', 'th'), '/th/topics')
+})
+
+test('dynamic non-article routes stay English until localized routes exist', () => {
+  assert.equal(localizePath('/categories/ai-technology', 'zh'), '/categories/ai-technology')
+  assert.equal(localizePath('/tags/ai-coding-agents', 'de'), '/tags/ai-coding-agents')
+  assert.equal(localizePath('/topics/ai-coding-agent-stack', 'fr'), '/topics/ai-coding-agent-stack')
+  assert.equal(localizePath('/guides/seo-optimization-complete-guide', 'pt'), '/guides/seo-optimization-complete-guide')
+  assert.equal(getContentPath('/blog/example-post', 'th'), '/th/blog/example-post')
+})
+
+test('dynamic non-article routes bypass locale middleware', () => {
+  assert.equal(shouldUseLocaleRouting('/categories/ai-technology'), false)
+  assert.equal(shouldUseLocaleRouting('/tags/ai-coding-agents'), false)
+  assert.equal(shouldUseLocaleRouting('/topics/ai-coding-agent-stack'), false)
+  assert.equal(shouldUseLocaleRouting('/guides/seo-optimization-complete-guide'), false)
+  assert.equal(shouldUseLocaleRouting('/templates/nextjs/developer'), false)
+  assert.equal(shouldUseLocaleRouting('/solutions/performance'), false)
+  assert.equal(shouldUseLocaleRouting('/blog/example-post'), true)
+  assert.equal(shouldUseLocaleRouting('/zh/blog/example-post'), true)
+  assert.equal(shouldUseLocaleRouting('/zh/categories'), true)
 })
 
 test('localized alternates include all UI locales for localizable pages', () => {
@@ -51,6 +72,15 @@ test('localized alternates include all UI locales for localizable pages', () => 
   })
   assert.deepEqual(getLocalizedAlternates('/blog/example-post'), {
     'en-US': '/blog/example-post',
+    'zh-CN': '/zh/blog/example-post',
+    'de-DE': '/de/blog/example-post',
+    'fr-FR': '/fr/blog/example-post',
+    'th-TH': '/th/blog/example-post',
+    'pt-BR': '/pt/blog/example-post',
     'x-default': '/blog/example-post',
+  })
+  assert.deepEqual(getLocalizedAlternates('/topics/ai-coding-agent-stack'), {
+    'en-US': '/topics/ai-coding-agent-stack',
+    'x-default': '/topics/ai-coding-agent-stack',
   })
 })

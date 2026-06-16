@@ -12,6 +12,9 @@ interface SearchResult {
   summary: string
   publishedAt: string
   content?: string
+  href?: string
+  locale?: string
+  isTranslated?: boolean
 }
 
 export function Search() {
@@ -30,9 +33,17 @@ export function Search() {
       if (allPosts.length > 0) return
 
       try {
-        const response = await fetch('/search-index.json')
+        const indexPath = locale === 'en' ? '/search-index.en.json' : `/search-index.${locale}.json`
+        const response = await fetch(indexPath)
         if (response.ok) {
           const posts = await response.json()
+          setAllPosts(posts)
+          return
+        }
+
+        const fallbackResponse = await fetch('/search-index.json')
+        if (fallbackResponse.ok) {
+          const posts = await fallbackResponse.json()
           setAllPosts(posts)
         }
       } catch (error) {
@@ -43,7 +54,13 @@ export function Search() {
     if (isOpen) {
       loadPosts()
     }
-  }, [allPosts.length, isOpen])
+  }, [allPosts.length, isOpen, locale])
+
+  useEffect(() => {
+    setAllPosts([])
+    setResults([])
+    setTotalMatches(0)
+  }, [locale])
 
   useEffect(() => {
     if (query.trim() === '') {
@@ -181,7 +198,7 @@ export function Search() {
                 {results.map((post, index) => (
                   <li key={post.slug}>
                     <Link
-                  href={`/blog/${post.slug}`}
+                      href={post.href || localizePath(`/blog/${post.slug}`, locale)}
                       onClick={() => {
                         setIsOpen(false)
                         setQuery('')

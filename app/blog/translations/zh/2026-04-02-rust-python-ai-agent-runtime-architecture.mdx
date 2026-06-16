@@ -1,0 +1,93 @@
+---
+title: "为什么 AI 编码代理会同时使用 Rust 和 Python"
+summary: "Claw Code 的 parity 仓库展示了现代编码代理为什么常把运行时关键路径交给 Rust，把编排、兼容与迁移工作交给 Python。"
+seoTitle: "AI 编码代理中的 Rust 与 Python 架构分工"
+seoDescription: "解析 Claw Code parity 仓库的多语言架构：Rust 负责运行时和信任边界，Python 负责编排、兼容和迁移可见性。"
+faq: [{"question":"为什么不只用一种语言构建整个编码代理？","answer":"因为需求是混合的。运行时关键、安全敏感和高并发路径适合 Rust，而编排、兼容和迁移层通常用 Python 表达更快。"},{"question":"Python 层通常负责什么？","answer":"兼容 shim、parity inventory、报告生成和迁移脚手架，是混合代理系统里常见的 Python 职责。"},{"question":"多语言栈一定更好吗？","answer":"不是。只有边界清晰、职责分离明确时，多语言栈才会帮助系统，而不是增加复杂度。"}]
+howto: [{"name":"把运行时与迁移工作分开","text":"保持核心执行循环和安全敏感原语稳定，把兼容或 parity 逻辑隔离到单独层。"},{"name":"让信任边界归一个语言负责","text":"权限、工具执行和会话完整性应该放在你最信任、最能承压的运行时里。"},{"name":"明确记录边界","text":"当 Python 与 Rust 随机重叠时，团队最容易陷入维护问题；边界必须被写清楚。"}]
+sourceUpdatedAt: "2026-04-02"
+translatedAt: "2026-06-15"
+---
+
+# 为什么 AI 编码代理会同时使用 Rust 和 Python
+
+Claw Code 公开 parity 仓库里最有启发的细节，不是基准测试，也不是产品截图。
+
+而是语言分工。
+
+这个项目没有试图用一种语言解决所有问题。它暴露出一个未来几年更多 AI 基础设施团队可能采用的模式：**Rust 负责运行时核心，Python 负责编排、兼容和迁移工作。**
+
+这不是工程炫技，而是对一个复杂问题的务实回答。
+
+## 系列地图
+
+本文属于 **Inside the AI Coding Agent Stack** 系列：
+
+1. [Claw Code 揭示的 AI 编码代理架构](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [为什么 AI 编码代理会同时使用 Rust 和 Python](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [工具、权限与 MCP：编码代理如何变成真实系统](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [AI 编码代理中的 Hooks、插件与会话](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [面向 AI 代理团队的 Clean-Room 重写与 Parity Audit](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+
+## 为什么单语言方案会开始吃力
+
+原型阶段，一种语言很方便。
+
+进入代理阶段，权衡会改变。系统需要同时处理 prompt 与 workflow 实验、文件系统与 shell 访问、会话持久化、模型流式 IO、权限执行、外部工具集成、长时间可靠性，以及从旧系统迁移的压力。
+
+用一种语言同时优化这些目标，通常会让系统变形：要么运行时过于松散，要么迭代层过于僵硬。Claw Code parity 仓库展示的是一种更有纪律的折中。
+
+## Rust 在栈里负责什么
+
+Rust workspace 是系统变严肃的地方。
+
+截至 2026 年 4 月 2 日，公开 parity 仓库展示了多个 crate，例如 `api`、`commands`、`compat-harness`、`plugins`、`runtime`、`telemetry` 和 `tools`。这说明作者希望把最需要确定性的部分放进 Rust。
+
+Rust 适合承担：
+
+- CLI binary 与参数解析
+- 对话运行时
+- 工具定义与执行
+- 权限模式
+- hooks
+- MCP 传输与 server 管理
+- OAuth 与 API 管道
+- 使用统计与遥测
+
+换句话说，Rust 拥有信任边界。
+
+如果代理能读取文件、修改代码、启动进程、连接远程服务并恢复长期会话，运行时行为就不再是普通实现细节，而是产品本身。
+
+## Python 为什么仍然重要
+
+Python 的价值在于表达速度和迁移可见性。
+
+在复杂重写中，团队需要 inventory、manifest、gap report、compatibility check 和临时编排脚本。Python 很适合这些任务，因为它能快速描述数据、遍历文件、生成报告，并和现有工具链相连。
+
+这并不意味着 Python 是“次要层”。它更像迁移显微镜：帮助团队看见旧系统有哪些能力、新系统已经覆盖什么、还有哪些差异需要解释。
+
+## 关键不是语言，而是边界
+
+混合栈的成败不取决于“Rust 加 Python”这几个字，而取决于边界是否清晰。
+
+好的边界应该满足：
+
+- 高风险执行路径有明确归属
+- 迁移与报告逻辑不会侵入核心运行时
+- 两层共享的是 manifest 和契约，而不是随意互相调用
+- 团队能解释每个能力属于哪个层
+
+如果 Rust 和 Python 都能随便修改同一套状态，系统会变脆。反过来，如果 Rust 负责执行与约束，Python 负责盘点与迁移，组合就会非常自然。
+
+## 对代理团队的启发
+
+AI 编码代理的架构越来越像小型操作系统：它们有命令、权限、进程感、扩展点、会话、日志和外部设备。这样的系统往往需要一种语言来保证运行时，一种语言来加速周边编排。
+
+所以问题不是“应该选 Rust 还是 Python”，而是：
+
+- 哪一层必须强类型、可预测、适合长期运行？
+- 哪一层需要快速表达、频繁调整、生成报告？
+- 哪些数据结构是双方共享的契约？
+- 哪些行为绝不能分散在两边？
+
+Claw Code 的公开结构提醒我们：现代编码代理不是单文件脚本，也不是单模型包装器。它们是跨语言、跨边界、跨生命周期的工程系统。

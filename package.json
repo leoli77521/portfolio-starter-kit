@@ -1,8 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dev": "node scripts/generate-search-index.js && next dev",
-    "build": "node scripts/generate-search-index.js && next build",
+    "prepare:i18n": "node scripts/generate-blog-translation-manifest.js && node scripts/generate-search-index.js",
+    "audit:i18n": "node scripts/audit-blog-translations.js",
+    "dev": "pnpm prepare:i18n && next dev",
+    "build": "pnpm prepare:i18n && next build",
     "start": "next start",
     "test": "node --test scripts/*.test.js"
   },

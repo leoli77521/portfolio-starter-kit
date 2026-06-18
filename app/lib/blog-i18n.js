@@ -14,12 +14,45 @@ const blogTranslationsDirectory = path.join(process.cwd(), 'app', 'blog', 'trans
 
 const featuredTranslatedPostSlugs = Object.freeze([...translatedPostSlugsByLocale.zh])
 
+function createCleanSlug(filename) {
+  const slug = filename.replace(/\.[^/.]+$/, '')
+  const slugMappings = {
+    SEO: 'seo-optimization-guide',
+    'AI生成PPT': 'ai-generated-presentations',
+    'AI-Revolution-Finance': 'ai-revolution-finance',
+    'AI-Revolution-American-Workplaces': 'ai-revolution-american-workplaces',
+  }
+
+  if (slugMappings[slug]) {
+    return slugMappings[slug]
+  }
+
+  return slug
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
 function normalizeSlug(value) {
   return String(value || '').trim()
 }
 
+function getSourcePostMap() {
+  if (!fs.existsSync(blogPostsDirectory)) {
+    return new Map()
+  }
+
+  return new Map(
+    fs
+      .readdirSync(blogPostsDirectory)
+      .filter((file) => path.extname(file) === '.mdx')
+      .map((file) => [createCleanSlug(file), path.join(blogPostsDirectory, file)])
+  )
+}
+
 function getPostSourcePath(slug) {
-  return path.join(blogPostsDirectory, `${normalizeSlug(slug)}.mdx`)
+  return getSourcePostMap().get(normalizeSlug(slug)) || path.join(blogPostsDirectory, `${normalizeSlug(slug)}.mdx`)
 }
 
 function getTranslationDirectory(locale) {
@@ -31,7 +64,7 @@ function getPostTranslationPath(slug, locale) {
 }
 
 function hasSourcePost(slug) {
-  return fs.existsSync(getPostSourcePath(slug))
+  return getSourcePostMap().has(normalizeSlug(slug))
 }
 
 function hasPostTranslation(slug, locale) {

@@ -1,46 +1,235 @@
 ---
-title: "Hooks, plugins e sessões em agentes de codificação com IA"
-summary: "Hooks, registros de plugins e sessões persistentes transformam um assistente de codificação com IA em uma plataforma extensível."
-seoTitle: "Hooks, plugins e sessões para agentes de codificação com IA"
-seoDescription: "Como hooks, plugins e persistência de sessão tornam agentes de codificação extensíveis, controláveis e retomáveis."
-faq: [{"question":"Por que hooks importam?","answer":"Hooks permitem interceptar antes e depois da execução de ferramentas, criando espaço para políticas, logs, mutação e controle de workflow."},{"question":"Qual é o papel dos plugins?","answer":"Plugins empacotam ferramentas, comandos e comportamentos de ciclo de vida sem colocar tudo no runtime central."},{"question":"Por que sessões são essenciais?","answer":"Trabalho real de codificação atravessa muitos turnos. Sem persistência e retomada, workflows longos ficam frágeis."}]
-howto: [{"name":"Adicione hooks em ações arriscadas","text":"Shell, escrita de arquivos e ações remotas devem ser verificáveis antes e depois da execução."},{"name":"Empacote extensões de forma limpa","text":"Use manifests de plugins, registro de comandos e permissões explícitas."},{"name":"Projete para retomada","text":"Persistir transcripts, IDs de sessão e transições de estado permite continuar o trabalho."}]
+title: "Ganchos, plug-ins e sessões em agentes de codificação de IA"
+summary: "Ganchos, registros de plug-ins e sessões persistentes são o que transformam um assistente de codificação de IA em uma plataforma extensível, em vez de uma demonstração única."
+seoTitle: "Ganchos, plug-ins e sessões em agentes de codificação de IA"
+seoDescription: "Ganchos, registros de plug-ins e sessões persistentes são o que transformam um assistente de codificação de IA em uma plataforma extensível, em vez de uma demonstração única."
+faq: [{"question":"Por que os ganchos são importantes nos agentes de codificação?","answer":"Os ganchos permitem que o sistema intercepte a execução da ferramenta antes e depois das ações, o que cria espaço para verificações de políticas, registro em log, mutação e controle de fluxo de trabalho."},{"question":"Qual é a função dos plug-ins em um produto de agente?","answer":"Os plug-ins empacotam novas ferramentas, comandos e comportamentos de ciclo de vida para que o agente possa expandir sem codificar todos os recursos no tempo de execução principal."},{"question":"Por que as sessões são tão importantes?","answer":"Porque o trabalho real de codificação abrange muitas etapas. Sem persistência de sessão, comportamento de retomada e continuidade de transcrição, os fluxos de trabalho de agente de longa duração tornam-se frágeis e caros."}]
+howto: [{"name":"Adicione ganchos em torno de ações de alto risco","text":"Execute verificações antes e depois da execução do shell, gravações de arquivos ou ações remotas para que o tempo de execução possa impor políticas e capturar logs úteis."},{"name":"Lógica de extensão de pacote de forma limpa","text":"Use manifestos de plug-ins, registro de comandos e permissões explícitas em vez de espalhar integrações personalizadas pelo tempo de execução principal."},{"name":"Design para retomada","text":"Persista transcrições, IDs de sessão e transições de estado para que os usuários possam pausar, inspecionar e continuar o trabalho sem perder o contexto."}]
 sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-15"
+translatedAt: "2026-06-18"
 ---
+# Ganchos, plug-ins e sessões em agentes de codificação de IA
 
-# Hooks, plugins e sessões em agentes de codificação com IA
+A maneira mais rápida de identificar um agente de codificação de brinquedos é simples:
 
-Um agente de brinquedo responde perguntas, talvez edite um arquivo, e depois esquece quase tudo. Um agente de nível plataforma pode ser estendido, interceptado, retomado e supervisionado.
+ele pode responder perguntas, talvez editar um arquivo e esquecer quase tudo quando a interação terminar.
 
-Hooks, plugins e sessões são a infraestrutura que torna isso possível.
+A maneira mais rápida de identificar um agente de codificação de nível de plataforma é diferente:
+
+pode ser estendido, interceptado, retomado e supervisionado.
+
+É aí que entram os ganchos, plug-ins e sessões.
+
+Eles não são recursos chamativos. Eles são a infraestrutura que permite que um assistente de IA se transforme em um produto real.
 
 ## Mapa da série
 
-1. [O que o Claw Code revela sobre a arquitetura de agentes de codificação com IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
-2. [Por que agentes de codificação com IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+Este artigo faz parte de **Inside the AI ​​Coding Agent Stack**:
+
+1. [O que o código Claw revela sobre a arquitetura do agente de codificação de IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Por que os agentes de codificação de IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
 3. [Ferramentas, permissões e MCP: como um agente de codificação se torna real](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
-4. [Hooks, plugins e sessões em agentes de codificação com IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
-5. [Clean-room rewrites e auditorias de parity para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+4. [Ganchos, plug-ins e sessões em agentes de codificação de IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
 
-## Hooks conectam política e ação
+## Os ganchos estão onde a política encontra a ação
 
-Hooks ficam entre intenção e execução. Eles podem rodar antes de uma ferramenta, depois do sucesso ou depois de uma falha. Assim, o runtime ganha um lugar para inspecionar entradas, negar ações arriscadas, pedir revisão, emitir logs ou disparar comportamento posterior.
+Os ganchos são valiosos porque ficam na junção entre a intenção e a execução.
 
-Agentes de codificação não geram apenas texto. Eles executam ações com efeitos colaterais. Quando shell, arquivos, serviços remotos ou subagentes entram no fluxo, a ordem de execução vira lógica de produto.
+Na prática, isso significa que eles podem executar:
 
-## Plugins tornam expansão governável
+- antes de uma ferramenta ser executada
+- depois que uma ferramenta é bem-sucedida
+- depois que uma ferramenta falha
 
-Um agente cruza uma fronteira importante quando deixa de ter apenas capacidades internas e passa a aceitar extensões com manifests, comandos, ferramentas, permissões e comportamento de ciclo de vida.
+Esse é um padrão enganosamente poderoso.
 
-Plugins deixam equipes conectar sistemas internos sem fazer fork do runtime central. Mas precisam de permissões, namespaces e auditoria claros; caso contrário, extensibilidade vira bagunça.
+Dá ao tempo de execução um lugar para:
 
-## Sessões carregam trabalho longo
+- inspecionar ou alterar a entrada
+- negar ações arriscadas
+- forçar revisão extra
+- emitir registros
+- anexar decisões políticas
+- desencadear comportamento de acompanhamento
 
-Programar raramente é uma pergunta única. É ler, planejar, alterar, testar, falhar, corrigir e continuar. Sem sessão, o agente acorda novo a cada interação.
+Isso é importante porque os agentes de codificação não geram apenas texto. Eles realizam ações com efeitos colaterais.
 
-Uma boa camada de sessão preserva transcript, saídas de ferramentas, IDs de sessão, decisões de permissão e estado útil para retomada. Isso não é apenas histórico de chat; é continuidade de trabalho.
+No momento em que um agente pode executar comandos shell, modificar arquivos, chamar serviços remotos ou trabalhar manualmente com subagentes, a ordem de execução se torna lógica do produto.
 
-## Conclusão
+Os ganchos fornecem um local limpo para expressar essa lógica.
 
-Hooks dão controle, plugins dão crescimento, sessões dão tempo. Juntos, transformam um assistente de IA em uma plataforma que entra em processos reais de engenharia.
+## Por que os ganchos são mais importantes do que parecem
+
+Visto de fora, os ganchos podem soar como um recurso de nicho para usuários avançados.
+
+Visto de dentro, são um sinal de que a equipe entende uma verdade mais profunda:
+
+**sistemas de agentes precisam de pontos de interceptação.**
+
+Sem eles, todas as decisões políticas são empurradas para um de dois lugares ruins:
+
+- o prompt
+- a própria implementação da ferramenta
+
+O prompt é muito suave.
+
+A implementação da ferramenta é muito rígida.
+
+Os ganchos criam uma camada intermediária onde o tempo de execução pode permanecer adaptável sem se tornar caótico.
+
+Isso é especialmente útil em equipes que precisam desenvolver regras de aprovação, telemetria ou verificações de políticas mais rapidamente do que desejam reescrever a camada principal da ferramenta.
+
+## Plugins transformam recursos em um ecossistema
+
+O segundo grande sinal da plataforma são os plug-ins.
+
+Um agente de codificação ultrapassa um limite importante quando para de enviar apenas um conjunto fixo de recursos integrados e começa a oferecer suporte a extensões empacotadas com suas próprias:
+
+- metadados
+- permissões
+- comandos
+- ferramentas
+- ganchos de ciclo de vida
+
+Isso não é apenas “mais integrações”.
+
+É uma filosofia de produto diferente.
+
+Um sistema de plugins diz que a equipe espera que o ambiente do agente continue crescendo. Ele também diz que eles desejam que o crescimento aconteça de forma estruturada, em vez de por meio de patches aleatórios no tempo de execução principal.
+
+Esse é exatamente o tipo de transição que as plataformas de desenvolvedores maduras fazem.
+
+## O que um bom sistema de plug-ins geralmente inclui
+
+Na prática, os sistemas de plug-ins de nível de plataforma tendem a precisar de:
+
+1. um formato de manifesto
+2. fluxos de instalação e descoberta
+3. ativar ou desativar estado
+4. declarações de permissão
+5. eventos do ciclo de vida
+6. registro de ferramentas e comandos
+
+Quanto mais você vê, mais confiante você pode ter de que o produto está pensando além de demonstrações únicas.
+
+É também aqui que muitos produtos de IA terão dificuldades. É fácil implementar integrações. É muito mais difícil conceber um modelo de extensão que permaneça compreensível quando dezenas ou centenas de extensões estão envolvidas.
+
+Essa é uma das razões pelas quais a arquitetura do plugin é estrategicamente importante. Não é apenas um recurso de conveniência. É onde a complexidade do produto é disciplinada ou ampliada.
+
+## As sessões são o modelo de memória que realmente importa
+
+Depois, há a camada menos glamorosa, mas mais prática de todas: as sessões.
+
+O trabalho real de codificação raramente cabe em uma troca curta.
+
+Você investiga. Você tenta alguma coisa. Você altera um arquivo. Você se depara com um beco sem saída. Você retoma mais tarde. Você compara o que mudou. Você continua.
+
+Isso significa que um agente de codificação precisa de mais do que histórico de conversas. Precisa de um modelo de sessão.
+
+Um bom modelo de sessão permite:
+
+- retomar o trabalho anterior
+- exportar ou inspecionar transcrições
+- contexto longo compacto com segurança
+- rastrear o uso ao longo do tempo
+- preservar os resultados da ferramenta em uma ordem significativa
+
+Depois de ver isso claramente, muitas estratégias de produto começam a fazer sentido.
+
+Os agentes de codificação mais fortes não estão apenas melhorando na geração única. Eles estão melhorando em continuidade.
+
+## Por que essas três camadas se reforçam
+
+Ganchos, plug-ins e sessões são melhor compreendidos juntos.
+
+Os ganchos permitem que o sistema intercepte o comportamento.
+
+Os plug-ins permitem que o sistema expanda o comportamento.
+
+As sessões permitem que o sistema preserve o comportamento ao longo do tempo.
+
+Essa combinação é o que torna um agente de codificação semelhante a uma plataforma, em vez de semelhante a um prompt.
+
+Também explica por que tantos assistentes de IA ainda se sentem imaturos, mesmo quando o modelo subjacente é forte. Eles podem gerar uma ótima prosa ou patches decentes, mas têm um design de ciclo de vida fraco.
+
+E o design do ciclo de vida é o que separa uma boa demonstração de uma ferramenta em que as pessoas podem confiar diariamente.
+
+## O benefício oculto do produto: operações em equipe
+
+Há outra razão pela qual essas camadas são importantes.
+
+Eles facilitam a operação dos agentes dentro das equipes.
+
+Os ganchos apoiam a política e a observabilidade.
+
+Os plug-ins oferecem suporte à personalização controlada.
+
+As sessões apoiam a continuidade e a revisão partilhadas.
+
+Isso está muito mais próximo de como funcionam as organizações de engenharia reais.
+
+As equipes não precisam apenas de um assistente inteligente. Eles precisam de:
+
+- comportamento inspecionável
+- regras configuráveis
+- extensões reutilizáveis
+- trabalho retomável
+- estrutura suficiente para evitar o caos
+
+É por isso que acho que o próximo estágio das ferramentas de IA se parecerá cada vez mais com a engenharia da plataforma do desenvolvedor, e não apenas com o modelo UX.
+
+## Onde os construtores devem ter cuidado
+
+É claro que todas as três camadas podem dar errado.
+
+Os ganchos podem se tornar um labirinto invisível.
+
+Plugins podem se tornar uma bagunça de dependências.
+
+As sessões podem ficar inchadas, caras ou semanticamente turvas.
+
+Portanto, o verdadeiro desafio não é adicionar esses recursos. É adicioná-los sem destruir a legibilidade.
+
+Isso significa:
+
+- mantendo a ordem do gancho compreensível
+- mantendo as permissões do plugin explícitas
+- mantendo o estado da sessão inspecionável
+- mantendo o comportamento do currículo previsível
+
+As equipes que resolverem essas restrições terão um fosso muito mais forte do que as equipes que buscam apenas outra atualização marginal do modelo.
+
+## Tomada Final
+
+Se ferramentas e permissões fazem um agente de codificação parecer real, ganchos, plug-ins e sessões fazem com que ele pareça durável.
+
+São eles que permitem ao produto:
+
+- adaptar
+- estender
+- persistir
+- permaneça governável enquanto cresce
+
+É por isso que eles são tão importantes.
+
+Não porque os usuários irão se gabar deles.
+
+Mas porque os usuários sentirão a diferença cada vez que o agente se comportar como um sistema em vez de uma façanha.
+
+## Explore a série completa
+
+Para obter o caminho de leitura completo, visite o [hub de tópicos do AI Coding Agent Stack](/topics/ai-coding-agent-stack). Ele reúne esta série com cobertura relacionada sobre MCP, ferramentas de desenvolvedor e design de agente voltado para a produção.
+
+## Leia a seguir
+
+- [Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+- [Ferramentas, permissões e MCP: como um agente de codificação se torna real](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+- [Guia de produção de agentes de IA](/blog/ai-agents-production-guide)
+
+## Fontes
+
+- [Documentos oficiais do Código da Garra](https://claw-code.codes/)
+- [ultraworkers/claw-code no GitHub](https://github.com/ultraworkers/claw-code)
+- [ultraworkers/claw-code-parity no GitHub](https://github.com/ultraworkers/claw-code-parity)
+- [O que o código Claw revela sobre a arquitetura do agente de codificação de IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)

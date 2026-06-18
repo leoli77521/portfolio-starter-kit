@@ -1,48 +1,124 @@
 ---
-title: "AI Agents 生产环境 2025: How I Avoided $3.4K Mistakes"
-summary: "From demo to deployment: real lessons building 生产环境 AI agents. Learn circuit breakers, token management, and cost optimization to avoid API disasters."
-seoTitle: "AI Agents 生产环境 2025: How I Avoided $3.4K Mistakes"
-seoDescription: "From demo to deployment: real lessons building 生产环境 AI agents. Learn circuit breakers, token management, and cost optimization to avoid API disasters."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "AI Agents Production 2025：我如何避免 3400 美元的错误"
+summary: "从演示到部署：构建生产 AI 代理的真实课程。了解熔断机制、代币管理和成本优化，以避免 API 灾难。"
+seoTitle: "AI Agents Production 2025：我如何避免 3400 美元的错误"
+seoDescription: "从演示到部署：构建生产 AI 代理的真实课程。了解熔断机制、代币管理和成本优化，以避免 API 灾难。"
+faq: [{"question":"为什么人工智能代理会增加成本？","answer":"它们可以循环或过度迭代，而没有硬令牌和迭代限制。"},{"question":"最快的安全修复是什么？","answer":"为每个请求添加断路器和严格的代币预算。"}]
+howto: [{"name":"设置令牌限制","text":"为每个代理执行定义最大令牌和迭代。"},{"name":"按复杂程度划分的路线","text":"使用较便宜的型号来完成简单的任务，并为硬箱保留优质型号。"},{"name":"监视和杀死循环","text":"跟踪每个任务的成本并在达到阈值时强制执行终止开关。"}]
 sourceUpdatedAt: "2025-09-04"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
+---
+# AI 代理制作指南：避免 3400 美元
+
+*2025 年 1 月 21 日*
+
+上个月，我因一位失控的客户服务代理而消耗了 **3,400 美元的 API 成本**。如今，同一系统每天可以处理 1,000 多个查询，费用不到 50 美元。这是我通过艰难的方式学到的东西。
+
+## 现实检验
+
+每个人都在构建人工智能代理。很少有人谈论当他们遇到真正的用户时会发生什么。在跨三个生产系统部署代理之后，我收集了一些值得分享的战斗伤痕。
+
+这个承诺很诱人：能够思考、行动和适应的自治系统。现实呢？ **大多数代理都很昂贵，而循环却充满了宏伟的幻想。**
+
+## 3,400 美元的错误
+
+我们的第一个代理使用了 LangChain 和 GPT-4。简单的架构：
+
+1. 分析用户查询
+2. 获取相关文档
+3. 生成响应
+4. 验证准确性
+5. 如果需要的话进行细化
+
+看起来防弹。直到用户询问“所有可能的产品变体”。
+
+代理进入递归循环，生成变化、验证它们、发现问题并生成更多变化。 **47 分钟。 230 万个代币。 3,400 美元。**
+
+> **经验教训**：特工需要断路器，而不仅仅是护栏。
+
+## 什么实际有效
+
+经过三个月的迭代，我们的生产架构如下：
+
+### 1. 代币预算管理
+
+```python
+class AgentExecutor:
+    def __init__(self, max_tokens=50000, max_iterations=5):
+        self.token_budget = max_tokens
+        self.iteration_limit = max_iterations
+```
+
+每个代理都有一个硬令牌限制。时期。没有例外。
+
+### 2. 分层模型策略
+
+- **分类器**：Claude Haiku（0.25 美元/100 万代币）- 路线查询
+- **简单查询**：GPT-3.5 Turbo - 处理 70% 的请求
+- **复杂任务**：GPT-4 - 仅在必要时
+- **验证**：Gemini Flash - 具有成本效益的双重检查
+
+这在不降低质量的情况下将成本降低了 **85%**。
+
+### 3. 有效的状态持久化
+
+忘记复杂的状态机。我们使用简单的 JSON 检查点：
+
+```json
+{
+  "stage": "data_retrieval",
+  "tokens_used": 12500,
+  "iterations": 2,
+  "context": {...},
+  "can_resume": true
+}
+```
+
+如果出现故障，我们会从检查点恢复，而不是从头开始。
+
+## 重要的指标
+
+虚荣指标救不了你。而是跟踪这些：
+
+- **每次成功解决问题的成本**：我们的成本从 8.50 美元下降到 0.12 美元
+- **超时率**：应低于 2%
+- **人工交接率**：我们为 18%（之前为 65%）
+- **P95响应时间**：4.2秒（用户最多容忍5秒）
+
+## 三个不明显的见解
+
+### 1. 决定论胜过智力
+
+智能代理是不可预测的。愚蠢的代理商拥有良好的轨道是有利可图的。我们用决策树 + LLM 组合取代了“推理”代理。效果更好，成本降低 90%。
+
+### 2. 流媒体节省的不仅仅是钱
+
+用户在沉默 3 秒后放弃。流媒体回复将放弃率降低了 60%。心理影响比技术优雅更重要。
+
+### 3. 故障模式是特征
+
+我们的代理现在可以更快地说“我需要人工帮助”。用户满意度提高。违反直觉但却是事实：用户更喜欢快速升级而不是长时间的失败尝试。
+
+## 可扩展的框架
+
+这是我们当前的堆栈：
+
+- **编排**：Temporal（不是LangChain）
+- **矢量数据库**：Qdrant（自托管）
+- **监控**：OpenTelemetry + Grafana
+- **断路器**：自定义Python中间件
+- **测试**：专有的黄金数据集（1,000 个真实查询）
+
+## 接下来是什么？
+
+代理淘金热确实存在，但大多数团队都在针对演示而不是生产进行优化。获胜者将是那些了解**代理是工具，而不是魔法**的人。
+
+我的预测：2025 年将是“无聊”代理商的一年——专业化、可预测且有利可图。 AGI 梦想可以等待；企业需要当今有效的解决方案。
+
+## 要点
+
+�?**从狭窄的用例开始** �?**添加约束，而不是功能** �?**衡量一切** �?**始终，始终有一个终止开关**
+
 ---
 
-# AI Agents 生产环境 2025: How I Avoided $3.4K Mistakes
-
-这篇中文译文围绕 **AI Agents 生产环境 2025: How I Avoided $3.4K Mistakes** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。From demo to deployment: real lessons building 生产环境 AI agents. Learn circuit breakers, token management, and cost optimization to avoid API disasters.
-
-本文根据英文原文同步整理，源文更新时间为 **2025-09-04**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
-
-## 核心概览
-
-AI Agents 生产环境 2025: How I Avoided $3.4K Mistakes 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
-
-## 关键要点
-
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
-
-## 原文结构地图
-
-- The 现实检验
-- The $3,400 Mistake
-- 什么 Actually Works
-- 1. Token Budget Management
-- 2. Tiered Model Strategy
-- 3. State Persistence That Works
-- The Metrics That Matter
-- Three Non-Obvious Insights
-
-## 实践建议
-
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
-
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
-
-## 延伸阅读
-
-- [All articles](/blog)
+*目前正在构建：代理成本预测模型。关注现实世界人工智能工程的最新动态。*

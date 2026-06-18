@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "translate:i18n": "node scripts/translate-blog-posts.js",
     "prepare:i18n": "node scripts/generate-blog-translation-manifest.js && node scripts/generate-search-index.js",
     "audit:i18n": "node scripts/audit-blog-translations.js",
     "dev": "pnpm prepare:i18n && next dev",

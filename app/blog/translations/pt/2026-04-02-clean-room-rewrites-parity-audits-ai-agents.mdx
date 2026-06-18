@@ -1,50 +1,214 @@
 ---
-title: "Clean-room rewrites e auditorias de parity para equipes de agentes de IA"
-summary: "O workflow de parity do Claw Code mostra como reconstruir sistemas de agentes complexos sem cair em rewrites vagos ou cópias sem disciplina."
-seoTitle: "Clean-room rewrites e parity audits para agentes de IA"
-seoDescription: "Como manifests, inventários e gap reports ajudam equipes de IA a migrar agentes complexos preservando comportamento."
-faq: [{"question":"Por que grandes rewrites de agentes falham?","answer":"Equipes tentam recriar comportamento de memória, reescrevem demais de uma vez e perdem de vista quais capacidades realmente importam para parity."},{"question":"O que uma auditoria de parity faz?","answer":"Ela torna lacunas visíveis comparando comandos, ferramentas, arquivos, subsistemas ou comportamentos."},{"question":"Por que isso vale além do Claw Code?","answer":"Muitas equipes de IA estão reconstruindo stacks entre linguagens, provedores e fronteiras de confiança, e precisam preservar comportamento."}]
-howto: [{"name":"Defina a superfície antes do rewrite","text":"Liste comandos, ferramentas, fluxos e fronteiras de confiança antes de trocar a implementação."},{"name":"Acompanhe parity explicitamente","text":"Use manifests, snapshots e gap reports para mostrar o que já foi espelhado e o que falta."},{"name":"Migre por camada","text":"Runtime, ferramentas, integrações e memória precisam de checkpoints claros."}]
+title: "Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA"
+summary: "O fluxo de trabalho de paridade do Claw Code oferece um modelo forte para equipes que estão reconstruindo ou migrando sistemas de agentes complexos sem cair em reescritas vagas ou cópias de culto de carga."
+seoTitle: "Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA"
+seoDescription: "O fluxo de trabalho de paridade do Claw Code oferece um modelo forte para equipes que estão reconstruindo ou migrando sistemas de agentes complexos sem cair em reescritas vagas ou cópias de culto de carga."
+faq: [{"question":"Por que as reescritas de grandes agentes geralmente falham?","answer":"Porque as equipes tentam recriar o comportamento a partir da memória, reescrever muita coisa de uma vez e perder de vista quais capacidades realmente importam para a paridade."},{"question":"O que uma auditoria de paridade faz?","answer":"Torna a lacuna visível comparando comandos, ferramentas, arquivos, subsistemas ou comportamentos para que o progresso da migração seja concreto em vez de retórico."},{"question":"Por que isso é relevante além do Código da Garra?","answer":"Porque muitas equipes de IA estão agora reconstruindo pilhas entre linguagens, provedores ou limites de confiança e precisam de uma maneira disciplinada de preservar o comportamento enquanto alteram a implementação."}]
+howto: [{"name":"Defina a superfície antes de reescrever","text":"Liste os comandos, ferramentas, fluxos e limites de confiança que realmente importam antes de substituir qualquer implementação."},{"name":"Rastreie a paridade explicitamente","text":"Use manifestos, instantâneos e relatórios de lacunas para que todos possam ver o que já está espelhado e o que ainda difere."},{"name":"Migre por camada, não por exagero","text":"Reescreva o tempo de execução, as ferramentas, as integrações e as camadas de memória com pontos de verificação explícitos, em vez de tentar um salto gigante do tipo tudo ou nada."}]
 sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-15"
+translatedAt: "2026-06-18"
 ---
+# Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA
 
-# Clean-room rewrites e auditorias de parity para equipes de agentes de IA
+A maioria das reescritas falha muito antes de o código falhar.
 
-A maioria dos rewrites falha antes do código. Falha no planejamento.
+Eles falham no planejamento.
 
-Uma equipe quer substituir um stack antigo, trocar de linguagem ou reconstruir em torno de um novo provedor de modelo. Então descobre que não consegue descrever com disciplina o que o sistema antigo realmente fazia.
+As equipes ficam entusiasmadas com a substituição de uma pilha antiga, a troca de idiomas ou a reconstrução em torno de um novo modelo de provedor. Então eles bateram na mesma parede:
 
-É por isso que a mentalidade de parity no repositório do Claw Code é tão interessante.
+na verdade, eles não têm uma maneira disciplinada de descrever o que o antigo sistema fazia.
+
+É por isso que a coisa mais interessante no repositório de paridade do Claw Code pode não ser o tempo de execução em si.
+
+Pode ser a mentalidade de paridade.
 
 ## Mapa da série
 
-1. [O que o Claw Code revela sobre a arquitetura de agentes de codificação com IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
-2. [Por que agentes de codificação com IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+Este artigo faz parte de **Inside the AI ​​Coding Agent Stack**:
+
+1. [O que o código Claw revela sobre a arquitetura do agente de codificação de IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Por que os agentes de codificação de IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
 3. [Ferramentas, permissões e MCP: como um agente de codificação se torna real](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
-4. [Hooks, plugins e sessões em agentes de codificação com IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
-5. [Clean-room rewrites e auditorias de parity para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+4. [Ganchos, plug-ins e sessões em agentes de codificação de IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Reescritas de salas limpas e auditorias de paridade para equipes de agentes de IA](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
 
-## Por que rewrites derivam
+## Por que as reescritas geralmente mudam
 
-O problema clássico é a deriva semântica. O novo sistema promete ser mais rápido, seguro e moderno. Depois, comportamentos antigos somem sem rastreio: um comando falta, uma ferramenta muda, uma sessão não retoma, um edge case nunca foi escrito.
+O clássico problema de reescrita não é apenas um risco de engenharia.
 
-Nesse ponto, o rewrite deixa de ser uma migração controlada e vira um produto com fidelidade incerta.
+É uma deriva semântica.
 
-## Parity audit torna a migração contável
+O novo sistema começa com um slogan forte:
 
-Uma auditoria de parity transforma migração em contabilidade. Em vez de dizer que está quase completo, a equipe pergunta: quantos comandos foram espelhados? Quais ferramentas faltam? Quais subsistemas estão cobertos? Quais lacunas são estratégicas?
+- mais rápido
+- mais seguro
+- limpador
+- mais moderno
 
-O progresso fica concreto.
+Então o antigo comportamento desaparece lentamente de maneiras não monitoradas:
 
-## Clean-room não é copiar cegamente
+- um comando não existe mais
+- uma ferramenta se comporta de maneira diferente
+- um fluxo de prompt muda de forma
+- uma sessão não é retomada corretamente
+- um caso extremo desaparece porque ninguém o escreveu
 
-Um clean-room rewrite não copia linha por linha. Ele define a superfície comportamental e a reconstrói em uma arquitetura melhor. Assim, a equipe muda linguagem, runtime e estrutura interna sem quebrar sem querer aquilo que usuários dependem.
+Nesse ponto, “a reescrita” torna-se uma marca vaga para um produto com fidelidade incerta.
 
-Para agentes de IA isso é crucial, porque comandos, ferramentas, permissões, sessões, plugins, MCP e prompts se combinam de forma apertada.
+É exatamente por isso que o trabalho de paridade é importante.
 
-## Conclusão
+## Precisão da Força de Auditorias de Paridade
 
-Antes de reconstruir um agente, meça sua superfície real. Quais capacidades precisam permanecer? Quais podem mudar? Como tornar gaps visíveis?
+Uma auditoria de paridade parece pouco glamorosa, mas faz uma coisa crucial:
 
-Manifests, inventários e gap reports não são burocracia. São os guardrails de uma migração séria.
+transforma a migração da narrativa para a contabilidade.
+
+Em vez de dizer "estamos basicamente completos", você pode perguntar:
+
+- quantos comandos são espelhados?
+- quantas ferramentas são espelhadas?
+- quais diretórios ou subsistemas são cobertos?
+- quais comportamentos ainda estão faltando intencionalmente?
+- quais lacunas são estratégicas versus acidentais?
+
+Isso muda o tom de uma reescrita imediatamente.
+
+Agora o progresso pode ser debatido concretamente.
+
+Isto é muito mais saudável do que deixar uma migração viver apenas da confiança.
+
+## O que o fluxo de trabalho público do Claw Code sugere
+
+O repositório de paridade pública é útil aqui porque expõe um padrão de migração em plena luz do dia:
+
+- manter uma camada de implementação atual
+- manter instantâneos de inventário de comandos e ferramentas
+- gerar manifestos e resumos
+- executar auditorias de paridade
+- preservar documentos com lacunas explícitas
+- teste a camada espelhada, não apenas o tempo de execução
+
+Esse é um manual muito melhor do que a fantasia usual de reescrita, onde o novo sistema simplesmente “emerge” e todos esperam que o comportamento importante tenha sobrevivido.
+
+Também se ajusta ao que sabemos agora sobre sistemas de agentes de forma mais ampla. Essas pilhas não são minúsculas. Eles incluem comandos, ferramentas, prompts, permissões, sessões, protocolos de integração e superfícies de extensão. Você não pode migrar com segurança algo assim apenas com base na intuição.
+
+## As reescritas de salas limpas precisam de mais do que ética
+
+A frase “reescrita da sala limpa” costuma ser discutida como um conceito legal ou ético.
+
+Isso importa, é claro.
+
+Mas também há um lado da engenharia nisso.
+
+Uma reescrita de sala limpa precisa de:
+
+- uma superfície alvo
+- um vocabulário para descrever essa superfície
+- um método para medir o progresso
+- uma forma de preservar a confiança enquanto o sistema muda
+
+Sem isso, a “sala limpa” torna-se apenas uma história sobre recomeçar.
+
+Com eles, torna-se uma disciplina prática de migração.
+
+É por isso que acho que as ferramentas de paridade são um padrão tão forte aqui. Isso dá uma espinha dorsal à reescrita.
+
+## A melhor maneira de migrar uma pilha de agentes
+
+Se eu estivesse aconselhando uma equipe que está reconstruindo um produto de agente hoje, recomendaria um processo de migração semelhante a este:
+
+### 1. Faça um inventário do comportamento
+
+Liste os comandos, ferramentas, limites de tempo de execução, comportamentos de sessão e pontos de integração que definem o sistema antigo.
+
+### 2. Implementação separada da superfície
+
+Decida o que precisa de paridade de comportamento e o que pode mudar livremente. Nem todos os detalhes internos merecem ser preservados.
+
+### 3. Crie instantâneos explícitos
+
+Capture inventários de comandos e ferramentas para que o novo sistema tenha algo concreto para espelhar.
+
+### 4. Escreva relatórios de lacunas
+
+Seja honesto sobre o que está faltando, parcial ou intencionalmente diferente.
+
+### 5. Teste o comportamento voltado para a migração
+
+Não teste apenas o novo tempo de execução. Teste a própria camada de paridade.
+
+Esse é o tipo de rigor “chato” que evita que reescritas se transformem em reinvenções intermináveis.
+
+## Por que isso é mais importante na IA do que nos aplicativos tradicionais
+
+Os sistemas de agentes são extraordinariamente vulneráveis ​​a desvios porque grande parte do seu comportamento fica na fronteira entre o código e a política.
+
+Você não está apenas preservando APIs.
+
+Você está preservando:
+
+- semântica da ferramenta
+- expectativas de permissão
+- ordem de fluxo de trabalho
+- comportamento de memória
+- superfícies de extensão
+- suposições de confiança
+
+Esse é um alvo de migração mais frágil do que um aplicativo CRUD padrão.
+
+É também por isso que acredito que as melhores equipes de agentes se parecerão cada vez mais com equipes de plataforma. Precisarão de uma disciplina de inventário mais forte, e não mais fraca.
+
+## Um benefício oculto: melhor pensamento sobre o produto
+
+O trabalho de paridade faz mais do que reduzir o risco da migração.
+
+Também força um melhor julgamento do produto.
+
+Depois que você precisar escrever o que deve permanecer verdadeiro nas implementações, você começará a descobrir quais partes do sistema antigo eram realmente valiosas e quais partes eram apenas resíduos históricos.
+
+Isso é saudável.
+
+Uma reescrita não deve preservar tudo.
+
+Deve preservar as coisas certas, visivelmente.
+
+As auditorias de paridade ajudam as equipes a tomar essa decisão com mais clareza e menos mitologia.
+
+## Tomada Final
+
+A maior armadilha de reescrita é assumir que o código é a única coisa que está sendo migrada.
+
+Não é.
+
+Você também está migrando:
+
+- comportamentos
+- interfaces
+- limites de confiança
+- expectativas do operador
+- modelos de extensão
+
+É por isso que as reescritas de salas limpas precisam de pensamento de paridade.
+
+Não como papelada.
+
+Como controle de arquitetura.
+
+O Claw Code é útil porque torna essa disciplina visível no momento em que mais equipes de IA estão prestes a precisar dela.
+
+## Explore a série completa
+
+Para obter o caminho de leitura completo, visite o [hub de tópicos do AI Coding Agent Stack](/topics/ai-coding-agent-stack). Ele reúne esta série com cobertura relacionada sobre MCP, ferramentas de desenvolvedor e design de agente voltado para a produção.
+
+## Leia a seguir
+
+- [O que o código Claw revela sobre a arquitetura do agente de codificação de IA](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+- [Por que os agentes de codificação de IA usam Rust e Python juntos](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+- [Guia de produção de agentes de IA](/blog/ai-agents-production-guide)
+
+## Fontes
+
+- [Documentos oficiais do Código da Garra](https://claw-code.codes/)
+- [ultraworkers/claw-code no GitHub](https://github.com/ultraworkers/claw-code)
+- [ultraworkers/claw-code-parity no GitHub](https://github.com/ultraworkers/claw-code-parity)
+- [Ganchos, plug-ins e sessões em agentes de codificação de IA](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)

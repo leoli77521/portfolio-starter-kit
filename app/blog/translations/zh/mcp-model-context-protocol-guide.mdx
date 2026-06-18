@@ -1,51 +1,414 @@
 ---
-title: "MCP 协议 指南 2026: Connect AI to Any Data Source"
-summary: "Model Context 协议 (MCP) is the universal standard for connecting AI agents to external 工具 and data. Learn 如何 build MCP servers and clients with practical code examples."
-seoTitle: "MCP 协议 指南 2026: Connect AI to Any Data Source"
-seoDescription: "Model Context 协议 (MCP) is the universal standard for connecting AI agents to external 工具 and data. Learn 如何 build MCP servers and clients with practical code examples."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "MCP 协议指南 2026：将 AI 连接到任何数据源"
+summary: "模型上下文协议 (MCP) 是将 AI 代理连接到外部工具和数据的通用标准。了解如何通过实际代码示例构建 MCP 服务器和客户端。"
+seoTitle: "MCP 协议指南 2026：将 AI 连接到任何数据源"
+seoDescription: "模型上下文协议 (MCP) 是将 AI 代理连接到外部工具和数据的通用标准。了解如何通过实际代码示例构建 MCP 服务器和客户端。"
+faq: [{"question":"什么是 MCP（模型上下文协议）？","answer":"MCP 是 Anthropic 的开放协议，它标准化了 AI 模型如何连接到外部数据源、工具和系统。将其视为用于 AI 集成的 USB-C。"},{"question":"谁支持MCP？","answer":"自 2025 年起，Anthropic (Claude)、OpenAI (ChatGPT)、Google DeepMind (Gemini)、Microsoft 和 GitHub 均支持 MCP。"},{"question":"MCP 适合企业使用吗？","answer":"MCP 包括安全规范，但需要正确实施同意流程、访问控制和数据治理策略。"},{"question":"MCP 与函数调用有何不同？","answer":"函数调用是特定于模型的并且是单向的。 MCP 是一种通用的双向协议，适用于不同的 AI 提供商。"}]
+howto: [{"name":"安装MCP SDK","text":"安装适合您的语言的官方 MCP SDK：npm install @modelcontextprotocol/sdk 或 pip install mcp。"},{"name":"定义服务器功能","text":"创建一个服务器，公开 AI 模型可以访问的资源、工具或提示。"},{"name":"将客户端连接到服务器","text":"配置您的 AI 应用程序以通过 stdio 或 HTTP 传输连接到 MCP 服务器。"},{"name":"测试集成","text":"使用 MCP Inspector 工具调试和验证您的服务器实现。"}]
 sourceUpdatedAt: "2026-01-21"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# MCP 协议：AI 集成的通用标准
 
-# MCP 协议 指南 2026: Connect AI to Any Data Source
+*发布日期：2026 年 1 月 21 日*
 
-这篇中文译文围绕 **MCP 协议 指南 2026: Connect AI to Any Data Source** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。Model Context 协议 (MCP) is the universal standard for connecting AI agents to external 工具 and data. Learn 如何 build MCP servers and clients with practical code examples.
+每个人工智能代理都面临着同样的问题：他们擅长推理，但对你的数据视而不见。 MCP（模型上下文协议）通过创建一种用于人工智能与工具通信的通用语言来解决这个问题。
 
-本文根据英文原文同步整理，源文更新时间为 **2026-01-21**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
+如果您曾经在分散的 API 集成、自定义连接器方面遇到困难，或者想知道如何让您的 AI 访问数据库、文件或内部工具，那么 MCP 就是您的答案。
 
-## 核心概览
+## 要点
 
-MCP 协议 指南 2026: Connect AI to Any Data Source 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
+- MCP 是一种开放协议，它标准化了 AI 模型如何连接到外部数据源和工具 - 想想“AI 的 USB-C”。
+- Anthropic、OpenAI、Google 和 Microsoft 都支持 MCP，使其成为事实上的行业标准。
+- 2025 年，GitHub 上启动了超过 13,000 个 MCP 服务器，涵盖从数据库到 Slack 到自定义 API 的所有内容。
+- 构建 MCP 服务器只需不到 100 行代码，该协议可处理身份验证、功能协商和错误处理。
+- 安全性要求用户明确同意所有操作 - MCP 不授予全面访问权限。
 
-## 关键要点
+## 什么是模型上下文协议？
 
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
+模型上下文协议（MCP）是 Anthropic 于 2024 年 11 月推出的开放标准。它为 AI 系统提供了一个通用接口：
 
-## 原文结构地图
+- **从文件、数据库和 API 读取数据**
+- **通过定义的工具执行功能**
+- **使用模板和工作流程处理上下文提示**
 
-- Key Takeaways
-- 什么 Is Model Context 协议?
-- The Architecture: Hosts, Clients, and Servers
-- Hosts
-- Clients
-- Servers
-- Building Your First MCP Server
-- Step 1: Set Up the Project
+在 MCP 之前，每个 AI 集成都是自定义作业。想要 Claude 访问您的 CRM 吗？构建一个连接器。需要 GPT 来查询您的数据库吗？编写另一个连接器。每个人工智能提供商、每个工具——另一个定制的集成。
 
-## 实践建议
+MCP 用单一协议取代了这种碎片。为您的数据源构建一台 MCP 服务器，任何兼容 MCP 的 AI 客户端都可以连接。
 
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
+> 🔌 MCP 对于 AI 就像 LSP（语言服务器协议）对于代码编辑器一样。一种协议，通用兼容性。
 
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
+## 架构：主机、客户端和服务器
 
-## 延伸阅读
+MCP 使用简单的客户端-服务器模型，具有三个角色：
 
-- [Claude AI Executes Code: Real-Time Python & Node.js](/blog/claude-ai-now-executes-code)
-- [From Chatbots to AI Agents: The Quiet 革命](/blog/from-chatbots-to-ai-agents-quiet-revolution)
-- [AI Agents 生产环境 指南: Avoiding $3.4K Mistakes](/blog/ai-agents-production-guide)
-- [Agentic AI 革命 2025: The 未来 is Here](/blog/agentic-ai-revolution-2025)
+```
+┌─────────────────────────────────────────────────────────┐
+│                       HOST                              │
+│  (Claude Desktop, ChatGPT, VS Code, Custom App)        │
+│                                                         │
+│    ┌──────────┐    ┌──────────┐    ┌──────────┐       │
+│    │  CLIENT  │    │  CLIENT  │    │  CLIENT  │       │
+│    └────┬─────┘    └────┬─────┘    └────┬─────┘       │
+└─────────┼───────────────┼───────────────┼─────────────┘
+          │               │               │
+          ▼               ▼               ▼
+    ┌──────────┐    ┌──────────┐    ┌──────────┐
+    │  SERVER  │    │  SERVER  │    │  SERVER  │
+    │ (Files)  │    │ (Database)│   │ (Slack)  │
+    └──────────┘    └──────────┘    └──────────┘
+```
+
+### 主办方
+用户与之交互的 LLM 应用程序 - Claude Desktop、ChatGPT、VS Code 扩展或您的自定义 AI 应用程序。主机发起连接并管理用户体验。
+
+### 客户
+主机内的协议连接器。每个客户端都与特定服务器保持 1:1 连接，处理 JSON-RPC 通信。
+
+### 服务器
+向 AI 模型公开功能的服务。服务器可以提供：
+- **资源**：数据和上下文（文件、数据库记录、API 响应）
+- **工具**：人工智能可以执行的功能（发送电子邮件、创建票证、查询数据库）
+- **提示**：预构建的模板和工作流程
+
+## 构建您的第一个 MCP 服务器
+
+让我们构建一个提供天气数据的简单 MCP 服务器。本示例使用官方 TypeScript SDK。
+
+### 第 1 步：设置项目
+
+```bash
+mkdir weather-mcp-server && cd weather-mcp-server
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+```
+
+### 第 2 步：创建服务器
+
+```typescript
+// server.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
+
+// Define the weather tool schema
+const GetWeatherSchema = z.object({
+  city: z.string().describe("The city to get weather for"),
+});
+
+// Create the MCP server
+const server = new Server(
+  {
+    name: "weather-server",
+    version: "1.0.0",
+  },
+  {
+    capabilities: {
+      tools: {},  // This server provides tools
+    },
+  }
+);
+
+// Handle tool listing requests
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [
+      {
+        name: "get_weather",
+        description: "Get current weather for a city",
+        inputSchema: {
+          type: "object",
+          properties: {
+            city: { type: "string", description: "City name" },
+          },
+          required: ["city"],
+        },
+      },
+    ],
+  };
+});
+
+// Handle tool execution
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "get_weather") {
+    const { city } = GetWeatherSchema.parse(request.params.arguments);
+
+    // In production, call a real weather API
+    const weather = {
+      city,
+      temperature: "22°C",
+      condition: "Partly cloudy",
+      humidity: "65%",
+    };
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(weather, null, 2),
+        },
+      ],
+    };
+  }
+
+  throw new Error(`Unknown tool: ${request.params.name}`);
+});
+
+// Start the server
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("Weather MCP server running on stdio");
+}
+
+main().catch(console.error);
+```
+
+### 步骤 3：配置 Claude 桌面
+
+将您的服务器添加到 Claude Desktop 的配置文件中：
+
+```json
+// ~/Library/Application Support/Claude/claude_desktop_config.json (macOS)
+// %APPDATA%\Claude\claude_desktop_config.json (Windows)
+{
+  "mcpServers": {
+    "weather": {
+      "command": "npx",
+      "args": ["ts-node", "/path/to/weather-mcp-server/server.ts"]
+    }
+  }
+}
+```
+
+重新启动Claude Desktop，你现在可以问：“东京的天气怎么样？”
+
+## 服务器功能深入探讨
+
+MCP 服务器可以提供三种类型的功能：
+
+### 1. 资源（数据暴露）
+
+资源让 AI 模型无需执行代码即可读取数据。非常适合公开文件、数据库记录或 API 响应。
+
+```typescript
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  return {
+    resources: [
+      {
+        uri: "config://app/settings",
+        name: "Application Settings",
+        mimeType: "application/json",
+      },
+    ],
+  };
+});
+
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  if (request.params.uri === "config://app/settings") {
+    return {
+      contents: [
+        {
+          uri: request.params.uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ theme: "dark", language: "en" }),
+        },
+      ],
+    };
+  }
+});
+```
+
+### 2. 工具（函数执行）
+
+工具让人工智能模型能够采取行动——发送电子邮件、创建记录、触发工作流程。
+
+```typescript
+// Tool that creates a support ticket
+{
+  name: "create_ticket",
+  description: "Create a support ticket in the system",
+  inputSchema: {
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      description: { type: "string" },
+      priority: { type: "string", enum: ["low", "medium", "high"] },
+    },
+    required: ["title", "description"],
+  },
+}
+```
+
+### 3. 提示（工作流程模板）
+
+提示提供预先构建的对话启动器和工作流程。
+
+```typescript
+server.setRequestHandler(ListPromptsRequestSchema, async () => {
+  return {
+    prompts: [
+      {
+        name: "code_review",
+        description: "Template for reviewing code changes",
+        arguments: [
+          { name: "code", description: "The code to review", required: true },
+        ],
+      },
+    ],
+  };
+});
+```
+
+## 客户特征：另一个方向
+
+MCP 不仅仅是服务器到客户端。服务器还可以向客户端请求功能：
+
+### 采样
+
+服务器可以通过客户端请求 LLM 完成，从而实现递归 AI 交互和代理行为。
+
+```typescript
+// Server requests an LLM completion from the client
+const result = await client.request({
+  method: "sampling/createMessage",
+  params: {
+    messages: [{ role: "user", content: "Summarize this document..." }],
+    maxTokens: 500,
+  },
+});
+```
+
+### 根源
+
+服务器可以向客户端查询可访问的 URI 边界，这对于了解服务器可以安全访问哪些文件或资源很有用。
+
+### 启发
+
+服务器可以通过客户端的 UI 向用户请求其他信息，从而实现交互式工作流程。
+
+## 传输层
+
+MCP支持多种传输机制：
+
+| 运输 | 使用案例 | 优点 | 缺点 |
+|-----------|----------|------|------|
+| 标准输入输出 | 本地流程 | 简单、安全、无需网络 | 仅限同一台机器 |
+| HTTP+SSE | 远程服务器 | 网络接入，可扩展 | 需要身份验证设置 |
+| WebSocket | 实时应用程序 | 双向、低延迟 | 更复杂 |
+
+对于大多数本地工具，建议使用 stdio 传输。对于云托管的 MCP 服务器，HTTP 与服务器发送事件 (SSE) 提供了最佳平衡。
+
+## 2025-2026 MCP 生态系统
+
+### 行业采用
+
+MCP 在创纪录的时间内从 Anthropic 的内部实验转变为行业标准：
+
+- **2025 年 3 月**：OpenAI 在 ChatGPT 产品中采用 MCP
+- **2025 年 4 月**：Google DeepMind 确认 Gemini 支持
+- **2025 年 5 月**：Microsoft 和 GitHub 加入 MCP 指导委员会
+- **2025 年 11 月**：MCP 应用扩展 (SEP-1865) 添加了 UI 功能
+- **2025 年 12 月**：MCP 捐赠给 Linux 基金会的 Agentic AI 基金会
+
+### 服务器生态系统
+
+GitHub 上现已存在超过 13,000 个 MCP 服务器：
+
+- **数据库**：PostgreSQL、MySQL、MongoDB、Redis
+- **生产力**：Slack、Notion、Linear、GitHub
+- **云**：AWS、GCP、Azure 集成
+- **文件**：本地文件系统、Google Drive、Dropbox
+- **自定义**：内部 API、专有系统
+
+您可以通过官方 MCP 注册表浏览和安装社区服务器。
+
+## 安全：关键层
+
+MCP提供强大的能力，但能力需要责任。该协议规定：
+
+### 用户同意
+
+每个数据访问和工具执行都需要明确的用户批准。没有一揽子权限。
+
+```typescript
+// Clients MUST show this to users before tool execution
+{
+  tool: "delete_file",
+  arguments: { path: "/important/data.csv" },
+  requiresConfirmation: true  // User sees and approves
+}
+```
+
+### 数据隐私
+
+- 在向服务器公开任何用户数据之前获得明确同意
+- 无自动数据传输
+- 适当的访问控制和审核日志
+
+### 工具安全
+
+默认情况下，工具描述不受信任。客户应该：
+- 向用户清楚地展示工具功能
+- 敏感操作需要明确批准
+- 记录所有工具调用以供审核
+
+### 已知的安全问题
+
+安全研究人员已确定需要缓解的风险：
+
+1. **提示注入**：恶意输入可能会诱骗人工智能进行意外的工具调用
+2. **工具影子**：相似的工具可以悄悄地取代可信的工具
+3. **权限升级**：组合工具可能会泄露数据
+
+**缓解**：实施严格的工具允许列表、监控工具组合并验证所有输入。
+
+## 实际实施清单
+
+在生产中部署 MCP 之前：
+
+- [ ] **定义范围**：您的服务器将公开哪些工具和资源？
+- [ ] **实施身份验证**：对 HTTP 传输使用正确的身份验证
+- [ ] **建立同意流程**：用户必须批准所有敏感操作
+- [ ] **添加日志记录**：跟踪所有工具调用和数据访问
+- [ ] **使用 MCP Inspector 进行测试**：部署前调试和验证
+- [ ] **文档能力**：清晰的描述帮助AI正确使用工具
+- [ ] **设置速率限制**：防止失控的工具调用
+- [ ] **错误计划**：服务器不可用时的优雅降级
+
+## 2026 年将会发生什么
+
+MCP 路线图包括：
+
+1. **多代理协作**：具有专门角色的代理小队（诊断、修复、验证、记录）
+2. **增强的 UI 功能**：MCP 应用程序扩展支持丰富的交互界面
+3. **流资源**：实时数据馈送而不是请求-响应
+4. **跨平台身份**：跨 MCP 服务器的统一身份验证
+5. **性能优化**：更快的传输和缓存机制
+
+## 底线
+
+MCP 解决了阻碍 AI 代理的集成问题。您无需为每种 AI 工具组合构建自定义连接器，而是构建一台 MCP 服务器并获得通用兼容性。
+
+该协议已做好生产准备，被广泛采用，并得到各大人工智能提供商的支持。如果您正在构建需要与外部系统（数据库、API、文件或内部工具）交互的 AI 应用程序，MCP 不再是可选的。这是标准。
+
+**准备好构建您的第一个 MCP 服务器了吗？** 从 [官方文档](https://modelcontextprotocol.io) 和 [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) 开始。学习曲线平缓，回报是通用人工智能集成。
+
+## 相关文章
+
+- [Claude AI执行代码：实时Python & Node.js](/blog/claude-ai-now-executes-code)
+- [从聊天机器人到人工智能代理：安静的革命](/blog/from-chatbots-to-ai-agents-quiet-revolution)
+- [AI 代理制作指南：避免 3400 美元的错误](/blog/ai-agents-production-guide)
+- 【智能体AI革命2025：未来已来】(/blog/agentic-ai-revolution-2025)
+
+## 来源
+
+- [MCP规范2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)
+- 【人智MCP公告】(https://www.anthropic.com/news/model-context-protocol)
+- [MCP GitHub 存储库](https://github.com/modelcontextprotocol/modelcontextprotocol)
+- 【MCP一年：2025回顾】(https://www.pento.ai/blog/a-year-of-mcp-2025-review)
+- [MCP安全分析-Zenity](https://zenity.io/blog/security/securing-the-model-context-protocol-mcp)

@@ -1,52 +1,325 @@
 ---
-title: "AI 代理工具 Showdown 2026: From Cursor to Cowork to Clawdbot"
-summary: "The definitive comparison of 2026's hottest AI agents—coding assistants, task automators, and personal AI butlers. Find your perfect agent stack."
-seoTitle: "AI 代理工具 Showdown 2026: From Cursor to Cowork to Clawdbot"
-seoDescription: "The definitive comparison of 2026's hottest AI agents—coding assistants, task automators, and personal AI butlers. Find your perfect agent stack."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "AI 代理工具对决 2026：从 Cursor 到 Cowork 再到 Clawdbot"
+summary: "2026 年最热门的 AI 代理（编码助手、任务自动化器和个人 AI 管家）的权威比较。找到您完美的代理堆栈。"
+seoTitle: "AI 代理工具对决 2026：从 Cursor 到 Cowork 再到 Clawdbot"
+seoDescription: "2026 年最热门的 AI 代理（编码助手、任务自动化器和个人 AI 管家）的权威比较。找到您完美的代理堆栈。"
+faq: [{"question":"游标和克劳德代码有什么区别？","answer":"Cursor 是一个集成 IDE 的副驾驶，提供流畅的多文件编辑和细粒度控制，而 Claude Code 是一个基于终端的自主代理，专为深度推理和大规模重构任务而设计。"},{"question":"Manus 比 OpenAI Operator 更好吗？","answer":"Manus 在 GAIA 基准测试中得分较高（86.5% vs 74.3%），并提供完全的自主权，但 Operator 通过关键操作的人机循环检查点提供了更好的稳定性。"},{"question":"什么是 Clawdbot？为什么它如此受欢迎？","answer":"Clawdbot 是一款开源、自托管的个人人工智能助手，可与 WhatsApp 和 Telegram 等消息平台集成。它很受欢迎，因为它将所有数据保留在本地，同时提供电子邮件、日历和智能家居控制的实际自动化。"},{"question":"企业应该选择哪种人工智能编码工具？","answer":"GitHub Copilot 因其深度 GitHub 集成、合规性功能和既定的安全审核而成为企业团队的最佳选择。它受到需要严格代码治理的组织的信任。"},{"question":"什么是 MCP？为什么它对 AI 代理很重要？","answer":"MCP（模型上下文协议）是将 AI 代理连接到外部工具和数据源的通用标准。所有主要提供商（Anthropic、OpenAI、Google）现在都支持它，使跨平台代理集成成为可能。"}]
+howto: [{"name":"评估您的主要用例","text":"确定您是否需要编码帮助、任务自动化或个人人工智能支持。不同的代理类型在不同的领域表现出色。"},{"name":"评估自主权要求","text":"确定您需要多少人工监督。混合自治（Operator、Cowork）提供检查点，而完全自治（Manus、Devin）则端到端运行。"},{"name":"考虑您的预算","text":"选项范围从 10 美元/月 (Copilot) 到企业定价 (Devin)。 Manus 和 Clawdbot 等自托管选项存在免费套餐。"},{"name":"从一个工具开始","text":"从满足您最紧迫需求的单个代理开始，然后在了解每个工具的优势后逐渐构建您的工具包。"}]
 sourceUpdatedAt: "2026-01-31"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# AI 代理工具对决 2026：最终比较
 
-# AI 代理工具 Showdown 2026: From Cursor to Cowork to Clawdbot
+*发布日期：2026 年 1 月 29 日*
 
-这篇中文译文围绕 **AI 代理工具 Showdown 2026: From Cursor to Cowork to Clawdbot** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。The definitive comparison of 2026's hottest AI agents—coding assistants, task automators, and personal AI butlers. Find your perfect agent stack.
+这里有一个数字让我震惊不已：[85% 的开发人员现在经常使用 AI 编码工具](https://jellyfish.co/blog/2025-ai-metrics-in-review/)，而 12 个月前这一比例为 61%。人工智能编码市场将在 2025 年达到 40 亿美元（https://www.cbinsights.com/research/report/coding-ai-market-share-december-2025/），目前三个参与者控制着 70% 以上的份额。
 
-本文根据英文原文同步整理，源文更新时间为 **2026-01-31**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
+但事情是这样的：“最好的”工具完全取决于你的工作方式。
 
-## 核心概览
+2026 年，人工智能代理将从令人印象深刻的演示转向日常驾驶。 ChatGPT 的市场份额从 87% 下降到 68%，而 Gemini 则飙升至 18.2%，并且出现了一波专业代理，能够比任何通用 LLM 更好地解决特定问题。
 
-AI 代理工具 Showdown 2026: From Cursor to Cowork to Clawdbot 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
+本指南比较了三个类别的主要人工智能代理工具：编码助手、任务自动化器和个人人工智能管家。最后，您将确切地知道哪些工具属于您的堆栈。
 
-## 关键要点
+## 要点
 
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
+- **编码代理**已分为两个阵营：用于精细控制的 IDE 副驾驶（光标）与用于自主重构的终端代理（Claude Code）。
+- 像 Manus 这样的任务代理现在在基准测试中优于 Operator，但 Operator 的人机交互方法为关键工作流程提供了更好的可靠性。
+- **像 Clawdbot 这样的个人人工智能助理**受到注重隐私的用户的欢迎，这些用户希望“用手克劳德”而不依赖于云。
+- **MCP 协议** 成为行业标准——每个主要的人工智能提供商现在都支持它。
+- 制胜策略不是选择一种工具，而是构建一个互补的堆栈。
 
-## 原文结构地图
+## 人工智能代理的三种类型
 
-- Key Takeaways
-- The Three Types of AI Agents
-- 编码代理s: The Deep Dive
-- Cursor: The IDE Power User's Choice
-- Claude Code: The Terminal Autonomous Agent
-- GitHub Copilot: 企业's Safe Choice
-- Devin: The Fully Autonomous Engineer
-- 编码代理 Recommendation
+在进行比较之前，让我们先澄清一下我们正在比较的内容：
 
-## 实践建议
+| 类别 | 目的 | 示例工具 |
+|----------|---------|---------------|
+| **编码剂** | 编写、调试和重构代码 | 光标、克劳德·代码、副驾驶、德文 |
+| **任务代理** | 自动化 Web 和桌面工作流程 | 操作员，马努斯，克劳德·科沃克 |
+| **私人助理** | 跨消息应用程序的 24/7 AI 管家 | 爪机器人、毛机器人 |
 
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
+每个类别都有不同的评价标准。编码代理需要精确度和上下文感知。任务代理需要可靠性和自主性。个人助理需要始终在线和隐私。
 
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
+## 编码代理：深入探讨
 
-## 延伸阅读
+编码助理领域已经围绕三位领导者具体化，他们现在占据了 [超过 70% 的 4B 美元市场](https://www.cbinsights.com/research/report/coding-ai-market-share-december-2025/)：GitHub Copilot、Claude Code 和 Cursor (Anysphere)。这三者均已突破 ARR 10 美元门槛。
 
-- [MCP 协议 指南 2026: Connect AI to Any Data Source](/blog/mcp-model-context-protocol-guide)
-- [AI Agents 生产环境 指南: Avoiding $3.4K Mistakes](/blog/ai-agents-production-guide)
-- [From Chatbots to AI Agents: The Quiet 革命](/blog/from-chatbots-to-ai-agents-quiet-revolution)
-- [Agentic AI 革命 2025: The 未来 is Here](/blog/agentic-ai-revolution-2025)
-- [Claude AI Executes Code: Real-Time Python & Node.js](/blog/claude-ai-now-executes-code)
+有趣的是平衡变化的速度有多快。 2025 年 1 月，[超过 80% 的 AI 辅助拉取请求使用 Copilot](https://jellyfish.co/blog/2025-ai-metrics-in-review/)。到 10 月份，这一比例下降至 60%，而 Cursor 从不到 20% 攀升至近 40%。
+
+### 光标：IDE 高级用户的选择
+
+**它是什么**：基于 VS Code 构建的 AI 原生 IDE，具有多文件上下文感知和内联编辑功能。
+
+**最适合**：想要人工智能帮助而又不放弃控制权的开发人员。
+
+| 方面 | 细节 |
+|--------|---------|
+| **优势** | 流畅的 UI、多文件上下文、精确的内联编辑、用于较大更改的作曲家模式 |
+| **弱点** | 不完全自主，需要手动协调复杂的重构 |
+| **定价** | 20 美元/月 专业版 |
+| **模型** | Claude 3.5/4，GPT-4o，自定义微调 |
+
+当您知道自己想要什么但需要帮助执行时，光标会表现出色。 “选项卡-选项卡-选项卡”工作流程（逐步接受人工智能建议）让您掌握主动权，同时将编码速度加快 2-3 倍。
+
+Cursor 的有趣之处如下：[19.3% 的 AI 使用开发者采用了 Cursor Agent](https://www.index.dev/blog/ai-pair-programming-statistics)——略高于 GitHub Copilot Agent 的 18%。特别是对于代理编码，Cursor 获胜。
+
+### 克劳德·代码：终端自治代理
+
+**它是什么**：Anthropic 基于 CLI 的代理，可以自主导航代码库、运行测试和执行多步骤更改。
+
+**最适合**：大型重构工作、文档生成、端到端功能实现。
+
+| 方面 | 细节 |
+|--------|---------|
+| **优势** | 深度推理，处理复杂的多文件更改，独立构建和测试 |
+| **弱点** | 更陡峭的学习曲线，仅限终端界面 |
+| **定价** | 每月 20 美元起（Claude Pro） |
+| **模型** | 克劳德 3.5 十四行诗、克劳德 4 作品 |
+
+当你需要说“重构这个身份验证系统以使用 JWT”并走开时，Claude Code 就会大放异彩。它读取文件、理解依赖关系、进行更改并验证它们是否有效——所有这些都是自主完成的。
+
+> 有趣的事实：Anthropic 的 Claude Cowork 桌面代理由 Claude Code 在短短 1.5 周内构建完成。
+
+### GitHub Copilot：企业的安全选择
+
+**它是什么**：GitHub 的 AI 对程序员，与 GitHub 生态深度融合。
+
+**最适合**：需要合规性、审计跟踪和 GitHub 工作流程集成的企业团队。
+
+| 方面 | 细节 |
+|--------|---------|
+| **优势** | GitHub 集成、企业安全功能、广泛的语言支持 |
+| **弱点** | 智能程度低于竞争对手，基本的上下文处理 |
+| **定价** | 个人 10 美元/月，商业/企业 19-39 美元/月 |
+| **模型** | GPT-4o，克劳德（企业） |
+
+Copilot 不是最聪明的代理，但对组织来说是最安全的。它拥有[42% 的市场份额、20+ 百万用户以及 90% 的财富 100 强公司的业务](https://www.cbinsights.com/research/report/coding-ai-market-share-december-2025/)，这是企业默认设置。内置秘密扫描、代码来源跟踪和合规性认证使其成为受监管行业的选择。
+
+生产力数字证明了这一点：使用 Copilot 的开发人员[完成任务的速度快 55%](https://www.getpanto.ai/blog/ai-coding-assistant-statistics) 比不使用 Copilot 的开发人员。
+
+### Devin：完全自主的工程师
+
+**它是什么**：Cognition 的人工智能软件工程师，负责端到端处理整个开发任务。
+
+**最适合**：愿意支付溢价以获得最大自治权的组织。
+
+| 方面 | 细节 |
+|--------|---------|
+| **优势** | 真正的自治，独立处理全部功能，需要最少的监督 |
+| **弱点** | 成本高昂、决策不透明、仅限企业 |
+| **定价** | 企业（联系定价） |
+| **模型** | 所有权 |
+
+Devin 代表了自主编码的前沿——给它一个功能规范，它就会提供工作代码。但就企业定价和黑盒推理而言，这对大多数团队来说都是杀伤力过大的。
+
+### 编码剂推荐
+
+| 设想 | 推荐工具 |
+|----------|------------------|
+| 精确控制的日常编码 | **光标** |
+| 大型重构和文档 | **克劳德·代码** |
+| 企业合规要求 | **GitHub 副驾驶** |
+| 最大的自主权，预算没有问题 | **德文** |
+
+## 任务代理：自动化无聊的事情
+
+任务代理在 2025 年达到了拐点。根据 [G2 的人工智能代理报告](https://learn.g2.com/enterprise-ai-agents-report)，57% 的公司现在在生产中运行人工智能代理——这是从实验到运营使用的明显转变。短短六个月内，企业采用率从 11% 跃升至 42%。
+
+问题不在于是否采用任务代理。这是哪些符合您的风险承受能力。
+
+### OpenAI Operator：人在环自动化器
+
+**它是什么**：OpenAI 的浏览器自动化代理，通过人工检查点执行 Web 任务。
+
+**最适合**：可靠性比速度更重要的重复性网络任务。
+
+| 方面 | 细节 |
+|--------|---------|
+| **自治** | 混合——关键行动暂停 |
+| **基准** | 盖亚 1 级：74.3% |
+| **优势** | 稳定、可预测、明确的人为监督点 |
+| **弱点** | 需要人工干预，比竞争对手慢 |
+| **定价** | 包含在 ChatGPT Plus 中 |
+
+操作员采取保守的方法：自动化安全的事情，暂停确认任何敏感的事情。这使得它对于诸如“预订航班”或“填写此表格”之类的任务非常可靠，因为错误会产生真正的后果。
+
+### Manus：完全自主冠军
+
+**它是什么**：一个多代理系统，可以以最少的人工干预处理复杂的任务。
+
+**最适合**：复杂、多步骤的任务，您信任代理能够解决问题。
+
+| 方面 | 细节 |
+|--------|---------|
+| **自治** | 完整——端到端运行 |
+| **基准** | 盖亚 1 级：86.5% |
+| **优势** | 最高基准分数、多代理架构、部署到云端 |
+| **弱点** | 不太可预测，出现问题时更难调试 |
+| **定价** | 免费套餐 + 付费选项 |
+
+Manus 打破了 [GAIA 基准测试](https://www.helicone.ai/blog/manus-benchmark-operator-comparison) 的记录，这是由 Meta AI、Hugging Face 和 AutoGPT 团队创建的人工智能助手行业标准测试。其得分：1 级（基本任务）为 86.5%，2 级（中级）为 70.1%，3 级（复杂流程）为 57.7%。这领先于 OpenAI Deep Research 和微软的 o1。
+
+多代理架构为不同的任务组件生成专门的子代理，并自动协调它们。 【上线72小时内】(https://www.gocodeo.com/post/manus-ai-capabilities)，Manus吸引了超过18万用户。
+
+需要注意的是：Manus 仍然仅限受邀者参加，因此对这些基准的独立验证是有限的。
+
+### Claude Cowork：桌面文件专家
+
+**它是什么**：Anthropic 用于文件管理和文档处理的桌面代理。
+
+**最适合**：批处理文件操作、Office 文档处理、本地自动化。
+
+| 方面 | 细节 |
+|--------|---------|
+| **自治** | 混合——具有监督的并行子代理 |
+| **优势** | 本机 Office 支持（Word、Excel、PowerPoint）、并行处理、本地执行 |
+| **弱点** | 以桌面为中心，不适用于网络自动化 |
+| **定价** | 克劳德·马克斯订阅 |
+
+Cowork 填补了一个独特的领域：桌面自动化。 Operator 和 Manus 专注于 Web 任务，而 Cowork 擅长“组织这 500 个 PDF”或“将所有这些 Word 文档转换为 Markdown”。并行子代理架构意味着它可以有效地处理批量操作。
+
+### 任务代理推荐
+
+| 设想 | 推荐工具 |
+|----------|------------------|
+| 带有安全网的网络自动化 | **OpenAI 运营商** |
+| 复杂的自主任务 | **马努斯** |
+| 桌面文件批量处理 | **克劳德·科沃克** |
+
+## 个人人工智能助理：您的 24/7 管家
+
+### Clawdbot/Moltbot：自托管人工智能管家
+
+**它是什么**：开源个人人工智能助手，与消息传递平台集成并执行现实世界的任务。
+
+**最适合**：注重隐私的用户希望“用手中的克劳德”处于自己的控制之下。
+
+| 方面 | 细节 |
+|--------|---------|
+| **平台** | WhatsApp、Telegram、Discord、iMessage 等 |
+| **托管** | 自托管（VPS、Raspberry Pi、本地服务器） |
+| **特征** | 电子邮件管理、日历、航班值机、智能家居控制、语音唤醒 |
+| **社区** | 超过 8,900 名 Discord 成员 |
+
+Clawdbot（及其兄弟 Moltbot）之所以大受欢迎，是因为它解决了一个真正的问题：在实际通信渠道中获得人工智能帮助，而无需将数据交给云端。
+
+**为什么开发人员喜欢它**：
+
+1. **隐私第一**：所有数据都保留在您的硬件上
+2. **真正执行**：不仅仅是聊天——它实际上可以发送电子邮件、预约、控制智能家居设备
+3. **跨平台**：一名助手可跨您所有的消息应用程序
+4. **开源**：完全控制和定制
+5. **社区**：具有共享集成和技巧的 Active Discord
+
+创建者 Peter Steinberger（以 PSPDFKit 闻名）将其作为个人项目构建并取得了成功。 “克劳德双手”的定位与那些希望人工智能代理不受云锁定的开发人员产生了共鸣。
+
+## 代理框架：针对构建者
+
+如果您正在构建自定义代理而不是使用现成的工具：
+
+| 框架 | 最适合 | 到期 | 采用 |
+|-----------|----------|----------|----------|
+| **LangChain + LangGraph** | 复杂的工作流程 | 最成熟 | 标准选择 |
+| **船员人工智能** | 多智能体协作 | 生产就绪 | 财富 500 强企业 60% |
+| **自动GPT** | 快速原型制作 | 实验性的 | 研究/演示 |
+
+**LangGraph** 是安全的默认设置 - 全面的文档，经过生产测试，并且支持简单的链和复杂的代理架构。
+
+当您需要多个专业代理一起工作时，**CrewAI** 会大放异彩。其 1800 万美元的融资轮和《财富》500 强企业的采用证明了企业已做好准备。
+
+**AutoGPT** 非常适合快速验证代理想法，但在生产场景中却很困难。
+
+## 选择矩阵
+
+以下是根据您的需求进行选择的方法：
+
+| 您的需要 | 推荐工具 |
+|-----------|------------------|
+| 每日编码效率 | 光标 |
+| 大规模重构 | 克劳德·科德 |
+| 企业代码合规性 | GitHub 副驾驶 |
+| 最大编码自主权 | 德文 |
+| 可靠的网络自动化 | OpenAI运营商 |
+| 复杂的多步骤任务 | 马努斯 |
+| 桌面文件管理 | 克劳德·科沃克 |
+| 隐私第一的个人人工智能 | 爪机器人 |
+| 建立定制代理 | 郎图 |
+
+## 2026年值得关注的趋势
+
+### 市场正在爆炸式增长
+
+数字说明了这一点：[人工智能代理市场从 2023 年的 $3.7B 增长到 2025 年的 $7.38B](https://www.index.dev/blog/ai-agents-statistics)——两年内几乎翻了一番。长期预测显示，到 2032 年，其价值将达到 $103.6B。
+
+对于企业来说，投资回报率非常引人注目。 [Forrester 研究](https://www.warmly.ai/p/blog/ai-agents-statistics) 发现，组织在三年内实现了 210% 的投资回报率，投资回收期不到 6 个月。麦肯锡报告称，实施人工智能代理的公司[收入增加了 3-15%，销售投资回报率提高了 10-20%](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)。
+
+### MCP 变得普遍
+
+模型上下文协议从 Anthropic 的实验变成了行业标准。 OpenAI、Google 和 Microsoft 均在 2025 年采用了它。现在，任何 MCP 兼容工具都可以与任何 MCP 兼容代理配合使用，无需自定义集成。
+
+### 从演示到日常驱动程序
+
+2025 年将会有令人印象深刻的演示。 2026 年是关于可靠性的。 [每日 AI 用户合并的拉取请求比偶尔用户多 60%](https://jellyfish.co/blog/2025-ai-metrics-in-review/)。赢得市场份额的工具是那些能够优雅地失败并自动恢复的工具。
+
+### 整合挑战
+
+并非一切都是一帆风顺的。 [近 95% 的 IT 领导者](https://www.multimodal.dev/post/agentic-ai-statistics) 表示集成是人工智能实施的障碍。 [不到 10% 的组织](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) 已将人工智能代理扩展到初始试点之外。采用和生产级部署之间的差距仍然很大。
+
+### Gartner 的预测
+
+到 2028 年，33% 的企业软件将整合代理人工智能组件。我们正处于早期采用者阶段——您现在学习的工具将在 2 年内成为企业默认工具。
+
+### 人择的动量
+
+Anthropic 到 2025 年的收入将达到 47 亿美元，高于预期的 8.5 亿美元。他们的代理生态系统（Claude Code、Cowork、MCP）正在赢得市场份额，对抗 OpenAI 的传统主导地位。
+
+## 构建您的代理堆栈
+
+最佳方法不是选择一种工具，而是构建一个互补的堆栈：
+
+**推荐的入门堆栈**：
+- **光标**用于日常精确编码
+- **Claude Code** 用于繁重的工作（重构、文档、复杂功能）
+- **Clawdbot** 用于 IDE 之外的个人自动化
+
+该组合涵盖：
+- 粒度编码控制（光标）
+- 自主开发任务（克劳德代码）
+- 生活自动化（Clawdbot）
+
+从一种工具开始，掌握它，然后根据您的需求添加其他工具。
+
+## 底线
+
+2026 年的人工智能代理格局已经从“一种工具统治一切”发展到“用正确的工具完成正确的工作”。编码代理分为控制（光标）和自主（克劳德代码）。任务代理分为安全（操作员）和能力（马努斯）。个人助理完全成为一个新类别。
+
+数据告诉我们以下内容：
+- **85% 的开发人员** 现在定期使用 AI 编码工具
+- **57% 的公司** 在生产中拥有人工智能代理
+- **企业采用者三年内投资回报率达到 210%**
+- **借助 AI 协助，任务完成速度提高 55%**
+
+获胜策略是了解每个工具的优势并构建一个堆栈来弥补您的工作流程差距。从小处开始，有意识地扩展，并记住：最好的代理是您每天实际使用的代理。
+
+**准备好开始了吗？** 选择能够解决您今天最紧迫问题的工具。 Cursor for daily coding.用于大量重构的 Claude 代码。用于个人自动化的 Clawdbot。明天您随时可以扩展您的堆栈。
+
+## 相关文章
+
+- [MCP协议指南2026：将AI连接到任何数据源](/blog/mcp-model-context-protocol-guide)
+- [AI 代理制作指南：避免 3400 美元的错误](/blog/ai-agents-production-guide)
+- [从聊天机器人到人工智能代理：安静的革命](/blog/from-chatbots-to-ai-agents-quiet-revolution)
+- 【智能体AI革命2025：未来已来】(/blog/agentic-ai-revolution-2025)
+- [Claude AI执行代码：实时Python & Node.js](/blog/claude-ai-now-executes-code)
+
+## 来源
+
+- [CB Insights：编码人工智能市场份额报告，2025 年 12 月](https://www.cbinsights.com/research/report/coding-ai-market-share-december-2025/)
+- [Jellyfish：2025 年 AI 指标回顾](https://jellyfish.co/blog/2025-ai-metrics-in-review/)
+- [Index.dev：2026年AI结对编程统计](https://www.index.dev/blog/ai-pair-programming-statistics)
+- [Helicone：Manus 基准与运营商比较](https://www.helicone.ai/blog/manus-benchmark-operator-comparison)
+- [G2：2026年企业人工智能代理报告](https://learn.g2.com/enterprise-ai-agents-report)
+- [麦肯锡：2025年人工智能现状](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)
+- [Panto：AI编码助理统计2026](https://www.getpanto.ai/blog/ai-coding-assistant-statistics)
+- [Index.dev：AI代理统计与趋势](https://www.index.dev/blog/ai-agents-statistics)
+- [Gartner：2028 年代理人工智能预测](https://www.gartner.com/)
+- [模型上下文协议规范](https://modelcontextprotocol.io/)

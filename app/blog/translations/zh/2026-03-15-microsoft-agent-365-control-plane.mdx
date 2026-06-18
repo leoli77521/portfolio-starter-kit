@@ -1,50 +1,165 @@
 ---
-title: "Microsoft Agent 365 and the Rise of the 企业 AI Control Plane"
-summary: "Microsoft's Agent 365 points to a new 企业 AI battleground: a control plane for agent identity, policy, observability, and governed tool access."
-seoTitle: "Microsoft Agent 365 and the Rise of the 企业 AI Control Plane"
-seoDescription: "Microsoft's Agent 365 points to a new 企业 AI battleground: a control plane for agent identity, policy, observability, and governed tool access."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "Microsoft Agent 365 和企业 AI 控制平面的兴起"
+summary: "微软的 Agent 365 指向了一个新的企业人工智能战场：一个用于代理身份、策略、可观察性和受管工具访问的控制平面。"
+seoTitle: "Microsoft Agent 365 和企业 AI 控制平面的兴起"
+seoDescription: "微软的 Agent 365 指向了一个新的企业人工智能战场：一个用于代理身份、策略、可观察性和受管工具访问的控制平面。"
+faq: [{"question":"实际上，Microsoft Agent 365 是什么？","answer":"Microsoft 将 Agent 365 定位为 AI 代理的控制平面：一个在整个企业中盘点、管理、保护和观察代理的位置，而不是将每个代理视为孤立的应用程序功能。"},{"question":"为什么 Agent 365 比其他 Copilot 功能发布更重要？","answer":"因为官方文档将 Agent 365 与代理身份、注册表、访问控制、可观察性、安全集成和基于 MCP 的工具联系起来。这将对话从代理演示转移到企业运营模型。"},{"question":"为什么开发人员应该关心针对 IT 管理员的产品？","answer":"因为工具故事直接影响代理的构建和部署方式。 Agent 365 文档包括 MCP 服务器配置、清单生成、身份设置以及 OpenAI、Azure AI Foundry、语义内核和代理框架等框架的集成。"}]
+howto: [{"name":"清点每个代理表面","text":"在扩展使用之前跟踪第一方、合作伙伴和影子代理，否则治理将落后于采用。"},{"name":"使工具访问可审核","text":"将 MCP 服务器清单、范围和权限视为可审查的部署工件，而不是隐藏的实现细节。"},{"name":"尽早分离身份模型","text":"决定代理应在何处使用自己的身份与委派的用户访问权限，因为该选择会影响安全性、可观察性和合规性。"}]
 sourceUpdatedAt: "2026-03-15"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+大多数企业人工智能公告听起来仍然相同。
 
-# Microsoft Agent 365 and the Rise of the 企业 AI Control Plane
+模型变得更加智能。助理打开了另一个应用程序。演示更加流畅。定价捆绑更大。
 
-这篇中文译文围绕 **Microsoft Agent 365 and the Rise of the 企业 AI Control Plane** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。Microsoft's Agent 365 points to a new 企业 AI battleground: a control plane for agent identity, policy, observability, and governed tool access.
+但在 **2026 年 3 月 9 日**，微软宣布了比另一次助手升级在结构上更重要的事情。
 
-本文根据英文原文同步整理，源文更新时间为 **2026-03-15**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
+该公司在其官方博客中表示，**Microsoft Agent 365** 将于 **2026 年 5 月 1 日全面上市**，价格为 **每用户 15 美元**，并将其描述为 **AI 代理的控制平面**。
 
-## 核心概览
+这句话就是真实的故事。
 
-Microsoft Agent 365 and the Rise of the 企业 AI Control Plane 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
+如果微软的框架成立，下一个企业人工智能战场将不仅仅是谁拥有最聪明的代理。它将为企业提供识别、管理、保护和观察实际工作中大量代理的最佳方式。
 
-## 关键要点
+这是我从微软 2026 年 3 月的公告和文档中得出的推论，而不是微软的口号。但这种模式很难被忽视。
 
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
+## 这不仅仅是另一个副驾驶附加组件
 
-## 原文结构地图
+最简单的错误是将 Agent 365 视为围绕 Copilot 的管理中心包装。
 
-- This Is More Than Another Copilot Add-On
-- The Real Technical Signal Is the MCP Layer
-- 为什么 the Control Plane Changes the 企业 AI Conversation
-- Four Technical Implications for Builders
-- 1. Agent Identity Becomes a First-Class Design Decision
-- 2. Tool Manifests Become Deployment Artifacts
-- 3. Observability Stops Being Optional
-- 4. Openness Moves Up the Stack
+该文档使它比这更具体。
 
-## 实践建议
+微软表示，Agent 365 为每个 AI 代理提供了自己的 **Microsoft Entra Agent ID**，用于身份、生命周期和访问管理。它还表示，代理可以在 Microsoft 365 管理中心中进行管理和观察。产品概述突出了五个核心功能：
 
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
+- **注册表**用于发现整个组织的代理，包括注册代理和影子代理
+- **访问控制** 用于限制代理可以访问的内容
+- **可视化**用于查看代理、人员和数据之间的联系
+- **互操作性** 用于将代理连接到工作环境和业务流程
+- **安全** 通过与 Microsoft Purview 和 Microsoft Defender 集成
 
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
+这不仅仅是一个功能清单。它是一种运营模式。
 
-## 延伸阅读
+对于最后一波企业人工智能，默认的问题是“我们在哪里添加助手？”
 
-- [MCP 协议 指南](/blog/mcp-model-context-protocol-guide)
-- [AI agents in 生产环境 指南](/blog/ai-agents-production-guide)
-- [AI 代理工具 comparison for 2026](/blog/ai-agent-tools-comparison-2026)
+对于下一波浪潮，更尖锐的问题是“我们如何管理数百或数千个具有不同权限、工具、身份和数据路径的代理？”
+
+Agent 365 是微软对这个难题的回答。
+
+## 真正的技术信号是 MCP 层
+
+开发人员文档中最有力的线索表明它比仪表板更大。
+
+Microsoft 的 Agent 365 工具文档表示，开发人员可以通过 Agent 365 CLI 发现、配置**模型上下文协议 (MCP)** 服务器并将其集成到代理工作流程中。记录的流程异常明确：
+
+1. 配置 MCP 服务器
+2. 生成 `ToolingManifest.json`
+3. 向协调器注册工具
+4. 执行过程中调用工具
+
+这很重要，因为它将工具访问变成了结构化且可审查的东西。
+
+文档还表示，Agent 365 为多个编排路径提供了扩展包，包括 **OpenAI**、**Azure AI Foundry**、**Semantic Kernel** 和 **Agent Framework** 集成。换句话说，微软不仅仅试图在部署后管理代理。它首先试图塑造代理如何连接工具的开发者路径。
+
+如果您一直关注 MCP 的崛起，这听起来应该很熟悉。我们的 [MCP 协议指南](/blog/mcp-model-context-protocol-guide) 介绍了为什么标准化工具访问对于代理生态系统很重要。微软在这里添加的是围绕这个想法的企业包装：清单、范围、身份设置、权限和可观察性是产品表面的一部分，而不仅仅是开发人员管道的一部分。
+
+这是一个有意义的转变。
+
+## 为什么控制平面改变了企业人工智能对话
+
+大多数公司不再真正存在“AI智能”问题。
+
+他们有**代理蔓延**问题。
+
+团队构建内部副驾驶、工作流代理、聊天界面、检索工具、浏览器自动化和数据连接助手的速度比 IT、安全和合规团队跟踪它们的速度要快。结果是可以预见的：
+
+- 所有权不明确
+- 权限不一致
+- 可审核性差
+- 工具使用情况的可见性较差
+- 过度分享和政策漂移的风险日益增加
+
+这就是为什么微软的时机很有趣。
+
+**2026 年 3 月 4 日**，微软还宣布推出公共预览版 **AI 安全仪表板**，将其描述为使用来自 Defender、Entra 和 Purview 的信号跨代理、应用程序和平台的 AI 威胁的统一视图。与 Agent 365 一起，微软似乎不仅构建了代理功能，而且还围绕代理部署构建了更广泛的信任堆栈。
+
+这种组合赋予了这次发射重量。
+
+从实践经验中我们已经知道，生产代理在因前沿模型原因失败之前会先因无聊原因而失败。他们之所以失败，是因为范围太广。它们之所以失败，是因为工具接线不当。他们失败了，因为没有人知道哪个特工做了什么。他们失败是因为缺少升级和审查。
+
+这与我们在[生产中的人工智能代理指南](/blog/ai-agents-production-guide)中探索的教训相同：困难的部分不是演示。困难的部分是围绕它的操作纪律。
+
+微软似乎押注企业买家终于准备好为这种纪律买单了。
+
+## 对建筑商的四个技术影响
+
+如果 Agent 365 的方向扩展，开发者应该期待四项变化。
+
+### 1. 代理身份成为一流的设计决策
+
+这些文档区分了**代理身份验证**和**代表 (OBO)** 委托访问。这不是一个次要的实施细节。它确定代理是作为其自己的受治理实体还是作为人类用户的扩展。
+
+这种选择会影响从审计跟踪到最低权限设计的一切。
+
+### 2. 工具清单成为部署工件
+
+当通过 CLI 流添加 MCP 服务器并将其写入工具清单时，工具访问不再是不可见的代码级假设。
+
+它成为安全、平台和工程团队可以检查的东西。
+
+这就是企业代理开发的方向：更少的神奇工具连接，更明确的功能和范围声明。
+
+### 3.可观察性不再是可选的
+
+Microsoft 的文档反复强调可见性、监控、威胁检测和实时评估。
+
+这是一个强烈的信号，表明代理的采用正在进入我们在云基础设施和身份系统中已经看到的相同成熟度曲线。如果你无法追踪它、管理它或解释它，组织最终将拒绝扩展它。
+
+### 4. 开放性提升层次
+
+工具故事中最有趣的部分之一是微软并不坚持单一的编排框架。官方文档指出了 OpenAI 和 Azure AI Foundry 以及 Microsoft 原生方法的集成路径。
+
+这表明竞争层可能会发生变化。
+
+护城河可能不是强迫每个构建者使用同一个 SDK，而是更多地关于拥有异构模型和工具链之上的可信控制界面。
+
+这是一个明智的竞争场所。
+
+## 团队现在应该做什么
+
+如果您构建或运营代理，即使您从未购买 Agent 365，此启动也是一个有用的提示。
+
+从这些问题开始：
+
+1. 我们是否拥有组织中每个代理和工具表面的真实清单，包括非官方或影子使用情况？
+2. 哪些代理应拥有自己的身份，哪些代理应仅通过委派用户访问进行操作？
+3. 我们能否解释代理可以调用​​的每个工具、它需要的每个范围以及它可以触及的每个系统？
+4. 我们的可观察性是否不仅可以显示正常运行时间，还可以显示行为、权限和风险？
+
+无论您使用哪个堆栈，这些问题都很重要。
+
+如果您的团队已经在比较生态系统，我们的 [2026 年人工智能代理工具比较](/blog/ai-agent-tools-comparison-2026) 仍然有用。但未来更重要的比较可能是：哪个平台为您提供从代理实验到受控生产的最干净的路径？
+
+这就是市场变得严肃的地方。
+
+## 最后拍摄
+
+Microsoft Agent 365 很重要，因为它有助于阐明企业 AI 的发展方向。
+
+不仅仅是更智能的聊天。
+
+不仅仅是更多的代理。
+
+一个治理层，其中代理被视为具有身份、权限、工具清单、可观察性和策略边界的可管理企业对象。
+
+微软是否赢得了这一层仍然是一个悬而未决的问题。
+
+但截至**2026年3月**，它已经做出了最明确的案例之一，即下一场严肃的人工智能平台之战将围绕**控制平面**展开，而不仅仅是模型。
+
+这是一个比另一个助理演示更持久、更具技术性的故事。
+
+## 来源
+
+- [微软：推出首个基于智能+信任的前沿套件](https://blogs.microsoft.com/blog/2026/03/09/introducing-the-first-frontier-suite-built-on-intelligence-trust/)
+- [Microsoft Learn：Microsoft Agent 365 文档](https://learn.microsoft.com/en-us/microsoft-agent-365/)
+- [Microsoft Learn：Microsoft Agent 365 概述](https://learn.microsoft.com/en-us/microsoft-agent-365/overview)
+- [Microsoft Learn：添加和管理 Microsoft Agent 365 工具](https://learn.microsoft.com/en-us/microsoft-agent-365/developer/tooling)
+- [Microsoft Learn：2026 年 3 月公告](https://learn.microsoft.com/en-us/partner-center/announcements/2026-march)

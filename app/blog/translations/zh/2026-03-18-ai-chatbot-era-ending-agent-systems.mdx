@@ -1,49 +1,153 @@
 ---
-title: "The Last 48 Hours in AI Made One Thing Clear: The Chatbot Era Is Ending"
-summary: "Announcements from NVIDIA and Anthropic between March 16 and March 17, 2026 show the AI race shifting toward long-running agents, policy runtimes, and physical-world execution."
-seoTitle: "The Last 48 Hours in AI Made One Thing Clear: The Chatbot Era Is Ending"
-seoDescription: "Announcements from NVIDIA and Anthropic between March 16 and March 17, 2026 show the AI race shifting toward long-running agents, policy runtimes, and physical-world execution."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "人工智能的最后 48 小时清楚地表明了一件事：聊天机器人时代即将结束"
+summary: "NVIDIA 和 Anthropic 在 2026 年 3 月 16 日至 17 日期间发布的公告显示，人工智能竞赛正在转向长期运行的代理、策略运行时和物理世界执行。"
+seoTitle: "人工智能的最后 48 小时清楚地表明了一件事：聊天机器人时代即将结束"
+seoDescription: "NVIDIA 和 Anthropic 在 2026 年 3 月 16 日至 17 日期间发布的公告显示，人工智能竞赛正在转向长期运行的代理、策略运行时和物理世界执行。"
+faq: [{"question":"为什么最近 48 小时的人工智能新闻比另一次基准跳跃更重要？","answer":"因为最重要的公告并不是关于某个模型赢得排行榜。它们是关于人工智能的系统：代理运行时、长期运行推理的基础设施、策略控制和物理世界部署。"},{"question":"在这个故事中，NVIDIA 和 Anthropic 有何联系？","answer":"两者都指向同一个目的地。 NVIDIA 专注于自主系统所需的基础设施、工具和机器人堆栈，而 Anthropic 则强调为真正的公共和私营部门工作流程负责的代理部署。"},{"question":"这是否意味着聊天机器人已经死了？","answer":"不会。聊天界面仍将是主要的入口点。但人工智能的战略中心正在从聊天转向能够行动、协调工具、根据策略运行并跨工作流程持续存在的系统。"}]
+howto: [{"name":"为行动而设计，而不仅仅是答案","text":"绘制人工智能应该完成工作、调用工具或移交给人类的确切位置，而不是将聊天视为最终产品。"},{"name":"将模型选择与运行时设计分开","text":"选择功能模型，但将内存、权限、可观察性和回滚构建为独立的产品层。"},{"name":"在规模之前添加治理","text":"长期运行的代理需要策略执行、可审核的工具访问和审查检查点，然后才能跨重要工作流程传播。"}]
 sourceUpdatedAt: "2026-03-18"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+如果你将过去 48 小时的人工智能新闻视为一堆不相关的公告，那么你就错过了情节。
 
-# The Last 48 Hours in AI Made One Thing Clear: The Chatbot Era Is Ending
+**2026 年 3 月 16 日至 3 月 17 日期间**，NVIDIA 和 Anthropic 各自从不同的方向提出了相同的更重要的观点：AI 竞赛不再主要是谁拥有最令人印象深刻的聊天演示。这是关于谁可以构建、管理和部署在提示结束后继续工作的系统。
 
-这篇中文译文围绕 **The Last 48 Hours in AI Made One Thing Clear: The Chatbot Era Is Ending** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。Announcements from NVIDIA and Anthropic between March 16 and March 17, 2026 show the AI race shifting toward long-running agents, policy runtimes, and physical-world execution.
+这是我根据官方公告得出的推论，并非任何一家公司的口号。但这种模式很难被忽视。
 
-本文根据英文原文同步整理，源文更新时间为 **2026-03-18**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
+**3 月 16 日**，NVIDIA 使用 GTC 2026 来说话，不再像一家模范公司，而更像是面向代理密集型未来的操作系统供应商。 **3 月 17 日**，Anthropic 举办了伦敦活动，**负责任的代理和人工智能的未来**，重点讨论如何在公共和私营部门工作中负责任地部署代理系统。
 
-## 核心概览
+将这些信号放在一起，结论就很清楚了：
 
-The Last 48 Hours in AI Made One Thing Clear: The Chatbot Era Is Ending 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
+**人工智能的重心正在从聊天机器人智能转移到代理系统。**
 
-## 关键要点
+## 这不是又一个模特周
 
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
+最简单的错误是将所有人工智能新闻扁平化到同一个标题模板中：
 
-## 原文结构地图
+- 更智能的模型
+- 更好的基准
+- 更流畅的界面
+- 更大的上下文窗口
 
-- This Was Not Another Model Week
-- Infrastructure Is Now Being Designed for Agents
-- The Runtime Layer Is Becoming the Real Product
-- AI Is Escaping the Screen
-- 什么 Builders and Operators Should Take From This
-- Final Take
+这种框架很快就会过时。
 
-## 实践建议
+过去两天最引人注目的并不是一次基准的飞跃。这是一个新堆栈不断增长的形状。
 
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
+在 GTC 上，NVIDIA 宣布 **Vera Rubin** 平台作为人工智能各个阶段的基础设施，明确包括**代理推理**。在同一波更新中，它强调了 **OpenShell** 和 **NemoClaw** 以提供更安全的永远在线代理，围绕开放模型系列扩展了 **Nemotron Coalition**，并通过新的 Cosmos 和 Isaac 版本进一步推进了 **物理 AI**。
 
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
+Anthropic 3 月 17 日的活动强化了同一个故事的另一半。它的框架并不是“来看看更好的聊天机器人”。这是关于代理的实际和负责任的部署，这些代理可以支持决策、简化运营并在实际组织中交付成果。
 
-## 延伸阅读
+这很重要，因为它改变了获胜公司必须擅长的领域。
 
-- [Microsoft Agent 365 and the Rise of the 企业 AI Control Plane](/blog/2026-03-15-microsoft-agent-365-control-plane)
-- [Google Wants Gemini to Run Your Phone](/blog/2026-03-10-google-gemini-phone-layer)
-- [From Chatbots to AI Agents: The Quiet 革命 Reshaping Work](/blog/from-chatbots-to-ai-agents-quiet-revolution)
-- [AI Agents in 生产环境: 什么 Breaks First and 如何 Fix It](/blog/ai-agents-production-guide)
+仅仅运送情报已经不够了。
+
+你必须提供智能可以发挥作用的环境。
+
+## 现在正在为代理商设计基础设施
+
+NVIDIA **2026 年 3 月 16 日**的公告很能说明问题，因为他们将代理视为基础设施问题，而不仅仅是应用程序问题。
+
+Vera Rubin 平台被定位为一个用于预训练、后训练、测试时间扩展和实时代理推理的完整系统。这听起来很抽象，直到您了解 NVIDIA 强调的细节：
+
+- 专为大量强化学习和验证环境而构建的 CPU 机架
+- 专为键值缓存和代理内存工作负载而设计的机架级存储
+- 适用于长上下文系统的低延迟推理基础设施
+- 针对人工智能工厂而不是孤立的模型服务器调整的网络和电源设计
+
+换句话说，瓶颈不仅仅是模型的智能程度。
+
+瓶颈在于周围系统是否能够支持代理随着时间的推移进行推理、保存上下文、访问工具并有效地服务于实际工作负载。
+
+这比另一个发布说明中所说的模型在数学方面变得更好的转变要大得多。
+
+这也与我们最近在 [Microsoft Agent 365 和企业 AI 控制平面的兴起](/blog/2026-03-15-microsoft-agent-365-control-plane) 中介绍的方向一致。在各个供应商中，新兴的护城河越来越多地涉及控制平面、运行时以及围绕人工智能的编排模型，而不仅仅是原始模型层。
+
+## 运行时层正在成为真正的产品
+
+NVIDIA GTC 实时更新中隐藏的最重要细节之一根本不是芯片的发布。
+
+重点是 **OpenShell** 和 **NemoClaw** 作为围绕 OpenClaw 构建的长期运行代理的运行时和安全层。 NVIDIA 从**策略执行**、**网络护栏**和**隐私路由**方面描述了该堆栈。
+
+这种语言很有启发性。
+
+当公司开始以这种方式谈论时，他们就承认了一些重要的事情：一旦人工智能系统长期运行并使用工具，真正的产品挑战不仅仅是生成质量。这是受控执行。
+
+同样的转变也出现在人择方面。
+
+其 3 月 17 日的伦敦活动明确涉及**负责任的代理**、实际部署和真实用例。这种措辞很重要，因为它表明前沿对话正在成熟。问题不再是“代理可以完成任务吗？”更难的问题是“代理人能否在具有足够安全性、信任和责任感的真实机构内执行任务，值得使用？”
+
+这是一个更为重要的产品问题。
+
+它还直接连接到我们已经在[Google希望Gemini运行你的手机](/blog/2026-03-10-google-gemini-phone-layer)和[从聊天机器人到人工智能代理：安静的革命重塑工作](/blog/from-chatbots-to-ai-agents-quiet-revolution)中跟踪的主题。在移动、企业软件和开发人员工具中，人工智能正在从您访问的地方转移到在有限工作流程内运行的系统。
+
+## 人工智能正在逃离屏幕
+
+过去 48 小时的另一个重要原因是 NVIDIA 并没有止步于数字代理。
+
+**3 月 16 日**发布的物理人工智能公告使该公司的雄心异常明确。 NVIDIA 推出了新的 **Cosmos** 世界模型功能、新的 **Isaac** 模拟框架以及新的 **Isaac** 模型更新，面向机器人开发人员、工业合作伙伴和人形系统。
+
+这使得对话完全脱离了聊天窗口。
+
+一旦人工智能被定位于仓库车队、工厂自动化、手术系统和人形训练循环，讨论就会发生变化。困难的问题不再是撰写更好的段落或在侧面板中产生更好的答案。
+
+难题变成：
+
+- 系统如何感知和建模世界
+- 他们在部署前如何模拟
+- 他们在安全限制下如何行动
+- 当现实世界拒绝表现得像一个干净的基准时，他们如何恢复
+
+这就是为什么我认为这些 GTC 公告比普通的产品主题演讲更重要。
+
+他们表明，下一场人工智能平台之战将同时跨越三个连接层：
+
+1. **模型能力**
+2. **代理运行时和治理**
+3. **物理或工作流程执行**
+
+如果你只看第一层，你就会错过战略价值的走向。
+
+## 建筑商和运营商应该从中吸取什么教训
+
+如果你开发人工智能产品，本周的新闻应该会改变你提出的问题。
+
+不要问“我们如何在这里添加人工智能聊天？”
+
+问：
+
+- 系统应该在哪里采取行动而不是仅仅回答？
+- 应该允许它接触哪些工具或数据？
+- 什么样的记忆应该持续存在，持续多久？
+- 哪个策略层决定允许什么？
+- 当系统出错时存在什么回滚路径？
+
+这些不再是侧边问题了。他们就是产品。
+
+这就是为什么看起来像工作流平台、安全层、推理基础设施供应商和机器人堆栈的公司在下一阶段可能比那些仅通过华而不实的演示赢得短期关注的公司更重要。
+
+获胜者不仅仅拥有强大的模型。
+
+他们将为人工智能建立持久的运营模式。
+
+如果您想要更扎实的实施视角，我们的[生产中的人工智能代理：首先出现问题以及如何修复](/blog/ai-agents-production-guide) 文章仍然是您的最佳伴侣。市场不断印证着同样的教训：没有可观察性、政策和成本控制的自主权并不是产品优势。这是一种责任。
+
+## 最后拍摄
+
+过去 48 小时并没有证明人工智能已经变得足够可靠来运行一切。
+
+他们证明了更重要的事情。
+
+该行业正在围绕这样一个理念进行重组：有用的人工智能不仅仅是一个会说话的模型。它是一个可以推理、使用工具、在约束下运行以及越来越多地跨软件和物理环境移动的系统。
+
+这并不意味着聊天机器人会消失。
+
+这意味着聊天机器人不再是故事的全部。
+
+**2026 年 3 月 16 日至 17 日**之后，假装不这样做比以往任何时候都更加困难。
+
+## 来源
+
+- [NVIDIA GTC 2026：实时更新人工智能的未来发展](https://blogs.nvidia.com/blog/gtc-2026-news/)
+- [NVIDIA Vera Rubin 开启 Agentic AI 前沿](https://nvidianews.nvidia.com/news/nvidia-vera-rubin-platform)
+- [NVIDIA 和全球机器人领导者将物理 AI 引入现实世界](https://nvidianews.nvidia.com/news/nvidia-and-global-robotics-leaders-take-physical-ai-to-the-real-world)
+- [负责任的代理人与人工智能的未来](https://www.anthropic.com/events/agentic-ai-in-action)

@@ -1,46 +1,76 @@
 ---
-title: "GPT-5 for Coding 2025: benchmarks, Pricing & 5 Pro Tips"
-summary: "GPT-5 transforms programming. Real-world benchmarks, pricing breakdown, common pitfalls, and 5 expert tips to boost your coding productivity with outils IA."
-seoTitle: "GPT-5 for Coding 2025: benchmarks, Pricing & 5 Pro Tips"
-seoDescription: "GPT-5 transforms programming. Real-world benchmarks, pricing breakdown, common pitfalls, and 5 expert tips to boost your coding productivity with outils IA."
-faq: [{"question":"À qui s’adresse cette traduction ?","answer":"Aux lecteurs qui suivent les outils d’IA, les workflows de développement, le SEO et la stratégie produit technique."},{"question":"Quel est le lien avec l’article anglais original ?","answer":"Elle conserve les idées centrales, la structure et les liens internes, avec une rédaction adaptée aux lecteurs francophones."}]
-howto: [{"name":"Transformer la lecture en actions","text":"Relever les risques, opportunités et limites techniques, puis les convertir en prochaines étapes concrètes."},{"name":"Vérifier les détails dans l’original","text":"Pour les chiffres, citations ou dates de lancement, utilisez l’original anglais et les sources comme référence finale."}]
+title: "GPT-5 pour Coding 2025 : benchmarks, tarifs et 5 conseils de pro"
+summary: "GPT-5 transforme la programmation. Des benchmarks concrets, une répartition des prix, des pièges courants et 5 conseils d'experts pour augmenter votre productivité de codage avec les outils d'IA."
+seoTitle: "GPT-5 pour Coding 2025 : benchmarks, tarifs et 5 conseils de pro"
+seoDescription: "GPT-5 transforme la programmation. Des benchmarks concrets, une répartition des prix, des pièges courants et 5 conseils d'experts pour augmenter votre productivité de codage avec les outils d'IA."
+faq: [{"question":"Que prouvent les benchmarks GPT-5 ?","answer":"Ils indiquent la précision de l’édition de code du monde réel et de la correction des bogues à grande échelle."},{"question":"Comment puis-je maintenir les coûts GPT-5 à un niveau bas ?","answer":"Fournissez un contexte ciblé et évitez les longs raisonnements sur des tâches simples."}]
+howto: [{"name":"Fournir le contexte du dépôt","text":"Partagez les fichiers clés, les erreurs et les tests afin que le modèle puisse raisonner efficacement."},{"name":"Demander des différences","text":"Demandez des modifications de style patch et un plan d’auto-vérification."},{"name":"Valider les résultats","text":"Exécutez des tests ou du peluchage avant d'accepter les modifications."}]
 sourceUpdatedAt: "2025-08-09"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
+---
+# GPT-5 pour le codage : références et tarification
+
+**Description :** GPT-5 est enfin livré avec de réels gains en matière de codage. Voici ce que signifient réellement les critères, ce que cela coûte, les pièges et cinq conseils pour obtenir de meilleurs résultats.
+
 ---
 
-# GPT-5 for Coding 2025: benchmarks, Pricing & 5 Pro Tips
+Si vous avez manqué le livestream (et les graphiques « créatifs »), en voici un résumé : GPT-5 est sorti, il est rapide et, surtout, il est **meilleur en code réel** que les modèles précédents. Il y a un signal légitime dans les chiffres, plus quelques éléments de visage de la semaine de lancement qui valent la peine d'être connus. ([Business Insider][1])
 
-Cette version française présente **GPT-5 for Coding 2025: benchmarks, Pricing & 5 Pro Tips** pour aider les lecteurs à comprendre les enjeux techniques, produit et SEO de l’article original. GPT-5 transforms programming. Real-world benchmarks, pricing breakdown, common pitfalls, and 5 expert tips to boost your coding productivity with outils IA.
+## Ce que disent réellement les chiffres (et pourquoi ils sont importants)
 
-Cette traduction suit la version anglaise mise à jour le **2025-08-09**. Les noms de modèles, produits, protocoles et benchmarks restent souvent en anglais afin de préserver leur précision.
+* **Correction de bogues de dépôt réel (vérifié par SWE-bench) : 74,9 %.** Ce benchmark donne à un modèle un véritable problème de dépôt + GitHub et le compte comme une victoire uniquement si son correctif réussit les tests. GPT-5 établit ici le nouveau meilleur score. Traduction : il ne s’agit pas seulement d’une saisie semi-automatique ; il peut fournir des correctifs qui se compilent et sont transmis. ([OpenAI][2], [swebench.com][3])
+* **Édition de code (Aider Polyglot) : 88 %.** Celui-ci mesure si le modèle peut produire de manière fiable des **diffs/modifications de fichiers entiers** corrects sur des problèmes d'exercice difficiles dans plusieurs langues. Des scores élevés ici signifient généralement moins de correctifs mal formés et moins de baby-sitting dans votre éditeur. ([OpenAI][2], [aider.chat][4])
+* **Efficacité par rapport à o3 sur les tâches difficiles :** OpenAI rapporte que GPT-5 atteint ces résultats avec **~22 % de jetons de sortie en moins** et **~45 % d'appels d'outils en moins** (à paramètres de raisonnement élevés comparables). Cela compte à la fois pour la latence et pour votre facture cloud. ([OpenAI][5])
 
-## Vue d’ensemble
+> Note du nerd : SWE-bench Verified est une tranche de problèmes réels filtrée par l'homme de **500 tâches** ; OpenAI indique que 23 tâches ont été omises lors de leur exécution en raison de bizarreries infrarouges. Ne comparez donc pas les pourcentages bruts sans lire les notes de bas de page. ([swebench.com][6], [OpenAI][5])
 
-GPT-5 for Coding 2025: benchmarks, Pricing & 5 Pro Tips n’est pas seulement une actualité : c’est une lecture de ses conséquences pour les développeurs, les équipes produit et les équipes contenu.
+## Comment cela apparaît dans votre éditeur
 
-## Points clés
+OpenAI indique que GPT-5 est désormais le **modèle par défaut dans ChatGPT** pour les utilisateurs connectés, avec une bascule plus puissante « Réflexion GPT-5 » pour des invites plus difficiles. Il existe également un **routeur en temps réel** qui décide quand réfléchir plus longtemps ou répondre rapidement – ​​utile en théorie, mais vous pouvez également forcer une réflexion approfondie en lui demandant littéralement de « réfléchir sérieusement à cela**.� ? ([OpenAI][7])
 
-- Identifier d’abord si le sujet touche au modèle, à la distribution, au workflow ou aux coûts opérationnels.
-- Relier les exemples à son propre contexte technique, notamment les permissions, la qualité, les coûts et la maintenance.
-- Ne pas s’arrêter au récit de lancement : vérifier si le changement modifie réellement le travail quotidien.
-- Pour les sujets SEO et contenu, contrôler les canonicals, les données structurées, l’index de recherche et les liens internes.
+Pour les développeurs, la variante API est optimisée pour le **codage agent** (utilisation d'outils, plans en plusieurs étapes) et a été testée avec des outils de codage populaires (Cursor, Windsurf, Copilot, etc.). C’est là que l’affirmation « moins d’appels d’outils, meilleurs résultats » devrait briller. ([OpenAI][5])
 
-## Structure de l’article original
+## Tarifs en anglais simple
 
-- Ce que the numbers actually say (and Pourquoi they matter)
-- How this shows up in your editor
-- Pricing in plain English
-- test de réalité: it’s not all roses 🌹
-- Five quick tips to actually get better code out of GPT-5
-- So�?is GPT-5 “good at programming�?
+* **API GPT-5 :** **1,25 $** par million de jetons d'entrée ; **10 $** par million de jetons de sortie ; entrée en cache **0,125$** par 1M.
+* **GPT-5 mini/nano** existe si vous avez besoin de moins cher et plus rapidement pour des travaux plus simples.
+(Et oui, GPT-5 est déployé sur ChatGPT (gratuit et payant) avec des limites échelonnées.) ([OpenAI][8])
 
-## Lecture pratique
+## Rappel des faits : tout n’est pas rose 🌹
 
-Utilise l’article comme une note de décision : classe le problème, repère les risques et opportunités, puis transforme-les en une petite expérimentation mesurable.
+* La démo de lancement comportait quelques… **crimes graphiques** (OpenAI les a reconnus et corrigés). Si vous vous sentiez éclairé par la longueur des barres, vous n'étiez pas seul. ([Business Insider][1])
+* Dans la nature, le **routage peut avoir des ratés** et GPT-5 bousillera encore les bases de temps en temps (orthographe, géographie, ouais). C’est puissant, pas parfait. ([卫报][9])
 
-Si vous évaluez un outil ou une stratégie similaire, ramenez la décision à trois questions : quel problème concret est résolu ? quels nouveaux risques apparaissent ? l’expérimentation suivante en vaut-elle la peine ?
+## Cinq conseils rapides pour obtenir un meilleur code avec GPT-5
 
-## À lire ensuite
+1. **Dites les mots magiques :** ajoutez « ?*réfléchissez bien à cela** ? (ou choisissez GPT-5 Thinking) pour les refactors multi-fichiers, les bogues noueux ou les échafaudages de terrain nouveau. ([OpenAI][7])
+2. **Introduisez-lui le bon contexte :** carte de dépôt, fichiers clés, tests ayant échoué et traces d'erreurs. Ces benchmarks récompensent une configuration réaliste pour une raison. ([swebench.com][3])
+3. **Demandez des différences + des auto-vérifications :** demandez le format `git diff`/patch et un plan d'exécution de test post-patch. Cela reflète la façon dont il gagne sur le banc Aider & SWE. ([OpenAI][2], [aider.chat][4])
+4. **Laissez-le utiliser des outils, mais auditez les résultats :** le modèle parvient mieux à enchaîner les étapes avec moins d'appels : examinez toujours le plan comme vous le feriez pour un développeur junior. ([OpenAI][5])
+5. **Faites attention à vos jetons :** les réponses longues « réfléchies » sont chères ; utilisez-les là où elles sont rentables (architecture, débogage), pas pour renommer des variables. ([OpenAI][5])
 
-- [All articles](/blog)
+## Alors, GPT-5 est-il « bon en programmation » ?
+
+Réponse courte : **Oui : le meilleur de sa catégorie en matière de tests de référence de code réels à l'heure actuelle**, avec des gains pratiques en termes de stabilité et d'utilisation des outils. Il ne remplacera pas les tests, la révision de code ou vos goûts en matière de conception d'API, mais il **fournira** plus de correctifs dès le premier essai et gaspillera moins de cycles à le faire. Et avec **ChatGPT approchant les 700 millions d'utilisateurs hebdomadaires**, attendez-vous à ce que vos coéquipiers (et concurrents) le pilotent bientôt. ([OpenAI][2])
+
+---
+
+### Sources et lectures complémentaires
+
+* **OpenAI : Présentation de GPT-5** (benchmarks, routage, disponibilité). ([OpenAI][2])
+* **OpenAI : GPT-5 pour les développeurs** (détails du banc SWE, efficacité par rapport à o3). ([OpenAI][5])
+* **Tarifs de l'API OpenAI** (tarifs officiels des jetons). ([OpenAI][8])
+* **SWE-bench** (ce que signifie « Vérifié ?). ([swebench.com][3])
+* **Aider Polyglot** (ce que mesure ce test d'édition de code). ([aider.chat][4])
+
+- [巴伦周刊](https://www.barrons.com/articles/openai-new-chatgpt-ai-model-gpt-5-a79eda90?utm_source=chatgpt.com)
+- [Business Insider] (https://www.businessinsider.com/openai-made-mistakes-with-charts-in-its-gpt-5-demo-2025-8?utm_source=chatgpt.com)
+- [卫报](https://www.theguardian.com/australia-news/2025/aug/08/openai-chatgpt-5-struggled-with-spelling-and-geography?utm_source=chatgpt.com)
+
+[1] : https://www.businessinsider.com/openai-made-mistakes-with-charts-in-its-gpt-5-demo-2025-8?utm_source=chatgpt.com « OpenAI corrige le « crime involontaire des graphiques » après que des personnes ont signalé que quelque chose n'allait pas dans le flux en direct GPT-5 »
+[2] : https://openai.com/index/introducing-gpt-5/ "Présentation de GPT-5 | OpenAI"
+[3] : https://www.swebench.com/SWE-bench/?utm_source=chatgpt.com « Présentation – Documentation du banc SWE » [4] : https://aider.chat/docs/leaderboards/?utm_source=chatgpt.com « Classements Aider LLM »
+[5] : https://openai.com/index/introducing-gpt-5-for-developers/?utm_source=chatgpt.com « Présentation de GPT� ? pour les développeurs | OpenAI"
+[6] : https://www.swebench.com/?utm_source=chatgpt.com "Classements SWE-bench" [7] : https://openai.com/index/introducing-gpt-5/?utm_source=chatgpt.com "Présentation de GPT-5 - OpenAI"
+[8] : https://openai.com/api/pricing/ "Tarifs | OpenAI"
+[9] : https://www.theguardian.com/australia-news/2025/aug/08/openai-chatgpt-5-struggled-with-spelling-and-geography?utm_source=chatgpt.com « OpenAI dévoile ChatGPT-5 et son intelligence de « niveau doctorat » à la mode, avec des difficultés avec l'orthographe et la géographie de base »

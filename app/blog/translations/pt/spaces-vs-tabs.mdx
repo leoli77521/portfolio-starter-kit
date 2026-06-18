@@ -1,48 +1,144 @@
 ---
-title: "Spaces vs Tabs 2025: guia for Modern desenvolvedores"
-summary: "Pragmatic guia to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-seoTitle: "Spaces vs Tabs 2025: guia for Modern desenvolvedores"
-seoDescription: "Pragmatic guia to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-faq: [{"question":"Para quem é esta tradução?","answer":"Para leitores que acompanham produtos de IA, ferramentas para desenvolvedores, SEO e estratégia técnica aplicada."},{"question":"Qual é a relação com o artigo original em inglês?","answer":"Ela preserva os argumentos centrais, a estrutura e os links internos, com redação adaptada para leitores brasileiros."}]
-howto: [{"name":"Converter a leitura em próximos passos","text":"Anote riscos, oportunidades e limites técnicos e transforme-os em ações práticas para a equipe."},{"name":"Conferir detalhes no original","text":"Para números, citações ou datas de lançamento, use o original em inglês e os links de fonte como referência final."}]
+title: "Spaces vs Tabs 2025: Guia para desenvolvedores modernos"
+summary: "Guia pragmático para escolher espaços ou guias em 2025: benefícios de acessibilidade, higiene diferencial, ferramentas do editor, táticas de migração e práticas recomendadas explicadas."
+seoTitle: "Spaces vs Tabs 2025: Guia para desenvolvedores modernos"
+seoDescription: "Guia pragmático para escolher espaços ou guias em 2025: benefícios de acessibilidade, higiene diferencial, ferramentas do editor, táticas de migração e práticas recomendadas explicadas."
+faq: [{"question":"Devemos escolher espaços ou tabulações?","answer":"Siga os padrões do ecossistema e use a automação para impor consistência."},{"question":"Por que as guias causam diferenças barulhentas?","answer":"A largura da guia depende das configurações do editor, criando um alinhamento inconsistente."}]
+howto: [{"name":"Escolha um formatador","text":"Adote Prettier, gofmt ou Rustfmt e mantenha os padrões sempre que possível."},{"name":"Aplicar no CI","text":"Adicione trabalhos lint que falham no desvio de espaço em branco."},{"name":"Exceções de documento","text":"Permitir guias apenas quando necessário (por exemplo, Makefiles, Go)."}]
 sourceUpdatedAt: "2025-09-15"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# Espaços versus guias: ergonomia do desenvolvedor e realidade do conjunto de ferramentas
 
-# Spaces vs Tabs 2025: guia for Modern desenvolvedores
+*Como tomar uma decisão de estilo que mantenha o código legível, inclusivo e fácil de automação*
 
-Esta versão em português do Brasil apresenta **Spaces vs Tabs 2025: guia for Modern desenvolvedores** para leitores que acompanham ferramentas de IA, fluxos de desenvolvimento, SEO e estratégia técnica. Pragmatic guia to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained.
+## O debate ainda está vivo
 
-A tradução acompanha o original em inglês atualizado em **2025-09-15**. Nomes de modelos, produtos, protocolos e benchmarks são preservados em inglês quando isso ajuda a manter precisão técnica.
+Toda chamada de onboarding ainda tem aquele momento: alguém pergunta se a equipe prefere espaços ou abas e a sala fica em silêncio. O debate já não é ideológico; as ferramentas que enviamos determinam o quão acessível é o nosso código, quão limpas são as nossas diferenças e quão previsíveis se tornam as nossas migrações automatizadas.
 
-## Visão geral
+O objetivo deste guia é simples: fornecer uma estrutura repetível que você possa colar em seu manual de engenharia para que a questão "espaços versus tabulações" pare de custar tempo de sprint.
 
-Spaces vs Tabs 2025: guia for Modern desenvolvedores não é apenas uma notícia; é uma leitura das consequências práticas para desenvolvedores, times de produto e equipes de conteúdo.
+## Critérios-chave que devem orientar a decisão
 
-## Pontos principais
+1. **Requisitos de acessibilidade** – Leitores de tela e fontes monoespaçadas se comportam de maneira diferente com paradas de tabulação.
+2. **Estabilidade de diferenças** – Os bots e revisores de CI preferem a formatação determinística para evitar PRs barulhentos.
+3. **Padrões do ecossistema de idiomas** - Os conjuntos de ferramentas Go, Python e Rust são fornecidos com opiniões incorporadas.
+4. **Pegada herdada** - Você pode ter dezenas de milhares de linhas já formatadas de uma maneira.
+5. **Suporte ao editor** – Os desenvolvedores ainda alternam entre VS Code, JetBrains e Vim no mesmo repositório.
 
-- Primeiro identifique se a mudança afeta capacidade do modelo, distribuição, workflow ou custo operacional.
-- Conecte os exemplos ao stack da sua equipe, com atenção a permissões, qualidade, custo e manutenção.
-- Não avalie só o anúncio: pergunte se a novidade muda o trabalho real do usuário.
-- Em temas de SEO e conteúdo, valide canonical, dados estruturados, índice de busca e links internos junto com o texto.
+## Qual é o padrão dos fornecedores do conjunto de ferramentas
 
-## Mapa do artigo original
+| Linguagem / Ecossistema | Formatador Oficial | Recuo padrão | Substituir opções |
+| --- | --- | --- | --- |
+| JavaScript / TypeScript | Mais bonito | 2 espaços | `tabWidth`, `useTabs` |
+| Pitão | Preto | 4 espaços | Nenhum (guias rejeitadas) |
+| Ir | gofmt | Guias | Substituições raras via `gofmt -tabs=false` |
+| Ferrugem | ferrugem | 4 espaços | Configuração instável necessária |
+| C# | formato dotnet | 4 espaços | `.editorconfig` |
 
-- The Debate Is Still Alive
-- Key Criteria That Should Drive the Decision
-- O que the Toolchain Vendors Default To
-- Accessibility and Screen Reader Considerations
-- Diff Hygiene: How Reviewers Experience Your Choice
-- The Hybrid Pattern That Works in 2025
-- Example `.editorconfig`
-- Migration Playbook for Legacy Repositories
+Se você se alinhar aos padrões do ecossistema, receberá atualizações gratuitas sempre que o formatador adicionar uma regra. Lutar contra os padrões significa manter configurações personalizadas para sempre.
 
-## Como aplicar
+## Considerações sobre acessibilidade e leitor de tela
 
-Use o artigo como uma nota de decisão: classifique o problema, marque riscos e oportunidades e transforme a leitura em um experimento pequeno que possa ser medido rapidamente.
+- As guias são renderizadas em larguras variáveis ​​dependendo das configurações do usuário. Isso é ótimo para usuários avançados, mas confuso para leitores de tela que esperam espaçamento uniforme.
+- Os espaços fornecem layout determinístico para telas Braille e síntese de fala porque cada espaço é anunciado de forma consistente.
+- Para equipes com habilidades mistas, a escolha mais segura são espaços para recuo e tabulações reservadas para alinhamento em tabelas de dados onde a flexibilidade é importante.
 
-Se você estiver avaliando uma ferramenta ou estratégia relacionada, reduza a decisão a três perguntas: qual problema concreto ela resolve, quais riscos novos ela cria e se vale entrar em um próximo experimento.
+## Higiene Diff: Como os revisores vivenciam sua escolha
 
-## Leia também
+Considere um arquivo TypeScript onde um desenvolvedor adiciona duas cláusulas de guarda. Com guias configuradas em 4 espaços, um revisor usando um console Git de 80 colunas pode ver todo o realinhamento do diff. Os espaços mantêm a diferença localizada.
 
-- [All articles](/blog)
+```typescript
+if (!user?.profile) {
+  return redirect('/login')
+}
+
+if (!user.isOnboarded) {
+  return redirect('/welcome')
+}
+```
+
+O trecho acima com espaços produz uma pequena diferença porque cada formatador concorda com o número exato de caracteres. As guias geralmente aumentam ou diminuem com base nas configurações do editor local, produzindo alterações "fantasmas" em linhas não relacionadas.
+
+## O padrão híbrido que funciona em 2025
+
+Um compromisso prático adotado por muitas equipes de produto:
+
+- **Recuo:** Use espaços (2 ou 4) aplicados pelo seu formatador.
+- **Alinhamento:** permite guias apenas em Makefiles, código Go ou tabelas de dados onde o alinhamento é semanticamente significativo.
+- **Automação:** Adicione `.editorconfig` além de scripts de formatador para que nenhum ser humano comprometa espaços em branco manualmente.
+
+### Exemplo `.editorconfig`
+
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false
+```
+
+## Manual de migração para repositórios legados
+
+1. **Escolha um formatador** que entenda sua linguagem (Prettier, rustfmt, clang-format, etc.).
+2. **Gere uma comparação de linha de base** na ramificação principal e marque-a como `style-migration-base` para que futuras sessões de culpa tenham um ponto de verificação.
+3. **Execute o formatador uma vez** em todo o repositório. Confirme com uma mensagem como `chore: normalize whitespace`.
+4. **Ative a aplicação de CI** usando um trabalho lint. Exemplo de ação do GitHub:
+
+```yaml
+name: formatting
+on: [pull_request]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run lint:format
+```
+
+5. **Documente a decisão** em seu manual de engenharia para que novas contratações não ressuscitem o debate.
+
+## Quando as guias não são negociáveis
+
+- **Projetos Go** - `gofmt` guias de saída; combater isso significa manter um formatador bifurcado.
+- **Makefiles** - A sintaxe requer uma tabulação literal para linhas de receita; espaços geram erros de tempo de execução.
+- **Bases de código de kernel ou firmware** onde o alinhamento com os documentos de hardware é importante.
+
+Use substituições `.editorconfig` para que a exceção permaneça no nível do tipo de arquivo, em vez de no conhecimento tribal.
+
+## Matriz de decisão para sua equipe
+
+| Restrição | Escolha espaços se... | Escolha guias se... |
+| --- | --- | --- |
+| Monorepo de idioma misto | Maioria favorece espaços | A maioria é Go / Make |
+| Colaboradores em leitores de tela | Acessibilidade é prioridade | A equipe pode garantir ferramentas fáceis de usar |
+| Formatação de CI | O padrão do formatador é espaços | Guias de saída do formatador |
+| Estabilidade do histórico do Git | Você quer linhas de culpa consistentes | As diferenças de largura das guias são aceitáveis |
+
+## Lista de verificação de implementação
+
+- [] Combine o tamanho do recuo (2 vs 4) por escrito.
+- [] Confirme `.editorconfig` e formate os scripts.
+- [] Adicione um protetor de CI que falha no desvio de espaço em branco.
+- [] Documente exceções (Go, Makefile) diretamente no repositório README.
+- [] Execute uma migração única e marque o commit.
+
+## TL; DR para seu manual
+
+Os espaços oferecem previsibilidade, acessibilidade e diferenças limpas. As guias continuam essenciais em alguns ecossistemas. A política mais sustentável é seguir os padrões do formatador, codificar a decisão em automação e nunca mais confiar nas configurações individuais do editor.
+
+Antes de sua próxima retrospectiva, copie este artigo em seu wiki interno e torne a decisão explícita. A guerra de chamas termina quando o trabalho de fiapos é executado.

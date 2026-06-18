@@ -1,51 +1,170 @@
 ---
-title: "LLM 基准测试 Scores 2026: Coding, Math & Reasoning"
-summary: "June 2026 LLM 基准测试 scores for coding, math, and reasoning, comparing GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro, DeepSeek V3.2, and open models."
-seoTitle: "LLM 基准测试 Scores 2026: Coding, Math & Reasoning"
-seoDescription: "June 2026 LLM 基准测试 scores for coding, math, and reasoning, comparing GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro, DeepSeek V3.2, and open models."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "2026 年法学硕士基准分数：编码、数学和推理"
+summary: "2026 年 6 月 LLM 编码、数学和推理基准分数，比较了 GPT-5.5、Claude Opus 4.8、Gemini 3.1 Pro、DeepSeek V3.2 和开放模型。"
+seoTitle: "2026 年 LLM 编码基准：分数比较"
+seoDescription: "比较 SWE-bench、Aider、LiveCodeBench、Terminal-Bench、数学推理、GPT-5.5、Claude、Gemini 和 DeepSeek 的 2026 年 LLM 编码基准。"
+faq: [{"question":"2026 年哪个 LLM 编码基准最重要？","answer":"对于真正的存储库修复，SWE-bench 是最好的起点。对于编辑质量，Aider 更有用。对于算法，请使用 LiveCodeBench。对于自主 shell 工作，请使用 Terminal-Bench。"},{"question":"2026 年 6 月哪个法学硕士最适合编码？","answer":"每个基准测试中都没有单一的赢家。 GPT-5.5 具有强大的代理和终端工作流分数，​​Claude Opus 4.8 是 Anthropic 最新的前沿编码和代理模型，Gemini 3.1 Pro 是 Google 最新的多模态推理模型，而 DeepSeek V3.2 是强大的价值竞争者。公共 SWE-bench 和 Aider 结果应与所使用的脚手架和工具界面一起阅读。"},{"question":"什么是 SWE-bench Verified？为什么它很重要？","answer":"SWE-bench Verified 是根据真实 GitHub 问题构建的 500 个任务基准测试。它很有用，因为它测试存储库理解、补丁生成和错误修复，而不是孤立的代码片段。"},{"question":"为什么编码基准分数不一致？","answer":"基准衡量不同的工作流程。 SWE-bench 强调真正的错误修复，Aider Polyglot 强调跨语言的编辑质量，LiveCodeBench 强调算法问题解决，而 Terminal-Bench 强调命令行代理执行。"},{"question":"LLM 基准页面应该多久更新一次？","answer":"对于模型比较页面，2026 年每月刷新一次是合理的最低限度。主要模型发布或排行榜更改应触发同周更新。"}]
+howto: [{"name":"从任务类型开始","text":"使用 SWE-bench 风格的分数进行错误修复，使用 Aider 风格的分数进行代码编辑，使用 LiveCodeBench 进行算法，使用 Terminal-Bench 进行 shell 重的代理工作流程。"},{"name":"检查脚手架","text":"在进行比较之前，请先了解分数是来自原始模型、编码代理、IDE 助手还是自定义基准测试支架。"},{"name":"将公共排行榜与供应商报告分开","text":"供应商发布基准可能很有用，但请将它们与第三方排行榜数字分开，除非评估设置相同。"},{"name":"购买或迁移前重新检查","text":"在对模型进行标准化之前，请验证最新分数、发布日期、定价、延迟、上下文窗口和工具支持。"}]
 sourceUpdatedAt: "2026-06-12"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
+---
+*最后检查时间：2026 年 6 月 8 日。此页面现在作为 2026 年基准快照进行维护，而不是 2026 年 2 月的一次性比较。*
+
+如果您搜索 **LLM 基准分数 2026 编码数学推理比较**，简短的版本是这样的：最佳模型更少依赖于一个排行榜，更多地依赖于您尝试自动化的任务。
+
+编码错误修复、算法竞赛、数学推理和终端代理工作流程不再由同一记分板来衡量。 GPT-5.5、Claude Opus 4.8、Gemini 3.1 Pro和DeepSeek V3.2在不同的地方看起来都很强。有用的举措是比较该工作的正确基准。
+
+## 2026 年 LLM 编码基准：快速地图
+
+**LLM 编码基准**一词涵盖了几种不同的测试。 SWE-bench 衡量真实的仓库错误修复情况，Aider 衡量多语言编辑质量，LiveCodeBench 衡量编程挑战性能，Terminal-Bench 衡量命令行代理执行情况。
+
+这就是为什么有用的 **LLM 编码基准 2026** 比较不应将所有内容都归为一个分数。首先将基准测试与您的工作流程进行匹配，然后在该上下文中比较 GPT、Claude、Gemini、DeepSeek 和开放模型结果。
+
+## 2026 年当前法学硕士基准分数
+
+此快照将公共排行榜与供应商报告的发布指标分开。这种区别很重要：原始模型、编码代理和 IDE 助手即使使用相同的底层模型，也可能会发布截然不同的分数。
+
+| 模型或排行榜条目 | 编码分数 | 数学/推理分数 | 最佳读数 | 来源 |
+|---|---:|---:|---|---|
+| **GPT-5.5** | SWE-Bench Pro：**58.6%**；终端工作台 2.0：**82.7%** | FrontierMath 第 1-3 级：**51.7%**；第 4 级：**35.4%** | OpenAI 发布数据中代理终端工作流程和硬科学推理的最强信号 | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) |
+| **克劳德作品 4.8** | 最新的人择前沿编码和代理模型 | 1M上下文窗口；混合推理模型 | 长期运行的编码代理和大背景专业工作的有力候选人；公开可比排行榜可能会滞后于发布 | [人类克劳德作品 4.8](https://www.anthropic.com/claude/opus) |
+| **双子座 3.1 专业版** | 最新Gemini 3系列型号卡 | 原生多模态推理模型 | 最佳评价为多模态推理和长上下文模型；当确切的任务分数很重要时，使用公共编码排行榜 | [谷歌 DeepMind Gemini 3.1 专业版](https://deepmind.google/models/model-cards/gemini-3-1-pro/) |
+| **DeepSeek V3.2 / V3.2-Speciale** | SWE 工作台解析：**70** | GPQA 钻石级：**74.24 / 82.4**； MMLU-Pro：**85** | 强大的以价值为导向的推理和编码竞争者，特别是当成本很重要时 | [DeepSeek V3.2模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) |
+| **Aider 多语言排行榜** | GPT-5高：**88.0%**； GPT-5培养基：**86.7%**；双子座 2.5 Pro：**83.1%**； DeepSeek V3.2 Reasoner：**74.2%** | 不是数学基准 | 最适合现实世界的代码编辑和差异质量 | [助手排行榜](https://aider.chat/docs/leaderboards/) |
+| **SWE-bench 公开快照** | 已验证的报告 **% 已解决** 超过 500 项任务 | 不是数学基准 | 最适合真正的 GitHub 问题修复；当前顶级公开条目包括 Claude-family、Gemini 3、GPT-5.2 Codex、Kimi K2.5 和 DeepSeek V3.2 变体 | [SWE-长凳](https://www.swebench.com/) |
+
+标题：**GPT-5.5 是最强大的终端和科学推理发射数据故事； Claude Opus 4.8 是最新的 Anthropic 代理编码模型； Gemini 3.1 Pro是谷歌最新的多模态推理模型； DeepSeek V3.2 是值得关注的价值模型。** 有关更广泛的存档路径，请参阅 [AI 模型比较主题中心](/topics/ai-model-comparisons)。
+
+## 编码基准分数
+
+编码基准分为三个有用的系列：
+
+| 基准 | 它测试什么 | 最佳使用 |
+|---|---|---|
+| **SWE 工作台验证** | 真正的 GitHub 问题、存储库理解、补丁、测试 | 错误修复和生产型编码代理 |
+| **助手多语言** | 多语言代码编辑和差异正确性 | IDE 和补丁工作流程 |
+| **LiveCodeBench** | 不断刷新竞技编程题 | 算法编码和抗污染问题解决 |
+| **终端长凳** | 命令行任务和代理执行 | 大量 Shell 自主工作流程 |
+
+### SWE-bench：真实存储库修复
+
+[SWE-bench](https://www.swebench.com/) 仍然是真正的错误修复能力最重要的公共基准，因为它评估系统是否可以解决实际的存储库问题。公共排行榜报告 **% Resolved**，而不是通用的“编码智商”分数。
+
+这种区别很重要。高 SWE 基准条目通常反映模型及其周围的支架：检索、文件编辑、工具调用、测试执行、重试策略和补丁验证。这就是为什么 Claude 系列模型、Gemini 3 条目、GPT-5.2 Codex 条目、Kimi K2.5 和 DeepSeek 变体都可以出现在同一个公共生态系统中，而无需产生简单的仅模型排名。
+
+如果您的工作流程接近“修复此存储库中的实际错误”，那么 SWE-bench 是正确的起点。如果您的工作流程是“在我的 IDE 中彻底编辑此文件”，Aider 通常更有用。
+
+### Aider 多语言：编辑质量
+
+[Aider 排行榜](https://aider.chat/docs/leaderboards/) 特别有用，因为它测试模型是否可以跨编程语言生成可用的编辑。截至本次刷新，值得注意的行是：
+
+| 模型 | 正确百分比 | Aider 运行的成本 | 它意味着什么 |
+|---|---:|---:|---|
+| GPT-5 高 | **88.0%** | $29.08 | 此排行榜中高精度编辑的最佳信号 |
+| GPT-5培养基 | **86.7%** | $17.69 | 以更低的成本实现几乎同样的强度 |
+| Gemini 2.5 Pro预览版05-06 | **83.1%** | 各不相同 | 来自 Google 上一代的强大编辑基线 |
+| DeepSeek V3.2 推理机 | **74.2%** | $1.30 | 强大的性价比 |
+
+这就是为什么我不会将“最佳编码模型”视为一项普遍主张。如果您正在进行大量补丁工作，GPT-5 风格的 Aider 结果很重要。如果您正在进行自主回购修复，SWE-bench 和您的代理脚手架更重要。
+
+对于实际操作的 OpenAI 工作流程策略，较旧但仍然有用的姊妹篇是 [GPT-5 for Coding: Benchmarks, Pricing & 5 Pro Tips](/blog/gpt-5-for-coding)。
+
+### LiveCodeBench：算法和抗污染性
+
+[LiveCodeBench](https://livecodebench.github.io/leaderboard.html) 很有价值，因为它不断增加编程问题，与静态基准相比，可以降低训练集污染风险。
+
+在当前的公共生成数据集中，最近的强势条目包括 o4-mini high、Gemini 2.5 Pro 06-05、o3 high、DeepSeek-R1-0528 和 Qwen3 变体。这并不意味着这些人是最好的生产编码助手。这意味着他们在竞争性编程风格的生成方面表现出色。
+
+当您的问题是“哪种模型解决算法编码问题？”时，请使用 LiveCodeBench。当您的问题是“哪个模型可以正确更改我的代码库？”时，请使用 SWE-bench 或 Aider。
+
+## 数学和科学推理分数
+
+数学和科学推理现在与一般编码分开进行比较。
+
+GPT-5.5 的发布数据报告 **FrontierMath Tier 1-3** 为 51.7%，**FrontierMath Tier 4** 为 35.4%，而 **SWE-Bench Pro** 为 58.6%。这些数字表明模型针对艰苦的、多步骤的科学和代理工作进行了优化，而不仅仅是简短的编码提示。
+
+DeepSeek V3.2 的模型卡报告 V3.2 在 GPQA Diamond** 上为 **74.24，在 V3.2-Speciale 上为 **82.4**，以及在 MMLU-Pro** 上 **85。这使得 DeepSeek 更难被视为仅限预算的选择。这是一个严肃的推理模型，但通常需要注意的是，部署、延迟、工具使用和数据策略仍然很重要。
+
+Gemini 3.1 Pro 应被解读为来自 Google 最新 Gemini 3 代的**原生多模态推理模型**。如果您的数学工作流程包括图表、视觉上下文、长文档或多模式输入，则纯文本排行榜比较将错过部分图片。这里的实用配套文章是[Gemini Deep Thinking API：构建数学人工智能应用程序](/blog/gemini-deep-thinking-api-math-reasoning)。
+
+## 代理和终端工作流程分数
+
+代理编码与自动完成不同。
+
+Terminal-Bench、SWE-Bench Pro 和真实的编码代理评估询问模型是否可以跟踪任务、使用工具、检查输出、从错误中恢复并完成有用的工作。 GPT-5.5 的 **82.7% Terminal-Bench 2.0** 数字是该类别的一个强烈信号。
+
+Claude Opus 4.8 在这里也高度相关，因为 Anthropic 将其定位于编码、代理、专业工作和 **1M 上下文窗口**。当模型必须在范围内保留大型存储库、长事件或多小时任务时，上下文长度很重要。
+
+这也是工具选择很重要的地方。光标、Claude Code、Codex 风格的终端代理和自定义脚手架都可以更改结果。相关的问题不仅仅是“哪种型号？”但是“哪个模型在哪个工作流程中？”对于这背后的生产力陷阱，请阅读 [AI 编码工具：尽管感觉更快，但速度却慢了 19%](/blog/ai-coding-tools-slower-productivity-paradox)。
+
+## 自 2026 年 2 月以来发生的变化
+
+本文的 2 月版本将 Claude Opus 4.5、GPT-5.2、Gemini 2.5 Pro 和 DeepSeek V3.1 作为中心比较集。对于 2026 年基准页面来说，这已经不够新鲜了。
+
+以下是 2026 年 6 月的更新：
+
+| 二月框架 | 2026 年 6 月刷新 |
+|---|---|
+| Claude Opus 4.5 作为高级编码领导者 | Claude Opus 4.8 是当前编码和代理的人择前沿模型 |
+| GPT-5.2作为主要的OpenAI推理模型 | GPT-5.5 现在锚定 OpenAI 终端和科学推理基准的比较 |
+| Gemini 2.5 Pro 作为上下文窗口的故事 | Gemini 3.1 Pro是当前Google模型卡的目标，而Claude Opus 4.8也宣传1M上下文 |
+| DeepSeek V3.1 作为价值竞争者 | DeepSeek V3.2 和 V3.2-Speciale 现在是相关推理/编码参考 |
+| 一项“最佳模型”声明 | SWE-bench、Aider、LiveCodeBench、Terminal-Bench 和数学推理之间的特定任务比较 |
+
+开放模型的故事也发生了变化。 Kimi K2.5、Qwen、GLM、MiniMax 和 DeepSeek 条目现在经常出现在公共排行榜中，因此它们应该被视为真实选项，而不是好奇心。 Moonshot 角度在 [Verbose AI Beats Fast AI: Moonshot K2 $1,172 Paradox](/blog/verbose-ai-beats-fast-ai-moonshot-k2) 中单独介绍。
+
+## 您应该使用哪种模型？
+
+| 使用案例 | 最佳起点 | 为什么 |
+|---|---|---|
+| 真正的回购错误修复 | Claude-family 或 Gemini/GPT 系统具有强大的 SWE-bench 支架结果 | SWE-bench 奖励存储库理解、测试和补丁验证 |
+| 大量补丁的 IDE 编辑 | Aider 风格工作流程中的 GPT-5 高/中 | Aider 强调清晰的差异和多语言编辑 |
+| 终端密集型自主工作 | GPT-5.5 或 Claude Opus 4.8 风格的代理设置 | 终端工作台和代理启动定位比自动完成更重要 |
+| 数学和科学推理 | GPT-5.5、DeepSeek V3.2-Speciale、Gemini 3.1 Pro | 结合使用 FrontierMath、GPQA、MMLU-Pro 和多模态推理上下文 |
+| 预算敏感的编码 | DeepSeek V3.2、Kimi K2.5、Qwen/GLM 系列选项 | 公众评分现在足以证明认真的试点是合理的 |
+| 大背景专业工作 | 克劳德 Opus 4.8 或 Gemini 3.1 Pro | 上下文窗口和多模式/文档处理可以主导原始编码分数 |
+
+对于大多数团队来说，最好的堆栈是混合的：
+
+1. 使用快速、便宜的模型进行日常编辑和解释。
+2. 对硬错误、架构和多步骤代理运行使用更强大的推理模型。
+3. 通过测试、审查和可观察性来验证每个模型的输出。
+4. 每月重新检查基准数据，因为公共排行榜的变化速度可能快于您的采购周期。
+
+## 基准警告
+
+基准分数很有用，但它们本身并不是买家指南。
+
+**脚手架会改变分数。** SWE-bench 条目通常包括模型和代理系统。检索、文件选择、工具执行、重试和测试工具可以显着改变结果。
+
+**Aider、SWE-bench 和 LiveCodeBench 衡量不同的工作。** 模型在代码编辑方面可能表现出色，但在实际的回购错误修复方面则较弱。另一个可以解决算法竞赛，但与混乱的生产代码作斗争。
+
+**供应商发布分数和公共排行榜不应盲目合并。** 将它们保留在单独的行中，除非任务、数据集和评估工具相同。
+
+**延迟和成本在许多总结中是不可见的。** 通过大量推理获得较高分数的模型可能是实时 IDE 使用的错误选择。
+
+**新鲜度很重要。** 2026 年基准文章应指定数据检查日期。如果您阅读此页面时已有一个多月了，请在做出认真的模型决策之前验证最新的排行榜。
+
+## 底线
+
+最好的 2026 年 LLM 基准比较不是“Claude vs GPT vs Gemini vs DeepSeek”作为单一战斗。这是一张地图：
+
+- **GPT-5.5** 在 OpenAI 2026 年 6 月发布的终端代理和科学推理任务数据中看起来最强。
+- **Claude Opus 4.8** 是用于编码、代理、专业工作和大上下文任务的最新人类前沿模型。
+- **Gemini 3.1 Pro** 是 Google 目前的多模态推理模型卡目标。
+- **DeepSeek V3.2** 是价值竞争者，现在值得认真的编码和推理试点。
+- **Aider、SWE-bench、LiveCodeBench 和 Terminal-Bench** 回答不同的问题，因此请使用与您的工作流程相匹配的基准测试。
+
+如果您只记住一条规则：**选择看起来像您的实际任务的基准，然后选择模型。**
+
 ---
 
-# LLM 基准测试 Scores 2026: Coding, Math & Reasoning
+## 来源
 
-这篇中文译文围绕 **LLM 基准测试 Scores 2026: Coding, Math & Reasoning** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。June 2026 LLM 基准测试 scores for coding, math, and reasoning, comparing GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro, DeepSeek V3.2, and open models.
-
-本文根据英文原文同步整理，源文更新时间为 **2026-06-12**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
-
-## 核心概览
-
-LLM 基准测试 Scores 2026: Coding, Math & Reasoning 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
-
-## 关键要点
-
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
-
-## 原文结构地图
-
-- LLM Coding 基准测试s 2026: Quick Map
-- Current LLM 基准测试 Scores 2026
-- Coding 基准测试 Scores
-- SWE-bench: Real Repository Repair
-- Aider Polyglot: Editing Quality
-- LiveCodeBench: Algorithms and Contamination Resistance
-- Math and Scientific Reasoning Scores
-- Agentic and Terminal 工作流 Scores
-
-## 实践建议
-
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
-
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
-
-## 延伸阅读
-
-- [GPT-5 for Coding: 基准测试s, Pricing & 5 Pro Tips](/blog/gpt-5-for-coding)
-- [Gemini Deep Thinking API: Build Math AI Apps](/blog/gemini-deep-thinking-api-math-reasoning)
-- [AI 编码工具: 19% Slower Despite Feeling Faster](/blog/ai-coding-tools-slower-productivity-paradox)
-- [Verbose AI Beats Fast AI: Moonshot K2 $1,172 Paradox](/blog/verbose-ai-beats-fast-ai-moonshot-k2)
+- [OpenAI：GPT-5.5 简介](https://openai.com/index/introducing-gpt-5-5/)
+- [人类：克劳德·奥普斯 4.8](https://www.anthropic.com/claude/opus)
+- [Google DeepMind: Gemini 3.1 Pro 模型卡](https://deepmind.google/models/model-cards/gemini-3-1-pro/)
+- [DeepSeek V3.2模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V3.2)
+- [SWE-替补排行榜](https://www.swebench.com/)
+- [Aider LLM排行榜](https://aider.chat/docs/leaderboards/)
+- [LiveCodeBench排行榜](https://livecodebench.github.io/leaderboard.html)

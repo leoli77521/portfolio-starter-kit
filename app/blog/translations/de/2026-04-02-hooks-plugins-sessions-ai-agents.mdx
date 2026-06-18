@@ -1,46 +1,235 @@
 ---
-title: "Hooks, Plugins und Sessions in AI Coding Agents"
-summary: "Hooks, Plugin-Registries und persistente Sessions machen aus einem AI Coding Assistant eine erweiterbare Plattform statt einer einmaligen Demo."
-seoTitle: "Hooks, Plugins und Sessions für AI Coding Agents"
-seoDescription: "Wie Hooks, Plugins und Session Persistence Coding Agents erweiterbar, kontrollierbar und fortsetzbar machen."
-faq: [{"question":"Warum sind Hooks wichtig?","answer":"Hooks können vor und nach Tool-Ausführung eingreifen und Platz für Policies, Logging, Mutation und Workflow-Kontrolle schaffen."},{"question":"Welche Rolle haben Plugins?","answer":"Plugins verpacken Tools, Commands und Lifecycle-Verhalten, ohne alles in die Core Runtime zu schreiben."},{"question":"Warum sind Sessions so wichtig?","answer":"Echte Coding-Arbeit dauert viele Runden. Ohne Persistenz, Resume und Transcript-Kontinuität werden lange Agent-Workflows fragil."}]
-howto: [{"name":"Hooks um riskante Aktionen legen","text":"Shell, Datei-Schreibzugriffe und Remote-Aktionen sollten vor und nach Ausführung prüfbar sein."},{"name":"Erweiterungen sauber paketieren","text":"Plugin-Manifeste, Commands und explizite Permissions verhindern verstreute Speziallogik."},{"name":"Auf Wiederaufnahme auslegen","text":"Transcript, Session IDs und Zustandswechsel müssen persistiert werden."}]
+title: "Hooks, Plugins und Sitzungen in AI Coding Agents"
+summary: "Hooks, Plugin-Register und dauerhafte Sitzungen machen einen KI-Codierungsassistenten zu einer erweiterbaren Plattform und nicht zu einer One-Shot-Demo."
+seoTitle: "Hooks, Plugins und Sitzungen in AI Coding Agents"
+seoDescription: "Hooks, Plugin-Register und dauerhafte Sitzungen machen einen KI-Codierungsassistenten zu einer erweiterbaren Plattform und nicht zu einer One-Shot-Demo."
+faq: [{"question":"Warum sind Hooks in Codierungsagenten wichtig?","answer":"Mithilfe von Hooks kann das System die Ausführung von Tools vor und nach Aktionen abfangen, wodurch Raum für Richtlinienprüfungen, Protokollierung, Mutation und Workflow-Kontrolle geschaffen wird."},{"question":"Welche Rolle spielen Plugins in einem Agentenprodukt?","answer":"Plugins bündeln neue Tools, Befehle und Lebenszyklusverhalten, sodass der Agent erweitert werden kann, ohne jede Funktion fest in die Kernlaufzeit zu codieren."},{"question":"Warum sind Sitzungen so wichtig?","answer":"Denn echte Codierungsarbeit erstreckt sich über viele Runden. Ohne Sitzungspersistenz, Wiederaufnahmeverhalten und Transkriptkontinuität werden langwierige Agenten-Workflows anfällig und teuer."}]
+howto: [{"name":"Fügen Sie Hooks zu risikoreichen Aktionen hinzu","text":"Führen Sie Prüfungen vor und nach der Shell-Ausführung, Dateischreibvorgängen oder Remote-Aktionen durch, damit die Laufzeit Richtlinien durchsetzen und nützliche Protokolle erfassen kann."},{"name":"Erweiterungslogik sauber verpacken","text":"Verwenden Sie Plugin-Manifeste, Befehlsregistrierung und explizite Berechtigungen, anstatt benutzerdefinierte Integrationen über die Kernlaufzeit zu verteilen."},{"name":"Design für Wiederaufnahmefähigkeit","text":"Behalten Sie Transkripte, Sitzungs-IDs und Statusübergänge bei, damit Benutzer ihre Arbeit unterbrechen, überprüfen und fortsetzen können, ohne den Kontext zu verlieren."}]
 sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-15"
+translatedAt: "2026-06-18"
 ---
+# Hooks, Plugins und Sitzungen in AI Coding Agents
 
-# Hooks, Plugins und Sessions in AI Coding Agents
+Der schnellste Weg, einen Toy Coding Agent zu erkennen, ist einfach:
 
-Ein Spielzeug-Agent beantwortet Fragen, ändert vielleicht eine Datei und vergisst danach fast alles. Ein plattformfähiger Coding Agent kann erweitert, abgefangen, fortgesetzt und überwacht werden.
+Es kann Fragen beantworten, vielleicht eine Datei bearbeiten und dann fast alles vergessen, sobald die Interaktion beendet ist.
 
-Genau hier kommen Hooks, Plugins und Sessions ins Spiel. Sie sind keine Show-Funktionen, sondern Infrastruktur.
+Der schnellste Weg, einen plattformtauglichen Codierungsagenten zu erkennen, ist ein anderer:
+
+es kann verlängert, abgefangen, wieder aufgenommen und überwacht werden.
+
+Hier kommen Hooks, Plugins und Sitzungen ins Spiel.
+
+Es sind keine auffälligen Features. Sie sind die Infrastruktur, die einen KI-Assistenten zu einem echten Produkt werden lässt.
 
 ## Serienkarte
 
-1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
-2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
-3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
-4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
-5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+Dieser Artikel ist Teil von **Inside the AI ​​Coding Agent Stack**:
 
-## Hooks verbinden Policy und Aktion
+1. [Was Claw Code über die Architektur von AI Coding Agent verrät](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum KI-Coding-Agents Rust und Python zusammen verwenden](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Codierungsagent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sitzungen in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Umschreibungen und Paritätsprüfungen für KI-Agententeams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
 
-Hooks sitzen zwischen Absicht und Ausführung. Sie können vor einem Tool, nach Erfolg oder nach Fehler laufen. Dadurch erhält die Runtime einen Ort, um Eingaben zu prüfen, riskante Aktionen abzulehnen, zusätzliche Freigaben zu verlangen, Logs zu schreiben oder Folgeaktionen auszulösen.
+## Bei Hooks trifft Politik auf Aktion
 
-Das ist wichtig, weil Coding Agents nicht nur Text erzeugen. Sie führen Aktionen mit Nebenwirkungen aus. Sobald Shell, Dateisystem, Remote Services oder Subagents beteiligt sind, wird Ausführungsreihenfolge zu Produktlogik.
+Haken sind wertvoll, weil sie auf der Nahtstelle zwischen Absicht und Ausführung liegen.
 
-## Plugins machen Erweiterung beherrschbar
+In der Praxis bedeutet das, dass sie Folgendes ausführen können:
 
-Ein Agent überschreitet eine wichtige Schwelle, wenn er nicht nur eine feste Menge eingebauter Fähigkeiten hat, sondern Erweiterungen mit Manifesten, Commands, Tools, Permissions und Lifecycle-Verhalten unterstützt.
+- bevor ein Tool ausgeführt wird
+- nachdem ein Tool erfolgreich war
+- nachdem ein Werkzeug ausgefallen ist
 
-Plugins erlauben Teams, interne Systeme anzubinden, ohne die Core Runtime zu forken. Gleichzeitig brauchen Plugins klare Berechtigungen, Namespaces und Audit Trails. Sonst wird Erweiterbarkeit schnell zur Unordnung.
+Das ist ein trügerisch starkes Muster.
 
-## Sessions tragen lange Arbeit
+Es gibt der Laufzeit einen Ort für Folgendes:
 
-Programmieren ist selten eine einzelne Frage. Es besteht aus Lesen, Planen, Ändern, Testen, Fehlern, Reparieren und Fortsetzen. Ohne Session-Schicht wacht der Agent jedes Mal neu auf.
+- Eingaben prüfen oder ändern
+- riskante Handlungen ablehnen
+- zusätzliche Überprüfung erzwingen
+- Protokolle ausgeben
+- politische Entscheidungen beifügen
+- Folgeverhalten auslösen
 
-Eine ernsthafte Session-Schicht speichert Transcript, Tool-Ausgaben, Session IDs, Berechtigungsentscheidungen und genug Zustand für Resume. Das ist nicht nur Chat-Historie, sondern Arbeitskontinuität.
+Dies ist wichtig, da Codierungsagenten nicht nur Text generieren. Sie führen Aktionen mit Nebenwirkungen aus.
 
-## Fazit
+Sobald ein Agent Shell-Befehle ausführen, Dateien ändern, Remote-Dienste aufrufen oder Arbeiten an Subagenten weiterleiten kann, wird die Ausführungsreihenfolge zur Produktlogik.
 
-Hooks erlauben Kontrolle, Plugins erlauben Wachstum, Sessions erlauben Zeit. Zusammen verwandeln sie einen AI Coding Assistant in eine Plattform, die in reale Engineering-Prozesse eingebettet werden kann.
+Hooks bieten einen sauberen Ort, um diese Logik auszudrücken.
+
+## Warum Haken wichtiger sind als sie aussehen
+
+Von außen betrachtet können Hooks wie eine Nischenfunktion für Power-User klingen.
+
+Von innen heraus sind sie ein Zeichen dafür, dass das Team eine tiefere Wahrheit versteht:
+
+**Agentensysteme benötigen Abfangpunkte.**
+
+Ohne sie wird jede politische Entscheidung in eine von zwei schlechten Situationen gedrängt:
+
+- die Aufforderung
+- die Tool-Implementierung selbst
+
+Die Aufforderung ist zu leise.
+
+Die Tool-Implementierung ist zu starr.
+
+Hooks bilden eine mittlere Ebene, in der die Laufzeit anpassbar bleiben kann, ohne chaotisch zu werden.
+
+Dies ist besonders nützlich für Teams, die Genehmigungsregeln, Telemetrie oder Richtlinienprüfungen schneller weiterentwickeln müssen, als sie die Kerntoolebene neu schreiben möchten.
+
+## Plugins verwandeln Funktionen in ein Ökosystem
+
+Das zweite große Plattformsignal sind Plugins.
+
+Ein Codierungsagent überschreitet einen wichtigen Schwellenwert, wenn er aufhört, nur einen festen integrierten Funktionssatz zu liefern, und beginnt, gepackte Erweiterungen mit ihren eigenen zu unterstützen:
+
+- Metadaten
+- Berechtigungen
+- Befehle
+- Werkzeuge
+- Lebenszyklus-Hooks
+
+Das bedeutet nicht nur „mehr Integrationen“.
+
+Es ist eine andere Produktphilosophie.
+
+Ein Plugin-System besagt, dass das Team erwartet, dass die Umgebung des Agenten weiter wächst. Außerdem heißt es, dass das Wachstum auf strukturierte Weise und nicht durch zufällige Patches für die Kernlaufzeit erfolgen soll.
+
+Das ist genau die Art von Übergang, die ausgereifte Entwicklerplattformen vollziehen.
+
+## Was ein gutes Plugin-System normalerweise beinhaltet
+
+In der Praxis benötigen plattformtaugliche Plugin-Systeme in der Regel Folgendes:
+
+1. ein Manifestformat
+2. Installations- und Erkennungsabläufe
+3. Status aktivieren oder deaktivieren
+4. Erlaubniserklärungen
+5. Lebenszyklusereignisse
+6. Werkzeug- und Befehlsregistrierung
+
+Je mehr davon Sie sehen, desto sicherer können Sie sein, dass das Produkt über einmalige Demos hinausgeht.
+
+Hier werden auch viele KI-Produkte Schwierigkeiten haben. Es ist einfach, Integrationen anzuschrauben. Es ist viel schwieriger, ein Erweiterungsmodell zu entwerfen, das verständlich bleibt, wenn Dutzende oder Hunderte von Erweiterungen beteiligt sind.
+
+Das ist einer der Gründe, warum die Plugin-Architektur strategisch wichtig ist. Es ist nicht nur eine Komfortfunktion. Hier wird die Produktkomplexität entweder diszipliniert oder verstärkt.
+
+## Sitzungen sind das Speichermodell, auf das es wirklich ankommt
+
+Dann gibt es noch die am wenigsten glamouröse, aber praktischste Ebene von allen: Sitzungen.
+
+Echte Codierungsarbeit passt selten in einen kurzen Austausch.
+
+Sie ermitteln. Du versuchst etwas. Sie ändern eine Datei. Du gerätst in eine Sackgasse. Sie machen später weiter. Sie vergleichen, was sich geändert hat. Du machst weiter.
+
+Das bedeutet, dass ein Coding-Agent mehr als nur den Gesprächsverlauf benötigt. Es braucht ein Sitzungsmodell.
+
+Ein gutes Sitzungsmodell ermöglicht Folgendes:
+
+- frühere Arbeiten wieder aufnehmen
+- Transkripte exportieren oder prüfen
+- kompakten langen Kontext sicher
+- Verfolgen Sie die Nutzung im Laufe der Zeit
+- Werkzeugergebnisse in sinnvoller Reihenfolge aufbewahren
+
+Sobald Sie dies klar erkennen, ergeben viele Produktstrategien einen Sinn.
+
+Die stärksten Codierungsagenten werden nicht nur bei der One-Shot-Generierung besser. Sie werden in Sachen Kontinuität immer besser.
+
+## Warum diese drei Schichten sich gegenseitig verstärken
+
+Hooks, Plugins und Sitzungen werden am besten zusammen verstanden.
+
+Mit Hooks kann das System Verhalten abfangen.
+
+Mit Plugins kann das System das Verhalten erweitern.
+
+Sitzungen ermöglichen es dem System, das Verhalten über einen längeren Zeitraum hinweg beizubehalten.
+
+Diese Kombination macht einen Codierungsagenten plattformähnlich und nicht wie eine Eingabeaufforderung.
+
+Es erklärt auch, warum sich so viele KI-Assistenten immer noch unreif fühlen, selbst wenn das zugrunde liegende Modell stark ist. Sie generieren zwar großartige Prosa oder anständige Patches, haben aber ein schwaches Lebenszyklusdesign.
+
+Und das Lebenszyklusdesign ist es, was eine gute Demo von einem Tool unterscheidet, dem Menschen täglich vertrauen können.
+
+## Der versteckte Produktvorteil: Team Operations
+
+Es gibt noch einen weiteren Grund, warum diese Schichten wichtig sind.
+
+Sie erleichtern die Arbeit von Agenten innerhalb von Teams.
+
+Hooks unterstützen Richtlinien und Beobachtbarkeit.
+
+Plugins unterstützen die kontrollierte Anpassung.
+
+Sitzungen unterstützen die gemeinsame Kontinuität und Überprüfung.
+
+Das kommt der Arbeitsweise echter Ingenieurorganisationen viel näher.
+
+Teams brauchen nicht nur einen smarten Assistenten. Sie brauchen:
+
+- inspizierbares Verhalten
+- konfigurierbare Regeln
+- wiederverwendbare Erweiterungen
+- wiederaufnehmbare Arbeit
+- genug Struktur, um Chaos zu verhindern
+
+Aus diesem Grund denke ich, dass die nächste Stufe der KI-Tools zunehmend wie Entwicklerplattform-Engineering aussehen wird und nicht nur in Modell-UX.
+
+## Wo Bauherren vorsichtig sein sollten
+
+Natürlich können alle drei Schichten schiefgehen.
+
+Haken können zu einem unsichtbaren Labyrinth werden.
+
+Plugins können zu einem Abhängigkeitschaos führen.
+
+Sitzungen können aufgebläht, teuer oder semantisch unübersichtlich werden.
+
+Die eigentliche Herausforderung besteht also nicht darin, diese Funktionen hinzuzufügen. Es fügt sie hinzu, ohne die Lesbarkeit zu beeinträchtigen.
+
+Das bedeutet:
+
+- Halten Sie die Hook-Reihenfolge verständlich
+- Plugin-Berechtigungen explizit beibehalten
+- Der Sitzungsstatus bleibt überprüfbar
+- Halten Sie das Lebenslaufverhalten vorhersehbar
+
+Die Teams, die diese Einschränkungen lösen, werden einen viel stärkeren Burggraben haben als Teams, die nur eine weitere marginale Modellverbesserung anstreben.
+
+## Letzte Aufnahme
+
+Wenn Tools und Berechtigungen dafür sorgen, dass sich ein Programmieragent echt anfühlt, sorgen Hooks, Plugins und Sitzungen dafür, dass er langlebig wirkt.
+
+Sie ermöglichen dem Produkt Folgendes:
+
+- anpassen
+- verlängern
+- bestehen
+- Bleiben Sie kontrollierbar, während es skaliert
+
+Deshalb sind sie so wichtig.
+
+Nicht, weil die Benutzer damit prahlen würden.
+
+Sondern weil die Benutzer den Unterschied jedes Mal spüren werden, wenn sich der Agent wie ein System und nicht wie ein Stunt verhält.
+
+## Entdecken Sie die komplette Serie
+
+Den vollständigen Lesepfad finden Sie im [Themen-Hub „AI Coding Agent Stack“](/topics/ai-coding-agent-stack). Es vereint diese Reihe mit der dazugehörigen Berichterstattung über MCP, Entwicklertools und produktionsorientiertes Agentendesign.
+
+## Lesen Sie weiter
+
+- [Clean-Room-Umschreibungen und Paritätsprüfungen für KI-Agententeams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+- [Tools, Berechtigungen und MCP: Wie ein Codierungsagent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+- [Produktionsleitfaden für KI-Agenten](/blog/ai-agents-production-guide)
+
+## Quellen
+
+- [Offizielle Dokumente zum Claw Code](https://claw-code.codes/)
+- [ultraworkers/claw-code auf GitHub](https://github.com/ultraworkers/claw-code)
+- [ultraworkers/claw-code-parity auf GitHub](https://github.com/ultraworkers/claw-code-parity)
+- [Was Claw Code über die Architektur von AI Coding Agent verrät](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)

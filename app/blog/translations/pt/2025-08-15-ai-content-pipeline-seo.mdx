@@ -1,48 +1,318 @@
 ---
-title: "AI Content Pipeline 2025: SEO Automation"
-summary: "Founder's playbook to build produção-grade AI content engine with real SEO results. Complete guia from ingestion to monitoring with paste-ready code."
-seoTitle: "AI Content Pipeline 2025: SEO Automation"
-seoDescription: "Founder's playbook to build produção-grade AI content engine with real SEO results. Complete guia from ingestion to monitoring with paste-ready code."
-faq: [{"question":"Para quem é esta tradução?","answer":"Para leitores que acompanham produtos de IA, ferramentas para desenvolvedores, SEO e estratégia técnica aplicada."},{"question":"Qual é a relação com o artigo original em inglês?","answer":"Ela preserva os argumentos centrais, a estrutura e os links internos, com redação adaptada para leitores brasileiros."}]
-howto: [{"name":"Converter a leitura em próximos passos","text":"Anote riscos, oportunidades e limites técnicos e transforme-os em ações práticas para a equipe."},{"name":"Conferir detalhes no original","text":"Para números, citações ou datas de lançamento, use o original em inglês e os links de fonte como referência final."}]
+title: "Pipeline de conteúdo de IA 2025: automação de SEO"
+summary: "Manual do fundador para construir um mecanismo de conteúdo de IA de nível de produção com resultados reais de SEO. Guia completo desde a ingestão até o monitoramento com código pronto para colar."
+seoTitle: "Pipeline de conteúdo de IA 2025: automação de SEO"
+seoDescription: "Manual do fundador para construir um mecanismo de conteúdo de IA de nível de produção com resultados reais de SEO. Guia completo desde a ingestão até o monitoramento com código pronto para colar."
+faq: [{"question":"O que é um pipeline de conteúdo de IA?","answer":"É um fluxo de trabalho automatizado que transforma itens brutos em páginas prontas para SEO com metadados e monitoramento consistentes."},{"question":"Por que adicionar dados estruturados ao pipeline?","answer":"Os dados estruturados ajudam os sistemas de pesquisa e IA a analisar, validar e citar suas páginas."}]
+howto: [{"name":"Ingerir e normalizar","text":"Colete itens de origem, desduplica e padronize campos antes da geração."},{"name":"Gere ativos de SEO","text":"Crie títulos, resumos, tags e imagens com verificações de controle de qualidade."},{"name":"Publicar e monitorar","text":"Envie páginas com JSON-LD, mapas de sites e verificações de integridade."}]
 sourceUpdatedAt: "2025-08-15"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
+---
+# Pipeline de conteúdo de IA que escala e classifica
+*Publicado em **15 de agosto de 2025*** *Um manual do empreendedor para enviar um mecanismo de conteúdo de IA de nível de produção com ganhos reais de SEO - além dos genéricos “escreva uma postagem no blog”?
+
 ---
 
-# AI Content Pipeline 2025: SEO Automation
+## DR
 
-Esta versão em português do Brasil apresenta **AI Content Pipeline 2025: SEO Automation** para leitores que acompanham ferramentas de IA, fluxos de desenvolvimento, SEO e estratégia técnica. Founder's playbook to build produção-grade AI content engine with real SEO results. Complete guia from ingestion to monitoring with paste-ready code.
+Se o seu site adiciona novos itens regularmente (jogos, listagens, documentos, produtos), não dimensione os redatores - dimensione um **pipeline de operações de conteúdo**: ingerir – normalizar – gerar (títulos, resumos, tags, traduções, imagens) – publicar com **dados estruturados** – monitorar a saúde – medir o impacto de SEO. Abaixo está um modelo testado em batalha com esquemas, prompts, trechos de código, portas de controle de qualidade e uma implementação 30/60/90.
 
-A tradução acompanha o original em inglês atualizado em **2025-08-15**. Nomes de modelos, produtos, protocolos e benchmarks são preservados em inglês quando isso ajuda a manter precisão técnica.
+---
 
-## Visão geral
+## 1) O que estamos realmente construindo
 
-AI Content Pipeline 2025: SEO Automation não é apenas uma notícia; é uma leitura das consequências práticas para desenvolvedores, times de produto e equipes de conteúdo.
+Um sistema mínimo e resiliente que transforma itens brutos (por exemplo, novos jogos HTML5) em **páginas indexáveis, vinculáveis ​​e de alta qualidade** com:
 
-## Pontos principais
+- títulos e descrições nítidos (orientados para CTR),
+- conteúdo multilíngue com terminologia consistente,
+- imagens de capa/cartões OG da marca,
+- corrigir JSON-LD, canônico/hreflang e mapas de sites,
+- links internos que melhoram a descoberta,
+- **verificações de integridade** contínuas (por exemplo, iframes quebrados, armadilhas de redirecionamento),
+- análises para comprovar o impacto.
 
-- Primeiro identifique se a mudança afeta capacidade do modelo, distribuição, workflow ou custo operacional.
-- Conecte os exemplos ao stack da sua equipe, com atenção a permissões, qualidade, custo e manutenção.
-- Não avalie só o anúncio: pergunte se a novidade muda o trabalho real do usuário.
-- Em temas de SEO e conteúdo, valide canonical, dados estruturados, índice de busca e links internos junto com o texto.
+Pense nisso como **CI/CD para conteúdo**.
 
-## Mapa do artigo original
+---
 
-- TL;DR
-- 1) O que we’re actually building
-- 2) Architecture at a glance
-- 3) Data model (works for games, products, docs)
-- 4) Ingestion & normalization
-- 5) LLM tasks with guardrails
-- 5.1 Title (CTR-oriented)
-- 5.2 Meta description (SERP snippet)
+## 2) Visão geral da arquitetura
 
-## Como aplicar
+```
+Source feeds �?Ingestion �?Normalization
+             �?LLM Tasks (summ, title, tags, translate, image)
+             �?SEO Packager (JSON-LD, canonical, links, OG)
+             �?Publish (Next.js/Vercel)
+             �?Monitors (health, quality, costs)
+             �?Analytics (GSC, logs, CTR, index coverage)
+```
 
-Use o artigo como uma nota de decisão: classifique o problema, marque riscos e oportunidades e transforme a leitura em um experimento pequeno que possa ser medido rapidamente.
+**Padrões técnicos**: Postgres (+pgvector), Next.js 14, Serverless workers, Playwright (capturas de tela/OG), vLLM ou gateway de API para modelos.
 
-Se você estiver avaliando uma ferramenta ou estratégia relacionada, reduza a decisão a três perguntas: qual problema concreto ela resolve, quais riscos novos ela cria e se vale entrar em um próximo experimento.
+---
 
-## Leia também
+## 3) Modelo de dados (funciona para jogos, produtos, documentos)
 
-- [All articles](/blog)
+```sql
+create table items (
+  id bigserial primary key,
+  slug text unique not null,
+  title_en text, title_zh text,
+  desc_en text, desc_zh text,
+  tags text[],
+  source_url text,
+  media_cover_url text,
+  iframe_url text,                -- optional: for embeddables
+  playable boolean default true,
+  broken_reason text,
+  last_checked timestamptz default now(),
+  embedding vector(768),
+  quality_score numeric default 0 -- QA gate
+);
+
+create index on items using ivfflat (embedding vector_cosine_ops);
+```
+
+---
+
+## 4) Ingestão e normalização
+
+- Aceite CSV/feeds/webhooks; **desduplicação** por `(normalized_title, source_domain)` e canonização de URL.
+- Remova os parâmetros de rastreamento, reduza os espaços em branco, execute um passe de palavrões/segurança da marca.
+- Crie um **vocabulário controlado** para tags (sem taxonomias explosivas).
+
+---
+
+## 5) Tarefas LLM com guarda-corpos
+
+### 5.1 Título (orientado para CTR)
+
+**Restrições**
+
+- 50.0 caracteres (ponto ideal SERP para desktop)
+- Incluir 1�? intenções primárias (sem recheio)
+- Verbos de ação; evite colchetes, a menos que seja significativo
+
+**Aviso (sistema)**
+
+> Você é um editor de SEO. Escreva um título único e com som natural (50.0 caracteres) que maximize a CTR e ao mesmo tempo permaneça fiel. Evite clickbait e redundância.
+
+**Aviso (usuário)**
+
+```
+Item: {short description}
+Audience: casual web gamers
+Primary intent: {e.g., puzzle, skill, speedrun}
+Brand tone: concise, friendly
+Return: just the title string.
+```
+
+### 5.2 Meta descrição (snippet SERP)
+
+- 140×60 caracteres; inclua proposta de valor + call to action.
+- Adicione variantes multilíngues somente se você enviar hreflang.
+
+### 5.3 Resumo (na página)
+
+- 80×20 palavras; explique a jogabilidade/recursos claramente.
+- Insira 3�? **controladas** tags da sua taxonomia.
+
+### 5.4 Tradução com bloqueio de terminologia
+
+- Mantenha um glossário (JSON) de traduções fixas (por exemplo, “parkour”→“跑酷�?.
+- Rejeite traduções que alterem os termos da marca.
+
+### 5.5 Incorporações e itens relacionados
+
+- Calcular embeddings para título+resumo; loja em `embedding`.
+- Bloco relacionado = `topK(embedding) �?tag_intersection`.
+
+---
+
+## 6) Visuais: capas e imagens OG
+
+1) Se você tiver arte oficial: **corte automático** em vários tamanhos (cartão 1:1, 1,91:1 OG). 2) Caso contrário, gere via:
+   - **Captura de tela do dramaturgo** de um estado estabilizado (atraso de 4 segundos, ocultação da interface do usuário) ou
+   - Texto para imagem (somente se o licenciamento permitir).
+
+**Exemplo de dramaturgo (Nó):**
+
+```ts
+import { chromium } from "playwright";
+
+export async function screenshotOG(url: string, out: string) {
+  const browser = await chromium.launch();
+  const page = await browser.newPage({ viewport: { width: 1200, height: 630 }});
+  await page.goto(url, { waitUntil: "networkidle" });
+  await page.waitForTimeout(4000); // let animations settle
+  await page.screenshot({ path: out });
+  await browser.close();
+}
+```
+
+---
+
+## 7) Empacotador de SEO: o que o Google realmente precisa
+
+### 7.1 Canônico e paginação
+
+- Autocanônico para páginas folha.
+- Listas paginadas: `rel=prev/next` obsoletas – dependem de URLs limpos + links internos fortes + canônicos claros.
+
+### 7.2 Hreflang (somente se o conteúdo for realmente localizado)
+
+- Sempre emparelhe `x-default`.
+- Mantenha os pares idioma-região estáveis ​​(por exemplo, `en`, `en-GB`, `zh-CN`).
+
+### 7.3 JSON-LD (escolha o tipo certo)
+
+Para jogos da web, prefira **VideoGame** (ou **SoftwareApplication** substituto):
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Sliding Blocks: Speed Mode",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web",
+  "url": "https://example.com/games/sliding-blocks",
+  "image": "https://example.com/og/sliding-blocks.jpg",
+  "description": "A fast-paced tile puzzle with speedrun mode and daily challenges.",
+  "inLanguage": "en",
+  "genre": ["Puzzle","Speedrun"]
+}
+</script>
+```
+
+### 7.4 Links internos importantes
+
+- **Módulo de itens relacionados** (sobreposição semântica + tag).
+- **Coleções** (por exemplo, “Principais quebra-cabeças desta semana�? com introduções selecionadas – essas páginas ganham links.
+- **Breadcrumbs** (e JSON-LD `BreadcrumbList`).
+
+### 7.5 Mapas de site
+
+- Dividido por tipo (itens, coleções, localidades).
+- Atualize os carimbos de data/hora quando o material mudar (não em todas as implantações).
+
+---
+
+## 8) Monitoramento de integridade (onde a maioria dos sites falha)
+
+Para incorporáveis ​​(jogos, ferramentas, demos), verifique:
+
+- `X-Frame-Options` (`DENY`/`SAMEORIGIN` �?marca injogável),
+- `Content-Security-Policy` `frame-ancestors` restrições,
+- 30x para sites externos (rouba sua sessão),
+- Tempo limite de carregamento e 4xx/5xx.
+
+**Trecho de nó**
+
+```ts
+import fetch from "node-fetch";
+
+export async function checkEmbed(url: string) {
+  const res = await fetch(url, { redirect: "manual" });
+  const xfo = res.headers.get("x-frame-options") || "";
+  const csp = res.headers.get("content-security-policy") || "";
+  const redirected = res.status >= 300 && res.status < 400;
+  const location = res.headers.get("location");
+
+  let playable = true,
+    reason = "";
+  if (/deny|sameorigin/i.test(xfo)) {
+    playable = false;
+    reason = `XFO: ${xfo}`;
+  } else if (/frame-ancestors/i.test(csp)) {
+    playable = false;
+    reason = `CSP: frame-ancestors`;
+  } else if (redirected) {
+    playable = false;
+    reason = `Redirect �?${location}`;
+  }
+
+  return { status: res.status, playable, reason, location };
+}
+```
+
+---
+
+## 9) Portões de qualidade (controle de qualidade antes da publicação)
+
+- **Comprimento do título** 50�?0 caracteres; sem palavras duplicadas.
+- **Meta** 140�?60 caracteres; inclui um benefício principal.
+- **Legibilidade**: alvo da 6ª série�? para públicos casuais.
+- **Bloqueio de termos**: glossário respeitado; termos da marca preservados.
+- **Duplicação**: cosseno sim < 0,92 vs itens existentes.
+- **Imagem**: 1200×630 OG presente; menos de 200 KB sempre que possível.
+- **JSON-LD** valida; consistente canônico/hreflang.
+- **Bloco relacionado** retorna �? Unid.
+
+Se algum falhar, o item entra na fila para revisão humana.
+
+---
+
+## 10) Medindo o impacto (o que observar)
+
+- **Cobertura do índice** (por localidade e por coleção).
+- **CTR** deltas para páginas antes/depois dos títulos de IA.
+- **Impressões versus páginas publicadas** (a inclinação deve aumentar).
+- **Bounce e duração da sessão** (o bloco relacionado move a agulha).
+- **Erro de orçamento**: % de incorporações quebradas, medianas de LCP/CLS.
+- **Custo por página enviada** (LLM + infra) e **tempo de publicação**.
+
+---
+
+## 11) Controle de custos e latência
+
+- **Geração de lote** (até limites de token/contexto).
+- **Cache** por prompt normalizado; adicione desduplicação semântica.
+- **Modelos quantizados** para embeddings; reserve modelos fortes apenas para títulos/descrições.
+- **Pré-cálculo** itens relacionados off-line; renderizar estaticamente.
+- **Estratégia de nova tentativa**: espera exponencial com jitter; limite em 2 tentativas.
+
+Regra aproximada: com cache + modelos pequenos para incorporações, você pode manter o custo ponta a ponta **bem abaixo de US$ 0,02 por item** em muitas configurações.
+
+---
+
+## 12) Governança, EAT e risco
+
+- Cite fontes ao resumir os documentos do fornecedor; conecte-se criteriosamente.
+- Mantenha **notas/registros de alterações do editor** — úteis para usuários e revisores.
+- Não publique páginas com conteúdo limitado ou incorporações que não possam ser reproduzidas; **noindex** até ser corrigido.
+- Respeite a fonte **ToS**; evite raspar onde for proibido.
+- Manter um canal de **abuso e remoção**; reivindicações de propriedade de log.
+
+---
+
+## 13) Implementação de 30/60/90 dias
+
+**Dia 1�?0 (MVP)**
+- Ingerir �?title/summary/tags �?publicar com JSON-LD e mapa do site.
+- Adicione capturas de tela do dramaturgo.
+- Verificações básicas de integridade + falha no fechamento em mapas de sites.
+
+**Dia 31�?0 (Escala)**
+- Localize (hreflang), vocabulário controlado, itens relacionados por meio de embeddings.
+- Coleções e listas selecionadas.
+- Painel de custos + cache de prompt.
+
+**Dia 61�?0 (Fosso)**
+- Experimentos de CTR (títulos e descrições A/B).
+- Páginas do autor, diretrizes editoriais (E-E-A-T).
+- Monitores avançados (detecção de anomalias de rastreamento com base em log).
+
+---
+
+## Lista de verificação prática
+
+- [ ] Títulos 50�?0 caracteres; metas 140�?60 caracteres
+- [ ] JSON-LD válido; consistente canônico/hreflang
+- [] Imagem OG 1200×630 e conjunto de miniaturas
+- [] O bloco relacionado retorna �? Unid
+- [] Incorporar passe de integridade (XFO/CSP/redirecionamento)
+- [ ] Pontuação do item �?0 �?publicação automática; outra revisão
+
+---
+
+A maioria das equipes tenta "escalar o conteúdo". Os vencedores escalam **operações de conteúdo**: esquemas rígidos, resultados previsíveis, empacotamento correto de SEO e monitoramento implacável. Construa o pipeline uma vez - então cada novo item se torna um ativo que classifica, converte e compõe.

@@ -1,48 +1,144 @@
 ---
-title: "空格与制表符 2025: 指南 for Modern 开发者"
-summary: "Pragmatic 指南 to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-seoTitle: "空格与制表符 2025: 指南 for Modern 开发者"
-seoDescription: "Pragmatic 指南 to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-faq: [{"question":"这篇译文适合谁阅读？","answer":"适合关注 AI 工具、开发者工作流、SEO 增长和技术产品策略的读者。"},{"question":"这篇文章和英文原文是什么关系？","answer":"它保留原文的核心论点、结构和内部链接，并用简体中文重写为更适合本地读者的版本。"}]
-howto: [{"name":"提炼可执行结论","text":"阅读时记录文章提到的风险、机会和工具边界，再把它们转化为团队可以验证的行动项。"},{"name":"回到原文核对细节","text":"涉及具体数字、引用或产品发布日期时，以英文原文和来源链接作为最终依据。"}]
+title: "空格与制表符 2025：现代开发人员指南"
+summary: "2025 年选择空格或选项卡的实用指南：可访问性优势、差异卫生、编辑器工具、迁移策略和最佳实践说明。"
+seoTitle: "空格与制表符 2025：现代开发人员指南"
+seoDescription: "2025 年选择空格或选项卡的实用指南：可访问性优势、差异卫生、编辑器工具、迁移策略和最佳实践说明。"
+faq: [{"question":"我们应该选择空格还是制表符？","answer":"遵循生态系统默认设置并使用自动化来强制一致性。"},{"question":"为什么选项卡会导致嘈杂的差异？","answer":"制表符宽度取决于编辑器设置，从而导致对齐方式不一致。"}]
+howto: [{"name":"选择格式化程序","text":"采用 Prettier、gofmt 或 rustfmt 并尽可能保留默认值。"},{"name":"在 CI 中强制执行","text":"添加因空格漂移而失败的 lint 作业。"},{"name":"记录例外情况","text":"仅在需要时允许使用选项卡（例如，Makefile、Go）。"}]
 sourceUpdatedAt: "2025-09-15"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# 空格与选项卡：开发人员人体工程学和工具链现实
 
-# 空格与制表符 2025: 指南 for Modern 开发者
+*如何做出保持代码可读性、包容性和自动化友好的风格决策*
 
-这篇中文译文围绕 **空格与制表符 2025: 指南 for Modern 开发者** 展开，帮助读者快速理解原文的技术背景、商业含义和可执行判断。Pragmatic 指南 to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained.
+## 争论仍然存在
 
-本文根据英文原文同步整理，源文更新时间为 **2025-09-15**。为了保留技术准确性，模型名称、产品名称、协议名和基准名称会保留英文写法。
+每次入职电话仍然会有这样的时刻：有人问团队是否喜欢空格或制表符，然后房间就安静了。争论不再是意识形态的；而是。我们提供的工具决定了我们的代码的可访问性、我们的差异看起来有多干净以及我们的自动迁移的可预测性。
 
-## 核心概览
+本指南的目标很简单：为您提供一个可重复的框架，您可以将其粘贴到工程手册中，以便“空格与制表符”问题不再浪费您的冲刺时间。
 
-空格与制表符 2025: 指南 for Modern 开发者 讨论的不只是新闻本身，而是它对开发者、产品团队和内容运营者的实际影响。
+## 推动决策的关键标准
 
-## 关键要点
+1. **辅助功能要求** - 屏幕阅读器和等宽字体对于制表位的行为有所不同。
+2. **差异稳定性** - CI 机器人和审阅者更喜欢确定性格式以避免嘈杂的 PR。
+3. **语言生态系统默认设置** - Go、Python 和 Rust 工具链都附带了内置的意见。
+4. **旧版足迹** - 您可能有数万行已经以一种方式格式化。
+5. **编辑器支持** - 开发人员仍然在同一存储库上的 VS Code、JetBrains 和 Vim 之间切换。
 
-- 先判断这项变化影响的是模型能力、产品分发、工作流，还是组织采用成本。
-- 把文章里的案例映射到自己的团队环境，尤其关注权限、质量、成本和可维护性。
-- 不要只看发布叙事，还要看它能否改变真实用户的日常工作路径。
-- 如果涉及 SEO 或内容生产，优先验证 canonical、结构化数据、搜索索引和内部链接。
+## 工具链供应商默认的内容
 
-## 原文结构地图
+| 语言/生态系统 | 官方格式化程序 | 默认缩进 | 覆盖选项 |
+| --- | --- | --- | --- |
+| JavaScript / TypeScript | 更漂亮 | 2 个空格 | `tabWidth`, `useTabs` |
+| Python | 黑色的 | 4 个空格 | 无（选项卡被拒绝） |
+| 去 | 戈夫姆特 | 选项卡 | 通过 `gofmt -tabs=false` 进行罕见覆盖 |
+| 锈 | 铁锈 | 4 个空格 | 需要不稳定的配置 |
+| C# | 点网格式 | 4 个空格 | `.editorconfig` |
 
-- The Debate Is Still Alive
-- Key Criteria That Should Drive the Decision
-- 什么 the Toolchain Vendors Default To
-- Accessibility and Screen Reader Considerations
-- Diff Hygiene: How Reviewers Experience Your Choice
-- The Hybrid Pattern That Works in 2025
-- Example `.editorconfig`
-- Migration Playbook for Legacy Repositories
+如果您遵循生态系统默认设置，则每次格式化程序添加规则时，您都可以获得免费升级。与默认设置作斗争意味着永久保留自定义配置。
 
-## 实践建议
+## 辅助功能和屏幕阅读器注意事项
 
-建议把这篇文章当作决策备忘录来读：先确认问题属于工具选择、架构设计、内容增长还是风险治理，再把结论转化成一到两个可以在本周验证的小实验。
+- 选项卡根据用户设置以可变宽度呈现。这对于高级用户来说非常有用，但对于期望均匀间距的屏幕阅读器来说却很混乱。
+- 空间为盲文显示和语音合成提供确定性布局，因为每个空间都是一致宣布的。
+- 对于混合能力的团队来说，最安全的选择是在数据表中保留缩进和制表符的空间，以便在灵活性很重要的情况下进行对齐。
 
-如果你正在评估相关工具或策略，可以把这篇文章拆成三个问题：它解决什么具体工作？它引入什么新风险？它是否值得进入下一轮实验？
+## Diff Hygiene：审稿人如何体验您的选择
 
-## 延伸阅读
+考虑一个 TypeScript 文件，其中开发人员添加了两个保护子句。将选项卡配置为 4 个空格后，使用 80 列 Git 控制台的审阅者可能会看到整个差异重新对齐。空格使差异保持本地化。
 
-- [All articles](/blog)
+```typescript
+if (!user?.profile) {
+  return redirect('/login')
+}
+
+if (!user.isOnboarded) {
+  return redirect('/welcome')
+}
+```
+
+上面带有空格的代码片段会产生微小的差异，因为每个格式化程序都同意确切的字符数。选项卡通常会根据本地编辑器设置加宽或缩小，从而在不相关的行上产生“虚拟”更改。
+
+## 2025 年可行的混合模式
+
+许多产品团队采用的实用折衷方案：
+
+- **缩进：** 使用格式化程序强制使用的空格（2 或 4）。
+- **对齐：** 仅允许在 Makefile、Go 代码或数据表中使用制表符，其中对齐在语义上很重要。
+- **自动化：** 添加 `.editorconfig` 以及格式化程序脚本，这样就没有人手动提交空格。
+
+### 示例 `.editorconfig`
+
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false
+```
+
+## 旧存储库的迁移手册
+
+1. **选择一个能够理解您的语言的格式化程序**（Prettier、rustfmt、clang-format 等）。
+2. **在主分支上生成基线差异**并将其标记为 `style-migration-base`，以便将来的指责会话有一个检查点。
+3. **在整个存储库中运行格式化程序一次**。使用类似 `chore: normalize whitespace` 的消息进行提交。
+4. **Enable CI enforcement** using a lint job. GitHub 操作示例：
+
+```yaml
+name: formatting
+on: [pull_request]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run lint:format
+```
+
+5. **在工程手册中记录决定**，这样新员工就不会再次引发争论。
+
+## 当标签不可协商时
+
+- **Go 项目** - `gofmt` 输出选项卡；解决这个问题意味着维护一个分叉的格式化程序。
+- **Makefiles** - 语法需要配方行的文字选项卡；空格会引发运行时错误。
+- **内核或固件代码库**与硬件文档的一致性很重要。
+
+使用 `.editorconfig` 覆盖，以便异常存在于文件类型级别而不是部落知识。
+
+## 您团队的决策矩阵
+
+| 约束 | 选择空格如果... | 选择选项卡如果... |
+| --- | --- | --- |
+| 混合语言单一存储库 | 大多数人青睐空间 | 大多数是 Go / Make |
+| 屏幕阅读器贡献者 | 无障碍是优先考虑的 | 团队可以保证选项卡友好的工具 |
+| CI 格式化 | 格式化程序默认为空格 | 格式化程序输出选项卡 |
+| Git历史稳定性 | 你想要一致的责备线 | 制表符宽度差异是可以接受的 |
+
+## 实施清单
+
+- [ ] 以书面形式同意缩进大小（2 与 4）。
+- [ ] 提交 `.editorconfig` 并格式化脚本。
+- [ ] 添加一个因空格漂移而失败的 CI 防护。
+- [ ] 直接在存储库自述文件中记录异常（Go、Makefile）。
+- [ ] 运行一次性迁移并标记提交。
+
+## TL;DR 适合您的剧本
+
+空间提供可预测性、可访问性和清晰的差异。选项卡在少数生态系统中仍然至关重要。最可持续的策略是遵循格式化程序默认值，对决策进行自动化编码，并且不再依赖单独的编辑器设置。
+
+在您进行下一次回顾之前，请将本文复制到您的内部 wiki 中并明确做出决定。当 lint 作业运行时，火焰之战结束。

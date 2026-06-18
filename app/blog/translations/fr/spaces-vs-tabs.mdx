@@ -1,48 +1,144 @@
 ---
-title: "Spaces vs Tabs 2025: guide for Modern développeurs"
-summary: "Pragmatic guide to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-seoTitle: "Spaces vs Tabs 2025: guide for Modern développeurs"
-seoDescription: "Pragmatic guide to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained."
-faq: [{"question":"À qui s’adresse cette traduction ?","answer":"Aux lecteurs qui suivent les outils d’IA, les workflows de développement, le SEO et la stratégie produit technique."},{"question":"Quel est le lien avec l’article anglais original ?","answer":"Elle conserve les idées centrales, la structure et les liens internes, avec une rédaction adaptée aux lecteurs francophones."}]
-howto: [{"name":"Transformer la lecture en actions","text":"Relever les risques, opportunités et limites techniques, puis les convertir en prochaines étapes concrètes."},{"name":"Vérifier les détails dans l’original","text":"Pour les chiffres, citations ou dates de lancement, utilisez l’original anglais et les sources comme référence finale."}]
+title: "Spaces vs Tabs 2025 : Guide pour les développeurs modernes"
+summary: "Guide pragmatique pour choisir les espaces ou les onglets en 2025 : avantages en matière d'accessibilité, hygiène des différences, outils d'édition, tactiques de migration et bonnes pratiques expliquées."
+seoTitle: "Spaces vs Tabs 2025 : Guide pour les développeurs modernes"
+seoDescription: "Guide pragmatique pour choisir les espaces ou les onglets en 2025 : avantages en matière d'accessibilité, hygiène des différences, outils d'édition, tactiques de migration et bonnes pratiques expliquées."
+faq: [{"question":"Faut-il choisir des espaces ou des tabulations ?","answer":"Suivez les valeurs par défaut de l'écosystème et utilisez l'automatisation pour assurer la cohérence."},{"question":"Pourquoi les onglets provoquent-ils des différences bruyantes ?","answer":"La largeur des onglets dépend des paramètres de l'éditeur, créant un alignement incohérent."}]
+howto: [{"name":"Choisissez un formateur","text":"Adoptez Prettier, gofmt ou rustfmt et conservez les valeurs par défaut lorsque cela est possible."},{"name":"Appliquer dans CI","text":"Ajoutez des tâches de charpie qui échouent en raison de la dérive des espaces."},{"name":"Documenter les exceptions","text":"Autorisez les onglets uniquement lorsque cela est nécessaire (par exemple, Makefiles, Go)."}]
 sourceUpdatedAt: "2025-09-15"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# Espaces vs onglets : ergonomie des développeurs et réalité de la chaîne d'outils
 
-# Spaces vs Tabs 2025: guide for Modern développeurs
+*Comment prendre une décision de style qui garde le code lisible, inclusif et convivial*
 
-Cette version française présente **Spaces vs Tabs 2025: guide for Modern développeurs** pour aider les lecteurs à comprendre les enjeux techniques, produit et SEO de l’article original. Pragmatic guide to choosing spaces or tabs in 2025: accessibility benefits, diff hygiene, editor tooling, migration tactics, and best practices explained.
+## Le débat est toujours vivant
 
-Cette traduction suit la version anglaise mise à jour le **2025-09-15**. Les noms de modèles, produits, protocoles et benchmarks restent souvent en anglais afin de préserver leur précision.
+Chaque appel d'intégration comporte encore ce moment : quelqu'un demande si l'équipe préfère les espaces ou les onglets et la salle devient silencieuse. Le débat n'est plus idéologique ; les outils que nous livrons déterminent l'accessibilité de notre code, la propreté de nos différences et la prévisibilité de nos migrations automatisées.
 
-## Vue d’ensemble
+L'objectif de ce guide est simple : vous fournir un cadre reproductible que vous pouvez coller dans votre manuel d'ingénierie afin que la question "espaces vs tabulations" cesse de vous coûter du temps de sprint.
 
-Spaces vs Tabs 2025: guide for Modern développeurs n’est pas seulement une actualité : c’est une lecture de ses conséquences pour les développeurs, les équipes produit et les équipes contenu.
+## Critères clés qui devraient guider la décision
 
-## Points clés
+1. **Exigences en matière d'accessibilité** : Les lecteurs d'écran et les polices à espacement fixe se comportent différemment avec les taquets de tabulation.
+2. **Stabilité différentielle** - Les robots CI et les réviseurs préfèrent le formatage déterministe pour éviter les PR bruyants.
+3. **Paramètres par défaut de l'écosystème linguistique** - Les chaînes d'outils Go, Python et Rust sont toutes livrées avec des opinions intégrées.
+4. **Empreinte héritée** - Vous pouvez déjà avoir des dizaines de milliers de lignes formatées dans un sens.
+5. **Prise en charge de l'éditeur** - Les développeurs basculent toujours entre VS Code, JetBrains et Vim sur le même référentiel.
 
-- Identifier d’abord si le sujet touche au modèle, à la distribution, au workflow ou aux coûts opérationnels.
-- Relier les exemples à son propre contexte technique, notamment les permissions, la qualité, les coûts et la maintenance.
-- Ne pas s’arrêter au récit de lancement : vérifier si le changement modifie réellement le travail quotidien.
-- Pour les sujets SEO et contenu, contrôler les canonicals, les données structurées, l’index de recherche et les liens internes.
+## Ce que font par défaut les fournisseurs de chaînes d'outils
 
-## Structure de l’article original
+| Langue / Écosystème | Formateur officiel | Retrait par défaut | Options de remplacement |
+| --- | --- | --- | --- |
+| JavaScript/TypeScript | Plus jolie | 2 espaces | `tabWidth`, `useTabs` |
+| Python | Noir | 4 espaces | Aucun (onglets rejetés) |
+| Aller | gouvernement | Onglets | Remplacements rares via `gofmt -tabs=false` |
+| Rouiller | Rustfmt | 4 espaces | Configuration instable requise |
+| C# | format dotnet | 4 espaces | `.editorconfig` |
 
-- The Debate Is Still Alive
-- Key Criteria That Should Drive the Decision
-- Ce que the Toolchain Vendors Default To
-- Accessibility and Screen Reader Considerations
-- Diff Hygiene: How Reviewers Experience Your Choice
-- The Hybrid Pattern That Works in 2025
-- Example `.editorconfig`
-- Migration Playbook for Legacy Repositories
+Si vous vous conformez aux valeurs par défaut de l'écosystème, vous bénéficiez de mises à niveau gratuites chaque fois que le formateur ajoute une règle. Combattre les valeurs par défaut signifie conserver une configuration personnalisée à perpétuité.
 
-## Lecture pratique
+## Considérations sur l’accessibilité et le lecteur d’écran
 
-Utilise l’article comme une note de décision : classe le problème, repère les risques et opportunités, puis transforme-les en une petite expérimentation mesurable.
+- Les onglets s'affichent à des largeurs variables en fonction des paramètres utilisateur. C'est idéal pour les utilisateurs expérimentés, mais déroutant pour les lecteurs d'écran qui s'attendent à un espacement uniforme.
+- Les espaces fournissent une disposition déterministe pour les affichages braille et la synthèse vocale car chaque espace est annoncé de manière cohérente.
+- Pour les équipes aux capacités mixtes, le choix le plus sûr consiste en des espaces pour l'indentation et des onglets réservés à l'alignement dans les tableaux de données où la flexibilité est importante.
 
-Si vous évaluez un outil ou une stratégie similaire, ramenez la décision à trois questions : quel problème concret est résolu ? quels nouveaux risques apparaissent ? l’expérimentation suivante en vaut-elle la peine ?
+## Hygiène différentielle : comment les évaluateurs perçoivent votre choix
 
-## À lire ensuite
+Considérez un fichier TypeScript dans lequel un développeur ajoute deux clauses de garde. Avec des onglets configurés sur 4 espaces, un réviseur utilisant une console Git à 80 colonnes pourrait voir l'ensemble de la différence se réaligner. Les espaces maintiennent la différence localisée.
 
-- [All articles](/blog)
+```typescript
+if (!user?.profile) {
+  return redirect('/login')
+}
+
+if (!user.isOnboarded) {
+  return redirect('/welcome')
+}
+```
+
+L'extrait ci-dessus avec des espaces produit une petite différence car chaque formateur est d'accord sur le nombre exact de caractères. Les onglets s'élargissent ou se rétrécissent souvent en fonction des paramètres locaux de l'éditeur, produisant des modifications « fantômes » sur des lignes sans rapport.
+
+## Le modèle hybride qui fonctionne en 2025
+
+Un compromis pratique adopté par de nombreuses équipes produit :
+
+- **Indentation :** Utilisez les espaces (2 ou 4) imposés par votre formateur.
+- **Alignement :** Autoriser les onglets uniquement dans les Makefiles, le code Go ou les tables de données où l'alignement est sémantiquement significatif.
+- **Automatisation :** Ajoutez `.editorconfig` ainsi que des scripts de formatage afin qu'aucun humain ne valide manuellement les espaces.
+
+### Exemple `.editorconfig`
+
+```ini
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false
+```
+
+## Playbook de migration pour les référentiels existants
+
+1. **Choisissez un formateur** qui comprend votre langage (Prettier, rustfmt, clang-format, etc.).
+2. **Générez une différence de base** sur la branche principale et marquez-la `style-migration-base` afin que les futures sessions de blâme aient un point de contrôle.
+3. **Exécutez le formateur une fois** sur l'ensemble du dépôt. Engagez-vous avec un message comme `chore: normalize whitespace`.
+4. **Activez l'application de CI** à l'aide d'une tâche de charpie. Exemple d'action GitHub :
+
+```yaml
+name: formatting
+on: [pull_request]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run lint:format
+```
+
+5. **Documentez la décision** dans votre manuel d'ingénierie afin que les nouvelles recrues ne relancent pas le débat.
+
+## Quand les onglets ne sont pas négociables
+
+- **Aller aux projets** - `gofmt` onglets de sorties ; combattre cela signifie maintenir un formateur fourchu.
+- **Makefiles** - La syntaxe nécessite un onglet littéral pour les lignes de recette ; les espaces génèrent des erreurs d’exécution.
+- **Bases de code du noyau ou du micrologiciel** où l'alignement avec la documentation matérielle est important.
+
+Utilisez les remplacements `.editorconfig` pour que l'exception réside au niveau du type de fichier plutôt qu'au niveau des connaissances tribales.
+
+## Matrice de décision pour votre équipe
+
+| Contrainte | Choisissez des espaces si... | Choisissez les onglets si... |
+| --- | --- | --- |
+| Monorepo en langues mixtes | La majorité privilégie les espaces | La majorité est Go / Make |
+| Contributeurs sur les lecteurs d'écran | L'accessibilité est une priorité | L'équipe peut garantir des outils adaptés aux onglets |
+| Formatage CI | Le formateur utilise par défaut les espaces | Onglets de sorties du formateur |
+| Stabilité de l'historique Git | Vous voulez des lignes de blâme cohérentes | Les différences de largeur d'onglet sont acceptables |
+
+## Liste de contrôle de mise en œuvre
+
+- [ ] Convenez par écrit de la taille du retrait (2 contre 4).
+- [ ] Validez `.editorconfig` et formatez les scripts.
+- [ ] Ajoutez une protection CI qui échoue en cas de dérive d'espaces.
+- [ ] Documentez les exceptions (Go, Makefile) directement dans le repo README.
+- [ ] Exécutez une migration unique et marquez le commit.
+
+## TL;DR pour votre Playbook
+
+Les espaces offrent prévisibilité, accessibilité et différences nettes. Les onglets restent essentiels dans une poignée d’écosystèmes. La politique la plus durable consiste à suivre les paramètres par défaut du formateur, à encoder la décision dans l'automatisation et à ne plus jamais s'appuyer sur les paramètres individuels de l'éditeur.
+
+Avant votre prochaine rétro, copiez cet article dans votre wiki interne et rendez la décision explicite. La guerre des flammes se termine lorsque le travail de charpie est terminé.

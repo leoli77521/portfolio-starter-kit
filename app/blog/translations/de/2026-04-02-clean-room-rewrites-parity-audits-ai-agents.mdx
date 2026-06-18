@@ -1,48 +1,214 @@
 ---
-title: "Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams"
-summary: "Der Claw-Code-Parity-Workflow zeigt, wie Teams komplexe Agent-Systeme neu bauen können, ohne in vage Rewrite-Erzählungen oder bloße Kopien abzurutschen."
-seoTitle: "Clean-Room-Rewrites und Parity Audits für AI Agents"
-seoDescription: "Wie Manifeste, Inventare und Gap Reports helfen, AI-Agent-Rewrites kontrolliert und prüfbar zu migrieren."
-faq: [{"question":"Warum scheitern große Agent-Rewrites oft?","answer":"Teams rekonstruieren Verhalten aus Erinnerung, schreiben zu viel auf einmal um und verlieren aus dem Blick, welche Fähigkeiten für Parity wirklich zählen."},{"question":"Was macht ein Parity Audit?","answer":"Es macht Lücken sichtbar, indem Commands, Tools, Dateien, Subsysteme oder Verhaltensweisen verglichen werden."},{"question":"Warum ist das über Claw Code hinaus relevant?","answer":"Viele AI-Teams bauen Stacks über Sprachen, Provider oder Vertrauensgrenzen hinweg neu und brauchen Disziplin, um Verhalten zu erhalten."}]
-howto: [{"name":"Oberfläche vor dem Rewrite definieren","text":"Commands, Tools, Flows und Vertrauensgrenzen müssen vor dem Austausch der Implementierung beschrieben werden."},{"name":"Parity explizit verfolgen","text":"Manifeste, Snapshots und Gap Reports zeigen, was gespiegelt ist und was noch fehlt."},{"name":"Schichtweise migrieren","text":"Runtime, Tools, Integrationen und Memory sollten mit klaren Checkpoints migriert werden."}]
+title: "Reinraum-Umschreibungen und Paritätsprüfungen für KI-Agententeams"
+summary: "Der Paritätsworkflow von Claw Code bietet ein starkes Modell für Teams, die komplexe Agentensysteme neu erstellen oder migrieren, ohne in vage Umschreibungen oder Cargo-Kult-Kopien abzudriften."
+seoTitle: "Reinraum-Umschreibungen und Paritätsprüfungen für KI-Agententeams"
+seoDescription: "Der Paritätsworkflow von Claw Code bietet ein starkes Modell für Teams, die komplexe Agentensysteme neu erstellen oder migrieren, ohne in vage Umschreibungen oder Cargo-Kult-Kopien abzudriften."
+faq: [{"question":"Warum scheitern große Umschreibungen von Agenten normalerweise?","answer":"Weil Teams versuchen, Verhalten aus dem Gedächtnis nachzubilden, zu viel auf einmal neu zu schreiben und dabei aus den Augen zu verlieren, welche Fähigkeiten für die Parität tatsächlich wichtig sind."},{"question":"Was bewirkt ein Paritätsaudit?","answer":"Es macht die Lücke sichtbar, indem es Befehle, Tools, Dateien, Subsysteme oder Verhaltensweisen vergleicht, sodass der Migrationsfortschritt konkret und nicht rhetorisch ist."},{"question":"Warum ist dies über den Claw Code hinaus relevant?","answer":"Denn viele KI-Teams bauen jetzt Stacks über Sprachen, Anbieter oder Vertrauensgrenzen hinweg neu auf und benötigen eine disziplinierte Methode, um das Verhalten beizubehalten und gleichzeitig die Implementierung zu ändern."}]
+howto: [{"name":"Definieren Sie die Oberfläche vor dem Neuschreiben","text":"Listen Sie die Befehle, Tools, Abläufe und Vertrauensgrenzen auf, die tatsächlich wichtig sind, bevor Sie eine Implementierung ersetzen."},{"name":"Verfolgen Sie die Parität explizit","text":"Verwenden Sie Manifeste, Snapshots und Lückenberichte, damit jeder sehen kann, was bereits gespiegelt ist und was sich noch unterscheidet."},{"name":"Migrieren Sie nach Ebenen, nicht nach Hype","text":"Schreiben Sie die Laufzeit-, Tools-, Integrations- und Speicherebenen mit expliziten Prüfpunkten neu, anstatt einen riesigen Alles-oder-Nichts-Sprung zu versuchen."}]
 sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-15"
+translatedAt: "2026-06-18"
 ---
+# Reinraum-Umschreibungen und Paritätsprüfungen für KI-Agententeams
 
-# Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams
+Die meisten Umschreibungen schlagen fehl, lange bevor der Code fehlschlägt.
 
-Die meisten Rewrites scheitern, bevor der Code scheitert. Sie scheitern in der Planung.
+Sie versagen bei der Planung.
 
-Teams wollen einen alten Stack ersetzen, die Sprache wechseln oder um einen neuen Modellanbieter herum neu bauen. Dann merken sie, dass sie gar nicht diszipliniert beschreiben können, was das alte System tatsächlich getan hat.
+Die Teams freuen sich darauf, einen alten Stack zu ersetzen, die Sprache zu wechseln oder einen Neuaufbau rund um einen neuen Modellanbieter vorzunehmen. Dann stießen sie auf dieselbe Wand:
 
-Genau deshalb ist die Parity-Denkweise im Claw-Code-Repository so interessant.
+Sie haben eigentlich keine disziplinierte Möglichkeit, zu beschreiben, was das alte System getan hat.
+
+Aus diesem Grund ist die Laufzeit selbst möglicherweise nicht das Interessanteste am Claw Code-Paritäts-Repo.
+
+Vielleicht liegt es an der Paritätsmentalität.
 
 ## Serienkarte
 
-1. [Was Claw Code über die Architektur von AI Coding Agents zeigt](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
-2. [Warum AI Coding Agents Rust und Python gemeinsam nutzen](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
-3. [Tools, Berechtigungen und MCP: Wie ein Coding Agent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
-4. [Hooks, Plugins und Sessions in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
-5. [Clean-Room-Rewrites und Parity Audits für AI-Agent-Teams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
+Dieser Artikel ist Teil von **Inside the AI ​​Coding Agent Stack**:
 
-## Warum Rewrites driften
+1. [Was Claw Code über die Architektur von AI Coding Agent verrät](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+2. [Warum KI-Coding-Agents Rust und Python zusammen verwenden](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+3. [Tools, Berechtigungen und MCP: Wie ein Codierungsagent real wird](/blog/2026-04-02-tooling-permissions-mcp-coding-agents)
+4. [Hooks, Plugins und Sitzungen in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)
+5. [Clean-Room-Umschreibungen und Paritätsprüfungen für KI-Agententeams](/blog/2026-04-02-clean-room-rewrites-parity-audits-ai-agents)
 
-Das klassische Rewrite-Problem ist semantische Drift. Das neue System startet mit einem starken Versprechen: schneller, sicherer, sauberer, moderner. Dann verschwinden alte Verhaltensweisen unbemerkt. Ein Command fehlt, ein Tool verhält sich anders, ein Session-Resume bricht, ein Edge Case wurde nie dokumentiert.
+## Warum Umschreibungen normalerweise driften
 
-Ab diesem Moment ist der Rewrite kein kontrollierter Übergang mehr, sondern ein Produkt mit unsicherer Treue.
+Das klassische Rewrite-Problem ist nicht nur ein technisches Risiko.
 
-## Parity Audit macht Migration zählbar
+Es ist eine semantische Drift.
 
-Ein Parity Audit verwandelt Migration von Erzählung in Buchhaltung. Statt zu sagen, man sei fast feature-complete, kann das Team fragen: Wie viele Commands sind gespiegelt? Welche Tools fehlen? Welche Subsysteme sind abgedeckt? Welche Lücken sind strategisch und welche versehentlich?
+Das neue System beginnt mit einem starken Slogan:
 
-Das ändert die Diskussion. Fortschritt wird konkret.
+- Schneller
+- sicherer
+- Reiniger
+- moderner
 
-## Clean-room heißt nicht blind kopieren
+Dann verschwindet das alte Verhalten langsam auf unverfolgte Weise:
 
-Ein Clean-Room-Rewrite kopiert nicht Zeile für Zeile. Er definiert die Verhaltensoberfläche und baut sie in einer neuen Architektur nach. So kann das Team Sprache, Runtime und interne Struktur ändern, ohne Nutzerverhalten versehentlich zu zerstören.
+- Ein Befehl existiert nicht mehr
+- ein Werkzeug verhält sich anders
+- Ein sofortiger Fluss ändert seine Form
+- Eine Sitzung wird nicht ordnungsgemäß fortgesetzt
+- Ein Grenzfall verschwindet, weil ihn niemand aufgeschrieben hat
 
-Für AI Agents ist das besonders wichtig, weil Commands, Tools, Permissions, Sessions, Plugins, MCP und Prompt-Flows eng zusammenwirken.
+An diesem Punkt wird „the rewrite“ zu einem vagen Markennamen für ein Produkt mit ungewisser Wiedergabetreue.
 
-## Fazit
+Genau deshalb ist Paritätsarbeit wichtig.
 
-Teams, die Agent-Systeme neu bauen, sollten zuerst die Oberfläche messen: Welche Fähigkeiten müssen bleiben, welche dürfen sich ändern, welche Lücken sind sichtbar? Manifeste, Inventare und Gap Reports sind keine Bürokratie. Sie sind die Sicherheitsgurte einer Migration.
+## Paritätsprüfungen erzwingen Präzision
+
+Eine Paritätsprüfung klingt unscheinbar, aber sie bewirkt eine entscheidende Sache:
+
+Es verwandelt die Migration vom Geschichtenerzählen in die Buchhaltung.
+
+Anstatt zu sagen: „Wir verfügen im Grunde über alle Funktionen“, können Sie fragen:
+
+- Wie viele Befehle werden gespiegelt?
+- Wie viele Tools werden gespiegelt?
+- Welche Verzeichnisse bzw. Subsysteme werden abgedeckt?
+- Welche Verhaltensweisen fehlen noch absichtlich?
+- Welche Lücken sind strategisch oder zufällig?
+
+Das ändert sofort den Ton einer Neufassung.
+
+Nun kann konkret über Fortschritte debattiert werden.
+
+Das ist viel gesünder, als eine Migration allein vom Vertrauen leben zu lassen.
+
+## Was der öffentliche Workflow von Claw Code vorschlägt
+
+Das öffentliche Paritäts-Repo ist hier nützlich, weil es ein Migrationsmuster am helllichten Tag aufdeckt:
+
+- Aufrechterhaltung einer aktuellen Implementierungsschicht
+- Behalten Sie Inventar-Snapshots von Befehlen und Tools
+- Generieren Sie Manifeste und Zusammenfassungen
+- Führen Sie Paritätsprüfungen durch
+- Bewahren Sie explizite Lückendokumente auf
+- Testen Sie die Spiegelschicht, nicht nur die Laufzeit
+
+Das ist ein viel besseres Spielbuch als die übliche Umschreibungsphantasie, bei der das neue System einfach „entsteht“ und jeder hofft, dass das wichtige Verhalten überlebt.
+
+Es passt auch zu dem, was wir heute über Agentensysteme im weiteren Sinne wissen. Diese Stapel sind nicht winzig. Dazu gehören Befehle, Tools, Eingabeaufforderungen, Berechtigungen, Sitzungen, Integrationsprotokolle und Erweiterungsoberflächen. So etwas lässt sich allein aufgrund der Intuition nicht sicher migrieren.
+
+## Umgestaltungen von Reinräumen erfordern mehr als nur Ethik
+
+Der Ausdruck „Reinraum-Umschreibung“ wird oft als rechtlicher oder ethischer Begriff diskutiert.
+
+Das ist natürlich wichtig.
+
+Aber es gibt auch eine technische Seite.
+
+Eine Neufassung des Reinraums erfordert:
+
+- eine Zieloberfläche
+- ein Vokabular zur Beschreibung dieser Oberfläche
+- eine Methode zur Fortschrittsmessung
+- eine Möglichkeit, das Vertrauen zu bewahren, während sich das System ändert
+
+Ohne diese wird „Reinraum“ nur zu einer Geschichte eines Neuanfangs.
+
+Mit ihnen wird es zu einer praktischen Migrationsdisziplin.
+
+Deshalb denke ich, dass Parity Tooling hier ein so starkes Muster ist. Es gibt dem Umschreiben ein Rückgrat.
+
+## Der bessere Weg, einen Agent-Stack zu migrieren
+
+Wenn ich heute einem Team bei der Neuerstellung eines Agentenprodukts raten würde, würde ich einen Migrationsprozess empfehlen, der in etwa so aussieht:
+
+### 1. Inventarisieren Sie das Verhalten
+
+Listen Sie die Befehle, Tools, Laufzeitgrenzen, Sitzungsverhalten und Integrationspunkte auf, die das alte System definieren.
+
+### 2. Implementierung von der Oberfläche trennen
+
+Entscheiden Sie, was Verhaltensparität erfordert und was sich frei ändern kann. Nicht jedes innere Detail verdient es, erhalten zu bleiben.
+
+### 3. Erstellen Sie explizite Snapshots
+
+Erfassen Sie Befehls- und Werkzeugbestände, damit das neue System etwas Konkretes widerspiegeln kann.
+
+### 4. Lückenberichte schreiben
+
+Seien Sie ehrlich darüber, was fehlt, unvollständig oder absichtlich anders ist.
+
+### 5. Testen Sie das Migrationsverhalten
+
+Testen Sie nicht nur die neue Laufzeit. Testen Sie die Paritätsschicht selbst.
+
+Dies ist die Art von „langweiliger“ Strenge, die verhindert, dass Neufassungen zu endlosen Neuerfindungen werden.
+
+## Warum dies bei KI wichtiger ist als bei herkömmlichen Apps
+
+Agentensysteme sind ungewöhnlich anfällig für Abweichungen, da ihr Verhalten größtenteils an der Grenze zwischen Code und Richtlinie angesiedelt ist.
+
+Sie bewahren nicht nur APIs.
+
+Sie bewahren auf:
+
+- Werkzeugsemantik
+- Erlaubniserwartungen
+- Workflow-Reihenfolge
+- Gedächtnisverhalten
+- Erweiterungsflächen
+- Vertrauensannahmen
+
+Das ist ein fragileres Migrationsziel als eine Standard-CRUD-App.
+
+Aus diesem Grund denke ich auch, dass die besten Agententeams zunehmend wie Plattformteams aussehen werden. Sie benötigen eine stärkere und nicht eine schwächere Lagerdisziplin.
+
+## Ein versteckter Vorteil: Besseres Produktdenken
+
+Paritätsarbeit bewirkt mehr als nur eine Risikominderung bei der Migration.
+
+Es erzwingt auch eine bessere Produktbeurteilung.
+
+Sobald Sie aufschreiben müssen, was bei allen Implementierungen gelten soll, beginnen Sie herauszufinden, welche Teile des alten Systems tatsächlich wertvoll waren und welche Teile nur historische Überbleibsel waren.
+
+Das ist gesund.
+
+Eine Neufassung sollte nicht alles bewahren.
+
+Es sollte die richtigen Dinge sichtbar bewahren.
+
+Paritätsprüfungen helfen Teams, diese Entscheidung mit mehr Klarheit und weniger Mythologie zu treffen.
+
+## Letzte Aufnahme
+
+Die größte Rewrite-Falle besteht darin, anzunehmen, dass nur Code migriert wird.
+
+Das ist es nicht.
+
+Sie migrieren außerdem:
+
+- Verhaltensweisen
+- Schnittstellen
+- Grenzen vertrauen
+- Erwartungen des Betreibers
+- Erweiterungsmodelle
+
+Aus diesem Grund ist bei Neufassungen im Reinraum ein paritätisches Denken erforderlich.
+
+Nicht als Papierkram.
+
+Als Architekturkontrolle.
+
+Claw Code ist nützlich, weil es diese Disziplin zu einem Zeitpunkt sichtbar macht, an dem mehr KI-Teams sie benötigen werden.
+
+## Entdecken Sie die komplette Serie
+
+Den vollständigen Lesepfad finden Sie im [Themen-Hub „AI Coding Agent Stack“](/topics/ai-coding-agent-stack). Es vereint diese Reihe mit der dazugehörigen Berichterstattung über MCP, Entwicklertools und produktionsorientiertes Agentendesign.
+
+## Lesen Sie weiter
+
+- [Was Claw Code über die Architektur von AI Coding Agent verrät](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
+- [Warum KI-Coding-Agents Rust und Python zusammen verwenden](/blog/2026-04-02-rust-python-ai-agent-runtime-architecture)
+- [Produktionsleitfaden für KI-Agenten](/blog/ai-agents-production-guide)
+
+## Quellen
+
+- [Offizielle Dokumente zum Claw Code](https://claw-code.codes/)
+- [ultraworkers/claw-code auf GitHub](https://github.com/ultraworkers/claw-code)
+- [ultraworkers/claw-code-parity auf GitHub](https://github.com/ultraworkers/claw-code-parity)
+- [Hooks, Plugins und Sitzungen in AI Coding Agents](/blog/2026-04-02-hooks-plugins-sessions-ai-agents)

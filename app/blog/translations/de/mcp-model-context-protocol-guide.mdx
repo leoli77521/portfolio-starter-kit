@@ -1,51 +1,414 @@
 ---
-title: "MCP Protokoll Leitfaden 2026: Connect AI to Any Data Source"
-summary: "Model Context Protokoll (MCP) is the universal standard for connecting AI agents to external Tools and data. Learn Wie man build MCP servers and clients with practical code examples."
-seoTitle: "MCP Protokoll Leitfaden 2026: Connect AI to Any Data Source"
-seoDescription: "Model Context Protokoll (MCP) is the universal standard for connecting AI agents to external Tools and data. Learn Wie man build MCP servers and clients with practical code examples."
-faq: [{"question":"Für wen ist diese Übersetzung gedacht?","answer":"Für Leser, die AI-Produkte, Entwicklerwerkzeuge, SEO und technische Strategie praxisnah verfolgen."},{"question":"Wie verhält sich diese Fassung zum englischen Original?","answer":"Sie bewahrt die Kernaussagen, Struktur und internen Links und formuliert sie für deutschsprachige Leser neu."}]
-howto: [{"name":"Handlungsrelevante Punkte ableiten","text":"Notiere Risiken, Chancen und technische Grenzen und übersetze sie in konkrete nächste Schritte für dein Team."},{"name":"Details mit dem Original prüfen","text":"Bei Zahlen, Zitaten oder Veröffentlichungsdaten sollte das englische Original mit den Quellenlinks herangezogen werden."}]
+title: "MCP Protocol Guide 2026: KI mit jeder Datenquelle verbinden"
+summary: "Model Context Protocol (MCP) ist der universelle Standard für die Verbindung von KI-Agenten mit externen Tools und Daten. Erfahren Sie anhand praktischer Codebeispiele, wie Sie MCP-Server und -Clients erstellen."
+seoTitle: "MCP Protocol Guide 2026: KI mit jeder Datenquelle verbinden"
+seoDescription: "Model Context Protocol (MCP) ist der universelle Standard für die Verbindung von KI-Agenten mit externen Tools und Daten. Erfahren Sie anhand praktischer Codebeispiele, wie Sie MCP-Server und -Clients erstellen."
+faq: [{"question":"Was ist MCP (Model Context Protocol)?","answer":"MCP ist ein offenes Protokoll von Anthropic, das standardisiert, wie KI-Modelle eine Verbindung zu externen Datenquellen, Tools und Systemen herstellen. Betrachten Sie es als USB-C für KI-Integrationen."},{"question":"Wer unterstützt MCP?","answer":"Anthropic (Claude), OpenAI (ChatGPT), Google DeepMind (Gemini), Microsoft und GitHub unterstützen MCP ab 2025."},{"question":"Ist MCP für den Einsatz in Unternehmen sicher?","answer":"MCP umfasst Sicherheitsspezifikationen, erfordert jedoch eine ordnungsgemäße Implementierung von Einwilligungsflüssen, Zugriffskontrollen und Datenverwaltungsrichtlinien."},{"question":"Wie unterscheidet sich MCP vom Funktionsaufruf?","answer":"Funktionsaufrufe sind modellspezifisch und unidirektional. MCP ist ein universelles, bidirektionales Protokoll, das über verschiedene KI-Anbieter hinweg funktioniert."}]
+howto: [{"name":"Installieren Sie das MCP SDK","text":"Installieren Sie das offizielle MCP SDK für Ihre Sprache: npm install @modelcontextprotocol/sdk oder pip install mcp."},{"name":"Definieren Sie Serverfunktionen","text":"Erstellen Sie einen Server, der Ressourcen, Tools oder Eingabeaufforderungen bereitstellt, auf die KI-Modelle zugreifen können."},{"name":"Client mit Server verbinden","text":"Konfigurieren Sie Ihre KI-Anwendung für die Verbindung mit MCP-Servern über Standard- oder HTTP-Transport."},{"name":"Testen Sie die Integration","text":"Verwenden Sie das MCP Inspector-Tool, um Ihre Serverimplementierung zu debuggen und zu validieren."}]
 sourceUpdatedAt: "2026-01-21"
-translatedAt: "2026-06-16"
+translatedAt: "2026-06-18"
 ---
+# MCP-Protokoll: Der universelle Standard für KI-Integrationen
 
-# MCP Protokoll Leitfaden 2026: Connect AI to Any Data Source
+*Veröffentlicht: 21. Januar 2026*
 
-Diese deutsche Fassung ordnet **MCP Protokoll Leitfaden 2026: Connect AI to Any Data Source** für Leser ein, die AI-Tools, Entwickler-Workflows und technische Produktstrategie verstehen wollen. Model Context Protokoll (MCP) is the universal standard for connecting AI agents to external Tools and data. Learn Wie man build MCP servers and clients with practical code examples.
+Jeder KI-Agent steht vor dem gleichen Problem: Er kann hervorragend argumentieren, ist aber blind für Ihre Daten. MCP (Model Context Protocol) behebt dieses Problem, indem es eine universelle Sprache für die Kommunikation zwischen KI und Werkzeug schafft.
 
-Die Fassung basiert auf dem englischen Original mit dem Quellenstand **2026-01-21**. Produktnamen, Modellnamen, Protokolle und Benchmarks bleiben bewusst in ihrer üblichen englischen Schreibweise.
+Wenn Sie jemals mit fragmentierten API-Integrationen oder benutzerdefinierten Konnektoren zu kämpfen hatten oder sich gefragt haben, wie Sie Ihrer KI Zugriff auf Datenbanken, Dateien oder interne Tools gewähren können, ist MCP Ihre Antwort.
 
-## Kernüberblick
+## Wichtige Erkenntnisse
 
-MCP Protokoll Leitfaden 2026: Connect AI to Any Data Source ist nicht nur eine Nachricht, sondern eine Einordnung der praktischen Folgen für Entwickler, Produktteams und Content-Teams.
+- MCP ist ein offenes Protokoll, das die Verbindung von KI-Modellen mit externen Datenquellen und Tools standardisiert – denken Sie an „USB-C für KI“.
+- Anthropic, OpenAI, Google und Microsoft unterstützen alle MCP und machen es damit zum De-facto-Industriestandard.
+- Im Jahr 2025 wurden über 13.000 MCP-Server auf GitHub gestartet, die alles von Datenbanken über Slack bis hin zu benutzerdefinierten APIs abdecken.
+- Der Aufbau eines MCP-Servers erfordert weniger als 100 Codezeilen und das Protokoll übernimmt die Authentifizierung, die Aushandlung von Funktionen und die Fehlerbehandlung.
+- Die Sicherheit erfordert die ausdrückliche Zustimmung des Benutzers für alle Vorgänge – MCP gewährt keinen pauschalen Zugriff.
 
-## Wichtige Punkte
+## Was ist das Model Context Protocol?
 
-- Prüfe zuerst, ob es um Modellleistung, Distribution, Workflow-Integration oder operative Kosten geht.
-- Übertrage die Beispiele auf den eigenen Stack und achte besonders auf Berechtigungen, Qualität, Kosten und Wartbarkeit.
-- Bewerte nicht nur die Ankündigung, sondern die Frage, ob sie reale Arbeitsabläufe verändert.
-- Bei SEO- und Content-Themen zählen Canonicals, strukturierte Daten, Suchindex und interne Links genauso wie der Text.
+Model Context Protocol (MCP) ist ein offener Standard, der im November 2024 von Anthropic eingeführt wurde. Es bietet eine universelle Schnittstelle für KI-Systeme, um:
 
-## Struktur der Originalanalyse
+- **Daten lesen** aus Dateien, Datenbanken und APIs
+- **Funktionen ausführen** über definierte Tools
+- **Behandeln Sie kontextbezogene Eingabeaufforderungen** mit Vorlagen und Workflows
 
-- Key Takeaways
-- Was Is Model Context Protokoll?
-- The Architecture: Hosts, Clients, and Servers
-- Hosts
-- Clients
-- Servers
-- Building Your First MCP Server
-- Step 1: Set Up the Project
+Vor MCP war jede KI-Integration eine individuelle Aufgabe. Möchten Sie, dass Claude auf Ihr CRM zugreift? Erstellen Sie einen Connector. Benötigen Sie GPT, um Ihre Datenbank abzufragen? Schreiben Sie einen anderen Connector. Jeder KI-Anbieter, jedes Tool – eine weitere maßgeschneiderte Integration.
 
-## Praktische Einordnung
+MCP ersetzt diese Fragmentierung durch ein einziges Protokoll. Erstellen Sie einen MCP-Server für Ihre Datenquelle, und jeder MCP-kompatible KI-Client kann eine Verbindung herstellen.
 
-Lies den Beitrag als Entscheidungsnotiz: Ordne das Thema ein, markiere konkrete Risiken und Chancen und formuliere daraus ein kleines Experiment, das dein Team kurzfristig testen kann.
+> 🔌 MCP ist für KI das, was LSP (Language Server Protocol) für Code-Editoren ist. Ein Protokoll, universelle Kompatibilität.
 
-Wenn du ein ähnliches Werkzeug oder eine Strategie bewertest, zerlege die Entscheidung in drei Fragen: Welches konkrete Problem löst es? Welche neuen Risiken entstehen? Lohnt sich ein nächstes Experiment?
+## Die Architektur: Hosts, Clients und Server
 
-## Weiterlesen
+MCP verwendet ein einfaches Client-Server-Modell mit drei Rollen:
 
-- [Claude AI Executes Code: Real-Time Python & Node.js](/blog/claude-ai-now-executes-code)
-- [From Chatbots to AI Agents: The Quiet Revolution](/blog/from-chatbots-to-ai-agents-quiet-revolution)
-- [AI Agents Produktion Leitfaden: Avoiding $3.4K Mistakes](/blog/ai-agents-production-guide)
-- [Agentic AI-Revolution 2025: The Zukunft is Here](/blog/agentic-ai-revolution-2025)
+```
+┌─────────────────────────────────────────────────────────┐
+│                       HOST                              │
+│  (Claude Desktop, ChatGPT, VS Code, Custom App)        │
+│                                                         │
+│    ┌──────────┐    ┌──────────┐    ┌──────────┐       │
+│    │  CLIENT  │    │  CLIENT  │    │  CLIENT  │       │
+│    └────┬─────┘    └────┬─────┘    └────┬─────┘       │
+└─────────┼───────────────┼───────────────┼─────────────┘
+          │               │               │
+          ▼               ▼               ▼
+    ┌──────────┐    ┌──────────┐    ┌──────────┐
+    │  SERVER  │    │  SERVER  │    │  SERVER  │
+    │ (Files)  │    │ (Database)│   │ (Slack)  │
+    └──────────┘    └──────────┘    └──────────┘
+```
+
+### Gastgeber
+LLM-Anwendungen, mit denen Benutzer interagieren – Claude Desktop, ChatGPT, VS Code-Erweiterungen oder Ihre benutzerdefinierte KI-App. Hosts initiieren Verbindungen und verwalten das Benutzererlebnis.
+
+### Kunden
+Protokollanschlüsse innerhalb des Hosts. Jeder Client unterhält eine 1:1-Verbindung mit einem bestimmten Server und übernimmt die JSON-RPC-Kommunikation.
+
+### Server
+Dienste, die Funktionen für KI-Modelle bereitstellen. Server können Folgendes bereitstellen:
+- **Ressourcen**: Daten und Kontext (Dateien, Datenbankeinträge, API-Antworten)
+- **Tools**: Funktionen, die die KI ausführen kann (E-Mail senden, Ticket erstellen, Datenbank abfragen)
+- **Eingabeaufforderungen**: Vorgefertigte Vorlagen und Arbeitsabläufe
+
+## Erstellen Sie Ihren ersten MCP-Server
+
+Lassen Sie uns einen einfachen MCP-Server erstellen, der Wetterdaten bereitstellt. In diesem Beispiel wird das offizielle TypeScript SDK verwendet.
+
+### Schritt 1: Richten Sie das Projekt ein
+
+```bash
+mkdir weather-mcp-server && cd weather-mcp-server
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+```
+
+### Schritt 2: Erstellen Sie den Server
+
+```typescript
+// server.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
+
+// Define the weather tool schema
+const GetWeatherSchema = z.object({
+  city: z.string().describe("The city to get weather for"),
+});
+
+// Create the MCP server
+const server = new Server(
+  {
+    name: "weather-server",
+    version: "1.0.0",
+  },
+  {
+    capabilities: {
+      tools: {},  // This server provides tools
+    },
+  }
+);
+
+// Handle tool listing requests
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+  return {
+    tools: [
+      {
+        name: "get_weather",
+        description: "Get current weather for a city",
+        inputSchema: {
+          type: "object",
+          properties: {
+            city: { type: "string", description: "City name" },
+          },
+          required: ["city"],
+        },
+      },
+    ],
+  };
+});
+
+// Handle tool execution
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "get_weather") {
+    const { city } = GetWeatherSchema.parse(request.params.arguments);
+
+    // In production, call a real weather API
+    const weather = {
+      city,
+      temperature: "22°C",
+      condition: "Partly cloudy",
+      humidity: "65%",
+    };
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(weather, null, 2),
+        },
+      ],
+    };
+  }
+
+  throw new Error(`Unknown tool: ${request.params.name}`);
+});
+
+// Start the server
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("Weather MCP server running on stdio");
+}
+
+main().catch(console.error);
+```
+
+### Schritt 3: Konfigurieren Sie für Claude Desktop
+
+Fügen Sie Ihren Server zur Konfigurationsdatei von Claude Desktop hinzu:
+
+```json
+// ~/Library/Application Support/Claude/claude_desktop_config.json (macOS)
+// %APPDATA%\Claude\claude_desktop_config.json (Windows)
+{
+  "mcpServers": {
+    "weather": {
+      "command": "npx",
+      "args": ["ts-node", "/path/to/weather-mcp-server/server.ts"]
+    }
+  }
+}
+```
+
+Starten Sie Claude Desktop neu und Sie können jetzt fragen: „Wie ist das Wetter in Tokio?“
+
+## Tiefer Einblick in die Serverfunktionen
+
+MCP-Server können drei Arten von Funktionen bieten:
+
+### 1. Ressourcen (Datenbereitstellung)
+
+Mit Ressourcen können KI-Modelle Daten lesen, ohne Code auszuführen. Perfekt zum Offenlegen von Dateien, Datenbankeinträgen oder API-Antworten.
+
+```typescript
+server.setRequestHandler(ListResourcesRequestSchema, async () => {
+  return {
+    resources: [
+      {
+        uri: "config://app/settings",
+        name: "Application Settings",
+        mimeType: "application/json",
+      },
+    ],
+  };
+});
+
+server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  if (request.params.uri === "config://app/settings") {
+    return {
+      contents: [
+        {
+          uri: request.params.uri,
+          mimeType: "application/json",
+          text: JSON.stringify({ theme: "dark", language: "en" }),
+        },
+      ],
+    };
+  }
+});
+```
+
+### 2. Tools (Funktionsausführung)
+
+Mithilfe von Tools können KI-Modelle Maßnahmen ergreifen – E-Mails senden, Datensätze erstellen und Arbeitsabläufe auslösen.
+
+```typescript
+// Tool that creates a support ticket
+{
+  name: "create_ticket",
+  description: "Create a support ticket in the system",
+  inputSchema: {
+    type: "object",
+    properties: {
+      title: { type: "string" },
+      description: { type: "string" },
+      priority: { type: "string", enum: ["low", "medium", "high"] },
+    },
+    required: ["title", "description"],
+  },
+}
+```
+
+### 3. Eingabeaufforderungen (Workflow-Vorlagen)
+
+Eingabeaufforderungen bieten vorgefertigte Gesprächsstarter und Arbeitsabläufe.
+
+```typescript
+server.setRequestHandler(ListPromptsRequestSchema, async () => {
+  return {
+    prompts: [
+      {
+        name: "code_review",
+        description: "Template for reviewing code changes",
+        arguments: [
+          { name: "code", description: "The code to review", required: true },
+        ],
+      },
+    ],
+  };
+});
+```
+
+## Kundenfunktionen: Die andere Richtung
+
+MCP ist nicht nur Server-zu-Client. Server können auch Funktionen von Clients anfordern:
+
+### Probenahme
+
+Server können LLM-Abschlüsse über den Client anfordern und so rekursive KI-Interaktionen und Agentenverhalten ermöglichen.
+
+```typescript
+// Server requests an LLM completion from the client
+const result = await client.request({
+  method: "sampling/createMessage",
+  params: {
+    messages: [{ role: "user", content: "Summarize this document..." }],
+    maxTokens: 500,
+  },
+});
+```
+
+### Wurzeln
+
+Server können den Client nach zugänglichen URI-Grenzen abfragen – nützlich, um zu verstehen, auf welche Dateien oder Ressourcen der Server sicher zugreifen kann.
+
+### Erhebung
+
+Server können über die Benutzeroberfläche des Clients zusätzliche Informationen vom Benutzer anfordern und so interaktive Arbeitsabläufe ermöglichen.
+
+## Transportschichten
+
+MCP unterstützt mehrere Transportmechanismen:
+
+| Transport | Anwendungsfall | Vorteile | Nachteile |
+|-----------|----------|------|------|
+| stdio | Lokale Prozesse | Einfach, sicher, kein Netzwerk | Nur die gleiche Maschine |
+| HTTP + SSE | Remote-Server | Netzwerkzugriff, skalierbar | Erfordert eine Authentifizierungseinrichtung |
+| WebSocket | Echtzeit-Apps | Bidirektional, geringe Latenz | Komplexer |
+
+Für die meisten lokalen Tools ist stdio der empfohlene Transport. Für in der Cloud gehostete MCP-Server bietet HTTP mit Server-Sent Events (SSE) die beste Balance.
+
+## Das MCP-Ökosystem 2025–2026
+
+### Branchenakzeptanz
+
+MCP hat sich in Rekordzeit von Anthropics internem Experiment zum Industriestandard entwickelt:
+
+- **März 2025**: OpenAI hat MCP für alle ChatGPT-Produkte übernommen
+- **April 2025**: Google DeepMind bestätigte die Gemini-Unterstützung
+- **Mai 2025**: Microsoft und GitHub sind dem MCP-Lenkungsausschuss beigetreten
+- **November 2025**: Mit der MCP Apps-Erweiterung (SEP-1865) wurden UI-Funktionen hinzugefügt
+- **Dezember 2025**: MCP spendete an die Agentic AI Foundation der Linux Foundation
+
+### Server-Ökosystem
+
+Mittlerweile gibt es auf GitHub über 13.000 MCP-Server:
+
+- **Datenbanken**: PostgreSQL, MySQL, MongoDB, Redis
+- **Produktivität**: Slack, Notion, Linear, GitHub
+- **Cloud**: AWS-, GCP- und Azure-Integrationen
+- **Dateien**: Lokales Dateisystem, Google Drive, Dropbox
+- **Benutzerdefiniert**: Interne APIs, proprietäre Systeme
+
+Sie können Community-Server über die offizielle MCP-Registrierung durchsuchen und installieren.
+
+## Sicherheit: Die kritische Ebene
+
+MCP bietet leistungsstarke Funktionen, aber Leistung erfordert Verantwortung. Das Protokoll schreibt vor:
+
+### Einwilligung des Benutzers
+
+Jeder Datenzugriff und jede Tool-Ausführung erfordert eine ausdrückliche Zustimmung des Benutzers. Keine pauschalen Berechtigungen.
+
+```typescript
+// Clients MUST show this to users before tool execution
+{
+  tool: "delete_file",
+  arguments: { path: "/important/data.csv" },
+  requiresConfirmation: true  // User sees and approves
+}
+```
+
+### Datenschutz
+
+- Erteilen Sie Ihre ausdrückliche Zustimmung, bevor Sie Benutzerdaten an Server weitergeben
+- Keine automatische Datenübertragung
+- Angemessene Zugriffskontrollen und Audit-Protokolle
+
+### Werkzeugsicherheit
+
+Werkzeugbeschreibungen sind standardmäßig nicht vertrauenswürdig. Kunden sollten:
+- Zeigen Sie den Benutzern die Werkzeugfunktionen deutlich an
+- Für sensible Vorgänge ist eine ausdrückliche Genehmigung erforderlich
+- Protokollieren Sie alle Tool-Aufrufe zur Prüfung
+
+### Bekannte Sicherheitsbedenken
+
+Sicherheitsforscher haben Risiken identifiziert, die gemindert werden müssen:
+
+1. **Prompt-Injection**: Böswillige Eingaben könnten die KI zu unbeabsichtigten Tool-Aufrufen verleiten
+2. **Tool Shadowing**: Lookalike-Tools könnten vertrauenswürdige Tools stillschweigend ersetzen
+3. **Berechtigungseskalation**: Durch die Kombination von Tools können Daten herausgefiltert werden
+
+**Abhilfe**: Implementieren Sie strenge Werkzeug-Zulassungslisten, überwachen Sie Werkzeugkombinationen und validieren Sie alle Eingaben.
+
+## Checkliste für die praktische Umsetzung
+
+Vor der Bereitstellung von MCP in der Produktion:
+
+- [ ] **Bereich definieren**: Welche Tools und Ressourcen wird Ihr Server verfügbar machen?
+- [ ] **Authentifizierung implementieren**: Verwenden Sie die richtige Authentifizierung für HTTP-Transporte
+- [ ] **Zustimmungsflüsse erstellen**: Benutzer müssen alle vertraulichen Vorgänge genehmigen
+- [ ] **Protokollierung hinzufügen**: Verfolgen Sie alle Tool-Aufrufe und Datenzugriffe
+- [ ] **Test mit MCP Inspector**: Debuggen und validieren Sie vor der Bereitstellung
+- [ ] **Dokumentfunktionen**: Klare Beschreibungen helfen der KI, Werkzeuge richtig zu verwenden
+- [ ] **Ratenbegrenzungen festlegen**: Verhindern Sie außer Kontrolle geratene Tool-Aufrufe
+- [ ] **Plan für Fehler**: Graceful Degradation, wenn Server nicht verfügbar sind
+
+## Was kommt im Jahr 2026?
+
+Die MCP-Roadmap umfasst:
+
+1. **Zusammenarbeit mit mehreren Agenten**: Agentengruppen mit speziellen Rollen (Diagnose, Behebung, Validierung, Dokumentation)
+2. **Erweiterte UI-Funktionen**: Die MCP Apps-Erweiterung ermöglicht umfangreiche interaktive Schnittstellen
+3. **Streaming-Ressourcen**: Echtzeit-Datenfeeds statt Anfrage-Antwort
+4. **Plattformübergreifende Identität**: Einheitliche Authentifizierung auf allen MCP-Servern
+5. **Leistungsoptimierungen**: Schnellere Transport- und Caching-Mechanismen
+
+## Fazit
+
+MCP löst das Integrationsproblem, das KI-Agenten zurückhält. Anstatt benutzerdefinierte Konnektoren für jede KI-Tool-Kombination zu erstellen, erstellen Sie einen MCP-Server und erhalten universelle Kompatibilität.
+
+Das Protokoll ist produktionsreif, weit verbreitet und wird von allen großen KI-Anbietern unterstützt. Wenn Sie KI-Anwendungen erstellen, die mit externen Systemen – Datenbanken, APIs, Dateien oder internen Tools – interagieren müssen, ist MCP nicht mehr optional. Es ist der Standard.
+
+**Bereit, Ihren ersten MCP-Server zu erstellen?** Beginnen Sie mit der [offiziellen Dokumentation](https://modelcontextprotocol.io) und dem [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk). Die Lernkurve ist sanft und der Lohn ist die universelle KI-Integration.
+
+## Verwandte Artikel
+
+- [Claude AI führt Code aus: Echtzeit-Python und Node.js](/blog/claude-ai-now-executes-code)
+- [Von Chatbots zu KI-Agenten: Die stille Revolution](/blog/from-chatbots-to-ai-agents-quiet-revolution)
+- [Produktionsleitfaden für KI-Agenten: Fehler in Höhe von 3,4.000 US-Dollar vermeiden](/blog/ai-agents-production-guide)
+- [Agentic AI Revolution 2025: Die Zukunft ist da](/blog/agentic-ai-revolution-2025)
+
+## Quellen
+
+- [MCP-Spezifikation 25.11.2025](https://modelcontextprotocol.io/specification/2025-11-25)
+- [Anthropic MCP-Ankündigung](https://www.anthropic.com/news/model-context-protocol)
+- [MCP GitHub Repository](https://github.com/modelcontextprotocol/modelcontextprotocol)
+- [Ein Jahr MCP: Rückblick 2025](https://www.pento.ai/blog/a-year-of-mcp-2025-review)
+- [MCP-Sicherheitsanalyse – Zenity](https://zenity.io/blog/security/securing-the-model-context-protocol-mcp)

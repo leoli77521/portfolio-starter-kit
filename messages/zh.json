@@ -3,6 +3,8 @@
     "siteName": "ToLearn Blog",
     "siteTagline": "给建设者的高信号笔记",
     "skipToContent": "跳到主要内容",
+    "themeToDark": "切换到深色模式",
+    "themeToLight": "切换到浅色模式",
     "home": "首页",
     "journal": "文章",
     "topics": "专题",

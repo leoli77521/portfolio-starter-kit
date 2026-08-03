@@ -1,12 +1,5 @@
-const fontStackClassName = 'font-stack'
-const fontVariableClassName = 'font-stack-vars'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 
-export const inter = {
-  className: fontStackClassName,
-  variable: fontVariableClassName,
-}
-
-export const jetBrainsMono = {
-  className: fontStackClassName,
-  variable: fontVariableClassName,
-}
+export const geistSans = GeistSans
+export const geistMono = GeistMono

@@ -46,6 +46,15 @@ function Table({ data }: TableProps) {
   )
 }
 
+/* 原生 markdown 表格：包一层横向滚动容器，保留 table 语义（屏幕阅读器可识别行列结构） */
+function NativeTable(props: React.TableHTMLAttributes<HTMLTableElement>) {
+  return (
+    <div className="overflow-x-auto" role="region" aria-label="Data table">
+      <table {...props} />
+    </div>
+  )
+}
+
 function getLocalizedMdxHref(href: string, locale: string) {
   if (!href.startsWith('/')) {
     return href
@@ -177,6 +186,7 @@ const baseComponents = {
     />
   ),
   Table,
+  table: NativeTable,
 } as MDXComponents
 
 interface CustomMDXProps extends Omit<MDXRemoteProps, 'components'> {

@@ -54,9 +54,8 @@ export function Navbar() {
   const hrefFor = (href: string) => localizePath(href, locale)
 
   return (
-    <header className="mb-12 md:mb-16" role="banner">
-      <div className="sticky top-0 z-50">
-        <div className="surface-panel px-4 py-3 lg:px-6">
+    <header className="sticky top-3 z-50 mb-12 md:mb-16" role="banner">
+      <div className="surface-panel px-4 py-3 lg:px-6">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
             <div className="flex items-center gap-4 lg:gap-8">
               <Link
@@ -65,7 +64,7 @@ export function Navbar() {
                 title={t('Nav.homeTitle')}
                 aria-label={t('Nav.homeTitle')}
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-emerald-400 shadow-sm theme-dark:bg-slate-100 theme-dark:text-emerald-700">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-indigo-400 shadow-sm theme-dark:bg-slate-100 theme-dark:text-indigo-700">
                   TL
                 </span>
                 <span className="hidden sm:block">
@@ -178,7 +177,6 @@ export function Navbar() {
             </div>
           </div>
         </div>
-      </div>
     </header>
   )
 }

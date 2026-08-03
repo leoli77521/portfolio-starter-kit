@@ -1,31 +1,17 @@
 @import 'tailwindcss';
 @custom-variant theme-dark (&:where(.dark, .dark *));
 
+/* 品牌色 token：全站统一以 indigo 为唯一强调色 */
+@theme {
+  --color-primary: #6366f1; /* indigo-500 */
+  --color-primary-strong: #4f46e5; /* indigo-600 */
+  --color-primary-soft: #818cf8; /* indigo-400（暗色模式强调色） */
+}
+
 :root {
-  /* Color System */
   --color-background: #FAFAFA; /* Warm Grey / Off-White */
   --color-foreground: #0f172a; /* slate-900 */
   color-scheme: light;
-
-  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
-  --font-jetbrains: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-  
-  --color-primary: #6366F1; /* Vibrant Violet (Indigo-500) */
-  --color-primary-foreground: #ffffff;
-  
-  --color-accent: #0D9488; /* Teal-600 */
-  --color-accent-foreground: #ffffff;
-  
-  --color-secondary: #f3f4f6; /* gray-100 */
-  --color-secondary-foreground: #111827; /* gray-900 */
-
-  --color-muted: #f1f5f9; /* slate-100 */
-  --color-muted-foreground: #64748b; /* slate-500 */
-
-  --color-border: #e2e8f0; /* slate-200 */
-
-  /* Syntax Highlighting */
 }
 
 ::selection {
@@ -55,27 +41,15 @@
 }
 
 .dark {
-  /* Color System Dark - Tech Blue Purple Theme */
-  --color-background: #0B0F1A; /* Base: Very dark blue-gray */
-  --color-foreground: #E2E8F0; /* Text: Light gray, readable */
+  --color-background: #0B0F1A; /* 深蓝灰底色 */
+  --color-foreground: #E2E8F0; /* 浅灰文字 */
 
-  --color-primary: #818CF8; /* Indigo-400: Bright, glowing primary */
-  --color-primary-foreground: #ffffff;
-
-  --color-secondary: #1F2937; /* Gray-800: Surface color */
-  --color-secondary-foreground: #F9FAFB; /* Gray-50 */
-
-  --color-muted: #1F2937; /* Gray-800: Muted surface */
-  --color-muted-foreground: #9CA3AF; /* Gray-400: Muted text */
-
-  --color-border: #374151; /* Gray-700: Subtle borders */
-
-  /* Syntax Highlighting adjustments for dark mode */
+  /* 暗色代码高亮 */
   --sh-class: #60A5FA;
   --sh-identifier: #F3F4F6;
   --sh-keyword: #F87171;
   --sh-string: #34D399;
-  
+
   color-scheme: dark;
 }
 
@@ -99,14 +73,14 @@
   z-index: 0;
 }
 
-/* 婢х偛宸遍悞锔惧仯閸欘垵顫嗛幀?- 閸欘垵顔栭梻顔解偓褌绱崠?*/
+/* 键盘导航焦点样式：保持清晰可见的焦点指示 */
 :focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* 鐠哄疇绻冪€佃壈鍩呴柧鐐复 - 闁款喚娲忛悽銊﹀煕閸欘垵顔栭梻顔解偓?*/
+/* 跳转主内容链接：仅键盘聚焦时可见 */
 .skip-to-content {
   position: absolute;
   left: -9999px;
@@ -124,16 +98,16 @@
   transform: translateX(-50%);
 }
 
-/* 缁夎濮╃粩顖欑喘閸?*/
+/* 移动端适配 */
 @media (max-width: 768px) {
 
-  /* 閺€鐟版澖缁夎濮╃粩顖涙瀮閺堫剙褰茬拠缁樷偓?*/
+  /* 移动端基础字号与行高 */
   body {
     font-size: 16px;
     line-height: 1.7;
   }
 
-  /* 娴兼ê瀵茬粔璇插З缁旑垱瀵滈柦顔惧仯閸戣灏崺?*/
+  /* 触控目标最小尺寸 44px */
   .btn-primary,
   a[class*="btn"],
   button,
@@ -143,14 +117,14 @@
     /* Avoid forcing flex/grid if not needed, just ensure size */
   }
 
-  /* 绾喕绻氶棃銏犲瘶鐏炴垵婀粔璇插З缁旑垯绗夐幑銏ｎ攽 */
+  /* 面包屑导航移动端横向滚动 */
   nav[aria-label="Breadcrumb navigation"] ol {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* 娴兼ê瀵茬粔璇插З缁旑垰宕遍悧鍥？鐠?*/
+  /* 卡片间距移动端收紧 */
   .featured-card,
   article {
     margin-bottom: 1rem;
@@ -189,11 +163,11 @@ body {
 }
 
 .prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+  @apply underline transition-all decoration-neutral-400 underline-offset-2 decoration-[0.1em];
 }
 
 .prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
+  @apply text-neutral-300;
   content: '#';
 }
 
@@ -202,14 +176,14 @@ body {
 }
 
 .prose pre {
-  @apply bg-gray-50 dark:bg-gray-900 rounded-xl overflow-x-auto border border-gray-200 dark:border-gray-800 py-4 px-4 text-sm shadow-sm;
+  @apply bg-gray-50 rounded-xl overflow-x-auto border border-gray-200 py-4 px-4 text-sm shadow-sm;
   font-family: var(--font-geist-mono), 'Fira Code', 'SF Mono', Consolas, monospace;
   line-height: 1.6;
   font-weight: 400;
 }
 
 .prose code {
-  @apply px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700;
+  @apply px-2 py-1 rounded-md bg-gray-100 text-gray-800 border border-gray-200;
   font-family: var(--font-geist-mono), 'Fira Code', 'SF Mono', Consolas, monospace;
   font-size: 0.9em;
   font-weight: 500;
@@ -228,16 +202,16 @@ body {
 .prose img {
   /* Don't apply styles to next/image */
   @apply m-0;
-  /* 绾喕绻氶崶鍓у閸濆秴绨插?*/
+  /* 防止图片溢出容器 */
   max-width: 100%;
   height: auto;
-  /* 閸ュ墽澧栭崝鐘烘祰娴兼ê瀵?*/
+  /* 延迟渲染屏外图片 */
   content-visibility: auto;
   contain-intrinsic-size: 0 500px;
 }
 
 .prose p {
-  @apply my-6 text-gray-700 dark:text-gray-300 leading-relaxed;
+  @apply my-6 text-gray-700 leading-relaxed;
   font-size: 1.125rem;
   font-weight: 400;
 }
@@ -250,19 +224,19 @@ body {
 }
 
 .prose h2 {
-  @apply text-2xl md:text-3xl font-bold tracking-tight mt-10 mb-4 text-gray-900 dark:text-gray-50;
+  @apply text-2xl md:text-3xl font-bold tracking-tight mt-10 mb-4 text-gray-900;
   line-height: 1.2;
   letter-spacing: -0.025em;
 }
 
 .prose h3 {
-  @apply text-xl md:text-2xl font-bold tracking-tight mt-8 mb-3 text-gray-900 dark:text-gray-100;
+  @apply text-xl md:text-2xl font-bold tracking-tight mt-8 mb-3 text-gray-900;
   line-height: 1.3;
   letter-spacing: -0.02em;
 }
 
 .prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2 text-gray-900 dark:text-gray-100;
+  @apply text-lg font-medium tracking-tight mt-6 mb-2 text-gray-900;
   line-height: 1.4;
   letter-spacing: -0.01em;
 }
@@ -311,7 +285,7 @@ input[type='email'] {
   }
 }
 
-/* 閹嗗厴娴兼ê瀵? 閸戝繐鐨崝銊ф暰娴犮儲褰佹妯烩偓褑鍏?*/
+/* 尊重减少动态偏好：关闭所有动画 */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -323,20 +297,7 @@ input[type='email'] {
   }
 }
 
-/* GPU 閸旂娀鈧喍绱崠?- 鐎靛綊娓剁憰浣稿З閻㈣崵娈戦崗鍐閸氼垳鏁ょ涵顑挎閸旂娀鈧?*/
-.featured-card,
-.card-hover,
-.btn-primary,
-.btn-secondary,
-.nav-link,
-.footer-link {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* 閸戝繐鐨粔璇插З缁旑垯绗夎箛鍛邦洣閻ㄥ嫬濮╅悽缁樻櫏閺?*/
+/* 移动端 hover 位移减弱 */
 @media (max-width: 768px) {
 
   .featured-card:hover,
@@ -344,7 +305,7 @@ input[type='email'] {
     transform: translateY(-2px);
   }
 
-  /* 缁夎濮╃粩顖滎洣閻劌顦查弶鍌滄畱濞撴劕褰夐崝銊ф暰 */
+  /* 渐变背景在移动端降级为纯色 */
   .bg-gradient-primary {
     background: #f0f9ff;
   }
@@ -360,29 +321,29 @@ input[type='email'] {
 }
 
 .section-title {
-  @apply text-3xl font-bold text-gray-900 dark:text-gray-50 mb-6 tracking-tight;
+  @apply text-3xl font-bold text-gray-900 mb-6 tracking-tight;
   letter-spacing: -0.025em;
   line-height: 1.2;
 }
 
 .featured-card {
-  @apply bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-gray-200/60 dark:border-slate-800/60 transition-all duration-300;
+  @apply bg-white/60 backdrop-blur-md rounded-2xl p-8 border border-gray-200/60 transition-all duration-300;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
 .featured-card:hover {
-  @apply border-blue-200/80 dark:border-blue-500/30 bg-white/90 dark:bg-slate-900/90;
+  @apply border-indigo-200/80 bg-white/90;
   transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.08), 0 8px 10px -6px rgba(59, 130, 246, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.08), 0 8px 10px -6px rgba(99, 102, 241, 0.04);
 }
 
 .card-title {
-  @apply font-bold text-blue-600 dark:text-blue-400 mb-3 text-xl leading-tight;
+  @apply font-bold text-primary-strong mb-3 text-xl leading-tight;
   letter-spacing: -0.02em;
 }
 
 .card-description {
-  @apply text-gray-600 dark:text-gray-400 leading-relaxed;
+  @apply text-gray-600 leading-relaxed;
   font-size: 1rem;
 }
 
@@ -392,7 +353,7 @@ input[type='email'] {
 }
 
 .btn-secondary {
-  @apply inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-semibold rounded-full transition-all duration-200 hover:shadow-md;
+  @apply inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-full transition-all duration-200 hover:shadow-md;
 }
 
 /* Mobile optimizations */
@@ -406,6 +367,12 @@ input[type='email'] {
     min-height: 44px;
     display: flex;
     align-items: center;
+  }
+
+  /* 正文行内链接例外：强制 flex 会破坏段落排版，行内链接不受 44px 触控目标约束 */
+  .prose a {
+    display: inline;
+    min-height: 0;
   }
 
   .prose p {
@@ -426,14 +393,7 @@ input[type='email'] {
   }
 }
 
-/* 娴兼ê瀵茬悰銊︾壐閸︺劎些閸斻劎顏惃鍕▔缁€?*/
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
+/* 表格横向滚动由 mdx.tsx 的 NativeTable 包装容器处理，不再对 table 全局用 display:block（会破坏表格语义） */
 .prose table {
   width: 100%;
   min-width: 36rem;
@@ -518,7 +478,7 @@ table {
 
 /* Enhanced link styles */
 .nav-link {
-  @apply relative font-medium text-gray-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-300 transition-colors duration-200 px-4 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-indigo-950/40;
+  @apply relative font-medium text-gray-700 hover:text-indigo-600 transition-colors duration-200 px-4 py-2 rounded-full hover:bg-gray-100;
 }
 
 .nav-link:hover::after {
@@ -528,12 +488,12 @@ table {
 
 .nav-link::after {
   content: '';
-  @apply absolute bottom-0 left-0 h-0.5 bg-indigo-600 dark:bg-indigo-400 opacity-0 transition-all duration-300 w-0 mx-auto right-0;
+  @apply absolute bottom-0 left-0 h-0.5 bg-indigo-600 opacity-0 transition-all duration-300 w-0 mx-auto right-0;
 }
 
 /* Enhanced footer styles */
 .footer-link {
-  @apply flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200 font-medium;
+  @apply flex items-center text-gray-600 hover:text-indigo-600 transition-colors duration-200 font-medium;
 }
 
 .footer-link:hover {
@@ -560,15 +520,15 @@ table {
 
 /* Enhanced prose styles */
 .prose blockquote {
-  @apply border-l-4 border-indigo-500 pl-6 my-8 italic text-gray-700 dark:text-gray-300 bg-indigo-50 dark:bg-indigo-900/20 py-4 pr-6 rounded-r-xl;
+  @apply border-l-4 border-indigo-500 pl-6 my-8 italic text-gray-700 bg-indigo-50 py-4 pr-6 rounded-r-xl;
 }
 
 .prose ul li::marker {
-  @apply text-indigo-600 dark:text-indigo-400;
+  @apply text-indigo-600;
 }
 
 .prose ol li::marker {
-  @apply text-indigo-600 dark:text-indigo-400 font-bold;
+  @apply text-indigo-600 font-bold;
 }
 
 /* Reserve space for dynamically injected AdSense units to limit CLS */
@@ -610,42 +570,45 @@ ins.adsbygoogle {
 
 /* Editorial surface system */
 .surface-panel {
-  @apply rounded-[2rem] border border-slate-200/80 bg-white/88 shadow-[0_18px_60px_-28px_rgba(15,23,42,0.22)] backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/72;
+  @apply rounded-[2rem] border border-slate-200/80 bg-white/88 shadow-[0_18px_60px_-28px_rgba(15,23,42,0.22)] backdrop-blur-xl;
 }
 
 .surface-card {
-  @apply rounded-[1.75rem] border border-slate-200/80 bg-white/82 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.2)] backdrop-blur-md transition-all duration-200 dark:border-slate-800/80 dark:bg-slate-950/82;
+  @apply rounded-[1.75rem] border border-slate-200/80 bg-white/82 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.2)] backdrop-blur-md transition-all duration-200;
 }
 
 .surface-card:hover {
-  @apply border-slate-300/80 dark:border-slate-700/80;
+  @apply border-slate-300/80;
   transform: translateY(-2px);
 }
 
 .section-kicker {
-  @apply text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400;
+  @apply text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-slate-500;
 }
 
 .section-copy {
-  @apply text-base leading-7 text-slate-600 dark:text-slate-300;
+  @apply text-base leading-7 text-slate-600;
 }
 
 .meta-chip {
-  @apply inline-flex items-center rounded-full border border-slate-200/70 bg-slate-100/80 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300;
+  @apply inline-flex items-center rounded-full border border-slate-200/70 bg-slate-100/80 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-600;
 }
 
 .stat-pill {
-  @apply flex flex-col gap-1 rounded-[1.5rem] border border-slate-200/70 bg-white/80 px-4 py-4 text-sm text-slate-500 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-950/76 dark:text-slate-400;
+  @apply flex flex-col gap-1 rounded-[1.5rem] border border-slate-200/70 bg-white/80 px-4 py-4 text-sm text-slate-500 shadow-sm backdrop-blur;
 }
 
 .editorial-link {
-  @apply inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition-colors hover:text-slate-950 dark:text-slate-300 dark:hover:text-white;
+  @apply inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition-colors hover:text-slate-950;
 }
 
 .utility-button {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-3 py-2.5 text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950 dark:border-slate-800 dark:bg-slate-950/82 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:text-white;
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-200/80 bg-white/85 px-3 py-2.5 text-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950;
 }
 
+/* 暗色覆盖：Tailwind alpha.13 的 @apply 不支持自定义变体（theme-dark），
+   因此 @apply 类（prose、surface、按钮等）的暗色样式在此用 .dark 手动声明。
+   组件 className 中的 theme-dark: 工具类不受影响，正常走 @custom-variant。 */
 .dark .prose a {
   text-decoration-color: #525252;
 }
@@ -688,12 +651,12 @@ ins.adsbygoogle {
 }
 
 .dark .featured-card:hover {
-  border-color: rgb(59 130 246 / 0.3);
+  border-color: rgb(99 102 241 / 0.3);
   background-color: rgb(15 23 42 / 0.9);
 }
 
 .dark .card-title {
-  color: #60a5fa;
+  color: var(--color-primary-soft);
 }
 
 .dark .card-description {
@@ -791,46 +754,4 @@ ins.adsbygoogle {
 .dark .utility-button:hover {
   border-color: #334155;
   color: #ffffff;
-}
-
-/* Bridge class-based dark mode while Tailwind alpha still compiles dark utilities as media queries. */
-.dark [class*='text-slate-950'],
-.dark [class*='text-slate-900'],
-.dark [class*='text-gray-900'],
-.dark [class*='text-neutral-900'] {
-  color: #f8fafc !important;
-}
-
-.dark [class*='text-slate-700'],
-.dark [class*='text-slate-600'],
-.dark [class*='text-gray-700'],
-.dark [class*='text-gray-600'],
-.dark [class*='text-neutral-700'],
-.dark [class*='text-neutral-600'] {
-  color: #cbd5e1 !important;
-}
-
-.dark [class*='text-slate-500'],
-.dark [class*='text-gray-500'],
-.dark [class*='text-neutral-500'] {
-  color: #94a3b8 !important;
-}
-
-.dark [class*='border-slate-200'],
-.dark [class*='border-slate-300'],
-.dark [class*='border-gray-200'],
-.dark [class*='border-gray-300'],
-.dark [class*='border-neutral-200'],
-.dark [class*='border-neutral-300'] {
-  border-color: #1f2937 !important;
-}
-
-.dark [class*='bg-white'],
-.dark [class*='bg-slate-50'],
-.dark [class*='bg-slate-100'],
-.dark [class*='bg-gray-50'],
-.dark [class*='bg-gray-100'],
-.dark [class*='bg-neutral-50'],
-.dark [class*='bg-neutral-100'] {
-  background-color: rgb(2 6 23 / 0.82) !important;
 }

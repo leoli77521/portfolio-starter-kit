@@ -3,6 +3,8 @@
     "siteName": "ToLearn Blog",
     "siteTagline": "Notes à fort signal pour les builders",
     "skipToContent": "Aller au contenu principal",
+    "themeToDark": "Passer en mode sombre",
+    "themeToLight": "Passer en mode clair",
     "home": "Accueil",
     "journal": "Journal",
     "topics": "Sujets",

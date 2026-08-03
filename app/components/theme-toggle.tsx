@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { MoonStar, SunMedium } from 'lucide-react'
 
 const LIGHT_THEME_COLOR = '#fafafa'
@@ -33,6 +34,7 @@ function applyTheme(theme: 'light' | 'dark') {
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [mounted, setMounted] = useState(false)
+  const t = useTranslations('Common')
 
   useEffect(() => {
     setMounted(true)
@@ -83,12 +85,14 @@ export function ThemeToggle() {
     return <div className="h-11 w-11 animate-pulse rounded-full bg-slate-100 theme-dark:bg-slate-900" />
   }
 
+  const nextThemeLabel = t(theme === 'light' ? 'themeToDark' : 'themeToLight')
+
   return (
     <button
       onClick={toggleTheme}
       className="utility-button h-11 w-11 p-0"
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={nextThemeLabel}
+      title={nextThemeLabel}
       type="button"
     >
       {theme === 'light' ? (

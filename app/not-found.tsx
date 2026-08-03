@@ -127,7 +127,7 @@ export default async function NotFound() {
         </Link>
         <Link
           href={localizePath('/blog', locale)}
-          className="ml-4 inline-flex items-center rounded-lg border border-neutral-300 px-6 py-3 font-medium text-neutral-900 transition-colors hover:border-blue-300 theme-dark:border-neutral-700 theme-dark:text-neutral-100 theme-dark:hover:border-blue-700"
+          className="ml-4 inline-flex items-center rounded-lg border border-neutral-300 px-6 py-3 font-medium text-neutral-900 transition-colors hover:border-indigo-300 theme-dark:border-neutral-700 theme-dark:text-neutral-100 theme-dark:hover:border-indigo-700"
         >
           {t('browseAll')}
         </Link>

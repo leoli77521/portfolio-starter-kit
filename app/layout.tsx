@@ -1,6 +1,6 @@
 import './global.css'
 import type { Metadata, Viewport } from 'next'
-import { inter, jetBrainsMono } from './fonts'
+import { geistMono, geistSans } from './fonts'
 import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -114,8 +114,8 @@ export default async function RootLayout({
       lang={getLocaleLanguageTag(locale)}
       suppressHydrationWarning
       className={cx(
-        inter.variable,
-        jetBrainsMono.variable
+        geistSans.variable,
+        geistMono.variable
       )}
     >
       <head>
@@ -130,7 +130,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
 
-        {/* 鍥炬爣浼樺寲 */}
+        {/* 图标优化 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="alternate" type="application/rss+xml" href="/rss" title="ToLearn Blog RSS Feed" />
@@ -141,7 +141,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className={cx('antialiased max-w-7xl mx-4 lg:mx-auto mt-8 lg:mt-12', inter.className)}>
+      <body className={cx('antialiased max-w-7xl mx-4 lg:mx-auto mt-8 lg:mt-12')}>
         <a href="#main-content" className="skip-to-content">
           {t('skipToContent')}
         </a>

@@ -18,7 +18,7 @@ export function HeroSection({
 
   return (
     <section className="relative overflow-hidden pb-2">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.16),transparent_40%),radial-gradient(circle_at_78%_18%,rgba(14,165,233,0.14),transparent_32%),linear-gradient(180deg,rgba(248,250,252,0.92),rgba(248,250,252,0))] theme-dark:bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.22),transparent_38%),radial-gradient(circle_at_78%_18%,rgba(56,189,248,0.18),transparent_32%),linear-gradient(180deg,rgba(2,6,23,0.78),rgba(2,6,23,0))]" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.16),transparent_40%),radial-gradient(circle_at_78%_18%,rgba(139,92,246,0.12),transparent_32%),linear-gradient(180deg,rgba(248,250,252,0.92),rgba(248,250,252,0))] theme-dark:bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.22),transparent_38%),radial-gradient(circle_at_78%_18%,rgba(139,92,246,0.16),transparent_32%),linear-gradient(180deg,rgba(2,6,23,0.78),rgba(2,6,23,0))]" />
 
       <div className="surface-panel px-6 py-8 md:px-8 md:py-10 lg:px-10 lg:py-12">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.18fr)_minmax(18rem,0.82fr)] lg:gap-10">

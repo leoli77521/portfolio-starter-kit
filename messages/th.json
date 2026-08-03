@@ -3,6 +3,8 @@
     "siteName": "ToLearn Blog",
     "siteTagline": "บันทึกสัญญาณชัดสำหรับผู้สร้าง",
     "skipToContent": "ข้ามไปยังเนื้อหาหลัก",
+    "themeToDark": "สลับเป็นโหมดมืด",
+    "themeToLight": "สลับเป็นโหมดสว่าง",
     "home": "หน้าแรก",
     "journal": "บทความ",
     "topics": "หัวข้อ",

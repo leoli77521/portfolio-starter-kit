@@ -27,13 +27,15 @@
         "evidence": "Visible comment form exposes comment, name, email, and website fields; no login wall or captcha was visible."
       },
       "proposedComment": "The distinction between memory hierarchy and sequence length is useful here. It is a good reminder that a model result can reflect systems design as much as model scale, which is why I find it valuable to keep benchmark methodology separate from raw model rankings. ToLearn's benchmark methodology guide makes a similar case for recording the scaffold and task setup alongside every score.",
-      "submissionStatus": "submitted_pending_moderation",
+      "submissionStatus": "submitted_visible",
       "submittedAt": "2026-08-21T03:43:15-07:00",
       "submissionResult": {
-        "status": "accepted_pending_moderation",
+        "status": "visible_after_moderation",
         "resultUrl": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/comment-page-23/#comment-513511",
         "visibleAfterSubmit": false,
-        "formNote": "The page redirected to the submitted comment anchor. The comment was not yet visible in the public list, consistent with moderation. The email field remained blank because the live form did not retain an entered value and did not mark the field required."
+        "visibleAfterModerationCheck": true,
+        "moderationCheckedAt": "2026-08-21T04:01:26-07:00",
+        "formNote": "A follow-up page check confirmed the comment and ToLearn Editorial name are now visible at the submitted comment anchor. The email field remained blank because the live form did not retain an entered value and did not mark the field required."
       }
     },
     {
@@ -70,5 +72,5 @@
       "submissionStatus": "skipped"
     }
   ],
-  "nextStep": "Monitor Synced Review for moderation; Pixel77 is publicly visible. Do not resubmit either target unless the result is removed or rejected."
+  "nextStep": "Monitor both public comments for removal or rejection. Do not resubmit either target unless the result changes."
 }

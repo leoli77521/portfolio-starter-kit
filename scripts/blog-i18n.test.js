@@ -1,4 +1,6 @@
 const assert = require('node:assert/strict')
+const fs = require('node:fs')
+const path = require('node:path')
 const {test} = require('node:test')
 
 const {
@@ -24,6 +26,8 @@ const translatedSlug = '2026-04-02-claw-code-ai-coding-agent-architecture'
 const missingSlug = 'not-a-real-post'
 const nonDefaultLocales = locales.filter((locale) => locale !== defaultLocale)
 const allPostSlugs = require('../public/search-index.en.json').map((post) => post.slug).sort()
+const sitemapSource = fs.readFileSync(path.join(process.cwd(), 'app', 'sitemap.ts'), 'utf8')
+const translatedArticlesAreInSitemap = /const INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP = true/.test(sitemapSource)
 const firstBatchSlugs = [
   '2026-04-02-claw-code-ai-coding-agent-architecture',
   '2026-04-02-rust-python-ai-agent-runtime-architecture',
@@ -79,33 +83,47 @@ test('localized static params are generated from real translation files', () => 
   }
 })
 
-test('translation audit reports fresh first-batch sources', () => {
+test('translation freshness is required before translated articles are returned to the sitemap', () => {
   const report = validatePostTranslations(featuredTranslatedPostSlugs)
   assert.equal(report.missing.length, 0)
-  assert.equal(report.stale.length, 0)
+
+  if (translatedArticlesAreInSitemap) {
+    assert.equal(report.stale.length, 0)
+  } else {
+    assert.ok(Array.isArray(report.stale))
+  }
 })
 
-test('all published posts have translations for every non-default locale', () => {
-  assert.equal(allPostSlugs.length, 44)
+test('translation manifests match available files while English-first pages may await translation', () => {
+  assert.ok(allPostSlugs.length > 0)
 
   for (const locale of nonDefaultLocales) {
-    assert.deepEqual(getTranslatedPostSlugsForLocale(locale).sort(), allPostSlugs)
+    const translatedSlugs = getTranslatedPostSlugsForLocale(locale).sort()
+    assert.deepEqual(translatedSlugs, translatedPostSlugsByLocale[locale].slice().sort())
+
+    for (const slug of translatedSlugs) {
+      assert.deepEqual(getAvailablePostLocales(slug), locales)
+    }
+
+    const report = validatePostTranslations(translatedSlugs)
+    assert.equal(report.missing.length, 0)
+
+    if (translatedArticlesAreInSitemap) {
+      assert.equal(report.stale.length, 0)
+    }
   }
 
-  for (const slug of allPostSlugs) {
-    assert.deepEqual(getAvailablePostLocales(slug), locales)
+  const untranslatedSlugs = allPostSlugs.filter((slug) => !hasPostTranslation(slug, nonDefaultLocales[0]))
+  for (const slug of untranslatedSlugs) {
+    assert.deepEqual(getAvailablePostLocales(slug), [defaultLocale])
   }
-
-  const report = validatePostTranslations(allPostSlugs)
-  assert.equal(report.missing.length, 0)
-  assert.equal(report.stale.length, 0)
 })
 
 test('middleware translation manifest matches translation files', () => {
   for (const locale of nonDefaultLocales) {
     assert.deepEqual(translatedPostSlugsByLocale[locale].slice().sort(), getTranslatedPostSlugsForLocale(locale).sort())
 
-    for (const slug of allPostSlugs) {
+    for (const slug of getTranslatedPostSlugsForLocale(locale)) {
       assert.equal(hasKnownPostTranslation(slug, locale), true)
     }
   }

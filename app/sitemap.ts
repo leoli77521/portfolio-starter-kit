@@ -17,6 +17,13 @@ export { baseUrl } from 'app/lib/constants'
 const PROJECT_ROOT = process.cwd()
 const DEFAULT_LAST_MODIFIED = '2026-01-01T00:00:00.000Z'
 const MIN_POSTS_FOR_YEAR_PAGE = 3
+// GSC shows that most URLs waiting for indexing are automatically generated
+// locale variants. Until a translated page is reviewed and earns demand in
+// its target market, keep the XML sitemap focused on the English editorial
+// canonicals. Localized pages remain available to readers and can be added
+// back deliberately after a quality review.
+const INDEXABLE_SITEMAP_LOCALES = [defaultLocale]
+const INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP = false
 const LOCALIZED_SITEMAP_PATHS = new Set([
   '/',
   '/blog',
@@ -74,7 +81,7 @@ function localizeSitemapRoutes<T extends { url: string }>(routes: T[]): T[] {
       return [route]
     }
 
-    return locales.map((locale) => {
+    return INDEXABLE_SITEMAP_LOCALES.map((locale) => {
       const localizedPath = localizePath(path, locale)
       return {
         ...route,
@@ -213,18 +220,20 @@ export default async function sitemap() {
     priority: 0.7,
   }))
 
-  const localizedBlogs = locales
-    .filter((locale) => locale !== defaultLocale)
-    .flatMap((locale) =>
-      getBlogPosts(locale)
-        .filter((post) => post.isTranslated)
-        .map((post) => ({
-          url: `${baseUrl}${getArticlePath(post.slug, locale)}`,
-          lastModified: getLatestTimestamp(getPostLastModified(post), post.metadata.translatedAt),
-          changeFrequency: 'weekly' as const,
-          priority: 0.65,
-        }))
-    )
+  const localizedBlogs = INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP
+    ? locales
+        .filter((locale) => locale !== defaultLocale)
+        .flatMap((locale) =>
+          getBlogPosts(locale)
+            .filter((post) => post.isTranslated)
+            .map((post) => ({
+              url: `${baseUrl}${getArticlePath(post.slug, locale)}`,
+              lastModified: getLatestTimestamp(getPostLastModified(post), post.metadata.translatedAt),
+              changeFrequency: 'weekly' as const,
+              priority: 0.65,
+            }))
+        )
+    : []
 
   const tagCounts = new Map<string, number>()
   const categoryNames = new Set<string>()

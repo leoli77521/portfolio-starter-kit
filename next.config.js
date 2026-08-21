@@ -1,4 +1,5 @@
 const createNextIntlPlugin = require('next-intl/plugin')
+const {getLegacyBlogRedirects} = require('./app/lib/legacy-blog-redirects')
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
@@ -39,10 +40,7 @@ const nextConfig = {
   // 重定向配置已移至 vercel.json 避免双重跳转
   // Next.js 层面只保留应用逻辑相关的重定向
   redirects: async () => {
-    return [
-      // 其他应用级别的重定向可以在这里添加
-      // 例如：旧路由到新路由的映射
-    ]
+    return getLegacyBlogRedirects()
   },
 }
 

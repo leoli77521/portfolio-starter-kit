@@ -2,6 +2,7 @@ const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const path = require('node:path')
 const {test} = require('node:test')
+const {isLegacyBlogSlug} = require('../app/lib/legacy-blog-redirects')
 
 const rootDirectory = process.cwd()
 const sourceDirectories = [
@@ -52,7 +53,7 @@ function getLineNumber(content, index) {
   return content.slice(0, index).split('\n').length
 }
 
-test('markdown links to blog posts point at existing slugs', () => {
+test('markdown links to blog posts point at existing slugs or intentional legacy redirects', () => {
   const sourceFiles = sourceDirectories.flatMap(collectMdxFiles)
   const knownSlugs = new Set(sourceFiles
     .filter((file) => file.includes(`${path.sep}posts${path.sep}`))
@@ -69,7 +70,7 @@ test('markdown links to blog posts point at existing slugs', () => {
     for (const match of content.matchAll(blogLinkPattern)) {
       const slug = decodeURIComponent(match[1]).replace(/^\/+|\/+$/g, '')
 
-      if (!knownSlugs.has(slug)) {
+      if (!knownSlugs.has(slug) && !isLegacyBlogSlug(slug)) {
         brokenLinks.push(`${path.relative(rootDirectory, file)}:${getLineNumber(content, match.index)} -> /blog/${slug}`)
       }
     }

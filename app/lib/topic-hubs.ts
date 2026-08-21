@@ -69,9 +69,9 @@ export const topicHubs: TopicHub[] = [
   {
     slug: 'seo-fundamentals',
     title: 'SEO Fundamentals',
-    seoTitle: 'SEO Fundamentals Guide 2026: Learn Google SEO',
+    seoTitle: 'SEO Fundamentals: Google SEO Basics & Checklist',
     seoDescription:
-      'Learn SEO fundamentals for 2026: search intent, technical SEO, on-page optimization, internal links, schema, mobile performance, and measurement.',
+      'Learn SEO fundamentals for 2026 with a Google SEO basics checklist: crawlability, intent, on-page SEO, internal links, schema, mobile performance, and measurement.',
     description:
       'Learn SEO fundamentals for 2026: search intent, technical SEO, on-page optimization, internal links, schema, mobile performance, and measurement.',
     longDescription: `SEO fundamentals are not tricks for gaming Google. They are the basic signals that help search engines discover your pages, understand what each page covers, and decide whether the result is useful enough to show to searchers. Start with crawlability, search intent, helpful content, clean page structure, internal links, mobile performance, and Search Console measurement before chasing advanced tactics.`,
@@ -358,6 +358,9 @@ export const topicHubs: TopicHub[] = [
   {
     slug: 'ai-search-geo',
     title: 'AI Search and GEO',
+    seoTitle: 'AI Search Optimization & GEO Guide 2026',
+    seoDescription:
+      'Learn AI search optimization and GEO for 2026: answer-first content, citation-ready evidence, entity clarity, structured data, and measurable refresh workflows.',
     description:
       'A focused path on AI search, generative engine optimization, search reliability, and content visibility in answer engines.',
     longDescription: `AI search is changing the web traffic map. This hub gathers ToLearn work on answer engines, AI search reliability, content pipelines, GEO strategy, and the practical ways publishers can keep their work discoverable when users get more answers directly from AI interfaces. It is meant for builders and operators who need to connect SEO fundamentals with the realities of Google AI Overviews, Perplexity-style answers, and AI-mediated research flows.`,
@@ -394,6 +397,124 @@ export const topicHubs: TopicHub[] = [
       'Understand how AI answers change publisher traffic and search behavior.',
       'Build content systems that support visibility in both search engines and answer engines.',
       'Use reliability, citations, and original analysis as durable search assets.',
+    ],
+    readingOrderDescription:
+      'Start with the AI search visibility guide, move into the technical GEO model, then use the content pipeline article to operationalize quality checks and refreshes.',
+    learningGoalsDescription:
+      'This path helps publishers and builders improve retrieval, citation readiness, and useful click-through without treating AI search as a shortcut around SEO fundamentals.',
+    guideSections: [
+      {
+        title: 'What Is AI Search Optimization?',
+        body: [
+          'AI search optimization is the practice of making a page easy for search and answer systems to retrieve, understand, verify, and cite. It builds on SEO rather than replacing it: a crawlable page with useful content, clear entities, descriptive headings, and credible sources remains the starting point.',
+          'The practical shift is that an answer engine may use one small passage instead of sending a user through an entire result page. Every important section therefore needs to make sense on its own, answer a real question quickly, and preserve the evidence behind the claim.',
+        ],
+      },
+      {
+        title: 'AEO, GEO, and SEO: How They Fit Together',
+        body: [
+          'SEO focuses on discoverability and relevance in search results. Answer engine optimization (AEO) makes direct answers, lists, and comparison tables easier to surface. Generative engine optimization (GEO) extends that work by making the page more retrieval-ready, sourceable, and semantically clear for AI-generated responses.',
+          'Do not create three separate versions of the same page. Build one useful page that satisfies the search intent, gives a concise answer before the detail, shows evidence and dates for changeable claims, and links to the next relevant source of depth.',
+        ],
+        bullets: [
+          'SEO: crawlable URLs, intent alignment, topical relevance, and useful search snippets.',
+          'AEO: concise definitions, lists, tables, and question-based headings that answer directly.',
+          'GEO: citation-ready evidence, stable entity language, machine-readable structure, and original information worth retrieving.',
+        ],
+      },
+      {
+        title: 'Build Citation-Ready Content',
+        body: [
+          'Citation readiness is not a markup trick. It comes from making important statements specific, attributable, and easy to check. Name the source, distinguish observation from inference, state the date when freshness matters, and avoid inflating a small data point into a universal claim.',
+          'Original research, tested workflows, benchmarks with methodology, and first-hand implementation notes are usually more durable than generic summaries. If a paragraph can be copied into an answer without losing its meaning or its evidence, it is more useful to readers and more legible to retrieval systems.',
+        ],
+      },
+      {
+        title: 'Structure Pages for Retrieval and Human Readers',
+        body: [
+          'Start with a short answer beneath a question-style heading, then add the caveats, methodology, examples, and next steps. Use tables when readers are comparing options and numbered steps when they need an execution sequence. Keep titles, H1s, summaries, and canonical URLs aligned to one intent.',
+          'Structured data can clarify the page type and FAQ or HowTo content, but it cannot compensate for weak information. The underlying page needs clear HTML, a self-canonical URL, descriptive internal links, readable mobile layout, and no accidental noindex or duplicate-content issue.',
+        ],
+      },
+      {
+        title: 'Measure AI Search Visibility Without Guessing',
+        body: [
+          'Track the pages and queries that already earn impressions, then compare changes in clicks, CTR, average position, cited mentions where available, and qualified engagement after an update. Look for page-query pairs where the intent is clear but the current page does not answer the question early enough.',
+          'Use a controlled refresh process: change the title or opening answer for a documented reason, record the publish date, request recrawling only for high-priority pages, and review the trend over several weeks. Avoid calling a short-term fluctuation a durable AI search gain.',
+        ],
+      },
+    ],
+    checklist: {
+      title: 'AI Search and GEO Publishing Checklist',
+      description:
+        'Use this checklist for high-priority pages that need to work in classic search results and answer-engine retrieval.',
+      items: [
+        'Choose one query intent and write a title, H1, canonical URL, and opening answer that agree on the topic.',
+        'Answer the primary question in the first 100 words, then add evidence, caveats, and deeper implementation detail.',
+        'Use question headings, short lists, and comparison tables only when they make the answer easier to scan.',
+        'Cite primary or authoritative sources for changeable facts, and label the date or methodology behind original data.',
+        'Use stable names for entities, products, metrics, and concepts so related sections reinforce each other.',
+        'Add descriptive internal links from the topic hub to the best supporting articles and back again.',
+        'Keep thin, duplicated, unreviewed, or poorly localized pages out of the primary sitemap.',
+        'Validate canonical tags, structured data, mobile readability, and indexability before requesting recrawl.',
+        'Review Search Console impressions, CTR, position, and qualified engagement after each documented refresh.',
+      ],
+    },
+    faq: [
+      {
+        question: 'What is AI search optimization?',
+        answer:
+          'AI search optimization makes content easier for search and answer systems to retrieve, understand, verify, and cite. It combines SEO fundamentals with direct answers, evidence, clear entities, structured content, and measurable refresh workflows.',
+      },
+      {
+        question: 'Is GEO different from SEO?',
+        answer:
+          'GEO is an optimization layer, not a replacement for SEO. SEO helps a page be discovered and ranked; GEO emphasizes retrieval-ready passages, citation-ready evidence, stable entity language, and content that can be synthesized accurately in generative answers.',
+      },
+      {
+        question: 'How can a page earn visibility in AI search?',
+        answer:
+          'Create a useful page with a direct answer, clear structure, original evidence or credible sources, current dates for changeable claims, and descriptive internal links. Then monitor the query-page pair in Search Console and refresh the section that does not satisfy intent.',
+      },
+      {
+        question: 'Does structured data guarantee an AI citation?',
+        answer:
+          'No. Structured data helps systems understand page types and relationships, but it does not guarantee citation or ranking. Useful, accurate, well-sourced content that answers the query is still the essential requirement.',
+      },
+    ],
+    conclusion: {
+      title: 'Build for Useful Retrieval, Not Shortcut Rankings',
+      body: [
+        'The strongest AI search strategy is still a useful publishing strategy: make a page easy to crawl, clear about its topic, direct in its answer, careful with evidence, and connected to the next useful source of depth.',
+        'Treat AI search as a reason to improve page quality and measurement discipline. The pages most likely to remain visible are those that offer something an answer engine can quote accurately and a reader can trust enough to continue exploring.',
+      ],
+    },
+    coreTerms: [
+      'AI search optimization',
+      'generative engine optimization',
+      'GEO strategy',
+      'answer engine optimization',
+      'AI Overviews',
+      'citation readiness',
+      'retrieval-ready content',
+      'structured data',
+    ],
+    referenceLinks: [
+      {
+        label: 'Google: AI Features and Your Website',
+        href: 'https://developers.google.com/search/docs/appearance/ai-features',
+        description: 'Official guidance on how existing SEO practices apply to Google AI search features.',
+      },
+      {
+        label: 'Google: Creating Helpful, Reliable, People-First Content',
+        href: 'https://developers.google.com/search/docs/fundamentals/creating-helpful-content',
+        description: 'Official baseline for content that helps users and search systems assess usefulness.',
+      },
+      {
+        label: 'Google: Structured Data Introduction',
+        href: 'https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data',
+        description: 'Official overview of structured data and its role in helping Google understand page content.',
+      },
     ],
   },
   {

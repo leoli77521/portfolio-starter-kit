@@ -1,16 +1,20 @@
 ---
-title: "What Claw Code Reveals About AI Coding Agent Architecture"
+title: "Claw Code: AI Coding Agent Architecture Explained"
+seoTitle: "Claw Code: AI Coding Agent Architecture"
+seoDescription: "What is Claw Code? Explore the runtime, tools, permissions, MCP connections, sessions, and extension points that make an AI coding agent work."
 publishedAt: "2026-04-02"
-updatedAt: "2026-04-02"
-summary: "Claw Code's public docs and parity repo offer a useful blueprint for how modern AI coding agents are actually structured beyond the model layer."
-image: "/og?title=What%20Claw%20Code%20Reveals%20About%20AI%20Coding%20Agent%20Architecture"
+updatedAt: "2026-08-20"
+summary: "Claw Code's public docs and parity repo reveal how an AI coding agent is assembled: runtime loop, tools, permissions, MCP connections, sessions, and plugins."
+image: "/og?title=Claw%20Code%3A%20AI%20Coding%20Agent%20Architecture%20Explained"
 category: 'AI Technology'
 tags: ["Claw Code", "AI Coding Agents", "Developer Tools", "Rust", "Python", "MCP", "Software Architecture"]
 faq: [{"question":"Why is Claw Code worth studying even if the main repo is locked?","answer":"Because the public parity repo still exposes the architecture patterns that matter: runtime design, tool integration, permissions, sessions, and migration strategy."},{"question":"What is the main lesson from this project?","answer":"A coding agent is not just a strong model. It is a system made of a runtime loop, tool layer, permission gates, memory, and extensibility primitives."},{"question":"Is this article about benchmark performance?","answer":"No. It is about product and systems architecture: how a coding agent is assembled so it can do useful work safely and repeatedly."}]
 howto: [{"name":"Study the runtime boundary first","text":"Before comparing models, map the interface, runtime loop, tool execution path, and persistence layer of any coding agent you evaluate."},{"name":"Look for trust surfaces","text":"Check how the system handles permissions, tool approval, hooks, and sandboxing before you treat it as production-capable."},{"name":"Evaluate extensibility early","text":"A coding agent becomes strategically useful when it can add tools, plugins, MCP servers, and reusable workflows without becoming chaotic."}]
 ---
 
-# What Claw Code Reveals About AI Coding Agent Architecture
+## What Is Claw Code?
+
+**Claw Code is an AI coding-agent architecture worth studying because its public materials expose the system around the model:** a command interface, runtime loop, tool registry, permission gates, MCP connections, session memory, and extension points. It is a useful blueprint for evaluating whether a coding agent can perform work safely and repeatedly rather than merely generate code.
 
 If you only follow model releases, AI coding tools can look deceptively simple.
 

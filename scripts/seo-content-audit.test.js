@@ -108,7 +108,10 @@ test('SEO audit script reports the core AI authority checks', () => {
   assert.equal(typeof audit.runAudit, 'function')
 
   const report = audit.runAudit({ rootDir: root })
-  assert.equal(report.summary.aiPosts, 37)
+  assert.equal(
+    report.summary.aiPosts,
+    getPosts().filter((post) => post.metadata.category === 'AI Technology').length
+  )
   assert.ok(report.summary.primaryHubCoveragePercent >= 100)
   assert.ok(Array.isArray(report.issues))
   assert.ok(Array.isArray(report.highPotentialRefreshQueue))

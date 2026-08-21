@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "property": "sc-domain:tolearn.blog",
+  "timezone": "America/Los_Angeles",
+  "updatedAt": "2026-08-21T00:00:00-07:00",
+  "requiredMetrics": [
+    "gsc.clicks",
+    "gsc.impressions",
+    "gsc.ctr",
+    "aiSearch.impressions",
+    "aiSearch.clicks",
+    "indexCoverage.indexedUrls",
+    "indexCoverage.crawledNotIndexed",
+    "conversions.corePageConversions"
+  ],
+  "snapshots": [
+    {
+      "capturedAt": "2026-08-21T00:00:00-07:00",
+      "source": "manual-baseline",
+      "periodEnd": "2026-08-20",
+      "gsc": {
+        "7d": {"clicks": null, "impressions": null, "ctr": null, "position": null},
+        "14d": {"clicks": null, "impressions": null, "ctr": null, "position": null},
+        "28d": {"clicks": null, "impressions": null, "ctr": null, "position": null}
+      },
+      "aiSearch": {
+        "7d": {"clicks": null, "impressions": null},
+        "14d": {"clicks": null, "impressions": null},
+        "28d": {"clicks": null, "impressions": 955, "benchmarkPageImpressions": 795}
+      },
+      "indexCoverage": {
+        "indexedUrls": null,
+        "crawledNotIndexed": 106,
+        "decisionCounts": {"index": 56, "noindex": 28, "redirect": 1, "review": 21}
+      },
+      "conversions": {
+        "corePageConversions": null,
+        "source": "not connected"
+      },
+      "experiments": {
+        "titleIntroTableInternalLinks": {
+          "status": "running",
+          "page": "/blog/llm-coding-benchmark-comparison-2026",
+          "startedAt": "2026-08-21",
+          "measurementDue": "2026-09-11",
+          "baselineAiSearchImpressions28d": 795,
+          "baselineGsc": "pending GSC export",
+          "variantStep": "title"
+        }
+      }
+    }
+  ],
+  "notes": [
+    "GSC performance and indexed URL counts require an authenticated export or API credential; null is intentional until imported.",
+    "The AI-search baseline is the supplied three-month report: 955 impressions overall and 795 for the benchmark page.",
+    "Index coverage decision counts are the 2026-08-21 audit input, before the 21 review URLs were assigned deterministic policy decisions."
+  ]
+}

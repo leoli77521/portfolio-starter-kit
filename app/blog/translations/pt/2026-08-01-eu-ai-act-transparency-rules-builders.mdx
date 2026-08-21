@@ -1,0 +1,189 @@
+---
+title: "As regras de transparência da Lei de IA da UE começam em 2 de agosto: uma lista de verificação do construtor"
+summary: "As regras de transparência do Artigo 50 da Lei de IA da UE começam em 2 de agosto de 2026. Aqui está o que os provedores e implantadores de IA precisam rotular, marcar, revisar e documentar."
+seoTitle: "As regras de transparência da Lei de IA da UE começam em 2 de agosto: uma lista de verificação do construtor"
+seoDescription: "As regras de transparência do Artigo 50 da Lei de IA da UE começam em 2 de agosto de 2026. Aqui está o que os provedores e implantadores de IA precisam rotular, marcar, revisar e documentar."
+faq: [{"question":"O que muda na Lei de IA da UE em 2 de agosto de 2026?","answer":"Os deveres de transparência do Artigo 50 começam a ser aplicados, incluindo a divulgação para interações diretas de IA, marcação legível por máquina de certos resultados sintéticos e rótulos visíveis para deepfakes e alguns textos de interesse público."},{"question":"Cada resultado gerado por IA precisa de um rótulo visível?","answer":"Não. A marcação legível por máquina do lado do provedor e a divulgação visível do lado do implementador são tarefas diferentes, e a orientação oficial inclui limites de escopo e exceções. As equipes devem classificar cada resultado e caso de uso em vez de aplicar uma regra geral."},{"question":"Existe um período de carência para o artigo 50.º?","answer":"Apenas um limitado. O dever de marcação e deteção previsto no artigo 50.º, n.º 2, é adiado até 2 de dezembro de 2026 para sistemas colocados no mercado antes de 2 de agosto de 2026. Não se trata de um atraso geral para todos os deveres de transparência."},{"question":"A Lei da IA ​​da UE pode ser aplicada a uma empresa fora da UE?","answer":"Sim. A Comissão afirma que os fornecedores fora da UE podem ser cobertos quando os resultados do seu sistema de IA são utilizados na UE."}]
+howto: [{"name":"Mapeie cada ponto de contato de IA","text":"Liste chatbots, agentes, geradores, classificadores e fluxos de trabalho de publicação que alcançam pessoas na UE."},{"name":"Atribuir funções de provedor e implementador","text":"Classifique sua responsabilidade por cada produto e fluxo de conteúdo, em vez de assumir uma função, que se aplica a toda a empresa."},{"name":"Separe as marcas da máquina das etiquetas visíveis","text":"Trate a proveniência do resultado e a divulgação voltada ao usuário como dois requisitos independentes do produto."},{"name":"Documentar revisão humana","text":"Registre quem pode verificar os fatos, alterar, rejeitar e assumir a responsabilidade pelo texto de interesse público."},{"name":"Retenha evidências de conformidade","text":"Salve decisões, exceções, testes, propriedade e datas de lançamento, e peça a um advogado qualificado para revisar a interpretação final."}]
+sourceUpdatedAt: "2026-08-01"
+translatedAt: "2026-08-21"
+---
+A maior parte da regulamentação sobre IA chega parecendo um problema político.
+
+As mais recentes regras de transparência da UE chegam parecendo um requisito de produto.
+
+Em **2 de agosto de 2026**, o Artigo 50 da Lei de IA da UE começa a ser aplicado. Para muitas equipes de IA, o trabalho prático é surpreendentemente concreto: adicionar uma divulgação a um agente, preservar um sinal legível por máquina na mídia gerada, rotular um deepfake ou provar que um editor humano realmente revisou um texto de interesse público.
+
+O botão, o selo, o pipeline de metadados e o registro de aprovação editorial não são mais apenas detalhes da interface. Eles podem ser controles de conformidade.
+
+O momento é fácil de interpretar mal. O recente AI Omnibus da UE estendeu vários prazos para sistemas de alto risco, mas o [cronograma de implementação atual](https://ai-act-service-desk.ec.europa.eu/en/ai-act/eu-ai-act-implementation-timeline) da Comissão ainda diz que as regras de transparência do Artigo 50 começam em 2 de agosto.
+
+Isto faz com que esta seja uma lista de verificação de lançamento e não uma previsão política distante.
+
+*Este artigo é uma leitura prática de materiais oficiais da UE e não um aconselhamento jurídico. O escopo depende dos fatos de um sistema e implantação específicos.*
+
+## A regra tem quatro interfaces, não uma
+
+A maneira mais clara de compreender o Artigo 50 é parar de perguntar: “Precisamos de um rótulo de IA?” e comece a fazer duas perguntas:
+
+1. Somos o **provedor** do sistema de IA, o **implantador** que o utiliza ou ambos?
+2. A obrigação é para uma **máquina** detectar ou uma **pessoa** perceber?
+
+As [orientações do artigo 50.º](https://digital-strategy.ec.europa.eu/en/policies/guidelines-transparency-ai-generated-content) da Comissão reduzem as funções principais a quatro casos recorrentes:
+
+| Parte responsável | Acionar | Implicação do produto |
+| --- | --- | --- |
+| Provedor | Uma pessoa interage diretamente com um sistema de IA | Informe claramente a pessoa que a interação é com IA, a menos que esse fato seja óbvio |
+| Provedor | Um sistema gera ou manipula texto sintético, áudio, imagem ou vídeo | Adicione uma marca eficaz, detectável e legível por máquina, sujeita aos limites e exceções do escopo |
+| Implantador | As pessoas estão expostas ao reconhecimento de emoções ou categorização biométrica | Informar as pessoas expostas ao sistema |
+| Implantador | Deepfakes ou determinados textos de interesse público são publicados | Fornecer uma divulgação clara e perceptível quando as condições relevantes forem atendidas |
+
+Esta distinção é importante porque uma empresa pode ocupar diferentes funções em diferentes fluxos.
+
+Uma startup que cria e vende um avatar de IA pode ser um fornecedor. Um varejista que usa o avatar para suporte ao cliente pode ser um implementador. Uma plataforma que constrói o modelo, envia a experiência e publica os seus resultados pode ser ambos.
+
+As [Perguntas frequentes da Comissão](https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act) também afirmam que os fornecedores fora da UE podem ser abrangidos pela lei quando a saída do seu sistema for utilizada na UE. “Não estamos sediados na Europa” não é uma regra de roteamento confiável.
+
+## A maior armadilha do produto: uma marca de máquina não é um rótulo visível
+
+O Artigo 50 cria duas camadas de transparência que são fáceis de reunir em uma só.
+
+A primeira é a **proveniência do provedor**. Os sistemas generativos no escopo devem produzir resultados marcados em um formato legível por máquina para que o conteúdo possa ser detectado como gerado ou manipulado por IA.
+
+A segunda é a **divulgação do lado do implementador**. Quando um implementador publica um deepfake, por exemplo, a divulgação deve ser compreensível e perceptível por uma pessoa. A Comissão afirma explicitamente que o implantador não pode confiar apenas na marca incorporada legível por máquina.
+
+Em termos de produto, estes são critérios de aceitação separados:
+
+- O ativo exportado retém um sinal de origem detectável após o fluxo de trabalho normal de geração.
+- A pessoa que encontra o conteúdo coberto vê ou ouve uma divulgação apropriada no momento necessário.
+
+Passar em um teste não significa passar automaticamente no outro.
+
+Isto é especialmente relevante para equipes de mídia sintética. Nossa análise anterior sobre [Sora 2 e realidade gerada por IA](/blog/sora-2-azure-ai-generated-reality) focou no problema da confiança. O Artigo 50 transforma parte desse debate abstrato sobre confiança em uma decisão de implementação: a proveniência deve acompanhar o resultado, enquanto a divulgação deve sobreviver até o público.
+
+## Chatbots e agentes precisam ser divulgados antes dos formulários de confiança
+
+Para sistemas que interagem diretamente com pessoas, o FAQ oficial diz que o aviso deve aparecer **desde o início da primeira interação**, de forma clara, distinguível e acessível.
+
+Há uma exceção quando é óbvio que a pessoa está interagindo com a IA. Mas a orientação diz que a exceção deve ser interpretada de forma restritiva.
+
+A lição prática do produto é direta: não faça um usuário procurar uma política de privacidade para descobrir que o “especialista” útil na janela de bate-papo é automatizado.
+
+Uma divulgação in-line próxima à primeira troca é mais fácil de testar, mais fácil de localizar e mais fácil de preservar na Web, em dispositivos móveis, em voz e em superfícies incorporadas. As equipes que executam agentes em produção devem adicionar esse requisito junto com controles de permissão, monitoramento e fallback, como aqueles em nosso [guia de produção de agentes de IA](/blog/ai-agents-production-guide).
+
+A divulgação também precisa sobreviver às transferências. Se um agente de IA iniciar uma conversa e um humano ingressar mais tarde, a interface não deverá apagar a natureza da interação anterior nem tornar o locutor atual ambíguo.
+
+## A revisão humana é um processo real, não uma caixa de seleção
+
+Uma das regras mais importantes diz respeito a textos gerados ou manipulados por IA, publicados para informar o público sobre assuntos de interesse público.
+
+A obrigação não é um rótulo genérico para todas as sentenças assistidas por IA. O FAQ oficial descreve três condições: o texto é publicado, informa o público e diz respeito a um assunto de interesse público. Ele também lista um caminho de revisão humana e controle editorial que pode remover a exigência de rotulagem para esta categoria de texto.
+
+Mas "revisado por humanos" significa mais do que executar a verificação ortográfica.
+
+Segundo a Comissão, a revisão substantiva envolve uma pessoa com conhecimentos relevantes e julgamento profissional que examina o conteúdo. Controle editorial significa que alguém tem autoridade para aprovar, alterar ou rejeitar a substância, incluindo verificação de fatos e avaliação da fonte. Uma verificação superficial ou puramente gramatical não se qualifica.
+
+Isso transforma a governança editorial em um fluxo de trabalho auditável:
+
+- Quem revisou a substância?
+- Que fontes eles verificaram?
+- Eles poderiam rejeitar ou reescrever materialmente o rascunho?
+- Quem é responsável pela publicação?
+- Essa decisão está registrada?
+
+Se o seu “humano informado” for um empreiteiro que clica em aprovar sob pressão de tempo, você pode ter um rótulo de fluxo de trabalho em vez de um controle editorial significativo.
+
+É também por isso que a questão mais ampla de [quando a IA parece demasiado humana](/blog/when-ai-becomes-too-human) tem agora uma resposta menos filosófica: as pessoas precisam de informação suficiente para calibrar a confiança antes de agirem na interação ou conteúdo sintético.
+
+## As exceções são uma tabela de roteamento, não uma brecha
+
+As orientações da Comissão incluem limites importantes. A obrigação de marcação mecânica não trata todas as saídas de forma idêntica.
+
+As FAQ identificam exemplos que podem não ser abrangidos pelo artigo 50.º, n.º 2, incluindo código-fonte, sequências curtas de números ou símbolos, resultados máquina-máquina sem exposição humana e determinadas utilizações industriais ou de desenvolvimento de produtos em circuito fechado. Também descreve uma exceção para edição padrão que não altera substancialmente a entrada ou seu significado, além de um caminho estreito para qualificar contextos business-to-business ou industriais.
+
+Esses detalhes são importantes, mas devem ser tratados como uma lógica de classificação – e não como uma política corporativa unidirecional.
+
+“Só vendemos para empresas” não determina se uma produção chega a uma pessoa. “Um humano tocou” não resolve se o sistema apenas auxiliou na edição padrão. “São metadados” não determina se permanecem legíveis por máquina e detectáveis ​​através da cadeia de distribuição.
+
+Uma boa engenharia de compliance parece uma árvore de decisão com evidências anexadas a cada ramo.
+
+## O período de carência é muito mais restrito do que parece
+
+A transição é limitada, mas não é um atraso universal.
+
+A Comissão afirma que os sistemas colocados no mercado antes de 2 de agosto de 2026 têm até **2 de dezembro de 2026** para a obrigação específica de marcação e detecção prevista no Artigo 50(2). O conteúdo gerado antes de 2 de agosto não exige rotulagem retroativa, embora a Comissão incentive a divulgação voluntária sempre que possível.
+
+Outras obrigações do Artigo 50 não são incluídas no mesmo período de quatro meses.
+
+Esta é a frase que os líderes de produto devem repetir internamente: **o período de carência pertence a uma obrigação específica e a uma classe específica de sistemas existentes, não ao Artigo 50 como um todo.**
+
+Registre a data em que cada sistema foi colocado no mercado, a função que sua empresa desempenha e o parágrafo exato por trás de qualquer atraso no trabalho. Se as evidências forem confusas, trate isso como um risco a ser resolvido, em vez de uma razão para assumir a data posterior.
+
+## Uma lista de verificação de 48 horas para equipes de produtos de IA
+
+Você não precisa resolver todas as questões com um documento político gigante. Comece com a superfície do produto e trabalhe de trás para frente.
+
+### 1. Inventariar todos os pontos de contato de IA voltados para a UE
+
+Inclui chatbots, agentes de voz, avatares, geradores de imagens e vídeos, pipelines de conteúdo, ferramentas de análise emocional e recursos de IA incorporados em um produto maior.
+
+### 2. Atribua uma função por fluxo
+
+Marque se você está atuando como provedor, implementador ou ambos. Repita o exercício quando o mesmo sistema for vendido, incorporado ou operado sob o nome de outra empresa.
+
+### 3. Teste a divulgação na primeira interação
+
+Abra cada experiência interativa de IA como um novo usuário. Confirme se a divulgação é imediata, clara, acessível e preservada em todas as superfícies suportadas.
+
+### 4. Separe a proveniência da apresentação
+
+Crie proprietários e testes separados para marcação de saída legível por máquina e rótulos visíveis por humanos. Verifique o que acontece após a exportação, compactação, repostagem e conversão de formato.
+
+### 5. Revise a mídia sintética e a publicação de interesse público
+
+Identifique deepfakes e textos de interesse público. Documente onde a divulgação visível é adicionada e, para o texto, se a revisão humana substantiva e a responsabilidade editorial estão presentes.
+
+### 6. Anote todas as exceções
+
+Para código, edição padrão, saída máquina a máquina ou outra exceção alegada, capture os fatos e as orientações oficiais que apoiam a decisão.
+
+### 7. Preservar evidências
+
+Mantenha capturas de tela, resultados de acessibilidade, testes de procedência, versões de modelos e produtos, registros de revisão, datas de lançamento do sistema e proprietários nomeados. Um controle que não pode ser demonstrado é difícil de defender.
+
+### 8. Decida se deseja usar o Código de Prática voluntário
+
+O [Código de Prática sobre Transparência de Conteúdo Gerado por IA] da UE (https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content) é voluntário, mas o Artigo 50 não é. A Comissão afirma que os signatários podem confiar nas medidas do código para demonstrar o cumprimento dos deveres de marcação e rotulagem; as empresas que utilizam outra abordagem devem demonstrar que esta é equivalentemente adequada.
+
+Em seguida, peça a um consultor jurídico qualificado que valide o escopo e a implementação final de seus produtos.
+
+## Os riscos são reais, mas a oportunidade estratégica é maior
+
+A Comissão afirma que as penalidades para violações relevantes podem atingir **15 milhões de euros ou 3% do volume de negócios anual mundial**, sendo a proporcionalidade considerada para empresas mais pequenas.
+
+Esse número chamará atenção. Mas o medo não é a estratégia de produto mais útil.
+
+A mudança mais profunda é que a transparência da IA ​​está se tornando um produto primitivo reutilizável. As equipes que criam componentes de divulgação, proveniência durável, controles editoriais e propriedade auditável estarão agora mais bem preparadas para novos modelos, novos formatos de mídia e novas jurisdições.
+
+A implementação vencedora não será o emblema de alerta mais barulhento. Será aquele que dará às pessoas um contexto significativo sem quebrar a experiência – e dará à empresa evidências de que o contexto foi entregue.
+
+## Tomada Final
+
+2 de agosto não é o dia em que todas as partes da Lei de IA da UE chegam repentinamente ao mesmo tempo. Vários prazos de sistemas de alto risco foram alterados.
+
+Mas o Artigo 50 é real, atual e incomumente próximo da interface.
+
+Para construtores de IA, o primeiro passo é não adicionar “alimentado por IA” ao rodapé. É mapear o fluxo:
+
+**Quem construiu o sistema? Quem o implantou? O que isso gerou? O que uma máquina deve detectar? O que uma pessoa deve entender? Quem pode provar a resposta?**
+
+Essa é a nova pilha de transparência.
+
+## Fontes
+
+- [Comissão Europeia: Orientações sobre obrigações de transparência para fornecedores e implantadores de determinados sistemas de IA](https://digital-strategy.ec.europa.eu/en/policies/guidelines-transparency-ai-generated-content)
+- [Comissão Europeia: Perguntas frequentes sobre obrigações de transparência do artigo 50.º](https://digital-strategy.ec.europa.eu/en/faqs/transparency-obligations-under-article-50-ai-act)
+- [Comissão Europeia: Factos rápidos — Regras de transparência para sistemas de IA](https://digital-strategy.ec.europa.eu/en/factpages/quick-facts-transparency-rules-ai-systems)
+- [Serviço da Lei de IA da UE: cronograma de implementação](https://ai-act-service-desk.ec.europa.eu/en/ai-act/eu-ai-act-implementation-timeline)
+- [Comissão Europeia: Código de Prática sobre Transparência de Conteúdo Gerado por IA](https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content)
+- [Comissão Europeia: AI Omnibus entra em vigor](https://digital-strategy.ec.europa.eu/en/news/ai-omnibus-enters-force)

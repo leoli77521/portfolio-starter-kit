@@ -1,0 +1,49 @@
+{
+  "campaign": "topic-matched backlink pilot",
+  "createdAt": "2026-08-21",
+  "site": "https://tolearn.blog",
+  "policy": "No signup, no captcha, topical fit only; website-field backlink preferred.",
+  "status": "ready_for_action_confirmation",
+  "targets": [
+    {
+      "id": "synced-microsoft-fpdt",
+      "domain": "syncedreview.com",
+      "targetUrl": "https://syncedreview.com/2024/09/09/microsofts-fully-pipelined-distributed-transformer-processes-16x-sequence-length-with-extreme-hardware-efficiency/",
+      "destinationUrl": "https://tolearn.blog/blog/ai-benchmark-methodology",
+      "liveVerification": {
+        "checkedAt": "2026-08-21",
+        "status": "verified_no_signup",
+        "evidence": "Visible comment form exposes comment, name, email, and website fields; no login wall or captcha was visible."
+      },
+      "proposedComment": "The distinction between memory hierarchy and sequence length is useful here. It is a good reminder that a model result can reflect systems design as much as model scale, which is why I find it valuable to keep benchmark methodology separate from raw model rankings. ToLearn's benchmark methodology guide makes a similar case for recording the scaffold and task setup alongside every score.",
+      "submissionStatus": "not_submitted_confirmation_required"
+    },
+    {
+      "id": "pixel77-typography-rules",
+      "domain": "pixel77.com",
+      "targetUrl": "https://pixel77.com/typography-rules-technique/",
+      "destinationUrl": "https://tolearn.blog/templates",
+      "liveVerification": {
+        "checkedAt": "2026-08-21",
+        "status": "verified_no_signup",
+        "evidence": "Visible WordPress comment form exposes comment, name, email, and website fields; no login wall or captcha was visible."
+      },
+      "proposedComment": "The point about hierarchy is especially practical: typography is doing navigation work before a reader notices the font choice. I see the same constraint in technical portfolios and long-form benchmark pages, where spacing and type scale determine whether the evidence is actually readable. ToLearn keeps a small template library for that kind of content-heavy presentation.",
+      "submissionStatus": "not_submitted_confirmation_required"
+    },
+    {
+      "id": "goaffpro-affiliate-review-guide",
+      "domain": "blog.goaffpro.com",
+      "targetUrl": "https://blog.goaffpro.com/mastering-affiliate-product-reviews-a-step-by-step-guide-for-engaging-content-and-conversions/",
+      "destinationUrl": "https://tolearn.blog/guides/seo-optimization-complete-guide",
+      "liveVerification": {
+        "checkedAt": "2026-08-21",
+        "status": "blocked_current_page_empty",
+        "evidence": "Navigation returned an empty document body with no visible comment form, so the March verification record is stale."
+      },
+      "proposedComment": null,
+      "submissionStatus": "skipped"
+    }
+  ],
+  "nextStep": "Submit only the two verified targets after action-time confirmation; recheck the page immediately before each public comment."
+}

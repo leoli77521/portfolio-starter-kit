@@ -11,6 +11,7 @@ import { getArticlePath } from 'app/lib/blog-i18n'
 import { getMostRecentIsoString } from 'app/lib/seo'
 import { MIN_POSTS_FOR_INDEXED_TAG_PAGE, toTagSlug } from 'app/lib/tags'
 import { postBelongsToTopicHub, topicHubs } from 'app/lib/topic-hubs'
+import { shouldIndexTemplate } from 'app/lib/seo-indexing-policy'
 
 export { baseUrl } from 'app/lib/constants'
 
@@ -204,15 +205,6 @@ export default async function sitemap() {
     },
   ]
 
-  const apiRoutes = [
-    {
-      url: `${baseUrl}/rss`,
-      lastModified: latestPostLastModified,
-      changeFrequency: 'weekly' as const,
-      priority: 0.3,
-    },
-  ]
-
   const blogs = posts.map((post) => ({
     url: `${baseUrl}/blog/${encodeURIComponent(post.slug)}`,
     lastModified: getPostLastModified(post),
@@ -375,12 +367,14 @@ export default async function sitemap() {
   }
 
   const templateRoutes = pseoData.technologies.flatMap((tech) =>
-    pseoData.roles.map((role) => ({
-      url: `${baseUrl}/templates/${tech.slug}/${role.slug}`,
-      lastModified: pseoSourceLastModified,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    }))
+    pseoData.roles
+      .filter((role) => shouldIndexTemplate(tech.slug, role.slug))
+      .map((role) => ({
+        url: `${baseUrl}/templates/${tech.slug}/${role.slug}`,
+        lastModified: pseoSourceLastModified,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      }))
   )
 
   const solutionRoutes = pseoData.features.map((feature) => ({
@@ -394,7 +388,6 @@ export default async function sitemap() {
 
   return [
     ...localizedStaticRoutes,
-    ...apiRoutes,
     ...blogs,
     ...localizedBlogs,
     ...categoryRoutes,

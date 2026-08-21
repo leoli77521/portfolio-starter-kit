@@ -8,7 +8,7 @@ const {
 const {
   getArticlePath,
   getPostTranslationPath,
-  hasPostTranslation,
+  isPostTranslationFresh,
 } = require('../app/lib/blog-i18n');
 
 const translatableMetadataKeys = [
@@ -121,14 +121,14 @@ function buildSearchEntry({ slug, metadata, content, locale }) {
     publishedAt: metadata.publishedAt,
     href: getArticlePath(slug, locale),
     locale,
-    isTranslated: locale !== defaultLocale && hasPostTranslation(slug, locale),
+    isTranslated: locale !== defaultLocale && isPostTranslationFresh(slug, locale),
     content: toPlainText(content)
   };
 }
 
 function buildSearchIndexForLocale(sourcePosts, locale) {
   return sourcePosts.map((sourcePost) => {
-    if (locale !== defaultLocale && hasPostTranslation(sourcePost.slug, locale)) {
+    if (locale !== defaultLocale && isPostTranslationFresh(sourcePost.slug, locale)) {
       const translation = readMDXFile(getPostTranslationPath(sourcePost.slug, locale));
       return buildSearchEntry({
         slug: sourcePost.slug,
@@ -142,7 +142,7 @@ function buildSearchIndexForLocale(sourcePosts, locale) {
       slug: sourcePost.slug,
       metadata: sourcePost.metadata,
       content: sourcePost.content,
-      locale: defaultLocale,
+      locale,
     });
   });
 }

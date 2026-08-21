@@ -1,0 +1,99 @@
+---
+title: "Guide d'utilisation du code Claw : un chemin sûr de l'invite à l'agent"
+summary: "Un guide d'utilisation pratique de Claw Code pour transformer l'architecture d'agent en flux de travail quotidiens sécurisés avec des tâches limitées, des portes d'autorisation, des tests, des points de contrôle et une restauration."
+seoTitle: "Guide d'utilisation du code Claw : flux de travail sécurisés pour les agents"
+seoDescription: "Utilisez ce guide Claw Code pour évaluer les tâches, les autorisations, les points de contrôle, les tests, les sessions et la restauration de l'agent de codage avant de faire confiance aux modifications autonomes."
+faq: [{"question":"Pour quoi dois-je utiliser Claw Code en premier ?","answer":"Commencez par des tâches de référentiel limitées et réversibles où des tests et un examen humain peuvent vérifier le résultat."},{"question":"Un agent de codage doit-il avoir un accès illimité au shell ?","answer":"Non. Commencez par les autorisations de moindre privilège et développez l'accès uniquement lorsque le flux de travail prouve qu'il en a besoin de plus."},{"question":"Comment puis-je savoir si une tâche d'agent est terminée ?","answer":"Définissez une condition de réussite observable, exécutez les tests pertinents, inspectez les différences et enregistrez tout suivi manuel."}]
+howto: [{"name":"Choisissez une tâche délimitée","text":"Choisissez un petit changement avec un chemin d’entrée, de sortie et de restauration clair."},{"name":"Définir les autorisations","text":"Autorisez uniquement les fichiers, commandes, accès au réseau et secrets requis pour la tâche."},{"name":"Exécuter des points de contrôle","text":"Demandez à l'agent de résumer l'intention, les fichiers modifiés, les tests et les risques non résolus à chaque limite."},{"name":"Révision et atterrissage","text":"Inspectez la différence, exécutez des tests et fusionnez uniquement une fois que le résultat répond aux critères d'acceptation écrits."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+Le moyen le plus sûr d’adopter Claw Code est de le traiter comme un flux de travail opérationnel, et non comme une invite magique. Le modèle est important, mais le temps d'exécution qui l'entoure détermine ce qu'il peut voir, ce qu'il peut modifier et la rapidité avec laquelle une erreur peut être réparée.
+
+Ce guide transforme l'[analyse de l'architecture du code Claw](/blog/2026-04-02-claw-code-ai-coding-agent-architecture) en un chemin reproductible pour le développement quotidien.
+
+## Commencez par un contrat de tâche
+
+Avant d'ouvrir une session d'agent, rédigez un court contrat :
+
+- **Objectif :** le seul résultat observable qui devrait changer ;
+- **Portée :** répertoires et fichiers que l'agent peut inspecter ou modifier ;
+- **Contraintes :** API, règles de style, exigences de compatibilité et actions interdites ;
+- **Validation :** commandes, tests, captures d'écran ou journaux qui prouvent le succès ;
+- **Rollback :** la validation, le correctif, la branche ou la sauvegarde qui vous permet d'annuler la modification.
+
+« Améliorer le système d'authentification » n'est pas un contrat de tâche. "Ajoutez un test d'échec pour les sessions expirées, implémentez le plus petit correctif dans `app/auth` et exécutez la suite de tests de session".
+
+## Niveaux d'autorisation
+
+Utilisez la confiance progressive. Une simple politique à quatre niveaux suffit à la plupart des équipes :
+
+| Niveau | L'agent peut faire | Règle d'approbation |
+| --- | --- | --- |
+| Lecture seule | Inspecter les fichiers, rechercher, expliquer et proposer un correctif | Pas d'accès en écriture |
+| Écriture dans l'espace de travail | Modifier les fichiers suivis dans un répertoire délimité | Examiner les différences avant les tests |
+| Exécution des tests | Exécuter les tests et formateurs sélectionnés | Liste d'autorisation et délai d'expiration des commandes |
+| Action extérieure | Réseauter, déployer, publier ou modifier l'infrastructure | Approbation explicite par action |
+
+Démarrez chaque nouveau référentiel en lecture seule ou en écriture dans l'espace de travail. N'accordez pas de secrets ou d'accès à la production simplement parce que l'agent a effectué une refactorisation locale.
+
+La [pile d'agents de codage AI](/ai-coding-agents) plus approfondie explique pourquoi les outils, les autorisations et les sessions sont des fonctionnalités du produit plutôt que des détails d'implémentation.
+
+## Une boucle de session fiable
+
+Utilisez cette boucle pour chaque tâche :
+
+1. **Inspecter :** demandez les fichiers pertinents, le comportement actuel et les tests existants.
+2. **Plan :** nécessite un court plan de modification et une liste de fichiers avant de procéder à la modification.
+3. **Patch :** garde la différence étroite ; éviter tout nettoyage sans rapport.
+4. **Valider :** exécutez d'abord le plus petit test pertinent, puis la suite plus large.
+5. **Expliquez :** demandez un résumé du changement de comportement, des preuves et des risques restants.
+6. **Point de contrôle :** validez ou enregistrez un correctif avant la prochaine étape autonome.
+
+Le point de contrôle est important. Une longue session qui modifie des dizaines de fichiers sans limite de révision est difficile à déboguer, même lorsque chaque modification individuelle semble raisonnable.
+
+## Tester le code généré par l'agent
+
+Les tests doivent prouver le comportement, et pas seulement que l'agent a exécuté une commande. Pour un changement de code, combinez :
+
+- tests unitaires pour la logique modifiée ;
+- tests d'intégration pour la frontière touchée par l'agent ;
+- vérification de type ou compilation ;
+- un examen différentiel pour une expansion accidentelle de la portée ;
+- une vérification manuelle ciblée lorsque la sortie est visuelle ou destinée à l'utilisateur.
+
+Lorsqu'un test échoue, ne laissez pas l'agent appliquer les correctifs à plusieurs reprises jusqu'à ce que l'échec disparaisse. Demandez-lui d'expliquer l'échec, d'identifier si le test ou la mise en œuvre est erroné et de proposer la prochaine plus petite expérience.
+
+## MCP et outils externes
+
+MCP peut rendre un agent considérablement plus utile, mais il élargit également les limites de confiance. Pour chaque serveur, enregistrez les ressources qu'il expose, les outils qu'il peut appeler, si les appels sont réversibles et quelles données peuvent quitter la machine.
+
+Le [Guide du protocole MCP](/blog/mcp-model-context-protocol-guide) est le compagnon idéal pour comprendre les ressources, les outils, les invites, les racines et le transport. Lors d'un véritable déploiement, associez-le à une liste blanche et à un journal d'audit plutôt que de traiter « connecté » comme « de confiance ».
+
+## Gestion des pannes
+
+De bons flux de travail d'agent supposent un échec. Ajoutez un comportement explicite pour :
+
+- une commande qui expire ;
+- un test qui échoue après une modification partielle ;
+- un outil renvoyant des données malformées ;
+- un agent demandant une autorisation dont il ne devrait pas avoir besoin ;
+- une instruction qui entre en conflit avec la politique du référentiel ;
+- une session qui perd son contexte ou reprend sur la mauvaise branche.
+
+La bonne réponse est généralement d'arrêter, de préserver le différentiel et de rétablir le contrat de tâche. Une nouvelle session avec un transfert compact est souvent plus sûre qu'une longue conversation qui a accumulé des suppositions.
+
+## Liste de contrôle pour l'adoption
+
+Avant qu'une équipe utilise Claw Code sur une base de code partagée, confirmez :
+
+- chaque tâche a une condition de réussite écrite ;
+- l'ensemble d'autorisations par défaut est le moindre privilège ;
+- les tests s'exécutent dans un bac à sable avec des délais d'attente ;
+- les sessions exposent les fichiers modifiés et les appels d'outils ;
+- les points de contrôle sont bon marché et fréquents ;
+- les secrets ne sont jamais copiés dans les invites ou les journaux ;
+- un humain examine les changements ayant un impact sur la production ;
+- l'équipe mesure les modifications acceptées, les boucles de correction et le taux de restauration.
+
+Pour les choix d'outils au niveau du produit, accédez au [répertoire des outils AI](/ai-tools). Pour les choix au niveau du modèle, utilisez le [répertoire des modèles et des benchmarks AI](/ai-models) plutôt que de supposer que la démo la plus impressionnante est le meilleur moteur d'exécution.

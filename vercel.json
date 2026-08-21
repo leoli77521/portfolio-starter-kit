@@ -25,6 +25,12 @@
       "statusCode": 308
     }
   ],
+  "crons": [
+    {
+      "path": "/api/cron/seo-monitor",
+      "schedule": "0 9 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

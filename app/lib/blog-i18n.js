@@ -75,6 +75,22 @@ function hasPostTranslation(slug, locale) {
   return fs.existsSync(getPostTranslationPath(slug, locale))
 }
 
+function isPostTranslationFresh(slug, locale) {
+  if (!hasPostTranslation(slug, locale)) {
+    return false
+  }
+
+  const sourceMetadata = readMetadata(getPostSourcePath(slug))
+  const translationMetadata = readMetadata(getPostTranslationPath(slug, locale))
+  const sourceUpdatedAt = sourceMetadata.updatedAt || sourceMetadata.publishedAt
+  const translationSourceUpdatedAt = translationMetadata.sourceUpdatedAt
+
+  // Legacy translations without a sourceUpdatedAt marker remain available
+  // until they are explicitly audited. A known mismatch, however, is not a
+  // current alternate and must stay out of hreflang and language sitemaps.
+  return !sourceUpdatedAt || !translationSourceUpdatedAt || sourceUpdatedAt === translationSourceUpdatedAt
+}
+
 function getTranslatedPostSlugsForLocale(locale) {
   if (!isLocale(locale) || locale === defaultLocale) {
     return []
@@ -99,14 +115,14 @@ function getAvailablePostLocales(slug) {
     return []
   }
 
-  return locales.filter((locale) => locale === defaultLocale || hasPostTranslation(safeSlug, locale))
+  return locales.filter((locale) => locale === defaultLocale || isPostTranslationFresh(safeSlug, locale))
 }
 
 function getArticlePath(slug, locale = defaultLocale) {
   const safeSlug = normalizeSlug(slug)
   const pathName = `/blog/${encodeURIComponent(safeSlug)}`
 
-  if (locale === defaultLocale || !hasPostTranslation(safeSlug, locale)) {
+  if (locale === defaultLocale || !isPostTranslationFresh(safeSlug, locale)) {
     return pathName
   }
 
@@ -214,5 +230,6 @@ module.exports = {
   getPostTranslationPath,
   getTranslatedPostSlugsForLocale,
   hasPostTranslation,
+  isPostTranslationFresh,
   validatePostTranslations,
 }

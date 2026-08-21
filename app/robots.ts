@@ -1,4 +1,5 @@
 import { baseUrl } from 'app/sitemap'
+import { defaultLocale, locales } from 'app/lib/i18n-paths'
 
 const sharedDisallowRules = ['/api/', '/_next/', '/static/', '*.json']
 const allowSeoToolBots = process.env.BLOCK_SEO_TOOL_BOTS !== 'true'
@@ -67,7 +68,12 @@ export default function robots() {
 
   return {
     rules,
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [
+      `${baseUrl}/sitemap.xml`,
+      ...locales
+        .filter((locale) => locale !== defaultLocale)
+        .map((locale) => `${baseUrl}/sitemap/${locale}.xml`),
+    ],
     host: new URL(baseUrl).host,
   }
 }

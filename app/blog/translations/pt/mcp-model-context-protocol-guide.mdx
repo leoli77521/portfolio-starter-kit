@@ -1,16 +1,18 @@
 ---
 title: "Guia do protocolo MCP 2026: Conecte IA a qualquer fonte de dados"
-summary: "O Model Context Protocol (MCP) é o padrão universal para conectar agentes de IA a ferramentas e dados externos. Aprenda como construir servidores e clientes MCP com exemplos práticos de código."
-seoTitle: "Guia do protocolo MCP 2026: Conecte IA a qualquer fonte de dados"
-seoDescription: "O Model Context Protocol (MCP) é o padrão universal para conectar agentes de IA a ferramentas e dados externos. Aprenda como construir servidores e clientes MCP com exemplos práticos de código."
+summary: "Saiba como o Model Context Protocol conecta agentes de IA a ferramentas e dados, com uma visão geral prática de hosts, clientes, servidores, permissões, controles de segurança e etapas de implementação."
+seoTitle: "Protocolo MCP: Guia de integração de ferramentas de IA"
+seoDescription: "Saiba como o Model Context Protocol conecta agentes de IA a ferramentas e dados. Entenda hosts, clientes, servidores, permissões, controles e etapas de implementação."
 faq: [{"question":"O que é MCP (Protocolo de Contexto de Modelo)?","answer":"MCP é um protocolo aberto da Anthropic que padroniza como os modelos de IA se conectam a fontes de dados, ferramentas e sistemas externos. Pense nisso como USB-C para integrações de IA."},{"question":"Quem apoia o MCP?","answer":"Anthropic (Claude), OpenAI (ChatGPT), Google DeepMind (Gemini), Microsoft e GitHub suportam MCP a partir de 2025."},{"question":"O MCP é seguro para uso empresarial?","answer":"O MCP inclui especificações de segurança, mas exige a implementação adequada de fluxos de consentimento, controles de acesso e políticas de governança de dados."},{"question":"Qual a diferença entre o MCP e a chamada de função?","answer":"A chamada de função é específica do modelo e unidirecional. MCP é um protocolo universal e bidirecional que funciona em diferentes provedores de IA."}]
 howto: [{"name":"Instale o SDK do MCP","text":"Instale o SDK MCP oficial para o seu idioma: npm install @modelcontextprotocol/sdk ou pip install mcp."},{"name":"Definir capacidades do servidor","text":"Crie um servidor que exponha recursos, ferramentas ou prompts que os modelos de IA possam acessar."},{"name":"Conecte o cliente ao servidor","text":"Configure seu aplicativo de IA para se conectar a servidores MCP por meio de transporte stdio ou HTTP."},{"name":"Teste a integração","text":"Use a ferramenta MCP Inspector para depurar e validar a implementação do servidor."}]
-sourceUpdatedAt: "2026-01-21"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-# Protocolo MCP: o padrão universal para integrações de IA
+*Atualização editorial: 20 de agosto de 2026. Verifique as especificações atuais do protocolo, as versões do SDK e o suporte do host antes de implementar uma integração de produção.*
 
-*Publicado: 21 de janeiro de 2026*
+## O que é protocolo de contexto de modelo?
+
+**Model Context Protocol (MCP) é uma interface aberta para conectar um host de IA a ferramentas externas, dados e prompts reutilizáveis ​​por meio de limites cliente-servidor explícitos.** Ele torna as integrações mais portáteis, mas não elimina a necessidade de design de permissão, aprovação do usuário, autenticação, validação de entrada ou registro de auditoria.
 
 Todo agente de IA enfrenta o mesmo problema: eles são brilhantes no raciocínio, mas cegos para os seus dados. O MCP (Model Context Protocol) corrige isso criando uma linguagem universal para comunicação entre IA e ferramenta.
 
@@ -400,7 +402,7 @@ O protocolo está pronto para produção, amplamente adotado e apoiado por todos
 
 ## Artigos relacionados
 
-- [Claude AI executa código: Python e Node.js em tempo real] (/blog/claude-ai-now-executes-code)
+- [Código Garra: Explicação da arquitetura do agente de codificação AI](/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
 - [De Chatbots a Agentes de IA: A Revolução Silenciosa](/blog/from-chatbots-to-ai-agents-quiet-revolution)
 - [Guia de produção de agentes de IA: evitando erros de US$ 3,4 mil](/blog/ai-agents-production-guide)
 - [Agentic AI Revolution 2025: O futuro está aqui](/blog/agentic-ai-revolution-2025)

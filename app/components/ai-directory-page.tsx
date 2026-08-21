@@ -113,6 +113,13 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
           {config.longDescription}
         </p>
 
+        <div className="mt-6 rounded-[1.5rem] border border-indigo-200/80 bg-indigo-50/70 px-5 py-5 theme-dark:border-indigo-900/70 theme-dark:bg-indigo-950/30">
+          <p className="section-kicker">Page role</p>
+          <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-700 theme-dark:text-slate-200 md:text-base">
+            {config.pageRole}
+          </p>
+        </div>
+
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {config.decisionCards.map((card) => (
             <div key={card.title} className="surface-card px-5 py-5">
@@ -123,6 +130,36 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
                 {card.description}
               </p>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="surface-panel px-6 py-7 md:px-8">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker">Direct paths</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+              Start with the page that answers your question
+            </h2>
+          </div>
+          <Link href="/blog" className="editorial-link">
+            Browse the full archive
+          </Link>
+        </div>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          {config.entryLinks.map((entry) => (
+            <Link key={entry.href} href={entry.href} className="surface-card group block px-5 py-5">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
+                  {entry.label}
+                </h3>
+                <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-slate-400" />
+              </div>
+              <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                {entry.description}
+              </p>
+            </Link>
           ))}
         </div>
       </section>
@@ -144,24 +181,26 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             {hubs.map((hub) =>
               hub ? (
-                <Link
-                  key={hub.slug}
-                  href={`/topics/${hub.slug}`}
-                  className="surface-card block px-5 py-5"
-                >
-                  <p className="section-kicker">Hub</p>
-                  <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-                    {hub.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
-                    {hub.description}
-                  </p>
-                  <div className="mt-5 editorial-link">
-                    Open hub
-                    <ArrowUpRight className="h-4 w-4" />
-                  </div>
-                </Link>
-              ) : null
+                    <div key={hub.slug} className="surface-card px-5 py-5">
+                      <p className="section-kicker">Hub</p>
+                      <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
+                        {hub.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                        {hub.description}
+                      </p>
+                      {config.hubLink === null ? (
+                        <p className="mt-5 text-sm font-semibold text-indigo-700 theme-dark:text-indigo-300">
+                          This directory is the canonical entry point for this comparison layer.
+                        </p>
+                      ) : (
+                        <Link href={config.hubLink || `/topics/${hub.slug}`} className="mt-5 editorial-link">
+                          Open hub
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      )}
+                    </div>
+                  ) : null
             )}
           </div>
         </section>

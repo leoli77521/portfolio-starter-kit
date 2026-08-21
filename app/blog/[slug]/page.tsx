@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound, redirect } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { ArrowUpRight, CalendarDays, Clock3, FileText, Layers3 } from 'lucide-react'
 import { CustomMDX } from 'app/components/mdx'
 import { TableOfContents } from 'app/components/toc'
@@ -207,7 +207,9 @@ export function generateArticleMetadata({ params }: ArticlePageProps): Metadata 
   const requestedSlug = params.slug
   const locale = getArticleLocale(params)
   const post = getBlogPost(requestedSlug, locale, {
-    fallbackToDefault: locale === defaultLocale,
+    // Keep metadata available for stale localized pages so they can emit a
+    // canonical/noindex signal while the translation is being refreshed.
+    fallbackToDefault: true,
   })
 
   if (!post) {
@@ -228,7 +230,8 @@ export function generateArticleMetadata({ params }: ArticlePageProps): Metadata 
   const socialTitle = buildSocialTitle(trimSocialTitle(title))
   const modifiedTime = updatedAt || publishedTime
   const ogImage = resolveOgImage(image, title)
-  const articlePath = getArticlePath(post.slug, locale)
+  const hasFreshLocalizedContent = locale === defaultLocale || post.isTranslated
+  const articlePath = getArticlePath(post.slug, hasFreshLocalizedContent ? locale : defaultLocale)
   const canonicalUrl = `${baseUrl}${articlePath}`
   const optimizedDescription =
     seoDescription ||
@@ -277,11 +280,11 @@ export function generateArticleMetadata({ params }: ArticlePageProps): Metadata 
       languages: getAbsoluteArticleAlternates(post.slug, baseUrl),
     },
     robots: {
-      index: true,
+      index: hasFreshLocalizedContent,
       follow: true,
       nocache: true,
       googleBot: {
-        index: true,
+        index: hasFreshLocalizedContent,
         follow: true,
         noimageindex: false,
         'max-video-preview': -1,
@@ -311,7 +314,7 @@ export function BlogArticle({ params }: ArticlePageProps) {
   if (!post && locale !== defaultLocale) {
     const fallbackPost = getBlogPost(requestedSlug, defaultLocale)
     if (fallbackPost) {
-      redirect(getArticlePath(fallbackPost.slug, defaultLocale))
+      permanentRedirect(getArticlePath(fallbackPost.slug, defaultLocale))
     }
   }
 
@@ -320,7 +323,7 @@ export function BlogArticle({ params }: ArticlePageProps) {
   }
 
   if (requestedSlug !== post.slug) {
-    redirect(getArticlePath(post.slug, locale))
+    permanentRedirect(getArticlePath(post.slug, locale))
   }
 
   const allPosts = getBlogPosts(locale)

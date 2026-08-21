@@ -1,22 +1,22 @@
 ---
-title: "LLM Benchmark Scores 2026: Coding, Math & Reasoning"
-seoTitle: "LLM Benchmark Scores 2026: Coding Models"
+title: "LLM Benchmark Scores 2026: Sources & Tradeoffs"
+seoTitle: "LLM Benchmark Scores 2026: Tradeoffs"
 seoDescription: "Compare 2026 LLM benchmark scores for coding across SWE-bench, Aider, LiveCodeBench, Terminal-Bench, math, and reasoning. Choose the right model."
 publishedAt: "2026-02-01"
 updatedAt: "2026-08-20"
 summary: "A task-first guide to 2026 LLM benchmark scores for coding, math, and reasoning—covering SWE-bench, Aider, LiveCodeBench, Terminal-Bench, and model tradeoffs."
 image: "/og?title=LLM%20Benchmark%20Scores%202026%3A%20Coding%20Math%20Reasoning"
 category: "AI Technology"
-tags: ["LLM", "GPT-5.5", "Claude Opus 4.8", "Gemini 3.1 Pro", "DeepSeek V3.2", "Coding Benchmark", "SWE-bench", "LiveCodeBench", "Aider Polyglot", "AI Reasoning"]
-faq: [{"question":"Which LLM coding benchmark matters most in 2026?","answer":"For real repository repair, SWE-bench is the best starting point. For edit quality, Aider is more useful. For algorithms, use LiveCodeBench. For autonomous shell work, use Terminal-Bench."},{"question":"Which LLM is best for coding in June 2026?","answer":"There is no single winner across every benchmark. GPT-5.5 has strong reported agentic and terminal-workflow scores, Claude Opus 4.8 is Anthropic's latest frontier coding and agent model, Gemini 3.1 Pro is Google's latest multimodal reasoning model, and DeepSeek V3.2 is a strong value contender. Public SWE-bench and Aider results should be read alongside the scaffold and tool interface used."},{"question":"What is SWE-bench Verified and why does it matter?","answer":"SWE-bench Verified is a 500-task benchmark built from real GitHub issues. It is useful because it tests repo understanding, patch generation, and bug fixing rather than isolated code snippets."},{"question":"Why do coding benchmark scores disagree?","answer":"Benchmarks measure different workflows. SWE-bench emphasizes real bug fixing, Aider Polyglot emphasizes edit quality across languages, LiveCodeBench emphasizes algorithmic problem solving, and Terminal-Bench emphasizes command-line agent execution."},{"question":"How often should LLM benchmark pages be updated?","answer":"For model comparison pages, a monthly refresh is a reasonable minimum in 2026. Major model releases or leaderboard changes should trigger a same-week update."}]
+tags: ["LLM", "GPT-5.5", "Claude Opus 5", "Gemini 3.1 Pro", "DeepSeek V3.2", "Coding Benchmark", "SWE-bench", "LiveCodeBench", "Aider Polyglot", "AI Reasoning"]
+faq: [{"question":"Which LLM coding benchmark matters most in 2026?","answer":"For real repository repair, SWE-bench is the best starting point. For edit quality, Aider is more useful. For algorithms, use LiveCodeBench. For autonomous shell work, use Terminal-Bench."},{"question":"Which LLM is best for coding in June 2026?","answer":"There is no single winner across every benchmark. GPT-5.5 has strong reported agentic and terminal-workflow scores, Claude Opus 5 is now the latest Anthropic model listed for coding and agents, Gemini 3.1 Pro is Google's latest multimodal reasoning model, and DeepSeek V3.2 is a strong value contender. Public SWE-bench and Aider results should be read alongside the scaffold and tool interface used."},{"question":"What is SWE-bench Verified and why does it matter?","answer":"SWE-bench Verified is a 500-task benchmark built from real GitHub issues. It is useful because it tests repo understanding, patch generation, and bug fixing rather than isolated code snippets."},{"question":"Why do coding benchmark scores disagree?","answer":"Benchmarks measure different workflows. SWE-bench emphasizes real bug fixing, Aider Polyglot emphasizes edit quality across languages, LiveCodeBench emphasizes algorithmic problem solving, and Terminal-Bench emphasizes command-line agent execution."},{"question":"How often should LLM benchmark pages be updated?","answer":"For model comparison pages, a monthly refresh is a reasonable minimum in 2026. Major model releases or leaderboard changes should trigger a same-week update."}]
 howto: [{"name":"Start with the task type","text":"Use SWE-bench-style scores for bug fixing, Aider-style scores for code editing, LiveCodeBench for algorithms, and Terminal-Bench for shell-heavy agent workflows."},{"name":"Check the scaffold","text":"Read whether a score comes from the raw model, a coding agent, an IDE assistant, or a custom benchmark scaffold before comparing it."},{"name":"Separate public leaderboards from vendor reports","text":"Vendor launch benchmarks can be useful, but keep them separate from third-party leaderboard numbers unless the evaluation setup is identical."},{"name":"Re-check before buying or migrating","text":"Before standardizing on a model, verify the latest score, release date, pricing, latency, context window, and tool support."}]
 ---
 
-*Editorial update: August 20, 2026. Benchmark data and linked source snapshots are current to the last source review on June 8, 2026; verify live leaderboards before making a purchase or migration decision.*
+*Editorial update: August 21, 2026. Numeric benchmark snapshots were last reviewed on June 8, 2026; source reachability and model-page freshness were rechecked on August 21. Verify live leaderboards before making a purchase or migration decision.*
 
-If you searched for **LLM benchmark scores 2026 coding math reasoning comparison**, the short version is this: the best model depends less on one leaderboard and more on the task you are trying to automate.
+If you searched for **LLM benchmark scores 2026 coding math reasoning comparison**, the short version is this: match the benchmark to the task before choosing a model, then verify the source date, scaffold, and success metric.
 
-Coding bug fixes, algorithm contests, math reasoning, and terminal-agent workflows are no longer measured by the same scoreboard. GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro, and DeepSeek V3.2 all look strong in different places. The useful move is to compare the right benchmark for the job.
+Coding bug fixes, algorithm contests, math reasoning, and terminal-agent workflows are no longer measured by the same scoreboard. GPT-5.5, Claude Opus 5, Gemini 3.1 Pro, and DeepSeek V3.2 all appear in different source contexts. The useful move is to compare the right benchmark for the job.
 
 ## Which LLM Benchmark Should You Use?
 
@@ -35,20 +35,24 @@ The phrase **LLM coding benchmarks** covers several different tests. SWE-bench m
 
 That is why a useful **LLM coding benchmark 2026** comparison should not collapse everything into one score. Match the benchmark to your workflow first, then compare GPT, Claude, Gemini, DeepSeek, and open-model results inside that context.
 
+![Original task-first chart mapping coding benchmarks to repository repair, code editing, algorithms, and terminal-agent work](/images/llm-benchmark-map.svg)
+
+*Original chart: ToLearn's editorial mapping of benchmark families to the workflows they actually measure.*
+
 ## Current LLM Benchmark Scores 2026
 
 This snapshot separates public leaderboards from vendor-reported release metrics. That distinction matters: a raw model, a coding agent, and an IDE assistant can post very different scores even when they use the same underlying model.
 
-| Model or leaderboard entry | Coding score | Math / reasoning score | Best readout | Source |
-|---|---:|---:|---|---|
-| **GPT-5.5** | SWE-Bench Pro: **58.6%**; Terminal-Bench 2.0: **82.7%** | FrontierMath Tier 1-3: **51.7%**; Tier 4: **35.4%** | Strongest signal for agentic terminal workflows and hard scientific reasoning in OpenAI's release data | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) |
-| **Claude Opus 4.8** | Latest Anthropic frontier coding and agent model | 1M context window; hybrid reasoning model | Strong candidate for long-running coding agents and large-context professional work; public comparable leaderboards may lag the release | [Anthropic Claude Opus 4.8](https://www.anthropic.com/claude/opus) |
-| **Gemini 3.1 Pro** | Latest Gemini 3 series model card | Native multimodal reasoning model | Best evaluated as a multimodal reasoning and long-context model; use public coding leaderboards when exact task scores matter | [Google DeepMind Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/) |
-| **DeepSeek V3.2 / V3.2-Speciale** | SWE-bench resolved: **70** | GPQA Diamond: **74.24 / 82.4**; MMLU-Pro: **85** | Strong value-oriented reasoning and coding contender, especially when cost matters | [DeepSeek V3.2 model card](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) |
-| **Aider Polyglot leaderboard** | GPT-5 high: **88.0%**; GPT-5 medium: **86.7%**; Gemini 2.5 Pro: **83.1%**; DeepSeek V3.2 Reasoner: **74.2%** | Not a math benchmark | Best for real-world code editing and diff quality | [Aider leaderboard](https://aider.chat/docs/leaderboards/) |
-| **SWE-bench public snapshot** | Verified reports **% Resolved** over 500 tasks | Not a math benchmark | Best for real GitHub issue repair; current top public entries include Claude-family, Gemini 3, GPT-5.2 Codex, Kimi K2.5, and DeepSeek V3.2 variants | [SWE-bench](https://www.swebench.com/) |
+| Model or leaderboard entry | Coding score | Math / reasoning score | Best readout | Source | Source type |
+|---|---:|---:|---|---|---|
+| **GPT-5.5** | SWE-Bench Pro: **58.6%**; Terminal-Bench 2.0: **82.7%** | FrontierMath Tier 1-3: **51.7%**; Tier 4: **35.4%** | Strongest signal for agentic terminal workflows and hard scientific reasoning in OpenAI's release data | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) | Vendor report |
+| **Claude Opus 5** | Latest Anthropic frontier coding and agent model; no comparable public score recorded in this snapshot | Verify current context and evaluation details on the live model page | Current Anthropic model-page reference; do not treat the qualitative model page as a cross-vendor benchmark score | [Anthropic Claude Opus](https://www.anthropic.com/claude/opus) | Vendor/model page |
+| **Gemini 3.1 Pro** | Latest Gemini 3 series model card | Native multimodal reasoning model | Best evaluated as a multimodal reasoning and long-context model; use public coding leaderboards when exact task scores matter | [Google DeepMind Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/) | Vendor/model card |
+| **DeepSeek V3.2 / V3.2-Speciale** | SWE-bench resolved: **70** | GPQA Diamond: **74.24 / 82.4**; MMLU-Pro: **85** | Strong value-oriented reasoning and coding contender, especially when cost matters | [DeepSeek V3.2 model card](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) | Model card |
+| **Aider Polyglot leaderboard** | GPT-5 high: **88.0%**; GPT-5 medium: **86.7%**; Gemini 2.5 Pro: **83.1%**; DeepSeek V3.2 Reasoner: **74.2%** | Not a math benchmark | Best for real-world code editing and diff quality | [Aider leaderboard](https://aider.chat/docs/leaderboards/) | Third-party |
+| **SWE-bench public snapshot** | Verified reports **% Resolved** over 500 tasks | Not a math benchmark | Best for real GitHub issue repair; current top public entries include Claude-family, Gemini 3, GPT-5.2 Codex, Kimi K2.5, and DeepSeek V3.2 variants | [SWE-bench](https://www.swebench.com/) | Third-party |
 
-The headline: **GPT-5.5 is the strongest launch-data story for terminal and scientific reasoning; Claude Opus 4.8 is the newest Anthropic agentic coding model; Gemini 3.1 Pro is the latest Google multimodal reasoning model; DeepSeek V3.2 is the value model to watch.** For a broader archive path, see the [AI Model Comparisons topic hub](/topics/ai-model-comparisons) and our [AI agent tools comparison](/blog/ai-agent-tools-comparison-2026) for workflow-level choices.
+The headline: **GPT-5.5 is the strongest launch-data story for terminal and scientific reasoning; Claude Opus 5 is the newest Anthropic model listed for agentic coding; Gemini 3.1 Pro is the latest Google multimodal reasoning model; DeepSeek V3.2 is the value model to watch.** For a broader archive path, see the [AI Model Comparisons topic hub](/topics/ai-model-comparisons) and our [AI agent tools comparison](/blog/ai-agent-tools-comparison-2026) for workflow-level choices.
 
 ## Coding Benchmark Scores
 
@@ -108,7 +112,7 @@ Agentic coding is not the same as autocomplete.
 
 Terminal-Bench, SWE-Bench Pro, and real coding-agent evaluations ask whether a model can keep track of a task, use tools, inspect outputs, recover from errors, and finish useful work. GPT-5.5's **82.7% Terminal-Bench 2.0** number is a strong signal for this category.
 
-Claude Opus 4.8 is also highly relevant here because Anthropic positions it around coding, agents, professional work, and a **1M context window**. That context length matters when the model must keep a large repo, a long incident, or a multi-hour task in scope.
+Claude Opus 5 is also relevant here because Anthropic's live model page now lists it above the older Opus entries. The page should be treated as a current product reference, not as a substitute for a comparable third-party benchmark row.
 
 This is also where tool choice matters. Cursor, Claude Code, Codex-style terminal agents, and custom scaffolds can change the result. The related question is not only "which model?" but "which model inside which workflow?" For the productivity trap behind this, read [AI Coding Tools: 19% Slower Despite Feeling Faster](/blog/ai-coding-tools-slower-productivity-paradox).
 
@@ -120,9 +124,9 @@ Here is the June 2026 update:
 
 | February framing | June 2026 refresh |
 |---|---|
-| Claude Opus 4.5 as the premium coding leader | Claude Opus 4.8 is the current Anthropic frontier model for coding and agents |
+| Claude Opus 4.5 as the premium coding leader | Claude Opus 5 is now listed as the current Anthropic frontier model for coding and agents |
 | GPT-5.2 as the main OpenAI reasoning model | GPT-5.5 now anchors the OpenAI comparison for terminal and scientific reasoning benchmarks |
-| Gemini 2.5 Pro as the context-window story | Gemini 3.1 Pro is the current Google model-card target, while Claude Opus 4.8 also advertises 1M context |
+| Gemini 2.5 Pro as the context-window story | Gemini 3.1 Pro is the current Google model-card target; verify Anthropic's live context claim separately |
 | DeepSeek V3.1 as the value contender | DeepSeek V3.2 and V3.2-Speciale are now the relevant reasoning/coding references |
 | One "best model" claim | Task-specific comparison across SWE-bench, Aider, LiveCodeBench, Terminal-Bench, and math reasoning |
 
@@ -134,10 +138,10 @@ The open-model story also changed. Kimi K2.5, Qwen, GLM, MiniMax, and DeepSeek e
 |---|---|---|
 | Real repo bug fixing | Claude-family or Gemini/GPT systems with strong SWE-bench scaffold results | SWE-bench rewards repo understanding, tests, and patch validation |
 | Patch-heavy IDE editing | GPT-5 high/medium in Aider-style workflows | Aider emphasizes clean diffs and multi-language editing |
-| Terminal-heavy autonomous work | GPT-5.5 or Claude Opus 4.8 style agent setups | Terminal-Bench and agentic launch positioning matter more than autocomplete |
+| Terminal-heavy autonomous work | GPT-5.5 or Claude Opus 5 style agent setups | Terminal-Bench and agentic launch positioning matter more than autocomplete |
 | Math and scientific reasoning | GPT-5.5, DeepSeek V3.2-Speciale, Gemini 3.1 Pro | Use FrontierMath, GPQA, MMLU-Pro, and multimodal reasoning context together |
 | Budget-sensitive coding | DeepSeek V3.2, Kimi K2.5, Qwen/GLM-family options | Public scores are now strong enough to justify serious pilots |
-| Large-context professional work | Claude Opus 4.8 or Gemini 3.1 Pro | Context window and multimodal/document handling can dominate raw coding scores |
+| Large-context professional work | Claude Opus 5 or Gemini 3.1 Pro | Context window and multimodal/document handling can dominate raw coding scores |
 
 For most teams, the best stack is hybrid:
 
@@ -147,6 +151,12 @@ For most teams, the best stack is hybrid:
 4. Re-check benchmark data monthly, because the public leaderboard can change faster than your procurement cycle.
 
 ## Benchmark Caveats
+
+### Methodology and source tiers
+
+Every score on this page is tagged by source class: vendor-reported release data, third-party leaderboard data, or a public benchmark snapshot. Vendor results are useful for understanding the manufacturer's chosen configuration; third-party results are more useful for cross-model context; neither is a guarantee of performance in your repository.
+
+For each row, the review records the model version, dataset or leaderboard date, scaffold, tool access, success metric, and whether the result can be reproduced. The [AI benchmark methodology guide](/blog/ai-benchmark-methodology) contains the full evidence-ledger template and refresh rules. Where a source does not publish a comparable number, the table intentionally uses a qualitative label instead of inventing a score.
 
 Benchmark scores are useful, but they are not buyer's guides by themselves.
 
@@ -165,7 +175,7 @@ Benchmark scores are useful, but they are not buyer's guides by themselves.
 The best 2026 LLM benchmark comparison is not "Claude vs GPT vs Gemini vs DeepSeek" as a single fight. It is a map:
 
 - **GPT-5.5** looks strongest in OpenAI's June 2026 launch data for terminal-agent and scientific reasoning tasks.
-- **Claude Opus 4.8** is the newest Anthropic frontier model for coding, agents, professional work, and large-context tasks.
+- **Claude Opus 5** is the newest Anthropic model listed for coding, agents, and professional work; verify its live evaluation details before comparing it numerically.
 - **Gemini 3.1 Pro** is Google's current multimodal reasoning model-card target.
 - **DeepSeek V3.2** is the value contender that now deserves serious coding and reasoning pilots.
 - **Aider, SWE-bench, LiveCodeBench, and Terminal-Bench** answer different questions, so use the benchmark that matches your workflow.
@@ -177,7 +187,7 @@ If you only remember one rule: **choose the benchmark that looks like your actua
 ## Sources
 
 - [OpenAI: Introducing GPT-5.5](https://openai.com/index/introducing-gpt-5-5/)
-- [Anthropic: Claude Opus 4.8](https://www.anthropic.com/claude/opus)
+- [Anthropic: Claude Opus](https://www.anthropic.com/claude/opus)
 - [Google DeepMind: Gemini 3.1 Pro Model Card](https://deepmind.google/models/model-cards/gemini-3-1-pro/)
 - [DeepSeek V3.2 model card](https://huggingface.co/deepseek-ai/DeepSeek-V3.2)
 - [SWE-bench leaderboard](https://www.swebench.com/)

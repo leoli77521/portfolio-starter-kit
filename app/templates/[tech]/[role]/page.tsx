@@ -8,6 +8,7 @@ import { findRelevantGuides, findRelevantPosts, findRelevantTopicHubs } from 'ap
 import { baseUrl } from 'app/sitemap'
 import { generateBreadcrumbSchema, schemaToJsonLd } from 'app/lib/schemas'
 import { buildSocialTitle, resolveOgImage, trimSeoTitle } from 'app/lib/seo'
+import { getTemplateSeoDecision } from 'app/lib/seo-indexing-policy'
 
 interface Technology {
   slug: string
@@ -155,6 +156,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     alternates: {
       canonical: `${baseUrl}/templates/${params.tech}/${params.role}`,
+    },
+    robots: {
+      index: getTemplateSeoDecision(params.tech, params.role) === 'index',
+      follow: true,
+      googleBot: {
+        index: getTemplateSeoDecision(params.tech, params.role) === 'index',
+        follow: true,
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   }
 }
@@ -646,4 +659,3 @@ export default function TechRoleTemplatePage({ params }: PageProps) {
     </section>
   )
 }
-

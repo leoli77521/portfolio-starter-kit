@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">LLM benchmark map by workflow</title>
+  <desc id="desc">A task-first map showing SWE-bench for repository repair, Aider for code editing, LiveCodeBench for algorithms, and Terminal-Bench for shell agents.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#020617" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="640" rx="40" fill="url(#bg)"/>
+  <text x="72" y="82" fill="#c7d2fe" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="4">TOLEARN / BENCHMARK MAP</text>
+  <text x="72" y="142" fill="#fff" font-family="Arial, sans-serif" font-size="42" font-weight="700">Choose the test that matches the work</text>
+  <text x="72" y="180" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="20">Scores are signals; the task and scaffold decide what they mean.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="72" y="238" width="250" height="260" rx="24" fill="#f8fafc"/>
+    <rect x="350" y="238" width="250" height="260" rx="24" fill="#f8fafc"/>
+    <rect x="628" y="238" width="250" height="260" rx="24" fill="#f8fafc"/>
+    <rect x="906" y="238" width="222" height="260" rx="24" fill="#f8fafc"/>
+  </g>
+
+  <g font-family="Arial, sans-serif">
+    <text x="100" y="282" fill="#4f46e5" font-size="18" font-weight="700">01 / REPAIR</text>
+    <text x="100" y="328" fill="#0f172a" font-size="28" font-weight="700">SWE-bench</text>
+    <text x="100" y="366" fill="#475569" font-size="18">Real GitHub issues</text>
+    <text x="100" y="400" fill="#475569" font-size="18">Repo context + tests</text>
+    <text x="100" y="454" fill="#0f172a" font-size="17" font-weight="700">Bug fixing</text>
+
+    <text x="378" y="282" fill="#0891b2" font-size="18" font-weight="700">02 / EDIT</text>
+    <text x="378" y="328" fill="#0f172a" font-size="28" font-weight="700">Aider</text>
+    <text x="378" y="366" fill="#475569" font-size="18">Multi-language diffs</text>
+    <text x="378" y="400" fill="#475569" font-size="18">Edit correctness</text>
+    <text x="378" y="454" fill="#0f172a" font-size="17" font-weight="700">IDE workflows</text>
+
+    <text x="656" y="282" fill="#059669" font-size="18" font-weight="700">03 / SOLVE</text>
+    <text x="656" y="328" fill="#0f172a" font-size="28" font-weight="700">LiveCodeBench</text>
+    <text x="656" y="366" fill="#475569" font-size="18">Fresh problems</text>
+    <text x="656" y="400" fill="#475569" font-size="18">Contamination checks</text>
+    <text x="656" y="454" fill="#0f172a" font-size="17" font-weight="700">Algorithms</text>
+
+    <text x="934" y="282" fill="#d97706" font-size="18" font-weight="700">04 / OPERATE</text>
+    <text x="934" y="328" fill="#0f172a" font-size="27" font-weight="700">Terminal-Bench</text>
+    <text x="934" y="366" fill="#475569" font-size="18">Shell tasks</text>
+    <text x="934" y="400" fill="#475569" font-size="18">Agent recovery</text>
+    <text x="934" y="454" fill="#0f172a" font-size="17" font-weight="700">Autonomy</text>
+  </g>
+  <text x="72" y="574" fill="#a5b4fc" font-family="Arial, sans-serif" font-size="18">Original editorial chart · source classes and methodology documented in the article</text>
+</svg>

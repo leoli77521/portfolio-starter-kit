@@ -5,7 +5,14 @@ export interface AiDirectoryConfig {
   longDescription: string
   canonicalPath: string
   hubSlugs: string[]
+  hubLink?: string | null
   keywords: string[]
+  pageRole: string
+  entryLinks: Array<{
+    href: string
+    label: string
+    description: string
+  }>
   decisionCards: Array<{
     title: string
     description: string
@@ -22,6 +29,8 @@ export const aiDirectories: AiDirectoryConfig[] = [
       'Use this directory when you want the operating model behind AI coding agents rather than another quick product comparison. It connects the agent runtime stack, tool systems, permissions, MCP integration, plugin/session design, and migration practices into one editorial entry point.',
     canonicalPath: '/ai-coding-agents',
     hubSlugs: ['ai-coding-agent-stack'],
+    pageRole:
+      'The canonical entry point for agent runtime architecture, tool execution, permissions, MCP, sessions, and migration practice.',
     keywords: [
       'AI coding agents',
       'coding agent architecture',
@@ -46,6 +55,23 @@ export const aiDirectories: AiDirectoryConfig[] = [
           'Treat clean-room rewrites, parity audits, and session continuity as first-class engineering work.',
       },
     ],
+    entryLinks: [
+      {
+        href: '/blog/2026-04-02-claw-code-ai-coding-agent-architecture',
+        label: 'Read the runtime architecture overview',
+        description: 'See how a coding agent is assembled beyond the foundation model.',
+      },
+      {
+        href: '/blog/claw-code-usage-guide',
+        label: 'Follow the Claw Code usage guide',
+        description: 'Translate the architecture into a practical evaluation and rollout path.',
+      },
+      {
+        href: '/blog/mcp-model-context-protocol-guide',
+        label: 'Understand MCP and tool boundaries',
+        description: 'Learn how external tools, permissions, and context exchange fit together.',
+      },
+    ],
   },
   {
     slug: 'ai-tools',
@@ -56,6 +82,8 @@ export const aiDirectories: AiDirectoryConfig[] = [
       'Use this directory to compare AI developer tools by workflow fit: IDE assistants, terminal agents, code execution surfaces, mobile assistants, and task automation tools. The emphasis is practical adoption, not product hype.',
     canonicalPath: '/ai-tools',
     hubSlugs: ['ai-tools-for-developers'],
+    pageRole:
+      'The canonical directory for choosing AI developer tools by workflow fit, review cost, automation surface, and product comparison.',
     keywords: [
       'AI tools for developers',
       'AI coding tools',
@@ -80,6 +108,23 @@ export const aiDirectories: AiDirectoryConfig[] = [
           'Choose tools that expose actions, permissions, costs, and failure states clearly enough for serious work.',
       },
     ],
+    entryLinks: [
+      {
+        href: '/blog/ai-agent-tools-comparison-2026',
+        label: 'Compare AI agent tools',
+        description: 'Start with a workflow-level comparison of coding assistants and agents.',
+      },
+      {
+        href: '/blog/ai-tools-seo-optimization',
+        label: 'Use the data-first SEO workflow',
+        description: 'See how AI tools support research, briefs, internal links, and refreshes.',
+      },
+      {
+        href: '/ai-coding-agents',
+        label: 'Go deeper on coding agents',
+        description: 'Move from a tool catalogue into runtime, permission, and session design.',
+      },
+    ],
   },
   {
     slug: 'ai-models',
@@ -90,6 +135,9 @@ export const aiDirectories: AiDirectoryConfig[] = [
       'Use this directory when model choice matters to product execution. It connects benchmark interpretation, coding performance, open-source model shifts, enterprise cost decisions, and hardware constraints so model comparisons lead to better engineering choices.',
     canonicalPath: '/ai-models',
     hubSlugs: ['ai-model-comparisons'],
+    hubLink: null,
+    pageRole:
+      'The canonical entry point for model comparison, benchmark interpretation, learning paths, and production tradeoffs.',
     keywords: [
       'AI model comparison',
       'LLM benchmarks',
@@ -112,6 +160,23 @@ export const aiDirectories: AiDirectoryConfig[] = [
         title: 'Include the interface',
         description:
           'The same model behaves differently inside an IDE, terminal agent, API workflow, or local hardware setup.',
+      },
+    ],
+    entryLinks: [
+      {
+        href: '/blog/llm-coding-benchmark-comparison-2026',
+        label: 'Read the current benchmark comparison',
+        description: 'Match SWE-bench, Aider, LiveCodeBench, and Terminal-Bench to real work.',
+      },
+      {
+        href: '/blog/ai-benchmark-methodology',
+        label: 'Audit the benchmark methodology',
+        description: 'Separate vendor claims, third-party tests, scaffolds, and reproducibility.',
+      },
+      {
+        href: '/blog/gpt-5-for-coding',
+        label: 'Follow the coding-model learning path',
+        description: 'Connect benchmark scores to pricing, prompting, validation, and rollout.',
       },
     ],
   },

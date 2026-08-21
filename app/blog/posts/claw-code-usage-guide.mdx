@@ -1,0 +1,103 @@
+---
+title: "Claw Code Usage Guide: A Safe Path from Prompt to Agent"
+seoTitle: "Claw Code Usage Guide: Safe Agent Workflows"
+seoDescription: "Use this Claw Code guide to evaluate coding-agent tasks, permissions, checkpoints, tests, sessions, and rollback before trusting autonomous changes."
+publishedAt: "2026-08-20"
+updatedAt: "2026-08-20"
+summary: "A practical Claw Code usage guide for turning agent architecture into safe daily workflows with bounded tasks, permission gates, tests, checkpoints, and rollback."
+image: "/og?title=Claw%20Code%20Usage%20Guide%3A%20A%20Safe%20Path%20from%20Prompt%20to%20Agent"
+category: "AI Technology"
+tags: ["Claw Code", "AI coding agents", "Agent workflows", "Developer Tools", "MCP", "AI programming"]
+faq: [{"question":"What should I use Claw Code for first?","answer":"Start with bounded, reversible repository tasks where tests and a human review can verify the result."},{"question":"Should a coding agent have unrestricted shell access?","answer":"No. Begin with least-privilege permissions and expand access only when the workflow proves it needs more."},{"question":"How do I know an agent task is complete?","answer":"Define an observable success condition, run the relevant tests, inspect the diff, and record any manual follow-up."}]
+howto: [{"name":"Choose a bounded task","text":"Pick a small change with a clear input, output, and rollback path."},{"name":"Set permissions","text":"Allow only the files, commands, network access, and secrets required for the task."},{"name":"Run checkpoints","text":"Ask the agent to summarize intent, changed files, tests, and unresolved risks at each boundary."},{"name":"Review and land","text":"Inspect the diff, run tests, and merge only after the result meets the written acceptance criteria."}]
+---
+
+The safest way to adopt Claw Code is to treat it as an operating workflow, not a magic prompt. The model matters, but the runtime around it determines what it can see, what it can change, and how quickly a mistake can be recovered.
+
+This guide turns the [Claw Code architecture analysis](/blog/2026-04-02-claw-code-ai-coding-agent-architecture) into a repeatable path for daily development.
+
+## Start with a task contract
+
+Before opening an agent session, write a short contract:
+
+- **Goal:** the one observable outcome that should change;
+- **Scope:** directories and files the agent may inspect or edit;
+- **Constraints:** APIs, style rules, compatibility requirements, and forbidden actions;
+- **Validation:** commands, tests, screenshots, or logs that prove success;
+- **Rollback:** the commit, patch, branch, or backup that lets you undo the change.
+
+“Improve the auth system” is not a task contract. “Add a failing test for expired sessions, implement the smallest fix in `app/auth`, and run the session test suite” is.
+
+## Permission levels
+
+Use progressive trust. A simple four-level policy is enough for most teams:
+
+| Level | Agent can do | Approval rule |
+| --- | --- | --- |
+| Read-only | Inspect files, search, explain, and propose a patch | No write access |
+| Workspace write | Edit tracked files in a bounded directory | Review diff before tests |
+| Test execution | Run selected tests and formatters | Command allowlist and timeout |
+| External action | Network, deploy, publish, or change infrastructure | Explicit approval per action |
+
+Start every new repository at read-only or workspace-write. Do not grant secrets or production access just because the agent completed a local refactor.
+
+The deeper [AI coding agent stack](/ai-coding-agents) explains why tools, permissions, and sessions are product features rather than implementation details.
+
+## A reliable session loop
+
+Use this loop for each task:
+
+1. **Inspect:** ask for the relevant files, current behavior, and existing tests.
+2. **Plan:** require a short change plan and list of files before editing.
+3. **Patch:** keep the diff narrow; avoid unrelated cleanup.
+4. **Validate:** run the smallest relevant test first, then the broader suite.
+5. **Explain:** request a summary of changed behavior, evidence, and remaining risk.
+6. **Checkpoint:** commit or save a patch before the next autonomous step.
+
+The checkpoint is important. A long session that changes dozens of files without a review boundary is hard to debug even when every individual edit looks reasonable.
+
+## Testing agent-generated code
+
+Tests should prove behavior, not merely that the agent ran a command. For a code change, combine:
+
+- unit tests for the changed logic;
+- integration tests for the boundary the agent touched;
+- type checking or compilation;
+- a diff review for accidental scope expansion;
+- a targeted manual check when the output is visual or user-facing.
+
+When a test fails, do not let the agent repeatedly patch until the failure disappears. Ask it to explain the failure, identify whether the test or implementation is wrong, and propose the next smallest experiment.
+
+## MCP and external tools
+
+MCP can make an agent dramatically more useful, but it also expands the trust boundary. For each server, record the resources it exposes, the tools it can call, whether calls are reversible, and what data can leave the machine.
+
+The [MCP protocol guide](/blog/mcp-model-context-protocol-guide) is the right companion for understanding resources, tools, prompts, roots, and transport. In a real rollout, pair it with an allowlist and an audit log rather than treating “connected” as “trusted.”
+
+## Failure handling
+
+Good agent workflows assume failure. Add explicit behavior for:
+
+- a command that times out;
+- a test that fails after a partial edit;
+- a tool returning malformed data;
+- an agent asking for a permission it should not need;
+- an instruction that conflicts with repository policy;
+- a session that loses context or resumes on the wrong branch.
+
+The correct response is usually to stop, preserve the diff, and re-establish the task contract. A fresh session with a compact handoff is often safer than a long conversation that has accumulated guesses.
+
+## Adoption checklist
+
+Before a team uses Claw Code on a shared codebase, confirm:
+
+- every task has a written success condition;
+- the default permission set is least privilege;
+- tests run in a sandbox with timeouts;
+- sessions expose changed files and tool calls;
+- checkpoints are cheap and frequent;
+- secrets are never copied into prompts or logs;
+- a human reviews production-impacting changes;
+- the team measures accepted changes, correction loops, and rollback rate.
+
+For product-level tool choices, continue to the [AI tools directory](/ai-tools). For model-level choices, use the [AI models and benchmarks directory](/ai-models) rather than assuming the most impressive demo is the best runtime.

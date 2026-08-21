@@ -1,18 +1,29 @@
 ---
-title: "LLM Benchmark Scores 2026: Codificação, Matemática e Raciocínio"
-summary: "Pontuações de benchmark LLM de junho de 2026 para codificação, matemática e raciocínio, comparando GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro, DeepSeek V3.2 e modelos abertos."
-seoTitle: "Benchmarks de codificação LLM 2026: pontuações comparadas"
-seoDescription: "Compare os benchmarks de codificação 2026 LLM em SWE-bench, Aider, LiveCodeBench, Terminal-Bench, raciocínio matemático, GPT-5.5, Claude, Gemini e DeepSeek."
-faq: [{"question":"Qual benchmark de codificação LLM é mais importante em 2026?","answer":"Para reparos reais de repositórios, o SWE-bench é o melhor ponto de partida. Para qualidade de edição, o Aider é mais útil. Para algoritmos, use LiveCodeBench. Para trabalho autônomo de shell, use Terminal-Bench."},{"question":"Qual LLM é melhor para codificação em junho de 2026?","answer":"Não há um único vencedor em todos os benchmarks. GPT-5.5 tem fortes pontuações relatadas de agente e fluxo de trabalho de terminal, Claude Opus 4.8 é o mais recente modelo de codificação e agente de fronteira da Anthropic, Gemini 3.1 Pro é o mais recente modelo de raciocínio multimodal do Google e DeepSeek V3.2 é um forte candidato a valor. Os resultados públicos do SWE-bench e do Aider devem ser lidos juntamente com o andaime e a interface da ferramenta usada."},{"question":"O que é verificado pelo SWE-bench e por que isso é importante?","answer":"SWE-bench Verified é um benchmark de 500 tarefas criado a partir de problemas reais do GitHub. É útil porque testa a compreensão do repositório, a geração de patches e a correção de bugs, em vez de trechos de código isolados."},{"question":"Por que as pontuações dos benchmarks de codificação discordam?","answer":"Os benchmarks medem diferentes fluxos de trabalho. SWE-bench enfatiza a correção real de bugs, Aider Polyglot enfatiza a qualidade de edição entre idiomas, LiveCodeBench enfatiza a resolução algorítmica de problemas e Terminal-Bench enfatiza a execução de agentes de linha de comando."},{"question":"Com que frequência as páginas de benchmark do LLM devem ser atualizadas?","answer":"Para páginas de comparação de modelos, uma atualização mensal é um mínimo razoável em 2026. Os principais lançamentos de modelos ou alterações na tabela de classificação devem acionar uma atualização na mesma semana."}]
+title: "Pontuações de benchmark LLM 2026: fontes e compensações"
+summary: "Um guia inicial para pontuações de benchmark 2026 LLM para codificação, matemática e raciocínio - cobrindo SWE-bench, Aider, LiveCodeBench, Terminal-Bench e compensações de modelo."
+seoTitle: "Pontuações de benchmark LLM 2026: fontes e compensações"
+seoDescription: "Compare as pontuações de benchmark 2026 LLM para codificação em SWE-bench, Aider, LiveCodeBench, Terminal-Bench, matemática e raciocínio. Escolha o modelo certo."
+faq: [{"question":"Qual benchmark de codificação LLM é mais importante em 2026?","answer":"Para reparos reais de repositórios, o SWE-bench é o melhor ponto de partida. Para qualidade de edição, o Aider é mais útil. Para algoritmos, use LiveCodeBench. Para trabalho autônomo de shell, use Terminal-Bench."},{"question":"Qual LLM é melhor para codificação em junho de 2026?","answer":"Não há um único vencedor em todos os benchmarks. GPT-5.5 tem fortes pontuações relatadas de agente e fluxo de trabalho de terminal, Claude Opus 5 é agora o modelo Antrópico mais recente listado para codificação e agentes, Gemini 3.1 Pro é o mais recente modelo de raciocínio multimodal do Google e DeepSeek V3.2 é um forte candidato a valor. Os resultados públicos do SWE-bench e do Aider devem ser lidos juntamente com o andaime e a interface da ferramenta usada."},{"question":"O que é verificado pelo SWE-bench e por que isso é importante?","answer":"SWE-bench Verified é um benchmark de 500 tarefas criado a partir de problemas reais do GitHub. É útil porque testa a compreensão do repositório, a geração de patches e a correção de bugs, em vez de trechos de código isolados."},{"question":"Por que as pontuações dos benchmarks de codificação discordam?","answer":"Os benchmarks medem diferentes fluxos de trabalho. SWE-bench enfatiza a correção real de bugs, Aider Polyglot enfatiza a qualidade de edição entre idiomas, LiveCodeBench enfatiza a resolução algorítmica de problemas e Terminal-Bench enfatiza a execução de agentes de linha de comando."},{"question":"Com que frequência as páginas de benchmark do LLM devem ser atualizadas?","answer":"Para páginas de comparação de modelos, uma atualização mensal é um mínimo razoável em 2026. Os principais lançamentos de modelos ou alterações na tabela de classificação devem acionar uma atualização na mesma semana."}]
 howto: [{"name":"Comece com o tipo de tarefa","text":"Use pontuações no estilo SWE-bench para correção de bugs, pontuações no estilo Aider para edição de código, LiveCodeBench para algoritmos e Terminal-Bench para fluxos de trabalho de agentes com muito uso de shell."},{"name":"Verifique o andaime","text":"Leia se uma pontuação vem do modelo bruto, de um agente de codificação, de um assistente IDE ou de uma estrutura de benchmark personalizada antes de compará-la."},{"name":"Separe os placares públicos dos relatórios dos fornecedores","text":"Os benchmarks de lançamento do fornecedor podem ser úteis, mas mantenha-os separados dos números da tabela de classificação de terceiros, a menos que a configuração da avaliação seja idêntica."},{"name":"Verifique novamente antes de comprar ou migrar","text":"Antes de padronizar um modelo, verifique a pontuação mais recente, a data de lançamento, o preço, a latência, a janela de contexto e o suporte da ferramenta."}]
-sourceUpdatedAt: "2026-06-12"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-*Última verificação: 8 de junho de 2026. Esta página agora é mantida como um instantâneo de referência vivo de 2026, não uma comparação única de fevereiro de 2026.*
+*Atualização editorial: 21 de agosto de 2026. Os instantâneos de benchmark numéricos foram revisados ​​pela última vez em 8 de junho de 2026; a acessibilidade da fonte e a atualização da página modelo foram verificadas novamente em 21 de agosto. Verifique os placares ao vivo antes de tomar uma decisão de compra ou migração.*
 
-Se você pesquisou **LLM benchmark pontuações 2026 codificação raciocínio matemático comparação**, a versão resumida é esta: o melhor modelo depende menos de um placar e mais da tarefa que você está tentando automatizar.
+Se você pesquisou **LLM benchmark pontuações 2026 codificação raciocínio matemático comparação**, a versão resumida é esta: combine o benchmark com a tarefa antes de escolher um modelo e, em seguida, verifique a data de origem, a estrutura e a métrica de sucesso.
 
-Correções de bugs de codificação, concursos de algoritmos, raciocínio matemático e fluxos de trabalho de agentes terminais não são mais medidos pelo mesmo painel de avaliação. GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro e DeepSeek V3.2 parecem fortes em lugares diferentes. A medida útil é comparar o benchmark certo para o trabalho.
+Correções de bugs de codificação, concursos de algoritmos, raciocínio matemático e fluxos de trabalho de agentes terminais não são mais medidos pelo mesmo painel de avaliação. GPT-5.5, Claude Opus 5, Gemini 3.1 Pro e DeepSeek V3.2 aparecem em diferentes contextos de origem. A medida útil é comparar o benchmark certo para o trabalho.
+
+## Qual benchmark LLM você deve usar?
+
+Use o **SWE-bench** para reparo de repositório real, o **Aider Polyglot** para qualidade de edição de código, o **LiveCodeBench** para codificação algorítmica e o **Terminal-Bench** para trabalho de agente com uso pesado de shell. Nenhum benchmark prova que um modelo é melhor para cada fluxo de trabalho de desenvolvimento; portanto, escolha o teste que mais se aproxima da tarefa que sua equipe realmente executará.
+
+| Se você precisa avaliar | Comece com | Então verifique |
+|---|---|---|
+| Correções de bugs e patches de repositório | Banco SWE verificado | Scaffold, política de teste e permissões de ferramentas |
+| Edição de vários arquivos em um IDE | Ajudante Poliglota | Custo, qualidade diferencial e carga de revisão |
+| Algoritmos e novos problemas de codificação | LiveCodeBench | Controles de contaminação e dificuldade da tarefa |
+| Trabalho terminal autônomo | Banco Terminal | Sandbox, novas tentativas e portas de aprovação humana |
 
 ## Benchmarks de codificação LLM 2026: mapa rápido
 
@@ -20,20 +31,24 @@ A frase **Benchmarks de codificação LLM** abrange vários testes diferentes. S
 
 É por isso que uma comparação útil do **LLM coding benchmark 2026** não deve resumir tudo em uma pontuação. Combine primeiro o benchmark com o seu fluxo de trabalho e, em seguida, compare os resultados de GPT, Claude, Gemini, DeepSeek e modelo aberto dentro desse contexto.
 
+![Benchmarks de codificação de mapeamento de gráfico de tarefa original para reparo de repositório, edição de código, algoritmos e trabalho de agente de terminal](/images/llm-benchmark-map.svg)
+
+*Gráfico original: mapeamento editorial da ToLearn das famílias de benchmark para os fluxos de trabalho que elas realmente medem.*
+
 ## Pontuações atuais de benchmark LLM 2026
 
 Este instantâneo separa os placares públicos das métricas de lançamento relatadas pelo fornecedor. Essa distinção é importante: um modelo bruto, um agente de codificação e um assistente de IDE podem postar pontuações muito diferentes, mesmo quando usam o mesmo modelo subjacente.
 
-| Entrada de modelo ou tabela de classificação | Pontuação de codificação | Pontuação de matemática/raciocínio | Melhor leitura | Fonte |
-|---|---:|---:|---|---|
-| **GPT-5.5** | SWE-Bench Pro: **58,6%**; Terminal-bancada 2.0: **82,7%** | FrontierMath Nível 1-3: **51,7%**; Nível 4: **35,4%** | Sinal mais forte para fluxos de trabalho de terminais de agência e raciocínio científico sólido nos dados de lançamento da OpenAI | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) |
-| **Claude Opus 4.8** | Mais recente modelo de agente e codificação de fronteira antrópica | Janela de contexto de 1M; modelo de raciocínio híbrido | Forte candidato para agentes de codificação de longa duração e trabalho profissional de grande contexto; tabelas de classificação públicas comparáveis ​​podem atrasar o lançamento | [Antrópico Claude Opus 4.8](https://www.anthropic.com/claude/opus) |
-| **Gêmeos 3.1 Pró** | Placa de modelo mais recente da série Gemini 3 | Modelo de raciocínio multimodal nativo | Melhor avaliado como um raciocínio multimodal e modelo de longo contexto; use tabelas de classificação de codificação pública quando as pontuações exatas das tarefas forem importantes | [Google DeepMind Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/) |
-| **DeepSeek V3.2 / V3.2-Especial** | Banco SWE resolvido: **70** | Diamante GPQA: **74,24/82,4**; MMLU-Pro: **85** | Forte raciocínio orientado a valor e concorrente de codificação, especialmente quando o custo é importante | [Cartão modelo DeepSeek V3.2](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) |
-| **Tabela de classificação do Aider Polyglot** | GPT-5 alto: **88,0%**; Meio GPT-5: **86,7%**; Gêmeos 2.5 Pro: **83,1%**; Raciocinador do DeepSeek V3.2: **74,2%** | Não é uma referência matemática | Melhor para edição de código do mundo real e qualidade de comparação | [Tabela de classificação de ajudantes](https://aider.chat/docs/leaderboards/) |
-| **Instantâneo público do SWE-bench** | Relatórios verificados **% resolvidos** mais de 500 tarefas | Não é uma referência matemática | Melhor para reparo real de problemas do GitHub; As principais entradas públicas atuais incluem variantes Claude-family, Gemini 3, GPT-5.2 Codex, Kimi K2.5 e DeepSeek V3.2 | [Banco SWE](https://www.swebench.com/) |
+| Entrada de modelo ou tabela de classificação | Pontuação de codificação | Pontuação de matemática/raciocínio | Melhor leitura | Fonte | Tipo de fonte |
+|---|---:|---:|---|---|---|
+| **GPT-5.5** | SWE-Bench Pro: **58,6%**; Terminal-bancada 2.0: **82,7%** | FrontierMath Nível 1-3: **51,7%**; Nível 4: **35,4%** | Sinal mais forte para fluxos de trabalho de terminais de agência e raciocínio científico sólido nos dados de lançamento da OpenAI | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) | Relatório do fornecedor |
+| **Cláudio Opus 5** | Último modelo de agente e codificação de fronteira antrópica; nenhuma pontuação pública comparável registrada neste instantâneo | Verifique o contexto atual e os detalhes da avaliação na página do modelo ativo | Referência atual da página modelo da Antrópica; não trate a página do modelo qualitativo como uma pontuação de referência de vários fornecedores | [Antrópico Claude Opus](https://www.anthropic.com/claude/opus) | Página do fornecedor/modelo |
+| **Gêmeos 3.1 Pró** | Placa de modelo mais recente da série Gemini 3 | Modelo de raciocínio multimodal nativo | Melhor avaliado como um raciocínio multimodal e modelo de longo contexto; use tabelas de classificação de codificação pública quando as pontuações exatas das tarefas forem importantes | [Google DeepMind Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/) | Cartão de fornecedor/modelo |
+| **DeepSeek V3.2 / V3.2-Especial** | Banco SWE resolvido: **70** | Diamante GPQA: **74,24/82,4**; MMLU-Pro: **85** | Forte raciocínio orientado a valor e concorrente de codificação, especialmente quando o custo é importante | [Cartão modelo DeepSeek V3.2](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) | Cartão modelo |
+| **Tabela de classificação do Aider Polyglot** | GPT-5 alto: **88,0%**; Meio GPT-5: **86,7%**; Gêmeos 2.5 Pro: **83,1%**; Raciocinador do DeepSeek V3.2: **74,2%** | Não é uma referência matemática | Melhor para edição de código do mundo real e qualidade de comparação | [Tabela de classificação de ajudantes](https://aider.chat/docs/leaderboards/) | Terceiro |
+| **Instantâneo público do SWE-bench** | Relatórios verificados **% resolvidos** mais de 500 tarefas | Não é uma referência matemática | Melhor para reparo real de problemas do GitHub; As principais entradas públicas atuais incluem variantes Claude-family, Gemini 3, GPT-5.2 Codex, Kimi K2.5 e DeepSeek V3.2 | [Banco SWE](https://www.swebench.com/) | Terceiro |
 
-A manchete: **GPT-5.5 é a história de dados de lançamento mais forte para raciocínio terminal e científico; Claude Opus 4.8 é o mais novo modelo de codificação agente antrópica; Gemini 3.1 Pro é o mais recente modelo de raciocínio multimodal do Google; DeepSeek V3.2 é o modelo de valor a ser observado.** Para obter um caminho de arquivo mais amplo, consulte o [hub de tópicos de comparações de modelos de IA](/topics/ai-model-comparisons).
+A manchete: **GPT-5.5 é a história de dados de lançamento mais forte para raciocínio terminal e científico; Claude Opus 5 é o mais novo modelo Antrópico listado para codificação agente; Gemini 3.1 Pro é o mais recente modelo de raciocínio multimodal do Google; DeepSeek V3.2 é o modelo de valor a ser observado.** Para obter um caminho de arquivo mais amplo, consulte o [hub de tópicos de comparações de modelos de IA](/topics/ai-model-comparisons) e nossa [comparação de ferramentas de agente de IA](/blog/ai-agent-tools-comparison-2026) para opções em nível de fluxo de trabalho.
 
 ## Pontuações de referência de codificação
 
@@ -93,7 +108,7 @@ A codificação Agentic não é o mesmo que o preenchimento automático.
 
 As avaliações do Terminal-Bench, SWE-Bench Pro e do agente de codificação real perguntam se um modelo pode acompanhar uma tarefa, usar ferramentas, inspecionar resultados, recuperar-se de erros e concluir trabalhos úteis. O número **82,7% Terminal-Bench 2.0** do GPT-5.5 é um forte sinal para esta categoria.
 
-Claude Opus 4.8 também é altamente relevante aqui porque a Anthropic o posiciona em torno de codificação, agentes, trabalho profissional e uma **janela de contexto de 1 milhão**. Esse comprimento do contexto é importante quando o modelo deve manter no escopo um grande repositório, um incidente longo ou uma tarefa de várias horas.
+Claude Opus 5 também é relevante aqui porque a página de modelo ao vivo do Anthropic agora o lista acima das entradas mais antigas do Opus. A página deve ser tratada como uma referência de produto atual e não como um substituto para uma linha de referência comparável de terceiros.
 
 É também aqui que a escolha da ferramenta é importante. Cursor, código Claude, agentes de terminal estilo Codex e scaffolds personalizados podem alterar o resultado. A questão relacionada não é apenas “qual modelo?” mas "qual modelo dentro de qual fluxo de trabalho?" Para saber a armadilha de produtividade por trás disso, leia [Ferramentas de codificação de IA: 19% mais lentas apesar de parecerem mais rápidas](/blog/ai-coding-tools-slower-productivity-paradox).
 
@@ -105,9 +120,9 @@ Aqui está a atualização de junho de 2026:
 
 | Enquadramento de fevereiro | Atualização de junho de 2026 |
 |---|---|
-| Claude Opus 4.5 como líder de codificação premium | Claude Opus 4.8 é o atual modelo de fronteira antrópica para codificação e agentes |
+| Claude Opus 4.5 como líder de codificação premium | Claude Opus 5 está agora listado como o atual modelo de fronteira antrópica para codificação e agentes |
 | GPT-5.2 como principal modelo de raciocínio OpenAI | GPT-5.5 agora ancora a comparação OpenAI para benchmarks de raciocínio científico e terminal |
-| Gemini 2.5 Pro como história da janela de contexto | Gemini 3.1 Pro é o atual alvo do cartão modelo do Google, enquanto Claude Opus 4.8 também anuncia contexto de 1 milhão |
+| Gemini 2.5 Pro como história da janela de contexto | Gemini 3.1 Pro é o atual alvo do cartão modelo do Google; verifique a reivindicação de contexto ao vivo da Antrópica separadamente |
 | DeepSeek V3.1 como concorrente de valor | DeepSeek V3.2 e V3.2-Speciale são agora as referências relevantes de raciocínio/codificação |
 | Uma afirmação de "melhor modelo" | Comparação específica de tarefas entre SWE-bench, Aider, LiveCodeBench, Terminal-Bench e raciocínio matemático |
 
@@ -119,10 +134,10 @@ A história do modelo aberto também mudou. As entradas Kimi K2.5, Qwen, GLM, Mi
 |---|---|---|
 | Correção de bug de repositório real | Sistemas da família Claude ou Gemini/GPT com fortes resultados de andaime de bancada SWE | SWE-bench recompensa compreensão de repositório, testes e validação de patch |
 | Edição IDE com muitos patches | GPT-5 alto/médio em fluxos de trabalho estilo Aider | Aider enfatiza diferenças limpas e edição multilíngue |
-| Trabalho autônomo com muitos terminais | Configurações de agente estilo GPT-5.5 ou Claude Opus 4.8 | Terminal-Bench e posicionamento de lançamento de agente são mais importantes do que preenchimento automático |
+| Trabalho autônomo com muitos terminais | Configurações de agente estilo GPT-5.5 ou Claude Opus 5 | Terminal-Bench e posicionamento de lançamento de agente são mais importantes do que preenchimento automático |
 | Raciocínio matemático e científico | GPT-5.5, DeepSeek V3.2-Speciale, Gemini 3.1 Pro | Use FrontierMath, GPQA, MMLU-Pro e contexto de raciocínio multimodal juntos |
 | Codificação sensível ao orçamento | Opções da família DeepSeek V3.2, Kimi K2.5, Qwen/GLM | As pontuações públicas agora são fortes o suficiente para justificar pilotos sérios |
-| Trabalho profissional de grande contexto | Claude Opus 4.8 ou Gemini 3.1 Pro | A janela de contexto e o manuseio multimodal/de documentos podem dominar as pontuações de codificação bruta |
+| Trabalho profissional de grande contexto | Claude Opus 5 ou Gemini 3.1 Pro | A janela de contexto e o manuseio multimodal/de documentos podem dominar as pontuações de codificação bruta |
 
 Para a maioria das equipes, a melhor pilha é a híbrida:
 
@@ -132,6 +147,12 @@ Para a maioria das equipes, a melhor pilha é a híbrida:
 4. Verifique novamente os dados de referência mensalmente, pois o placar público pode mudar mais rapidamente do que o seu ciclo de compras.
 
 ## Advertências de referência
+
+### Metodologia e níveis de origem
+
+Cada pontuação nesta página é marcada por classe de origem: dados de lançamento relatados pelo fornecedor, dados de tabelas de classificação de terceiros ou um instantâneo de benchmark público. Os resultados do fornecedor são úteis para compreender a configuração escolhida pelo fabricante; resultados de terceiros são mais úteis para contextos de modelos cruzados; nem é garantia de desempenho em seu repositório.
+
+Para cada linha, a revisão registra a versão do modelo, a data do conjunto de dados ou do placar, a estrutura, o acesso à ferramenta, a métrica de sucesso e se o resultado pode ser reproduzido. O [guia de metodologia de benchmark de IA](/blog/ai-benchmark-methodology) contém o modelo completo de registro de evidências e regras de atualização. Quando uma fonte não publica um número comparável, a tabela utiliza intencionalmente um rótulo qualitativo em vez de inventar uma pontuação.
 
 As pontuações de benchmark são úteis, mas não são guias do comprador por si só.
 
@@ -150,7 +171,7 @@ As pontuações de benchmark são úteis, mas não são guias do comprador por s
 A melhor comparação de benchmark 2026 LLM não é “Claude vs GPT vs Gemini vs DeepSeek” como uma única luta. É um mapa:
 
 - **GPT-5.5** parece mais forte nos dados de lançamento da OpenAI de junho de 2026 para tarefas de agente terminal e raciocínio científico.
-- **Claude Opus 4.8** é o mais novo modelo de fronteira antrópica para codificação, agentes, trabalho profissional e tarefas de grande contexto.
+- **Claude Opus 5** é o mais novo modelo Antrópico listado para codificação, agentes e trabalho profissional; verifique os detalhes da avaliação ao vivo antes de compará-la numericamente.
 - **Gemini 3.1 Pro** é o atual modelo de cartão-modelo de raciocínio multimodal do Google.
 - **DeepSeek V3.2** é o concorrente de valor que agora merece pilotos sérios de codificação e raciocínio.
 - **Aider, SWE-bench, LiveCodeBench e Terminal-Bench** respondem a perguntas diferentes, portanto, use o benchmark que corresponda ao seu fluxo de trabalho.
@@ -162,7 +183,7 @@ Se você se lembra apenas de uma regra: **escolha o benchmark que se parece com 
 ## Fontes
 
 - [OpenAI: Apresentando GPT-5.5](https://openai.com/index/introducing-gpt-5-5/)
-- [Antrópico: Claude Opus 4.8](https://www.anthropic.com/claude/opus)
+- [Antrópico: Claude Opus](https://www.anthropic.com/claude/opus)
 - [Google DeepMind: placa modelo Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/)
 - [Cartão modelo DeepSeek V3.2](https://huggingface.co/deepseek-ai/DeepSeek-V3.2)
 - [Tabela de classificação do banco SWE](https://www.swebench.com/)

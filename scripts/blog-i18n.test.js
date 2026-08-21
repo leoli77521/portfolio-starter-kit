@@ -15,6 +15,7 @@ const {
   getAvailablePostLocales,
   getTranslatedPostSlugsForLocale,
   hasPostTranslation,
+  isPostTranslationFresh,
   validatePostTranslations,
 } = require('../app/lib/blog-i18n')
 const {
@@ -22,7 +23,7 @@ const {
   translatedPostSlugsByLocale,
 } = require('../app/lib/blog-translation-manifest')
 
-const translatedSlug = '2026-04-02-claw-code-ai-coding-agent-architecture'
+const translatedSlug = '2026-03-09-gpt-5-4-codex-agent-stack'
 const missingSlug = 'not-a-real-post'
 const nonDefaultLocales = locales.filter((locale) => locale !== defaultLocale)
 const allPostSlugs = require('../public/search-index.en.json').map((post) => post.slug).sort()
@@ -102,7 +103,10 @@ test('translation manifests match available files while English-first pages may 
     assert.deepEqual(translatedSlugs, translatedPostSlugsByLocale[locale].slice().sort())
 
     for (const slug of translatedSlugs) {
-      assert.deepEqual(getAvailablePostLocales(slug), locales)
+      const isFresh = nonDefaultLocales.every((currentLocale) =>
+        isPostTranslationFresh(slug, currentLocale)
+      )
+      assert.deepEqual(getAvailablePostLocales(slug), isFresh ? locales : [defaultLocale])
     }
 
     const report = validatePostTranslations(translatedSlugs)

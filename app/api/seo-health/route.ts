@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { baseUrl } from 'app/sitemap'
+import { defaultLocale, locales } from 'app/lib/i18n-paths'
 
 // SEO健康检查配置
 interface SEOCheck {
@@ -12,11 +13,26 @@ const seoChecks: SEOCheck[] = [
     name: 'Sitemap Accessibility',
     check: async () => {
       try {
-        const response = await fetch(`${baseUrl}/sitemap.xml`)
+        const sitemapUrls = [
+          `${baseUrl}/sitemap.xml`,
+          ...locales
+            .filter((locale) => locale !== defaultLocale)
+            .map((locale) => `${baseUrl}/sitemap/${locale}.xml`),
+        ]
+        const responses = await Promise.all(sitemapUrls.map((url) => fetch(url)))
+        const failed = responses
+          .map((response, index) => ({response, url: sitemapUrls[index]}))
+          .filter(({response}) => !response.ok)
         return {
-          passed: response.ok,
-          message: response.ok ? 'Sitemap is accessible' : `Sitemap returned ${response.status}`,
-          details: { status: response.status, url: `${baseUrl}/sitemap.xml` }
+          passed: failed.length === 0,
+          message:
+            failed.length === 0
+              ? `${sitemapUrls.length} sitemaps are accessible`
+              : `${failed.length} sitemap(s) returned an error`,
+          details: {
+            urls: sitemapUrls,
+            failed: failed.map(({response, url}) => ({url, status: response.status})),
+          },
         }
       } catch (error) {
         return {

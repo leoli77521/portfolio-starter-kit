@@ -48,6 +48,7 @@ export async function GET() {
   return new Response(rssFeed, {
     headers: {
       'Content-Type': 'text/xml',
+      'X-Robots-Tag': 'noindex, follow',
     },
   })
 }

@@ -1,14 +1,16 @@
 ---
-title: "Was Claw Code über die Architektur von AI Coding Agent verrät"
-summary: "Die öffentlichen Dokumente und das Parity-Repo von Claw Code bieten eine nützliche Blaupause dafür, wie moderne KI-Coding-Agents tatsächlich über die Modellebene hinaus strukturiert sind."
-seoTitle: "Was Claw Code über die Architektur von AI Coding Agent verrät"
-seoDescription: "Die öffentlichen Dokumente und das Parity-Repo von Claw Code bieten eine nützliche Blaupause dafür, wie moderne KI-Coding-Agents tatsächlich über die Modellebene hinaus strukturiert sind."
+title: "Claw Code: AI Coding Agent-Architektur erklärt"
+summary: "Die öffentlichen Dokumente und das Paritäts-Repo von Claw Code zeigen, wie ein KI-Coding-Agent aufgebaut ist: Laufzeitschleife, Tools, Berechtigungen, MCP-Verbindungen, Sitzungen und Plugins."
+seoTitle: "Claw Code: AI Coding Agent Architecture"
+seoDescription: "Was ist der Claw Code? Entdecken Sie die Laufzeit, Tools, Berechtigungen, MCP-Verbindungen, Sitzungen und Erweiterungspunkte, die einen KI-Codierungsagenten zum Funktionieren bringen."
 faq: [{"question":"Warum lohnt es sich, Claw Code zu studieren, auch wenn das Haupt-Repo gesperrt ist?","answer":"Weil das öffentliche Paritäts-Repository weiterhin die wichtigen Architekturmuster offenlegt: Laufzeitdesign, Tool-Integration, Berechtigungen, Sitzungen und Migrationsstrategie."},{"question":"Was ist die wichtigste Lehre aus diesem Projekt?","answer":"Ein Coding Agent ist nicht nur ein starkes Modell. Es handelt sich um ein System, das aus einer Laufzeitschleife, einer Toolschicht, Berechtigungstoren, Speicher und Erweiterbarkeitsprimitiven besteht."},{"question":"Geht es in diesem Artikel um die Benchmark-Leistung?","answer":"Nein. Es geht um die Produkt- und Systemarchitektur: darum, wie ein Codierungsagent aufgebaut ist, damit er nützliche Aufgaben sicher und wiederholt ausführen kann."}]
 howto: [{"name":"Studieren Sie zunächst die Laufzeitgrenze","text":"Ordnen Sie vor dem Vergleichen von Modellen die Schnittstelle, die Laufzeitschleife, den Tool-Ausführungspfad und die Persistenzebene aller von Ihnen evaluierten Codierungsagenten zu."},{"name":"Suchen Sie nach Vertrauensflächen","text":"Überprüfen Sie, wie das System mit Berechtigungen, Toolgenehmigung, Hooks und Sandboxing umgeht, bevor Sie es als produktionsfähig behandeln."},{"name":"Bewerten Sie die Erweiterbarkeit frühzeitig","text":"Ein Coding-Agent ist dann von strategischem Nutzen, wenn er Tools, Plugins, MCP-Server und wiederverwendbare Arbeitsabläufe hinzufügen kann, ohne dass es zu Chaos kommt."}]
-sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-# Was Claw Code über die Architektur von AI Coding Agent verrät
+## Was ist der Claw Code?
+
+**Claw Code ist eine KI-Coding-Agent-Architektur, die es wert ist, untersucht zu werden, da ihre öffentlichen Materialien das System rund um das Modell offenlegen:** eine Befehlsschnittstelle, eine Laufzeitschleife, eine Tool-Registrierung, Berechtigungstore, MCP-Verbindungen, Sitzungsspeicher und Erweiterungspunkte. Dies ist eine nützliche Blaupause für die Bewertung, ob ein Codierungsagent Arbeiten sicher und wiederholt ausführen kann, anstatt lediglich Code zu generieren.
 
 Wenn Sie nur Modellveröffentlichungen verfolgen, können KI-Codierungstools täuschend einfach aussehen.
 

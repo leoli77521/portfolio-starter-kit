@@ -1,0 +1,99 @@
+---
+title: "Leitfaden zur Verwendung von Claw-Code: Ein sicherer Weg von der Eingabeaufforderung zum Agenten"
+summary: "Ein praktischer Claw Code-Nutzungsleitfaden zur Umwandlung der Agentenarchitektur in sichere tägliche Arbeitsabläufe mit begrenzten Aufgaben, Berechtigungstoren, Tests, Prüfpunkten und Rollback."
+seoTitle: "Claw-Code-Nutzungsleitfaden: Safe Agent-Workflows"
+seoDescription: "Verwenden Sie diesen Claw Code-Leitfaden, um Coding-Agent-Aufgaben, Berechtigungen, Prüfpunkte, Tests, Sitzungen und Rollbacks zu bewerten, bevor Sie autonomen Änderungen vertrauen."
+faq: [{"question":"Wofür sollte ich Claw Code zuerst verwenden?","answer":"Beginnen Sie mit begrenzten, reversiblen Repository-Aufgaben, bei denen Tests und eine menschliche Überprüfung das Ergebnis überprüfen können."},{"question":"Sollte ein Codierungsagent uneingeschränkten Shell-Zugriff haben?","answer":"Nein. Beginnen Sie mit den geringsten Berechtigungen und erweitern Sie den Zugriff nur, wenn der Workflow nachweist, dass er mehr benötigt."},{"question":"Woher weiß ich, dass eine Agentenaufgabe abgeschlossen ist?","answer":"Definieren Sie eine beobachtbare Erfolgsbedingung, führen Sie die entsprechenden Tests durch, überprüfen Sie den Unterschied und protokollieren Sie alle manuellen Folgemaßnahmen."}]
+howto: [{"name":"Wählen Sie eine begrenzte Aufgabe","text":"Wählen Sie eine kleine Änderung mit einem klaren Eingabe-, Ausgabe- und Rollback-Pfad."},{"name":"Berechtigungen festlegen","text":"Lassen Sie nur die Dateien, Befehle, Netzwerkzugriffe und Geheimnisse zu, die für die Aufgabe erforderlich sind."},{"name":"Führen Sie Kontrollpunkte durch","text":"Bitten Sie den Agenten, Absichten, geänderte Dateien, Tests und ungelöste Risiken an jeder Grenze zusammenzufassen."},{"name":"Überprüfen und landen","text":"Untersuchen Sie das Diff, führen Sie Tests durch und führen Sie die Zusammenführung erst durch, wenn das Ergebnis die schriftlichen Akzeptanzkriterien erfüllt."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+Der sicherste Weg, Claw Code einzuführen, besteht darin, ihn als betrieblichen Arbeitsablauf und nicht als magische Aufforderung zu betrachten. Das Modell ist wichtig, aber die Laufzeit um es herum bestimmt, was es sehen kann, was es ändern kann und wie schnell ein Fehler behoben werden kann.
+
+Dieser Leitfaden verwandelt die [Claw Code-Architekturanalyse](/blog/2026-04-02-claw-code-ai-coding-agent-architecture) in einen wiederholbaren Pfad für die tägliche Entwicklung.
+
+## Beginnen Sie mit einem Aufgabenvertrag
+
+Schreiben Sie vor dem Öffnen einer Agentensitzung einen kurzen Vertrag:
+
+- **Ziel:** das einzige beobachtbare Ergebnis, das sich ändern sollte;
+- **Geltungsbereich:** Verzeichnisse und Dateien, die der Agent prüfen oder bearbeiten kann;
+- **Einschränkungen:** APIs, Stilregeln, Kompatibilitätsanforderungen und verbotene Aktionen;
+- **Validierung:** Befehle, Tests, Screenshots oder Protokolle, die den Erfolg belegen;
+- **Rollback:** das Commit, der Patch, die Verzweigung oder das Backup, mit dem Sie die Änderung rückgängig machen können.
+
+„Das Authentifizierungssystem verbessern“ ist kein Auftragsauftrag. „Fügen Sie einen fehlgeschlagenen Test für abgelaufene Sitzungen hinzu, implementieren Sie den kleinsten Fix in `app/auth` und führen Sie die Sitzungstestsuite aus.“
+
+## Berechtigungsstufen
+
+Nutzen Sie progressives Vertrauen. Für die meisten Teams reicht eine einfache vierstufige Richtlinie aus:
+
+| Ebene | Der Agent kann es tun | Genehmigungsregel |
+| --- | --- | --- |
+| Schreibgeschützt | Inspizieren Sie Dateien, suchen Sie, erklären Sie und schlagen Sie einen Patch vor | Kein Schreibzugriff |
+| Arbeitsbereich schreiben | Bearbeiten Sie verfolgte Dateien in einem begrenzten Verzeichnis | Überprüfen Sie die Unterschiede vor den Tests |
+| Testdurchführung | Führen Sie ausgewählte Tests und Formatierer aus | Befehlszulassungsliste und Zeitüberschreitung |
+| Äußeres Handeln | Vernetzen, bereitstellen, veröffentlichen oder ändern Sie die Infrastruktur | Ausdrückliche Genehmigung pro Aktion |
+
+Starten Sie jedes neue Repository mit Lesezugriff oder Arbeitsbereichsschreibzugriff. Gewähren Sie keine Geheimnisse oder Produktionszugriff, nur weil der Agent eine lokale Umgestaltung durchgeführt hat.
+
+Der tiefergehende [AI-Coding-Agent-Stack](/ai-coding-agents) erklärt, warum Tools, Berechtigungen und Sitzungen Produktfunktionen und keine Implementierungsdetails sind.
+
+## Eine zuverlässige Sitzungsschleife
+
+Verwenden Sie diese Schleife für jede Aufgabe:
+
+1. **Inspizieren:** Fragen Sie nach den relevanten Dateien, dem aktuellen Verhalten und vorhandenen Tests.
+2. **Plan:** Vor der Bearbeitung sind ein kurzer Änderungsplan und eine Liste der Dateien erforderlich.
+3. **Patch:** Diff schmal halten; Vermeiden Sie unabhängige Aufräumarbeiten.
+4. **Validieren:** Führen Sie zuerst den kleinsten relevanten Test und dann die umfassendere Suite aus.
+5. **Erklären Sie:** Fordern Sie eine Zusammenfassung des geänderten Verhaltens, der Beweise und des verbleibenden Risikos an.
+6. **Prüfpunkt:** Übertragen oder speichern Sie einen Patch vor dem nächsten autonomen Schritt.
+
+Der Kontrollpunkt ist wichtig. Eine lange Sitzung, in der Dutzende Dateien ohne Überprüfungsgrenze geändert werden, ist schwer zu debuggen, selbst wenn jede einzelne Bearbeitung vernünftig aussieht.
+
+## Vom Agenten generierten Code testen
+
+Tests sollten Verhalten nachweisen und nicht nur, dass der Agent einen Befehl ausgeführt hat. Für eine Codeänderung kombinieren Sie:
+
+- Unit-Tests für die geänderte Logik;
+- Integrationstests für die Grenze, die der Agent berührt hat;
+- Typprüfung oder Kompilierung;
+- eine Diff-Überprüfung auf versehentliche Erweiterung des Umfangs;
+- eine gezielte manuelle Prüfung, wenn die Ausgabe visuell oder benutzerorientiert ist.
+
+Wenn ein Test fehlschlägt, lassen Sie den Agenten nicht wiederholt patchen, bis der Fehler behoben ist. Bitten Sie es, den Fehler zu erklären, herauszufinden, ob der Test oder die Implementierung falsch ist, und schlagen Sie das nächstkleinere Experiment vor.
+
+## MCP und externe Tools
+
+MCP kann einen Agenten erheblich nützlicher machen, erweitert aber auch die Vertrauensgrenze. Notieren Sie für jeden Server die von ihm bereitgestellten Ressourcen, die Tools, die er aufrufen kann, ob Aufrufe umkehrbar sind und welche Daten den Computer verlassen können.
+
+Der [MCP-Protokollleitfaden](/blog/mcp-model-context-protocol-guide) ist der richtige Begleiter zum Verständnis von Ressourcen, Tools, Eingabeaufforderungen, Wurzeln und Transport. Kombinieren Sie es bei einem echten Rollout mit einer Zulassungsliste und einem Prüfprotokoll, anstatt „verbunden“ als „vertrauenswürdig“ zu behandeln.
+
+## Fehlerbehandlung
+
+Gute Agenten-Workflows gehen von einem Scheitern aus. Fügen Sie explizites Verhalten hinzu für:
+
+- ein Befehl, der eine Zeitüberschreitung verursacht;
+- ein Test, der nach einer teilweisen Bearbeitung fehlschlägt;
+- ein Tool, das fehlerhafte Daten zurückgibt;
+- ein Agent, der um eine Erlaubnis bittet, die er nicht benötigen sollte;
+- eine Anweisung, die im Widerspruch zur Repository-Richtlinie steht;
+- eine Sitzung, die den Kontext verliert oder im falschen Zweig fortgesetzt wird.
+
+Die richtige Reaktion besteht normalerweise darin, anzuhalten, den Diff beizubehalten und den Task-Vertrag wiederherzustellen. Eine neue Sitzung mit einer kompakten Übergabe ist oft sicherer als ein langes Gespräch, in dem sich Vermutungen ansammeln.
+
+## Checkliste für die Adoption
+
+Bevor ein Team Claw Code auf einer gemeinsamen Codebasis verwendet, bestätigen Sie Folgendes:
+
+- Für jede Aufgabe gibt es eine schriftliche Erfolgsbedingung.
+- Der Standardberechtigungssatz ist die geringste Berechtigung.
+- Tests werden in einer Sandbox mit Zeitüberschreitungen ausgeführt;
+- Sitzungen legen geänderte Dateien und Toolaufrufe offen;
+- Kontrollpunkte sind günstig und häufig;
+- Geheimnisse werden niemals in Eingabeaufforderungen oder Protokolle kopiert;
+- ein Mensch überprüft produktionsrelevante Änderungen;
+- Das Team misst akzeptierte Änderungen, Korrekturschleifen und Rollback-Rate.
+
+Informationen zur Toolauswahl auf Produktebene finden Sie im [AI-Tools-Verzeichnis](/ai-tools). Verwenden Sie für Entscheidungen auf Modellebene das [Verzeichnis für KI-Modelle und Benchmarks] (/ai-models), anstatt davon auszugehen, dass die beeindruckendste Demo die beste Laufzeit ist.

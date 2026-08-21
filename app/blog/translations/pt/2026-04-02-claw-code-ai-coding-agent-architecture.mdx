@@ -1,14 +1,16 @@
 ---
-title: "O que o código Claw revela sobre a arquitetura do agente de codificação de IA"
-summary: "Os documentos públicos e o repositório de paridade do Claw Code oferecem um modelo útil de como os agentes de codificação de IA modernos são realmente estruturados além da camada do modelo."
-seoTitle: "O que o código Claw revela sobre a arquitetura do agente de codificação de IA"
-seoDescription: "Os documentos públicos e o repositório de paridade do Claw Code oferecem um modelo útil de como os agentes de codificação de IA modernos são realmente estruturados além da camada do modelo."
+title: "Código de garra: arquitetura do agente de codificação de IA explicada"
+summary: "Os documentos públicos e o repositório de paridade do Claw Code revelam como um agente de codificação de IA é montado: loop de tempo de execução, ferramentas, permissões, conexões MCP, sessões e plug-ins."
+seoTitle: "Código de garra: arquitetura do agente de codificação de IA"
+seoDescription: "O que é o Código da Garra? Explore o tempo de execução, as ferramentas, as permissões, as conexões MCP, as sessões e os pontos de extensão que fazem um agente de codificação de IA funcionar."
 faq: [{"question":"Por que vale a pena estudar o Claw Code mesmo se o repositório principal estiver bloqueado?","answer":"Porque o repositório de paridade pública ainda expõe os padrões de arquitetura que importam: design de tempo de execução, integração de ferramentas, permissões, sessões e estratégia de migração."},{"question":"Qual é a principal lição deste projeto?","answer":"Um agente de codificação não é apenas um modelo forte. É um sistema composto por um loop de tempo de execução, camada de ferramentas, portas de permissão, memória e primitivas de extensibilidade."},{"question":"Este artigo é sobre desempenho de benchmark?","answer":"Não. Trata-se de arquitetura de produtos e sistemas: como um agente de codificação é montado para que possa realizar um trabalho útil de forma segura e repetida."}]
 howto: [{"name":"Estude primeiro o limite do tempo de execução","text":"Antes de comparar modelos, mapeie a interface, o loop de tempo de execução, o caminho de execução da ferramenta e a camada de persistência de qualquer agente de codificação que você avaliar."},{"name":"Procure superfícies de confiança","text":"Verifique como o sistema lida com permissões, aprovação de ferramentas, ganchos e sandbox antes de tratá-lo como capaz de produção."},{"name":"Avalie a extensibilidade antecipadamente","text":"Um agente de codificação torna-se estrategicamente útil quando pode adicionar ferramentas, plug-ins, servidores MCP e fluxos de trabalho reutilizáveis ​​sem se tornar caótico."}]
-sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-# O que o código Claw revela sobre a arquitetura do agente de codificação de IA
+## O que é código de garra?
+
+**Claw Code é uma arquitetura de agente de codificação de IA que vale a pena estudar porque seus materiais públicos expõem o sistema em torno do modelo:** uma interface de comando, loop de tempo de execução, registro de ferramentas, portas de permissão, conexões MCP, memória de sessão e pontos de extensão. É um modelo útil para avaliar se um agente de codificação pode executar o trabalho de forma segura e repetida, em vez de apenas gerar código.
 
 Se você seguir apenas os lançamentos de modelos, as ferramentas de codificação de IA podem parecer enganosamente simples.
 

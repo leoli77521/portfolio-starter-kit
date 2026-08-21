@@ -72,6 +72,62 @@ export function HomepageStartHere({
   )
 }
 
+const homepageDirectoryLinks = [
+  {
+    href: '/ai-models',
+    label: 'AI Models & Benchmarks',
+    description: 'Compare models by benchmark, task, cost, and production fit.',
+  },
+  {
+    href: '/ai-tools',
+    label: 'AI Tools for Developers',
+    description: 'Choose tools by workflow, review burden, and automation surface.',
+  },
+  {
+    href: '/ai-coding-agents',
+    label: 'AI Coding Agents',
+    description: 'Study runtimes, permissions, MCP, sessions, and migration practice.',
+  },
+]
+
+export function HomepageDirectoryLinks() {
+  const locale = useLocale()
+
+  return (
+    <section className="content-section pt-0">
+      <div className="mb-8">
+        <p className="section-kicker">Editorial directories</p>
+        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white md:text-4xl">
+          Three clear ways into the AI archive
+        </h2>
+        <p className="section-copy mt-3 max-w-2xl">
+          Start with the directory that matches your decision: model choice, tool choice, or agent architecture.
+        </p>
+      </div>
+
+      <div className="grid gap-5 md:grid-cols-3">
+        {homepageDirectoryLinks.map((entry) => (
+          <Link
+            key={entry.href}
+            href={localizePath(entry.href, locale)}
+            className="surface-card group block px-6 py-6"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
+                {entry.label}
+              </h3>
+              <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-slate-400" />
+            </div>
+            <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+              {entry.description}
+            </p>
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export function HomepageTrackExplorer({
   tracks,
 }: {

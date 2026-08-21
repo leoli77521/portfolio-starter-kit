@@ -1,0 +1,97 @@
+---
+title: "Méthodologie de référence en IA : comment comparer équitablement les modèles"
+summary: "Une méthodologie transparente pour comparer les références des modèles d'IA sans mélanger les revendications de lancement des fournisseurs, les classements tiers, les échafaudages d'agents, la difficulté des tâches, le coût et la fiabilité."
+seoTitle: "Méthodologie de référence en IA : une comparaison équitable"
+seoDescription: "Une méthodologie pratique de référence en matière d'IA pour séparer les réclamations des fournisseurs, les tests tiers, les échafaudages, la répartition des tâches, le coût et la reproductibilité avant de choisir un modèle."
+faq: [{"question":"Qu’est-ce qui rend une comparaison de référence en matière d’IA équitable ?","answer":"Une comparaison équitable maintient la tâche, l'ensemble de données, l'échafaudage, l'accès au modèle, la politique d'échantillonnage et la mesure de réussite explicites et comparables."},{"question":"Les résultats des benchmarks des fournisseurs doivent-ils être mélangés aux classements publics ?","answer":"Non. Conservez les métriques de version signalées par le fournisseur séparément des résultats tiers, à moins que la configuration d'évaluation ne soit matériellement identique."},{"question":"À quelle fréquence une page de référence doit-elle être actualisée ?","answer":"Examinez l'instantané source tous les mois et actualisez-le plus tôt après une version majeure du modèle ou un changement de méthodologie du classement."}]
+howto: [{"name":"Définir la décision","text":"Notez le flux de travail, le coût de l'échec, l'objectif de latence et le budget avant de choisir une référence."},{"name":"Classer la source","text":"Étiquetez chaque partition comme étant une reproduction déclarée par le fournisseur, tierce, communautaire ou interne."},{"name":"Enregistrez l'échafaudage","text":"Outils de capture, récupération, tentatives, contexte, température et règles d'approbation humaine."},{"name":"Publier les mises en garde","text":"Affichez le score brut à côté de la couverture des tâches, du coût, de la reproductibilité et de la date de vérification."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+Si deux scores de modèle proviennent de tâches, d’ensembles de données ou d’échafaudages d’agents différents, ils ne constituent pas un seul classement. Cette **méthodologie de référence IA** maintient les comparaisons utiles en rendant visibles les variables cachées.
+
+Le but n’est pas de fabriquer un seul gagnant. L'objectif est de répondre à la vraie question d'un acheteur ou d'un ingénieur : quel système est suffisamment fiable pour ce flux de travail, à ce prix, avec ce niveau de supervision ?
+
+## Les cinq couches dont chaque partition a besoin
+
+Avant d'enregistrer un numéro, capturez cinq couches :
+
+1. **Tâche** — Que devait faire le système : réparer un référentiel, modifier un fichier, résoudre un algorithme, répondre à une question scientifique ou faire fonctionner un terminal ?
+2. **Ensemble de données** – Quelles versions, plages de dates, combinaisons de langues et contrôles de contamination ont été utilisés ?
+3. **Système** — S'agissait-il d'un modèle brut, d'une configuration API, d'un assistant IDE ou d'un agent de codage avec des outils ?
+4. **Metrique** : le pourcentage de résultat résolu, la correspondance exacte, le taux de réussite, le taux de victoire, la latence, le coût ou un score de préférence humaine ?
+5. **Preuve** — Un lecteur peut-il inspecter la carte modèle, la ligne du classement, le papier ou le cahier de reproduction ?
+
+Si l'un de ces champs est manquant, étiquetez le numéro comme étant incomplet plutôt que de le présenter comme une comparaison de modèle claire.
+
+## Classes sources séparées
+
+La première décision éditoriale est la classification des sources. Gardez les lignes séparées même lorsqu'elles discutent du même modèle.
+
+| Classe source | Ce que ça peut te dire | Ce qu'il ne peut pas prouver |
+| --- | --- | --- |
+| Rapport de version du fournisseur | Tâches choisies par le fournisseur, configuration et résultat optimal | Que le même résultat sera transféré à votre flux de travail |
+| Classement tiers | Une vision plus indépendante sous un harnais publié | Que chaque ligne utilise les mêmes outils ou budget d'inférence |
+| Évaluation communautaire | Signaux rapides sur les modèles émergents et les frictions pratiques | Reproductibilité scientifique stable |
+| Reproduction interne | Comment le modèle fonctionne dans votre environnement exact | Performance générale en dehors de votre échantillon de tâches |
+
+La [Comparaison de référence LLM](/blog/llm-coding-benchmark-comparison-2026) utilise cette séparation dans ses tableaux. Les mesures des fournisseurs restent dans les lignes des fournisseurs ; Aider et SWE-bench restent liés à leurs propres contextes d’évaluation publique.
+
+## Enregistrez l'échafaudage, pas seulement le modèle
+
+Les scores de codage agent incluent souvent la récupération, la sélection de fichiers, l'exécution du shell, les exécutions de tests, les tentatives, la réparation des correctifs et une politique d'approbation. Ces couches ne sont pas du bruit. Ils font partie du produit qu’une équipe adopte réellement.
+
+Pour chaque référence d'agent, enregistrez :
+
+- nom du modèle et version ;
+- fenêtre contextuelle et mode de raisonnement ;
+- outils disponibles pour le système ;
+- règles de récupération ou d'indexation du référentiel ;
+- nombre maximum de tours, de tentatives et de budget de jetons ;
+- autorisations sandbox et réseau ;
+- commande de test et politique de réussite/échec ;
+- si un humain pourrait intervenir.
+
+C'est pourquoi une [Comparaison des outils d'agent IA](/blog/ai-agent-tools-comparison-2026) appartient à côté des scores du modèle : l'interface modifie le résultat.
+
+## Utiliser des familles de référence adaptées aux tâches
+
+Ne faites pas la moyenne des scores non liés dans un composite inventé. Utilisez la famille de référence qui ressemble au travail prévu.
+
+| Décision | Preuve primaire | Preuve secondaire |
+| --- | --- | --- |
+| Réparer un référentiel de production | SWE-bench ou un ensemble de problèmes internes | Taux de réussite des tests, temps de révision, taux de restauration |
+| Effectuez des modifications multilingues propres | Évaluation des modifications de style Aider | Taille des différences, boucles de correction, coût par modification acceptée |
+| Résoudre de nouveaux problèmes algorithmiques | Tests de style LiveCodeBench | Taux de compilation, temps de résolution, contrôles de contamination |
+| Opérer un agent de terminal | Tâches de type Terminal-Bench | Demandes d'autorisation, taux de récupération, taux de prise de contrôle humaine |
+| Sélectionnez un modèle de raisonnement | Benchmark mathématiques/sciences adapté au domaine | Calibrage, qualité des citations, gravité des erreurs |
+
+Le [répertoire des modèles AI](/ai-models) est le point d'entrée canonique de cette carte de décision. Il devrait conduire les lecteurs vers une comparaison spécifique à une tâche plutôt que vers une affirmation générique du « meilleur modèle ».
+
+## Publier un registre des preuves
+
+Un registre de preuves rend les actualisations vérifiables. Un enregistrement minimal ressemble à ceci :
+
+```text
+score: 58.6%
+benchmark: SWE-Bench Pro
+source_type: vendor-reported
+source_url: https://example.com/model-card
+model: Example Model 1.0
+scaffold: vendor agent, test execution enabled
+checked_at: 2026-08-20
+reproducible: no public harness
+decision_use: directional signal only
+```
+
+Le champ `decision_use` empêche qu’un numéro de lancement fort ne devienne silencieusement une recommandation d’approvisionnement. Ajoutez à cela le coût, la latence et la gravité des pannes avant de franchir le pas.
+
+## Actualiser la cadence et modifier le contrôle
+
+Utilisez une vérification de 7 jours pour les dernières versions du modèle, une vérification de 14 jours pour l'intégrité des sources et des liens et une révision de 28 jours pour l'ensemble de la page de comparaison. Une actualisation doit mettre à jour ensemble la date source, le tableau de scores, les mises en garde et la conclusion.
+
+Ne mettez pas à jour une partition sans mettre à jour la prose qui l'entoure. Une nouvelle ligne de classement peut modifier la recommandation même si le graphique semble encore familier. Conservez le [guide d'utilisation de Claw Code] (/blog/claw-code-usage-guide) à proximité lorsque la comparaison est utilisée pour choisir un flux de travail d'agent plutôt qu'un modèle d'API brut.
+
+## Conclusion
+
+Une comparaison de référence utile est un petit instrument de recherche. Il nomme la tâche, préserve la classe source, enregistre l'échafaudage, affiche la date et explique ce que le score ne peut pas prouver. C'est plus lent que de copier un titre de classement, mais cela produit une décision qui peut survivre à la prochaine version du modèle.

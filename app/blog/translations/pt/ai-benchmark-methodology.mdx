@@ -1,0 +1,97 @@
+---
+title: "Metodologia de benchmark de IA: como comparar modelos de maneira justa"
+summary: "Uma metodologia transparente para comparar benchmarks de modelos de IA sem misturar declarações de lançamento de fornecedores, tabelas de classificação de terceiros, estruturas de agentes, dificuldade de tarefa, custo e confiabilidade."
+seoTitle: "Metodologia de benchmark de IA: uma comparação justa"
+seoDescription: "Uma metodologia prática de benchmark de IA para separar declarações de fornecedores, testes de terceiros, estruturas, combinação de tarefas, custo e reprodutibilidade antes de escolher um modelo."
+faq: [{"question":"O que torna justa uma comparação de benchmark de IA?","answer":"Uma comparação justa mantém a tarefa, o conjunto de dados, a estrutura, o acesso ao modelo, a política de amostragem e a métrica de sucesso explícitas e comparáveis."},{"question":"Os resultados dos benchmarks dos fornecedores devem ser misturados com os placares públicos?","answer":"Não. Mantenha as métricas de lançamento informadas pelo fornecedor separadas dos resultados de terceiros, a menos que a configuração da avaliação seja materialmente idêntica."},{"question":"Com que frequência uma página de benchmark deve ser atualizada?","answer":"Revise o instantâneo de origem mensalmente e atualize logo após um lançamento de modelo importante ou alteração na metodologia do placar."}]
+howto: [{"name":"Defina a decisão","text":"Anote o fluxo de trabalho, o custo da falha, a meta de latência e o orçamento antes de escolher um benchmark."},{"name":"Classifique a fonte","text":"Rotule cada pontuação como relatada pelo fornecedor, por terceiros, pela comunidade ou uma reprodução interna."},{"name":"Grave o andaime","text":"Ferramentas de captura, recuperação, novas tentativas, contexto, temperatura e regras de aprovação humana."},{"name":"Publique as advertências","text":"Mostre a pontuação bruta ao lado da cobertura da tarefa, custo, reprodutibilidade e data de verificação."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+Se duas pontuações de modelo vierem de tarefas, conjuntos de dados ou estruturas de agente diferentes, elas não serão um único placar. Esta **metodologia de benchmark de IA** mantém as comparações úteis, tornando visíveis as variáveis ​​ocultas.
+
+O objetivo não é fabricar um único vencedor. O objetivo é responder à verdadeira pergunta de um comprador ou engenheiro: qual sistema é confiável o suficiente para esse fluxo de trabalho, com esse custo e com esse nível de supervisão?
+
+## As cinco camadas que toda partitura precisa
+
+Antes de gravar um número, capture cinco camadas:
+
+1. **Tarefa** — O que o sistema precisava fazer: reparar um repositório, editar um arquivo, resolver um algoritmo, responder a uma questão científica ou operar um terminal?
+2. **Conjunto de dados** — Qual versão, período, combinação de idiomas e controles de contaminação foram usados?
+3. **Sistema** — Era um modelo bruto, uma configuração de API, um assistente de IDE ou um agente de codificação com ferramentas?
+4. **Métrica** — A porcentagem do resultado é resolvida, a correspondência exata, a taxa de aprovação, a taxa de vitórias, a latência, o custo ou uma pontuação de preferência humana?
+5. **Evidência** — Um leitor pode inspecionar o cartão modelo, a linha do placar, o papel ou o caderno de reprodução?
+
+Se algum desses campos estiver faltando, rotule o número como incompleto em vez de apresentá-lo como uma comparação de modelo limpa.
+
+## Classes de origem separadas
+
+A primeira decisão editorial é a classificação da fonte. Mantenha as linhas separadas mesmo quando discutirem o mesmo modelo.
+
+| Classe de origem | O que isso pode te dizer | O que não pode provar |
+| --- | --- | --- |
+| Relatório de lançamento do fornecedor | As tarefas, a configuração e o melhor resultado escolhidos pelo fornecedor | Que o mesmo resultado será transferido para o seu fluxo de trabalho |
+| Tabela de classificação de terceiros | Uma visão mais independente sob um arnês publicado | Que cada linha use as mesmas ferramentas ou orçamento de inferência |
+| Avaliação comunitária | Sinais rápidos sobre modelos emergentes e atritos práticos | Reprodutibilidade científica estável |
+| Reprodução interna | Como o modelo funciona em seu ambiente exato | Desempenho geral fora da sua amostra de tarefa |
+
+A [comparação de benchmark LLM](/blog/llm-coding-benchmark-comparison-2026) usa essa separação em suas tabelas. As métricas do fornecedor permanecem nas linhas do fornecedor; Aider e SWE-bench permanecem vinculados aos seus próprios contextos de avaliação pública.
+
+## Grave o andaime, não apenas o modelo
+
+As pontuações de codificação Agentic geralmente incluem recuperação, seleção de arquivos, execução de shell, execuções de testes, novas tentativas, reparo de patch e uma política de aprovação. Essas camadas não são ruído. Eles fazem parte do produto que uma equipe realmente adota.
+
+Para cada benchmark de agente, registre:
+
+- nome e versão do modelo;
+- janela de contexto e modo de raciocínio;
+- ferramentas disponíveis para o sistema;
+- regras de recuperação ou indexação de repositório;
+- máximo de turnos, novas tentativas e orçamento de tokens;
+- sandbox e permissões de rede;
+- comando de teste e política de aprovação/reprovação;
+- se um humano poderia intervir.
+
+É por isso que uma [comparação de ferramentas de agente de IA](/blog/ai-agent-tools-comparison-2026) pertence ao lado das pontuações do modelo: a interface altera o resultado.
+
+## Use famílias de benchmark correspondentes a tarefas
+
+Não calcule a média de pontuações não relacionadas em um composto inventado. Use a família de benchmark que se assemelhe ao trabalho pretendido.
+
+| Decisão | Evidência primária | Evidência secundária |
+| --- | --- | --- |
+| Reparar um repositório de produção | Banco SWE ou um conjunto de problemas internos | Taxa de aprovação no teste, tempo de revisão, taxa de reversão |
+| Faça edições limpas em vários idiomas | Avaliação de edição estilo Aider | Tamanho da diferença, ciclos de correção, custo por alteração aceita |
+| Resolva novos problemas algorítmicos | Testes estilo LiveCodeBench | Taxa de compilação, tempo para solução, verificações de contaminação |
+| Operar um agente terminal | Tarefas estilo Terminal-Bench | Solicitações de permissão, taxa de recuperação, taxa de controle humano |
+| Selecione um modelo de raciocínio | Referência de matemática/ciências correspondente ao domínio | Calibração, qualidade de citação, gravidade do erro |
+
+O [diretório de modelos de IA](/ai-models) é o ponto de entrada canônico para este mapa de decisão. Deve levar os leitores a uma comparação específica da tarefa, em vez de uma afirmação genérica de “melhor modelo”.
+
+## Publicar um livro de evidências
+
+Um livro-razão de evidências torna as atualizações auditáveis. Um registro mínimo se parece com isto:
+
+```text
+score: 58.6%
+benchmark: SWE-Bench Pro
+source_type: vendor-reported
+source_url: https://example.com/model-card
+model: Example Model 1.0
+scaffold: vendor agent, test execution enabled
+checked_at: 2026-08-20
+reproducible: no public harness
+decision_use: directional signal only
+```
+
+O campo `decision_use` evita que um número forte de lançamento se torne silenciosamente uma recomendação de aquisição. Adicione custo, latência e gravidade da falha antes de dar esse salto.
+
+## Atualizar cadência e alterar controle
+
+Use uma verificação de 7 dias para lançamentos de modelos quebrados, uma verificação de 14 dias para integridade de fonte e link e uma revisão de 28 dias para toda a página de comparação. Uma atualização deve atualizar a data de origem, a tabela de pontuação, as advertências e a conclusão em conjunto.
+
+Não atualize uma partitura sem atualizar a prosa em torno dela. Uma nova linha da tabela de classificação pode alterar a recomendação mesmo quando o gráfico ainda parece familiar. Mantenha o [guia de uso do Claw Code](/blog/claw-code-usage-guide) por perto quando a comparação estiver sendo usada para escolher um fluxo de trabalho do agente em vez de um modelo de API bruto.
+
+## Resultado final
+
+Uma comparação de benchmark útil é um pequeno instrumento de pesquisa. Ele nomeia a tarefa, preserva a classe de origem, registra o andaime, mostra a data e explica o que a pontuação não pode provar. Isso é mais lento do que copiar o título de uma tabela de classificação, mas produz uma decisão que pode sobreviver ao próximo lançamento do modelo.

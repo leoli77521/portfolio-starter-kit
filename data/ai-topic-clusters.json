@@ -27,6 +27,10 @@
     }
   ],
   "primaryHubBySlug": {
+    "2026-08-01-eu-ai-act-transparency-rules-builders": "enterprise-ai-governance",
+    "ai-benchmark-methodology": "ai-model-comparisons",
+    "claw-code-usage-guide": "ai-coding-agent-stack",
+    "ai-detection-evaluation-guide": "enterprise-ai-governance",
     "2026-04-02-claw-code-ai-coding-agent-architecture": "ai-coding-agent-stack",
     "2026-04-02-clean-room-rewrites-parity-audits-ai-agents": "ai-coding-agent-stack",
     "2026-04-02-hooks-plugins-sessions-ai-agents": "ai-coding-agent-stack",

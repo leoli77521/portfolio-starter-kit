@@ -1,0 +1,67 @@
+# SEO review cadence
+
+The repository now has deterministic policies for English canonicals, stale translations, utility pages, legacy redirects, and curated AI entry points. Use the cadence below after each production deploy.
+
+## 7-day check: crawl and redirect health
+
+- Export the current GSC “Page indexing” rows and save them locally as a JSON file with a `urls` array.
+- Run `pnpm audit:indexing ./path/to/gsc-indexing-urls.json`.
+- Confirm every redirect candidate resolves directly to its final canonical with HTTP 308.
+- Confirm `/sitemap.xml`, `/sitemap/zh.xml`, `/sitemap/de.xml`, `/sitemap/fr.xml`, `/sitemap/th.xml`, and `/sitemap/pt.xml` return 200 XML.
+- Confirm stale translations are absent from language sitemaps and hreflang alternates.
+- Run `pnpm audit:i18n:strict` and `pnpm audit:i18n:quality`; the latter keeps native-speaker review explicitly open even when automated checks pass.
+
+The repository also keeps a machine-readable monitoring store in `data/seo-monitoring.json`.
+Import one authenticated GSC/AI-search snapshot with:
+
+```bash
+pnpm metrics:record -- --input=.local/seo-metrics-snapshot.json
+pnpm metrics:audit
+```
+
+For a direct GSC API pull, provide a read-only service account that has access to the property:
+
+```bash
+GSC_SERVICE_ACCOUNT_FILE=/secure/path/gsc-service-account.json \
+  pnpm metrics:fetch -- --record
+```
+
+The collector queries the Search Analytics API for 7/14/28-day clicks, impressions, CTR, and
+position. Index Coverage and AI-search figures remain unchanged until their corresponding export
+is supplied because the standard Search Analytics endpoint does not provide those report totals.
+
+The internal dashboard is available at `/seo-dashboard`. It shows 7/14/28-day clicks,
+impressions, CTR, AI-search visibility, index coverage, conversions, and the active experiment.
+Null values are intentional until the corresponding export is connected; do not replace them with
+zeroes. The current baseline records 955 AI-search impressions over roughly three months, including
+795 for the benchmark page, supplied from the 2026-08-21 audit.
+
+## 14-day check: query and content signals
+
+In GSC, compare the previous 14 days with the preceding 14 days for the three directory pages and their linked pillar articles:
+
+- impressions and clicks;
+- average position and CTR;
+- indexed versus discovered URL count;
+- queries that map to the wrong directory;
+- clicks into `/ai-models`, `/ai-tools`, and `/ai-coding-agents`.
+
+Change one page variable at a time: title, first answer paragraph, comparison table, or internal-link block. Record the change date in the article frontmatter before reading the result.
+
+## 28-day check: decision review
+
+- Keep a page’s canonical role if its queries, links, and click path match the intended directory.
+- Strengthen a page if it has impressions but weak CTR or weak engagement.
+- Merge or redirect only when two pages satisfy the same intent and one has no distinct evidence.
+- Keep a page `noindex` when it is a utility route, narrow archive, stale translation, or an unresolved GSC candidate.
+- Re-run `pnpm test`, `pnpm audit:i18n`, and the AI SEO audit before submitting the next sitemap refresh.
+
+## External actions still required
+
+The repository cannot submit GSC inspection requests or read Search Console data without an authenticated connector. After deployment:
+
+1. Submit `https://tolearn.blog/sitemap.xml` and the five language sitemaps in GSC.
+2. Inspect the final destinations for the exported redirect rows and request validation.
+3. Inspect the 81 “Crawled — currently not indexed” URLs, attach the audit output, and apply the recorded decision.
+4. Check AI-search visibility and citation mentions separately; GSC does not expose a complete generative-AI click report.
+5. Record conversion events for directory clicks, newsletter signups, and guide starts alongside CTR.

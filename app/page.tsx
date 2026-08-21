@@ -12,6 +12,7 @@ import {
 } from 'app/lib/homepage'
 import {
   HomepageFeaturedSeriesCard,
+  HomepageDirectoryLinks,
   HomepageGuidedPaths,
   HomepageMiniAbout,
   HomepageStartHere,
@@ -152,6 +153,8 @@ export default async function Page() {
       />
 
       <HomepageStartHere items={homepageStartHere} />
+
+      <HomepageDirectoryLinks />
 
       <HomepageTrackExplorer tracks={trackData} />
 

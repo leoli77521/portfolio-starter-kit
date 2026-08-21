@@ -1,14 +1,16 @@
 ---
-title: "Ce que Claw Code révèle sur l'architecture des agents de codage IA"
-summary: "Les documents publics et le dépôt de parité de Claw Code offrent un modèle utile sur la manière dont les agents de codage d'IA modernes sont réellement structurés au-delà de la couche modèle."
-seoTitle: "Ce que Claw Code révèle sur l'architecture des agents de codage IA"
-seoDescription: "Les documents publics et le dépôt de parité de Claw Code offrent un modèle utile sur la manière dont les agents de codage d'IA modernes sont réellement structurés au-delà de la couche modèle."
+title: "Claw Code : explication de l'architecture de l'agent de codage IA"
+summary: "Les documents publics et le référentiel de parité de Claw Code révèlent comment un agent de codage IA est assemblé : boucle d'exécution, outils, autorisations, connexions MCP, sessions et plugins."
+seoTitle: "Claw Code : Architecture d'agent de codage IA"
+seoDescription: "Qu'est-ce que le code des griffes ? Explorez le moteur d'exécution, les outils, les autorisations, les connexions MCP, les sessions et les points d'extension qui font fonctionner un agent de codage IA."
 faq: [{"question":"Pourquoi Claw Code vaut-il la peine d'être étudié même si le dépôt principal est verrouillé ?","answer":"Parce que le dépôt à parité publique expose toujours les modèles d'architecture qui comptent : la conception du runtime, l'intégration des outils, les autorisations, les sessions et la stratégie de migration."},{"question":"Quelle est la principale leçon de ce projet ?","answer":"Un agent de codage n’est pas seulement un modèle solide. Il s'agit d'un système composé d'une boucle d'exécution, d'une couche d'outils, de portes d'autorisation, de mémoire et de primitives d'extensibilité."},{"question":"Cet article concerne-t-il les performances de référence ?","answer":"Non. Il s’agit de l’architecture des produits et des systèmes : comment un agent de codage est assemblé pour pouvoir effectuer un travail utile en toute sécurité et de manière répétée."}]
 howto: [{"name":"Étudiez d'abord la limite d'exécution","text":"Avant de comparer des modèles, mappez l'interface, la boucle d'exécution, le chemin d'exécution de l'outil et la couche de persistance de tout agent de codage que vous évaluez."},{"name":"Recherchez des surfaces de confiance","text":"Vérifiez comment le système gère les autorisations, l'approbation des outils, les hooks et le sandboxing avant de le traiter comme étant compatible avec la production."},{"name":"Évaluer l’extensibilité dès le début","text":"Un agent de codage devient stratégiquement utile lorsqu'il peut ajouter des outils, des plugins, des serveurs MCP et des flux de travail réutilisables sans devenir chaotique."}]
-sourceUpdatedAt: "2026-04-02"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-# Ce que Claw Code révèle sur l'architecture des agents de codage IA
+## Qu'est-ce que le code des griffes ?
+
+**Claw Code est une architecture d'agent de codage d'IA qui mérite d'être étudiée car ses documents publics exposent le système autour du modèle :** une interface de commande, une boucle d'exécution, un registre d'outils, des portes d'autorisation, des connexions MCP, une mémoire de session et des points d'extension. Il s’agit d’un modèle utile pour évaluer si un agent de codage peut effectuer un travail en toute sécurité et de manière répétée plutôt que de simplement générer du code.
 
 Si vous suivez uniquement les versions de modèles, les outils de codage d’IA peuvent sembler d’une simplicité trompeuse.
 

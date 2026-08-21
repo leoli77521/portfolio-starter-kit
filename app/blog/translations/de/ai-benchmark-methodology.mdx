@@ -1,0 +1,97 @@
+---
+title: "KI-Benchmark-Methodik: So vergleichen Sie Modelle fair"
+summary: "Eine transparente Methode zum Vergleichen von KI-Modell-Benchmarks, ohne Markteinführungsansprüche von Anbietern, Bestenlisten von Drittanbietern, Agentengerüste, Aufgabenschwierigkeit, Kosten und Zuverlässigkeit zu vermischen."
+seoTitle: "KI-Benchmark-Methodik: Ein fairer Vergleich"
+seoDescription: "Eine praktische KI-Benchmark-Methodik zur Trennung von Anbieteransprüchen, Tests von Drittanbietern, Gerüsten, Aufgabenmix, Kosten und Reproduzierbarkeit vor der Auswahl eines Modells."
+faq: [{"question":"Was macht einen KI-Benchmark-Vergleich fair?","answer":"Durch einen fairen Vergleich bleiben Aufgabe, Datensatz, Gerüst, Modellzugriff, Stichprobenrichtlinie und Erfolgsmetrik explizit und vergleichbar."},{"question":"Sollten Anbieter-Benchmark-Ergebnisse mit öffentlichen Bestenlisten gemischt werden?","answer":"Nein. Halten Sie die vom Anbieter gemeldeten Release-Metriken von den Ergebnissen Dritter getrennt, es sei denn, der Bewertungsaufbau ist im Wesentlichen identisch."},{"question":"Wie oft sollte eine Benchmark-Seite aktualisiert werden?","answer":"Überprüfen Sie den Quell-Snapshot monatlich und aktualisieren Sie ihn früher nach einer größeren Modellveröffentlichung oder einer Änderung der Bestenlisten-Methodik."}]
+howto: [{"name":"Definieren Sie die Entscheidung","text":"Notieren Sie den Arbeitsablauf, die Fehlerkosten, das Latenzziel und das Budget, bevor Sie einen Benchmark auswählen."},{"name":"Klassifizieren Sie die Quelle","text":"Kennzeichnen Sie jede Partitur als vom Anbieter gemeldet, von Drittanbietern, von der Community oder als interne Reproduktion."},{"name":"Nehmen Sie das Gerüst auf","text":"Erfassen Sie Tools, Abruf, Wiederholungsversuche, Kontext, Temperatur und menschliche Genehmigungsregeln."},{"name":"Veröffentlichen Sie die Vorbehalte","text":"Zeigen Sie den Rohwert neben der Aufgabenabdeckung, den Kosten, der Reproduzierbarkeit und dem Überprüfungsdatum an."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+Wenn zwei Modellbewertungen aus unterschiedlichen Aufgaben, Datensätzen oder Agentengerüsten stammen, handelt es sich nicht um eine Rangliste. Diese **KI-Benchmark-Methodik** hält Vergleiche nützlich, indem sie die verborgenen Variablen sichtbar macht.
+
+Das Ziel besteht nicht darin, einen einzelnen Gewinner herzustellen. Das Ziel besteht darin, die eigentliche Frage eines Käufers oder Ingenieurs zu beantworten: Welches System ist für diesen Arbeitsablauf, zu diesen Kosten und mit diesem Maß an Aufsicht zuverlässig genug?
+
+## Die fünf Schichten, die jede Partitur braucht
+
+Erfassen Sie vor dem Aufzeichnen einer Nummer fünf Ebenen:
+
+1. **Aufgabe** – Was musste das System tun: ein Repository reparieren, eine Datei bearbeiten, einen Algorithmus lösen, eine wissenschaftliche Frage beantworten oder ein Terminal bedienen?
+2. **Datensatz** – Welche Version, welcher Datumsbereich, welcher Sprachmix und welche Kontaminationskontrollen wurden verwendet?
+3. **System** – War es ein Rohmodell, eine API-Konfiguration, ein IDE-Assistent oder ein Coding-Agent mit Tools?
+4. **Metrik** – Ist das Ergebnis prozentual gelöst, exakte Übereinstimmung, Erfolgsquote, Gewinnquote, Latenz, Kosten oder ein menschlicher Präferenzwert?
+5. **Beweis** – Kann ein Leser die Modellkarte, die Ranglistenzeile, das Papier oder das Reproduktionsnotizbuch einsehen?
+
+Wenn eines dieser Felder fehlt, kennzeichnen Sie die Zahl als unvollständig, anstatt sie als sauberen Modellvergleich darzustellen.
+
+## Separate Quellklassen
+
+Die erste redaktionelle Entscheidung ist die Quellenklassifizierung. Halten Sie die Zeilen getrennt, auch wenn sie dasselbe Modell besprechen.
+
+| Quellklasse | Was es Ihnen sagen kann | Was es nicht beweisen kann |
+| --- | --- | --- |
+| Freigabebericht des Anbieters | Die vom Anbieter gewählten Aufgaben, Konfiguration und Best-Case-Ergebnis | Dass das gleiche Ergebnis auf Ihren Workflow übertragen wird |
+| Bestenliste von Drittanbietern | Eine unabhängigere Ansicht unter einem veröffentlichten Kabelbaum | Dass jede Zeile dieselben Tools oder dasselbe Inferenzbudget verwendet |
+| Community-Bewertung | Schnelle Signale über neue Modelle und praktische Reibungspunkte | Stabile wissenschaftliche Reproduzierbarkeit |
+| Interne Reproduktion | Wie das Modell in Ihrer genauen Umgebung funktioniert | Allgemeine Leistung außerhalb Ihres Aufgabenbeispiels |
+
+Der [LLM-Benchmark-Vergleich](/blog/llm-coding-benchmark-comparison-2026) verwendet diese Trennung in seinen Tabellen. Lieferantenmetriken bleiben in den Lieferantenzeilen; Aider und SWE-Bank bleiben an ihre eigenen öffentlichen Bewertungskontexte gebunden.
+
+## Zeichnen Sie das Gerüst auf, nicht nur das Modell
+
+Zu den Codierungsbewertungen von Agenten gehören häufig Abruf, Dateiauswahl, Shell-Ausführung, Testläufe, Wiederholungsversuche, Patch-Reparatur und eine Genehmigungsrichtlinie. Diese Schichten sind kein Rauschen. Sie sind Teil des Produkts, das ein Team tatsächlich anwendet.
+
+Notieren Sie für jeden Agenten-Benchmark Folgendes:
+
+- Modellname und Version;
+- Kontextfenster und Argumentationsmodus;
+- dem System zur Verfügung stehende Tools;
+- Abruf- oder Repository-Indizierungsregeln;
+- maximale Runden, Wiederholungsversuche und Token-Budget;
+- Sandbox- und Netzwerkberechtigungen;
+- Testbefehl und Pass/Fail-Richtlinie;
+- ob ein Mensch eingreifen könnte.
+
+Aus diesem Grund gehört ein [Vergleich der KI-Agenten-Tools](/blog/ai-agent-tools-comparison-2026) neben die Modellbewertungen: Die Schnittstelle verändert das Ergebnis.
+
+## Verwenden Sie aufgabenangepasste Benchmark-Familien
+
+Mitteln Sie keine unabhängigen Ergebnisse zu einer erfundenen Zusammensetzung. Verwenden Sie die Benchmark-Familie, die der beabsichtigten Arbeit ähnelt.
+
+| Entscheidung | Primärer Beweis | Sekundäre Beweise |
+| --- | --- | --- |
+| Reparieren Sie ein Produktions-Repository | SWE-Bench oder ein internes Issue-Set | Testdurchlaufquote, Überprüfungszeit, Rollback-Rate |
+| Nehmen Sie saubere mehrsprachige Bearbeitungen vor | Bearbeitungsbewertung im Aider-Stil | Differenzgröße, Korrekturschleifen, Kosten pro akzeptierter Änderung |
+| Lösen Sie neue algorithmische Probleme | Tests im LiveCodeBench-Stil | Zusammenstellungsrate, Zeit bis zur Lösung, Kontaminationsprüfungen |
+| Betreiben Sie einen Terminalagenten | Aufgaben im Terminal-Bench-Stil | Erlaubnisaufforderungen, Wiederherstellungsrate, menschliche Übernahmerate |
+| Wählen Sie ein Argumentationsmodell aus | Mathematik-/Naturwissenschafts-Benchmark passend zur Domäne | Kalibrierung, Zitierqualität, Fehlerschwere |
+
+Das [KI-Modellverzeichnis](/ai-models) ist der kanonische Einstiegspunkt für diese Entscheidungskarte. Es sollte den Leser zu einem aufgabenspezifischen Vergleich führen und nicht zu einer generischen Behauptung „das beste Modell“.
+
+## Veröffentlichen Sie ein Beweisbuch
+
+Ein Beweisbuch macht Aktualisierungen überprüfbar. Ein minimaler Datensatz sieht so aus:
+
+```text
+score: 58.6%
+benchmark: SWE-Bench Pro
+source_type: vendor-reported
+source_url: https://example.com/model-card
+model: Example Model 1.0
+scaffold: vendor agent, test execution enabled
+checked_at: 2026-08-20
+reproducible: no public harness
+decision_use: directional signal only
+```
+
+Das Feld `decision_use` verhindert, dass eine starke Startnummer stillschweigend zu einer Beschaffungsempfehlung wird. Fügen Sie Kosten, Latenz und Fehlerschwere hinzu, bevor Sie diesen Schritt wagen.
+
+## Aktualisieren Sie die Trittfrequenz und ändern Sie die Kontrolle
+
+Nutzen Sie eine 7-tägige Prüfung auf aktuelle Modellveröffentlichungen, eine 14-tägige Prüfung auf Quellen- und Linkintegrität und eine 28-tägige Prüfung für die gesamte Vergleichsseite. Bei einer Aktualisierung sollten das Quelldatum, die Bewertungstabelle, die Vorbehalte und die Schlussfolgerung gemeinsam aktualisiert werden.
+
+Aktualisieren Sie eine Partitur nicht, ohne die sie umgebende Prosa zu aktualisieren. Eine neue Bestenlistenzeile kann die Empfehlung ändern, selbst wenn das Diagramm noch bekannt vorkommt. Bewahren Sie den [Claw Code-Nutzungsleitfaden](/blog/claw-code-usage-guide) in der Nähe auf, wenn der Vergleich verwendet wird, um einen Agenten-Workflow anstelle eines Roh-API-Modells auszuwählen.
+
+## Fazit
+
+Ein nützlicher Benchmark-Vergleich ist ein kleines Forschungsinstrument. Es benennt die Aufgabe, bewahrt die Quellklasse, zeichnet das Gerüst auf, zeigt das Datum an und erklärt, was die Punktzahl nicht beweisen kann. Das ist zwar langsamer als das Kopieren einer Bestenlistenüberschrift, führt aber zu einer Entscheidung, die die nächste Modellveröffentlichung überdauern kann.

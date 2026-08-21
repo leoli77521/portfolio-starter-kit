@@ -1,0 +1,101 @@
+---
+title: "AI Benchmark Methodology: How to Compare Models Fairly"
+seoTitle: "AI Benchmark Methodology: A Fair Comparison"
+seoDescription: "A practical AI benchmark methodology for separating vendor claims, third-party tests, scaffolds, task mix, cost, and reproducibility before choosing a model."
+publishedAt: "2026-08-20"
+updatedAt: "2026-08-20"
+summary: "A transparent methodology for comparing AI model benchmarks without mixing vendor launch claims, third-party leaderboards, agent scaffolds, task difficulty, cost, and reliability."
+image: "/og?title=AI%20Benchmark%20Methodology%3A%20How%20to%20Compare%20Models%20Fairly"
+category: "AI Technology"
+tags: ["AI benchmarks", "LLM", "Model evaluation", "SWE-bench", "AI reasoning", "AI engineering"]
+faq: [{"question":"What makes an AI benchmark comparison fair?","answer":"A fair comparison keeps the task, dataset, scaffold, model access, sampling policy, and success metric explicit and comparable."},{"question":"Should vendor benchmark results be mixed with public leaderboards?","answer":"No. Keep vendor-reported release metrics separate from third-party results unless the evaluation setup is materially identical."},{"question":"How often should a benchmark page be refreshed?","answer":"Review the source snapshot monthly and refresh sooner after a major model release or leaderboard methodology change."}]
+howto: [{"name":"Define the decision","text":"Write down the workflow, failure cost, latency target, and budget before choosing a benchmark."},{"name":"Classify the source","text":"Label every score as vendor-reported, third-party, community, or an internal reproduction."},{"name":"Record the scaffold","text":"Capture tools, retrieval, retries, context, temperature, and human approval rules."},{"name":"Publish the caveats","text":"Show the raw score beside task coverage, cost, reproducibility, and the date checked."}]
+---
+
+If two model scores come from different tasks, datasets, or agent scaffolds, they are not one leaderboard. This **AI benchmark methodology** keeps comparisons useful by making the hidden variables visible.
+
+The goal is not to manufacture a single winner. The goal is to answer a buyer's or engineer's real question: which system is reliable enough for this workflow, at this cost, with this level of oversight?
+
+## The five layers every score needs
+
+Before recording a number, capture five layers:
+
+1. **Task** — What did the system have to do: repair a repository, edit a file, solve an algorithm, answer a science question, or operate a terminal?
+2. **Dataset** — Which version, date range, language mix, and contamination controls were used?
+3. **System** — Was it a raw model, an API configuration, an IDE assistant, or a coding agent with tools?
+4. **Metric** — Is the result percent resolved, exact match, pass rate, win rate, latency, cost, or a human preference score?
+5. **Evidence** — Can a reader inspect the model card, leaderboard row, paper, or reproduction notebook?
+
+If any of these fields are missing, label the number as incomplete rather than presenting it as a clean model comparison.
+
+## Separate source classes
+
+The first editorial decision is source classification. Keep the rows separate even when they discuss the same model.
+
+| Source class | What it can tell you | What it cannot prove |
+| --- | --- | --- |
+| Vendor release report | The vendor's chosen tasks, configuration, and best-case result | That the same result will transfer to your workflow |
+| Third-party leaderboard | A more independent view under a published harness | That every row uses the same tools or inference budget |
+| Community evaluation | Fast signals about emerging models and practical friction | Stable scientific reproducibility |
+| Internal reproduction | How the model performs in your exact environment | General performance outside your task sample |
+
+The [LLM benchmark comparison](/blog/llm-coding-benchmark-comparison-2026) uses this separation in its tables. Vendor metrics stay in vendor rows; Aider and SWE-bench stay tied to their own public evaluation contexts.
+
+## Record the scaffold, not just the model
+
+Agentic coding scores often include retrieval, file selection, shell execution, test runs, retries, patch repair, and an approval policy. Those layers are not noise. They are part of the product a team actually adopts.
+
+For every agent benchmark, record:
+
+- model name and version;
+- context window and reasoning mode;
+- tools available to the system;
+- retrieval or repository indexing rules;
+- maximum turns, retries, and token budget;
+- sandbox and network permissions;
+- test command and pass/fail policy;
+- whether a human could intervene.
+
+This is why an [AI agent tools comparison](/blog/ai-agent-tools-comparison-2026) belongs next to model scores: the interface changes the outcome.
+
+## Use task-matched benchmark families
+
+Do not average unrelated scores into an invented composite. Use the benchmark family that resembles the intended work.
+
+| Decision | Primary evidence | Secondary evidence |
+| --- | --- | --- |
+| Repair a production repository | SWE-bench or an internal issue set | Test pass rate, review time, rollback rate |
+| Make clean multi-language edits | Aider-style edit evaluation | Diff size, correction loops, cost per accepted change |
+| Solve new algorithmic problems | LiveCodeBench-style tests | Compilation rate, time-to-solution, contamination checks |
+| Operate a terminal agent | Terminal-Bench-style tasks | Permission prompts, recovery rate, human takeover rate |
+| Select a reasoning model | Math/science benchmark matched to the domain | Calibration, citation quality, error severity |
+
+The [AI model directory](/ai-models) is the canonical entry point for this decision map. It should lead readers to a task-specific comparison instead of a generic “best model” claim.
+
+## Publish an evidence ledger
+
+An evidence ledger makes refreshes auditable. A minimal record looks like this:
+
+```text
+score: 58.6%
+benchmark: SWE-Bench Pro
+source_type: vendor-reported
+source_url: https://example.com/model-card
+model: Example Model 1.0
+scaffold: vendor agent, test execution enabled
+checked_at: 2026-08-20
+reproducible: no public harness
+decision_use: directional signal only
+```
+
+The `decision_use` field prevents a strong launch number from silently becoming a procurement recommendation. Add cost, latency, and failure severity before making that leap.
+
+## Refresh cadence and change control
+
+Use a 7-day check for breaking model releases, a 14-day check for source and link integrity, and a 28-day review for the whole comparison page. A refresh should update the source date, score table, caveats, and the conclusion together.
+
+Do not update a score without updating the prose around it. A new leaderboard row can change the recommendation even when the chart still looks familiar. Keep the [Claw Code usage guide](/blog/claw-code-usage-guide) nearby when the comparison is being used to choose an agent workflow rather than a raw API model.
+
+## Bottom line
+
+A useful benchmark comparison is a small research instrument. It names the task, preserves the source class, records the scaffold, shows the date, and explains what the score cannot prove. That is slower than copying a leaderboard headline, but it produces a decision that can survive the next model release.

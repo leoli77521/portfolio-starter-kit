@@ -298,6 +298,7 @@ export const topicHubs: TopicHub[] = [
       'A connected series on runtime architecture, tool systems, MCP integration, permissions, sessions, hooks, plugins, and migration discipline in modern coding agents.',
     featuredArticleSlugs: [
       '2026-04-02-claw-code-ai-coding-agent-architecture',
+      'claw-code-usage-guide',
       '2026-04-02-rust-python-ai-agent-runtime-architecture',
       '2026-04-02-tooling-permissions-mcp-coding-agents',
       '2026-04-02-hooks-plugins-sessions-ai-agents',
@@ -345,6 +346,7 @@ export const topicHubs: TopicHub[] = [
     directoryHref: directoryHrefByHubSlug.get('ai-model-comparisons'),
     featuredArticleSlugs: [
       'llm-coding-benchmark-comparison-2026',
+      'ai-benchmark-methodology',
       'gpt-5-for-coding',
       'gpt-5-enterprise-reality-check',
       'verbose-ai-beats-fast-ai-moonshot-k2',
@@ -551,6 +553,7 @@ export const topicHubs: TopicHub[] = [
     directoryHref: directoryHrefByHubSlug.get('enterprise-ai-governance'),
     featuredArticleSlugs: [
       '2026-03-15-microsoft-agent-365-control-plane',
+      'ai-detection-evaluation-guide',
       '2026-03-26-ai-war-wont-be-won-on-benchmarks-itll-be-won-in-distribution',
       '2026-03-18-ai-chatbot-era-ending-agent-systems',
       'when-ai-becomes-too-human',

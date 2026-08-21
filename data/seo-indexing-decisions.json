@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "source": ".local/gsc-crawled-2026-08-21.json",
+  "reviewedAt": "2026-08-21",
+  "property": "sc-domain:tolearn.blog",
+  "defaults": {
+    "templateDetail": "noindex",
+    "solutionDetail": "index",
+    "guideDetail": "index",
+    "topicDetail": "index"
+  },
+  "decisions": [
+    {
+      "path": "/templates/nextjs/fullstack-developer",
+      "decision": "index",
+      "target": "/templates/nextjs/fullstack-developer",
+      "rationale": "Keep this high-intent Next.js and full-stack combination as a canonical entry point; the page has role-specific guidance, FAQs, and related editorial links.",
+      "nextAction": "Keep in the English sitemap and request indexing after deploy."
+    },
+    {
+      "path": "/solutions/fast-performance",
+      "decision": "index",
+      "target": "/solutions/fast-performance",
+      "rationale": "The feature page has implementation guidance, benefit detail, FAQ schema, starter templates, and related content rather than a thin doorway page.",
+      "nextAction": "Keep in the English sitemap and monitor impressions against the performance guide."
+    },
+    {
+      "path": "/templates/mdx/software-engineer",
+      "decision": "index",
+      "target": "/templates/mdx/software-engineer",
+      "rationale": "MDX plus software-engineering intent is distinct from the frontend and DevOps variants because it maps directly to technical publishing and architecture proof.",
+      "nextAction": "Keep in the English sitemap; add a first-party project example if impressions remain flat after 28 days."
+    },
+    {
+      "path": "/rss",
+      "decision": "noindex",
+      "target": "/rss",
+      "rationale": "RSS is a machine-readable distribution feed, not a search landing page. It should remain fetchable for subscribers without competing with the canonical article URLs.",
+      "nextAction": "Keep accessible, emit X-Robots-Tag noindex, and remove from XML sitemaps."
+    },
+    {
+      "path": "/pt",
+      "decision": "index",
+      "target": "/pt",
+      "rationale": "The localized homepage has translated navigation and metadata and becomes a valid language entry point once the missing article copies are synchronized.",
+      "nextAction": "Keep the locale sitemap entry after the translation audit returns zero missing and stale copies."
+    },
+    {
+      "path": "/th",
+      "decision": "index",
+      "target": "/th",
+      "rationale": "The localized homepage has translated navigation and metadata and becomes a valid language entry point once the missing article copies are synchronized.",
+      "nextAction": "Keep the locale sitemap entry after the translation audit returns zero missing and stale copies."
+    },
+    {
+      "path": "/topics/nextjs-mastery",
+      "decision": "index",
+      "target": "/topics/nextjs-mastery",
+      "rationale": "This hub has a defined learning path and matching Next.js material; it is a collection page with a distinct learning intent, not a duplicate tag archive.",
+      "nextAction": "Keep indexable while the hub has matching posts; refresh the featured set if the collection stays below three articles."
+    },
+    {
+      "path": "/templates/typescript/software-engineer",
+      "decision": "index",
+      "target": "/templates/typescript/software-engineer",
+      "rationale": "TypeScript plus software-engineering intent has a clear engineering-system angle and is one of the strongest role/technology combinations in the generated library.",
+      "nextAction": "Keep in the English sitemap and monitor query alignment."
+    },
+    {
+      "path": "/templates/react/backend-developer",
+      "decision": "noindex",
+      "target": "/templates/react/backend-developer",
+      "rationale": "React and backend-developer intent is weakly aligned and overlaps with stronger full-stack and TypeScript combinations; keep it browsable without creating a competing search target.",
+      "nextAction": "Keep accessible and out of the sitemap; revisit only if distinct backend examples are added."
+    },
+    {
+      "path": "/templates/nextjs/frontend-developer",
+      "decision": "index",
+      "target": "/templates/nextjs/frontend-developer",
+      "rationale": "This is a direct, high-intent framework and role pairing with strong topical fit and enough unique page signals to deserve a canonical test.",
+      "nextAction": "Keep in the English sitemap and monitor against the React frontend variant."
+    },
+    {
+      "path": "/templates/mdx/backend-developer",
+      "decision": "noindex",
+      "target": "/templates/mdx/backend-developer",
+      "rationale": "MDX is a publishing format rather than a backend stack, so this combination is likely to be a low-demand duplicate of the software-engineer page.",
+      "nextAction": "Keep accessible and out of the sitemap; consolidate into the stronger MDX software-engineer route if a future redirect is justified."
+    },
+    {
+      "path": "/templates/react/frontend-developer",
+      "decision": "index",
+      "target": "/templates/react/frontend-developer",
+      "rationale": "React frontend intent is a distinct, high-demand pairing and the page provides role signals, proof prompts, FAQs, and related content.",
+      "nextAction": "Keep in the English sitemap and use as the comparison control for framework-specific template pages."
+    },
+    {
+      "path": "/templates/tailwindcss/devops-engineer",
+      "decision": "noindex",
+      "target": "/templates/tailwindcss/devops-engineer",
+      "rationale": "Tailwind CSS and DevOps intent do not form a focused search need; the page is a generated cross-product combination without enough independent evidence.",
+      "nextAction": "Keep accessible and out of the sitemap."
+    },
+    {
+      "path": "/templates/tailwindcss/fullstack-developer",
+      "decision": "noindex",
+      "target": "/templates/tailwindcss/fullstack-developer",
+      "rationale": "This combination overlaps with stronger Next.js and TypeScript full-stack pages and does not currently provide a differentiated use case.",
+      "nextAction": "Keep accessible and out of the sitemap until a Tailwind-specific full-stack case study exists."
+    },
+    {
+      "path": "/templates/typescript/backend-developer",
+      "decision": "index",
+      "target": "/templates/typescript/backend-developer",
+      "rationale": "TypeScript backend intent is concrete and distinct, with direct alignment to APIs, databases, architecture, and security concerns.",
+      "nextAction": "Keep in the English sitemap and monitor query/page fit."
+    },
+    {
+      "path": "/templates/tailwindcss/software-engineer",
+      "decision": "noindex",
+      "target": "/templates/tailwindcss/software-engineer",
+      "rationale": "The role framing is broad and duplicates the stronger TypeScript software-engineer route while Tailwind contributes little unique search intent here.",
+      "nextAction": "Keep accessible and out of the sitemap."
+    },
+    {
+      "path": "/templates/mdx/frontend-developer",
+      "decision": "noindex",
+      "target": "/templates/mdx/frontend-developer",
+      "rationale": "This overlaps with the stronger React and Next.js frontend combinations and does not yet show a distinct MDX-specific frontend workflow.",
+      "nextAction": "Keep accessible and out of the sitemap until a component-driven publishing example is added."
+    },
+    {
+      "path": "/templates/typescript/fullstack-developer",
+      "decision": "index",
+      "target": "/templates/typescript/fullstack-developer",
+      "rationale": "TypeScript full-stack intent is a direct, durable combination that can serve as a broad engineering entry point without depending on a single UI framework.",
+      "nextAction": "Keep in the English sitemap and monitor overlap with Next.js full-stack."
+    },
+    {
+      "path": "/templates/mdx/devops-engineer",
+      "decision": "noindex",
+      "target": "/templates/mdx/devops-engineer",
+      "rationale": "MDX and DevOps intent are weakly connected and the generated page would compete with more specific architecture and deployment content.",
+      "nextAction": "Keep accessible and out of the sitemap."
+    },
+    {
+      "path": "/templates/typescript/frontend-developer",
+      "decision": "noindex",
+      "target": "/templates/typescript/frontend-developer",
+      "rationale": "This is a valid browsing combination but overlaps heavily with the stronger React and Next.js frontend pages and currently lacks a TypeScript-specific frontend proof angle.",
+      "nextAction": "Keep accessible and out of the sitemap until a distinct case study is added."
+    },
+    {
+      "path": "/guides/getting-started-with-ai-development",
+      "decision": "index",
+      "target": "/guides/getting-started-with-ai-development",
+      "rationale": "The guide has a structured beginner learning path, prerequisites, six steps, related articles, and Course/HowTo schema.",
+      "nextAction": "Keep in the English sitemap and monitor guide-to-article assisted conversions."
+    }
+  ]
+}

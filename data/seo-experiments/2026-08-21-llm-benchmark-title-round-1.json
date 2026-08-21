@@ -1,0 +1,32 @@
+{
+  "id": "llm-benchmark-title-round-1",
+  "status": "running",
+  "page": "/blog/llm-coding-benchmark-comparison-2026",
+  "goal": "Increase organic CTR without reducing average position or assisted conversions.",
+  "startedAt": "2026-08-21",
+  "measurementDue": "2026-09-11",
+  "minimumRuntimeDays": 21,
+  "sequence": ["title", "intro", "table", "internal-links", "ctr-review"],
+  "baseline": {
+    "source": "2026-08-21 supplied AI-search report",
+    "period": "approximately three months",
+    "aiSearchImpressions": 795,
+    "gscClicks": null,
+    "gscImpressions": null,
+    "gscCtr": null,
+    "gscPosition": null,
+    "corePageConversions": null,
+    "note": "Import the 7/14/28-day GSC snapshot before making a final lift decision."
+  },
+  "control": {
+    "title": "LLM Benchmark Scores 2026: Coding, Math & Reasoning",
+    "firstParagraph": "If you searched for LLM benchmark scores 2026 coding math reasoning comparison, the short version is this: the best model depends less on one leaderboard and more on the task you are trying to automate."
+  },
+  "variant": {
+    "title": "LLM Benchmark Scores 2026: Sources & Tradeoffs",
+    "firstParagraph": "If you searched for LLM benchmark scores 2026 coding math reasoning comparison, the short version is this: match the benchmark to the task before choosing a model, then verify the source date, scaffold, and success metric.",
+    "table": "Task-first benchmark map remains above the score table.",
+    "internalLinks": ["/topics/ai-model-comparisons", "/blog/ai-benchmark-methodology", "/blog/ai-agent-tools-comparison-2026"]
+  },
+  "decisionRule": "Ship the next step only when the completed window has a meaningful CTR lift and no material loss in average position or core-page conversions."
+}

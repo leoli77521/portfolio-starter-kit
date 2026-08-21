@@ -1,16 +1,18 @@
 ---
 title: "MCP 协议指南 2026：将 AI 连接到任何数据源"
-summary: "模型上下文协议 (MCP) 是将 AI 代理连接到外部工具和数据的通用标准。了解如何通过实际代码示例构建 MCP 服务器和客户端。"
-seoTitle: "MCP 协议指南 2026：将 AI 连接到任何数据源"
-seoDescription: "模型上下文协议 (MCP) 是将 AI 代理连接到外部工具和数据的通用标准。了解如何通过实际代码示例构建 MCP 服务器和客户端。"
+summary: "了解模型上下文协议如何将 AI 代理连接到工具和数据，并对主机、客户端、服务器、权限、安全控制和实施步骤进行实际概述。"
+seoTitle: "MCP协议：AI工具集成指南"
+seoDescription: "了解模型上下文协议如何将 AI 代理连接到工具和数据。了解主机、客户端、服务器、权限、控制和实施步骤。"
 faq: [{"question":"什么是 MCP（模型上下文协议）？","answer":"MCP 是 Anthropic 的开放协议，它标准化了 AI 模型如何连接到外部数据源、工具和系统。将其视为用于 AI 集成的 USB-C。"},{"question":"谁支持MCP？","answer":"自 2025 年起，Anthropic (Claude)、OpenAI (ChatGPT)、Google DeepMind (Gemini)、Microsoft 和 GitHub 均支持 MCP。"},{"question":"MCP 适合企业使用吗？","answer":"MCP 包括安全规范，但需要正确实施同意流程、访问控制和数据治理策略。"},{"question":"MCP 与函数调用有何不同？","answer":"函数调用是特定于模型的并且是单向的。 MCP 是一种通用的双向协议，适用于不同的 AI 提供商。"}]
 howto: [{"name":"安装MCP SDK","text":"安装适合您的语言的官方 MCP SDK：npm install @modelcontextprotocol/sdk 或 pip install mcp。"},{"name":"定义服务器功能","text":"创建一个服务器，公开 AI 模型可以访问的资源、工具或提示。"},{"name":"将客户端连接到服务器","text":"配置您的 AI 应用程序以通过 stdio 或 HTTP 传输连接到 MCP 服务器。"},{"name":"测试集成","text":"使用 MCP Inspector 工具调试和验证您的服务器实现。"}]
-sourceUpdatedAt: "2026-01-21"
-translatedAt: "2026-06-18"
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
 ---
-# MCP 协议：AI 集成的通用标准
+*编辑更新：2026 年 8 月 20 日。在实施生产集成之前验证当前协议规范、SDK 版本和主机支持。*
 
-*发布日期：2026 年 1 月 21 日*
+## 什么是模型上下文协议？
+
+**模型上下文协议 (MCP) 是一个开放接口，用于通过明确的客户端-服务器边界将 AI 主机连接到外部工具、数据和可重用提示。** 它使集成更加便携，但它并不能消除对权限设计、用户批准、身份验证、输入验证或审核日志记录的需要。
 
 每个人工智能代理都面临着同样的问题：他们擅长推理，但对你的数据视而不见。 MCP（模型上下文协议）通过创建一种用于人工智能与工具通信的通用语言来解决这个问题。
 
@@ -400,7 +402,7 @@ MCP 解决了阻碍 AI 代理的集成问题。您无需为每种 AI 工具组�
 
 ## 相关文章
 
-- [Claude AI执行代码：实时Python & Node.js](/blog/claude-ai-now-executes-code)
+- 【爪码：AI编码代理架构详解】(/blog/2026-04-02-claw-code-ai-coding-agent-architecture)
 - [从聊天机器人到人工智能代理：安静的革命](/blog/from-chatbots-to-ai-agents-quiet-revolution)
 - [AI 代理制作指南：避免 3400 美元的错误](/blog/ai-agents-production-guide)
 - 【智能体AI革命2025：未来已来】(/blog/agentic-ai-revolution-2025)

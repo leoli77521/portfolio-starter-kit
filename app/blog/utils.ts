@@ -14,7 +14,7 @@ import {
   getArticlePath,
   getAvailablePostLocales,
   getPostTranslationPath,
-  hasPostTranslation,
+  isPostTranslationFresh,
 } from 'app/lib/blog-i18n'
 
 // Re-export from formatters for backward compatibility
@@ -174,7 +174,7 @@ function localizePost(post: BlogPost, locale = defaultLocale): BlogPost {
   const safeLocale = getSafeLocale(locale)
   const availableLocales = getAvailablePostLocales(post.slug)
 
-  if (safeLocale === defaultLocale || !hasPostTranslation(post.slug, safeLocale)) {
+  if (safeLocale === defaultLocale || !isPostTranslationFresh(post.slug, safeLocale)) {
     return {
       ...post,
       locale: defaultLocale,
@@ -229,7 +229,7 @@ export function getBlogPost(
     return null
   }
 
-  if (safeLocale !== defaultLocale && !hasPostTranslation(post.slug, safeLocale) && !fallbackToDefault) {
+  if (safeLocale !== defaultLocale && !isPostTranslationFresh(post.slug, safeLocale) && !fallbackToDefault) {
     return null
   }
 

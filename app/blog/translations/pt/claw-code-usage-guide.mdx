@@ -1,0 +1,99 @@
+---
+title: "Guia de uso do código Claw: um caminho seguro do prompt ao agente"
+summary: "Um guia prático de uso do Claw Code para transformar a arquitetura do agente em fluxos de trabalho diários seguros com tarefas limitadas, portas de permissão, testes, pontos de verificação e reversão."
+seoTitle: "Guia de uso do código Claw: fluxos de trabalho de agentes seguros"
+seoDescription: "Use este guia do Claw Code para avaliar tarefas, permissões, pontos de verificação, testes, sessões e reversão do agente de codificação antes de confiar em alterações autônomas."
+faq: [{"question":"Para que devo usar o Claw Code primeiro?","answer":"Comece com tarefas de repositório reversíveis e limitadas, onde testes e uma revisão humana podem verificar o resultado."},{"question":"Um agente de codificação deve ter acesso irrestrito ao shell?","answer":"Não. Comece com permissões de privilégio mínimo e expanda o acesso somente quando o fluxo de trabalho provar que precisa de mais."},{"question":"Como posso saber se uma tarefa do agente foi concluída?","answer":"Defina uma condição de sucesso observável, execute os testes relevantes, inspecione a comparação e registre qualquer acompanhamento manual."}]
+howto: [{"name":"Escolha uma tarefa limitada","text":"Escolha uma pequena alteração com entrada, saída e caminho de reversão claros."},{"name":"Definir permissões","text":"Permita apenas os arquivos, comandos, acesso à rede e segredos necessários para a tarefa."},{"name":"Executar pontos de verificação","text":"Peça ao agente para resumir intenções, arquivos alterados, testes e riscos não resolvidos em cada limite."},{"name":"Revise e pouse","text":"Inspecione a comparação, execute testes e mescle somente depois que o resultado atender aos critérios de aceitação escritos."}]
+sourceUpdatedAt: "2026-08-20"
+translatedAt: "2026-08-21"
+---
+A maneira mais segura de adotar o Claw Code é tratá-lo como um fluxo de trabalho operacional, não como um prompt mágico. O modelo é importante, mas o tempo de execução determina o que ele pode ver, o que pode mudar e a rapidez com que um erro pode ser recuperado.
+
+Este guia transforma a [análise da arquitetura do Claw Code](/blog/2026-04-02-claw-code-ai-coding-agent-architecture) em um caminho repetível para o desenvolvimento diário.
+
+## Comece com um contrato de tarefa
+
+Antes de abrir uma sessão de agente, escreva um breve contrato:
+
+- **Meta:** o único resultado observável que deve mudar;
+- **Escopo:** diretórios e arquivos que o agente pode inspecionar ou editar;
+- **Restrições:** APIs, regras de estilo, requisitos de compatibilidade e ações proibidas;
+- **Validação:** comandos, testes, capturas de tela ou logs que comprovam sucesso;
+- **Reversão:** o commit, patch, branch ou backup que permite desfazer a alteração.
+
+“Melhorar o sistema de autenticação” não é um contrato de tarefa. “Adicionar um teste com falha para sessões expiradas, implementar a menor correção em `app/auth` e executar o conjunto de testes de sessão” é.
+
+## Níveis de permissão
+
+Use confiança progressiva. Uma política simples de quatro níveis é suficiente para a maioria das equipes:
+
+| Nível | Agente pode fazer | Regra de aprovação |
+| --- | --- | --- |
+| Somente leitura | Inspecione arquivos, pesquise, explique e proponha um patch | Sem acesso de gravação |
+| Gravação no espaço de trabalho | Edite arquivos rastreados em um diretório limitado | Revise a diferença antes dos testes |
+| Execução de teste | Execute testes e formatadores selecionados | Lista de permissões de comando e tempo limite |
+| Ação externa | Rede, implantar, publicar ou alterar infraestrutura | Aprovação explícita por ação |
+
+Inicie cada novo repositório em somente leitura ou gravação no espaço de trabalho. Não conceda segredos ou acesso à produção só porque o agente concluiu uma refatoração local.
+
+A [pilha de agentes de codificação de IA](/ai-coding-agents) mais detalhada explica por que ferramentas, permissões e sessões são recursos do produto, e não detalhes de implementação.
+
+## Um loop de sessão confiável
+
+Use este loop para cada tarefa:
+
+1. **Inspecionar:** solicite os arquivos relevantes, o comportamento atual e os testes existentes.
+2. **Plano:** exige um breve plano de alteração e uma lista de arquivos antes da edição.
+3. **Patch:** mantenha a diferença estreita; evite limpeza não relacionada.
+4. **Validar:** execute primeiro o menor teste relevante e depois o conjunto mais amplo.
+5. **Explicar:** solicite um resumo da mudança de comportamento, evidências e riscos restantes.
+6. **Ponto de verificação:** confirme ou salve um patch antes da próxima etapa autônoma.
+
+O ponto de verificação é importante. Uma sessão longa que altera dezenas de arquivos sem limite de revisão é difícil de depurar, mesmo quando cada edição individual parece razoável.
+
+## Testando código gerado pelo agente
+
+Os testes devem provar o comportamento, não apenas que o agente executou um comando. Para uma alteração de código, combine:
+
+- testes unitários para a lógica alterada;
+- testes de integração para a fronteira que o agente tocou;
+- verificação ou compilação de tipo;
+- uma revisão de diferenças para expansão acidental do escopo;
+- uma verificação manual direcionada quando a saída é visual ou voltada para o usuário.
+
+Quando um teste falhar, não deixe o agente corrigir repetidamente até que a falha desapareça. Peça para explicar a falha, identifique se o teste ou implementação está errado e proponha o próximo experimento menor.
+
+## MCP e ferramentas externas
+
+O MCP pode tornar um agente muito mais útil, mas também expande os limites da confiança. Para cada servidor, registre os recursos que ele expõe, as ferramentas que ele pode chamar, se as chamadas são reversíveis e quais dados podem sair da máquina.
+
+O [guia do protocolo MCP](/blog/mcp-model-context-protocol-guide) é o companheiro certo para compreender recursos, ferramentas, prompts, raízes e transporte. Em uma implementação real, combine-o com uma lista de permissões e um registro de auditoria em vez de tratar “conectado” como “confiável”.
+
+## Tratamento de falhas
+
+Bons fluxos de trabalho de agente pressupõem falha. Adicione comportamento explícito para:
+
+- um comando que expira;
+- um teste que falha após uma edição parcial;
+- uma ferramenta que retorna dados malformados;
+- um agente pedindo uma permissão de que não deveria precisar;
+- uma instrução que entre em conflito com a política do repositório;
+- uma sessão que perde contexto ou continua no branch errado.
+
+A resposta correta geralmente é parar, preservar a diferença e restabelecer o contrato da tarefa. Uma nova sessão com uma transferência compacta costuma ser mais segura do que uma longa conversa que acumulou suposições.
+
+## Lista de verificação de adoção
+
+Antes de uma equipe usar o Claw Code em uma base de código compartilhada, confirme:
+
+- toda tarefa tem uma condição de sucesso escrita;
+- o conjunto de permissões padrão é o privilégio mínimo;
+- os testes são executados em uma sandbox com tempos limite;
+- sessões expõem arquivos alterados e chamadas de ferramentas;
+- os postos de controle são baratos e frequentes;
+- os segredos nunca são copiados em prompts ou logs;
+- um humano analisa as mudanças que impactam a produção;
+- a equipe mede as alterações aceitas, os ciclos de correção e a taxa de reversão.
+
+Para opções de ferramentas em nível de produto, continue até o [diretório de ferramentas de IA](/ai-tools). Para escolhas em nível de modelo, use o [diretório de modelos e benchmarks de IA](/ai-models) em vez de presumir que a demonstração mais impressionante é o melhor tempo de execução.

@@ -70,4 +70,6 @@ After deployment, use an authenticated GSC session for the remaining external ch
 5. Record conversion events for directory clicks, newsletter signups, and guide starts alongside CTR.
 
 As of 2026-08-21, the 16 redirect-error URLs are in GSC validation with 16 pending and 0 failed;
-do not restart validation unless the current run fails.
+do not restart validation unless the current run fails. All six submitted sitemaps were also
+reported as Success on 2026-08-21, with 158 URLs discovered in the main sitemap and 46 in each
+language sitemap.

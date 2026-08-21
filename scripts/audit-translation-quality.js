@@ -39,6 +39,7 @@ function audit() {
       const ratio = translation.content.length / Math.max(1, source.content.length)
       const urls = source.content.match(/https?:\/\/[^\s)\]]+/g) || []
       const missingUrls = urls.filter((url) => !translation.content.includes(url))
+      const brokenMarkdownLinks = translation.content.match(/\]\s+\(/g) || []
       const issues = []
       checked += 1
 
@@ -46,6 +47,7 @@ function audit() {
       if (ratio < (ratioMinimums[locale] || 0.45)) issues.push(`short content ratio ${ratio.toFixed(2)}`)
       if (source.metadata.updatedAt && translation.metadata.sourceUpdatedAt !== source.metadata.updatedAt) issues.push('sourceUpdatedAt mismatch')
       if (missingUrls.length > 0) issues.push(`missing ${missingUrls.length} source URL(s)`)
+      if (brokenMarkdownLinks.length > 0) issues.push(`broken Markdown link spacing in ${brokenMarkdownLinks.length} link(s)`)
       if (languageSignals[locale] && !languageSignals[locale].test(translation.content)) issues.push('weak target-language signal')
       for (const hazard of [/987654321/, /XQZ/, /className="[^\"]*h-autorounded/, /<图片/]) {
         if (hazard.test(translation.content)) issues.push(`translation hazard ${hazard}`)
@@ -61,7 +63,7 @@ function audit() {
     automatedFailures: failures.length,
     automatedPasses: checked - failures.length,
     humanReviewRequired: checked,
-    humanReviewNote: 'Automated checks cover freshness, completeness, URL preservation, hazards, and coarse language signals. They do not replace native-speaker review of tone, terminology, or factual nuance.',
+    humanReviewNote: 'Automated checks cover freshness, completeness, URL preservation, Markdown link syntax, hazards, and coarse language signals. They do not replace native-speaker review of tone, terminology, or factual nuance.',
     failures,
   }
   console.log(JSON.stringify(report, null, 2))

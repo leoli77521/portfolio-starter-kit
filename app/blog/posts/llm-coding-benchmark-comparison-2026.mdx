@@ -3,7 +3,7 @@ title: "LLM Benchmark Scores 2026: Sources & Tradeoffs"
 seoTitle: "LLM Benchmark Scores 2026: Tradeoffs"
 seoDescription: "Compare 2026 LLM benchmark scores for coding across SWE-bench, Aider, LiveCodeBench, Terminal-Bench, math, and reasoning. Choose the right model."
 publishedAt: "2026-02-01"
-updatedAt: "2026-08-20"
+updatedAt: "2026-08-21"
 summary: "A task-first guide to 2026 LLM benchmark scores for coding, math, and reasoning—covering SWE-bench, Aider, LiveCodeBench, Terminal-Bench, and model tradeoffs."
 image: "/og?title=LLM%20Benchmark%20Scores%202026%3A%20Coding%20Math%20Reasoning"
 category: "AI Technology"
@@ -12,7 +12,7 @@ faq: [{"question":"Which LLM coding benchmark matters most in 2026?","answer":"F
 howto: [{"name":"Start with the task type","text":"Use SWE-bench-style scores for bug fixing, Aider-style scores for code editing, LiveCodeBench for algorithms, and Terminal-Bench for shell-heavy agent workflows."},{"name":"Check the scaffold","text":"Read whether a score comes from the raw model, a coding agent, an IDE assistant, or a custom benchmark scaffold before comparing it."},{"name":"Separate public leaderboards from vendor reports","text":"Vendor launch benchmarks can be useful, but keep them separate from third-party leaderboard numbers unless the evaluation setup is identical."},{"name":"Re-check before buying or migrating","text":"Before standardizing on a model, verify the latest score, release date, pricing, latency, context window, and tool support."}]
 ---
 
-*Editorial update: August 21, 2026. Numeric benchmark snapshots were last reviewed on June 8, 2026; source reachability and model-page freshness were rechecked on August 21. Verify live leaderboards before making a purchase or migration decision.*
+*Editorial update: August 21, 2026. Numeric benchmark snapshots were last reviewed on June 8, 2026; source reachability, model-page freshness, and the DeepSeek technical report were rechecked on August 21. Verify live leaderboards before making a purchase or migration decision.*
 
 If you searched for **LLM benchmark scores 2026 coding math reasoning comparison**, the short version is this: match the benchmark to the task before choosing a model, then verify the source date, scaffold, and success metric.
 
@@ -48,7 +48,7 @@ This snapshot separates public leaderboards from vendor-reported release metrics
 | **GPT-5.5** | SWE-Bench Pro: **58.6%**; Terminal-Bench 2.0: **82.7%** | FrontierMath Tier 1-3: **51.7%**; Tier 4: **35.4%** | Strongest signal for agentic terminal workflows and hard scientific reasoning in OpenAI's release data | [OpenAI GPT-5.5](https://openai.com/index/introducing-gpt-5-5/) | Vendor report |
 | **Claude Opus 5** | Latest Anthropic frontier coding and agent model; no comparable public score recorded in this snapshot | Verify current context and evaluation details on the live model page | Current Anthropic model-page reference; do not treat the qualitative model page as a cross-vendor benchmark score | [Anthropic Claude Opus](https://www.anthropic.com/claude/opus) | Vendor/model page |
 | **Gemini 3.1 Pro** | Latest Gemini 3 series model card | Native multimodal reasoning model | Best evaluated as a multimodal reasoning and long-context model; use public coding leaderboards when exact task scores matter | [Google DeepMind Gemini 3.1 Pro](https://deepmind.google/models/model-cards/gemini-3-1-pro/) | Vendor/model card |
-| **DeepSeek V3.2 / V3.2-Speciale** | SWE-bench resolved: **70** | GPQA Diamond: **74.24 / 82.4**; MMLU-Pro: **85** | Strong value-oriented reasoning and coding contender, especially when cost matters | [DeepSeek V3.2 model card](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) | Model card |
+| **DeepSeek V3.2** | SWE-bench Verified: **70.0% resolved** | GPQA Diamond: **82.4%**; MMLU-Pro: **85.0%** | Strong value-oriented reasoning and coding contender, especially when cost matters | [DeepSeek V3.2 model card](https://huggingface.co/deepseek-ai/DeepSeek-V3.2) | Model card |
 | **Aider Polyglot leaderboard** | GPT-5 high: **88.0%**; GPT-5 medium: **86.7%**; Gemini 2.5 Pro: **83.1%**; DeepSeek V3.2 Reasoner: **74.2%** | Not a math benchmark | Best for real-world code editing and diff quality | [Aider leaderboard](https://aider.chat/docs/leaderboards/) | Third-party |
 | **SWE-bench public snapshot** | Verified reports **% Resolved** over 500 tasks | Not a math benchmark | Best for real GitHub issue repair; current top public entries include Claude-family, Gemini 3, GPT-5.2 Codex, Kimi K2.5, and DeepSeek V3.2 variants | [SWE-bench](https://www.swebench.com/) | Third-party |
 
@@ -92,7 +92,7 @@ For hands-on OpenAI workflow tactics, the older but still useful companion piece
 
 [LiveCodeBench](https://livecodebench.github.io/leaderboard.html) is valuable because it continuously adds programming problems, which reduces training-set contamination risk compared with static benchmarks.
 
-In the current public generation dataset, recent strong entries include o4-mini high, Gemini 2.5 Pro 06-05, o3 high, DeepSeek-R1-0528, and Qwen3 variants. That does **not** automatically mean those are the best production coding assistants. It means they are strong at competitive-programming-style generation.
+In the currently selected public window (August 1, 2024 to May 1, 2025), strong entries include o4-mini high, Gemini 2.5 Pro 06-05, o3 high, DeepSeek-R1-0528, and Qwen3 variants. That does **not** automatically mean those are the best production coding assistants. It means they are strong at competitive-programming-style generation in that published window.
 
 Use LiveCodeBench when your question is "which model solves algorithmic coding problems?" Use SWE-bench or Aider when your question is "which model can change my codebase correctly?"
 
@@ -102,7 +102,7 @@ Math and scientific reasoning are now a separate comparison from general coding.
 
 GPT-5.5's release data reports **51.7% on FrontierMath Tier 1-3** and **35.4% on FrontierMath Tier 4**, alongside **58.6% on SWE-Bench Pro**. Those numbers point to a model optimized for hard, multi-step scientific and agentic work rather than only short-form coding prompts.
 
-DeepSeek V3.2's model card reports **74.24 on GPQA Diamond** for V3.2 and **82.4** for V3.2-Speciale, plus **85 on MMLU-Pro**. That makes DeepSeek much harder to dismiss as a budget-only option. It is a serious reasoning model, with the usual caveat that deployment, latency, tool use, and data policy still matter.
+DeepSeek V3.2's technical report and model card report **82.4% on GPQA Diamond** and **85.0% on MMLU-Pro**. The same model-card evidence lists **70.0% resolved on SWE-bench Verified**, while the technical report uses a separate internal code-agent framework for its higher internal SWE-Verified result. That makes DeepSeek much harder to dismiss as a budget-only option, but the two evaluation setups must not be merged. Deployment, latency, tool use, and data policy still matter.
 
 Gemini 3.1 Pro should be read as a **native multimodal reasoning model** from Google's latest Gemini 3 generation. If your math workflow includes diagrams, visual context, long documents, or multimodal inputs, raw text-only leaderboard comparisons will miss part of the picture. The practical companion article here is [Gemini Deep Thinking API: Build Math AI Apps](/blog/gemini-deep-thinking-api-math-reasoning).
 

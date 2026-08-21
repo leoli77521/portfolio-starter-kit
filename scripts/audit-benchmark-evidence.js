@@ -10,6 +10,12 @@ const allowedSourceTypes = new Set([
   'model-card',
   'third-party-leaderboard',
 ])
+const editorialVerifiedStatuses = new Set([
+  'verified-product-page',
+  'verified-model-card',
+  'verified-page-structure',
+  'editorial-verified-qualified',
+])
 
 function audit() {
   const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'))
@@ -27,8 +33,12 @@ function audit() {
     if (row.value !== null && !row.sourceUrl) errors.push(`${row.id} has a numeric/value claim without a source URL`)
     if (!allowedSourceTypes.has(row.sourceType)) errors.push(`${row.id} has unsupported source type ${row.sourceType}`)
     if (!/^https:\/\//.test(row.sourceUrl)) errors.push(`${row.id} source URL must be HTTPS`)
-    if (!['verified-product-page', 'verified-model-card', 'verified-page-structure'].includes(row.verificationStatus)) pending.push(row.id)
+    if (!editorialVerifiedStatuses.has(row.verificationStatus)) pending.push(row.id)
   }
+
+  const unqualifiedPublicationBlockers = ledger.rows
+    .filter((row) => row.reproducibility !== 'independently-reproduced')
+    .map((row) => row.id)
 
   const numericClaims = (article.match(/\*\*\d+(?:\.\d+)?%\*\*/g) || []).length
   const report = {
@@ -39,8 +49,9 @@ function audit() {
     errors,
     editorialReviewPending: pending,
     readyForEditorialReview: errors.length === 0,
-    readyForUnqualifiedPublication: errors.length === 0 && pending.length === 0,
-    note: 'A complete ledger is not the same as independently reproduced benchmark data; pending rows require an editor to reconcile the live source, test date, version, scaffold, and reproduction path.',
+    readyForUnqualifiedPublication: errors.length === 0 && pending.length === 0 && unqualifiedPublicationBlockers.length === 0,
+    unqualifiedPublicationBlockers,
+    note: 'Editorial verification confirms the live source, date/context, version, metric, and caveat. It does not turn vendor or leaderboard results into independently reproduced benchmark data; publish those rows only with the recorded qualifications.',
   }
 
   console.log(JSON.stringify(report, null, 2))

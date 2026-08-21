@@ -8,6 +8,7 @@ const focusPages = [
   {
     file: 'app/blog/posts/llm-coding-benchmark-comparison-2026.mdx',
     primaryKeyword: 'llm benchmark scores',
+    expectedUpdatedAt: '2026-08-21',
   },
   {
     file: 'app/blog/posts/2026-04-02-claw-code-ai-coding-agent-architecture.mdx',
@@ -67,7 +68,7 @@ test('priority SEO pages have concise metadata, one rendered H1, and internal pa
     const {metadata, content} = parsePage(page.file)
     const pageLabel = path.basename(page.file)
 
-    assert.equal(metadata.updatedAt, '2026-08-20', `${pageLabel} should record this content refresh`)
+    assert.equal(metadata.updatedAt, page.expectedUpdatedAt || '2026-08-20', `${pageLabel} should record this content refresh`)
     assert.ok(metadata.image, `${pageLabel} should have an explicit social image`)
     assert.ok(metadata.seoTitle.length >= 30, `${pageLabel} SEO title should be descriptive`)
     assert.ok(metadata.seoTitle.length <= 45, `${pageLabel} SEO title must fit the site title template`)

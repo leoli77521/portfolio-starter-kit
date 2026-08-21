@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "property": "sc-domain:tolearn.blog",
   "timezone": "America/Los_Angeles",
-  "updatedAt": "2026-08-21T02:43:09-07:00",
+  "updatedAt": "2026-08-21T03:14:22-07:00",
   "requiredMetrics": [
     "gsc.clicks",
     "gsc.impressions",
@@ -69,6 +69,19 @@
         "decisionCounts": {"index": 71, "noindex": 34, "redirect": 1, "review": 0},
         "gscLastUpdated": "2026-08-16"
       },
+      "redirectValidation": {
+        "checkedAt": "2026-08-21",
+        "status": "validation-started",
+        "startedAt": "2026-08-21",
+        "pendingUrls": 16,
+        "failedUrls": 0
+      },
+      "sitemaps": {
+        "checkedAt": "2026-08-21",
+        "status": "success",
+        "mainDiscoveredUrls": 158,
+        "languageDiscoveredUrls": {"zh": 46, "de": 46, "fr": 46, "th": 46, "pt": 46}
+      },
       "conversions": {
         "corePageConversions": null,
         "source": "not connected"
@@ -88,9 +101,10 @@
     }
   ],
   "notes": [
-    "GSC performance and indexed URL counts require an authenticated export or API credential; null is intentional until imported.",
+    "The latest GSC performance and indexed URL snapshot was imported from the authenticated UI; AI-search clicks and conversion fields remain null because those reports were not available.",
     "The original supplied AI-search baseline was 955 impressions overall and 795 for the benchmark page over three months; the current GSC UI shows 958 overall and 797 for the same three-month view.",
     "The latest manual GSC snapshot covers 2026-08-12 through 2026-08-18 for 7d, 2026-08-05 through 2026-08-18 for 14d, and 2026-07-22 through 2026-08-18 for 28d.",
-    "The current repository policy resolves all 21 review URLs; GSC's 106 crawled-not-indexed count is an independent Google coverage signal."
+    "The current repository policy resolves all 21 review URLs; GSC's 106 crawled-not-indexed count is an independent Google coverage signal.",
+    "On 2026-08-21, GSC showed redirect validation started for 16 URLs with 0 failed, and all six submitted sitemaps were Success."
   ]
 }

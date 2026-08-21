@@ -14,11 +14,13 @@
       "unit": "%",
       "sourceUrl": "https://openai.com/index/introducing-gpt-5-5/",
       "sourceType": "vendor-report",
-      "testDate": "2026-06-08",
+      "testDate": null,
+      "sourcePublicationDate": "2026-04-23",
+      "testDateNote": "The OpenAI release page publishes the result but does not publish an independent run date; 2026-06-08 is the article snapshot date, not a test date.",
       "scaffold": "OpenAI release configuration; exact agent harness must be recorded from the source before reuse.",
       "reproducibility": "not-reproducible-without-vendor-harness",
       "verificationStatus": "needs-editorial-reconcile",
-      "verificationNote": "The source URL did not expose a stable page in the audit browser; verify the exact benchmark table and harness manually."
+      "verificationNote": "The live OpenAI release page exposes the 58.6% SWE-Bench Pro row and the surrounding release context; the exact benchmark harness and run date remain vendor-controlled."
     },
     {
       "id": "gpt-55-terminal-bench",
@@ -30,11 +32,13 @@
       "unit": "%",
       "sourceUrl": "https://openai.com/index/introducing-gpt-5-5/",
       "sourceType": "vendor-report",
-      "testDate": "2026-06-08",
+      "testDate": null,
+      "sourcePublicationDate": "2026-04-23",
+      "testDateNote": "The OpenAI release page publishes the result but does not publish an independent run date; 2026-06-08 is the article snapshot date, not a test date.",
       "scaffold": "OpenAI release configuration; record sandbox, retries, tools, and approval policy from the source.",
       "reproducibility": "not-reproducible-without-vendor-harness",
       "verificationStatus": "needs-editorial-reconcile",
-      "verificationNote": "Numeric claim is source-attributed but not independently reproduced."
+      "verificationNote": "The live OpenAI release page exposes the 82.7% Terminal-Bench 2.0 row; sandbox, retries, tools, and approval policy are not fully specified for independent reproduction."
     },
     {
       "id": "gpt-55-frontiermath",
@@ -46,11 +50,13 @@
       "unit": "%",
       "sourceUrl": "https://openai.com/index/introducing-gpt-5-5/",
       "sourceType": "vendor-report",
-      "testDate": "2026-06-08",
+      "testDate": null,
+      "sourcePublicationDate": "2026-04-23",
+      "testDateNote": "The OpenAI release page publishes the result but does not publish an independent run date; 2026-06-08 is the article snapshot date, not a test date.",
       "scaffold": "OpenAI release configuration; exact prompt and grading harness pending source reconciliation.",
       "reproducibility": "not-reproducible-without-vendor-harness",
       "verificationStatus": "needs-editorial-reconcile",
-      "verificationNote": "Keep tier labels attached; do not collapse into one FrontierMath score."
+      "verificationNote": "The live OpenAI release page exposes separate Tier 1–3 (51.7%) and Tier 4 (35.4%) rows; keep tier labels attached and do not collapse them into one score."
     },
     {
       "id": "claude-opus-5-product-page",
@@ -94,11 +100,31 @@
       "unit": "score",
       "sourceUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2",
       "sourceType": "model-card",
-      "testDate": "2026-06-08",
+      "testDate": null,
+      "sourcePublicationDate": null,
+      "testDateNote": "The model card exposes reported evaluation scores, but the visible page does not establish a standalone run date.",
       "scaffold": "DeepSeek model-card evaluation setup; record prompting and judge details before treating as cross-model comparable.",
       "reproducibility": "model-card-dependent",
       "verificationStatus": "partial-numeric-reconcile",
       "verificationNote": "The live model page was reachable and exposed 82.4 and 85 in the rendered text; reconcile the 74.24 value and evaluation context manually."
+    },
+    {
+      "id": "deepseek-v32-swebench",
+      "claim": "DeepSeek V3.2 SWE-bench resolved score",
+      "modelVersion": "DeepSeek V3.2 / V3.2-Speciale",
+      "benchmark": "SWE-bench",
+      "metric": "resolved",
+      "value": 70,
+      "unit": "resolved tasks",
+      "sourceUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2",
+      "sourceType": "model-card",
+      "testDate": null,
+      "sourcePublicationDate": null,
+      "testDateNote": "The article reports the value but the visible model-card page does not establish a standalone run date.",
+      "scaffold": "DeepSeek model-card evaluation setup; retain the exact agent, retrieval, tools, retries, and test policy before treating as comparable.",
+      "reproducibility": "model-card-dependent",
+      "verificationStatus": "needs-editorial-reconcile",
+      "verificationNote": "The article contains this numeric claim, but the rendered model-card view did not expose the row during the audit; keep it source-attributed and unqualified until the exact model-card evidence is captured."
     },
     {
       "id": "aider-polyglot-snapshot",
@@ -110,11 +136,13 @@
       "unit": "%",
       "sourceUrl": "https://aider.chat/docs/leaderboards/",
       "sourceType": "third-party-leaderboard",
-      "testDate": "2026-06-08",
+      "testDate": "2025-11-20",
+      "sourcePublicationDate": "2025-11-20",
+      "testDateNote": "The Aider page states it was last updated November 20, 2025; that is a page/update date, not necessarily the run date for every row.",
       "scaffold": "Aider edit harness; retain language mix, edit format, model settings, and cost context.",
       "reproducibility": "replay-aider-harness",
       "verificationStatus": "needs-editorial-reconcile",
-      "verificationNote": "The leaderboard route did not expose a stable DOM in the audit browser; verify the live rows before publishing numeric claims."
+      "verificationNote": "The live Aider page exposes the cited rows, model commands, and its six-language/225-exercise Polyglot description; retain the run configuration and avoid implying cross-benchmark equivalence."
     },
     {
       "id": "swebench-public-snapshot",
@@ -126,11 +154,13 @@
       "unit": "%",
       "sourceUrl": "https://www.swebench.com/",
       "sourceType": "third-party-leaderboard",
-      "testDate": "2026-06-08",
+      "testDate": null,
+      "sourcePublicationDate": null,
+      "testDateNote": "The public leaderboard explains the % Resolved over 500 tasks metric but does not establish the article snapshot's run date.",
       "scaffold": "Entry-specific agent scaffold, retrieval, tools, retries, and test policy must be preserved per row.",
       "reproducibility": "entry-specific-replay",
       "verificationStatus": "needs-editorial-reconcile",
-      "verificationNote": "The public site did not expose a stable leaderboard DOM in the audit browser; keep this row qualitative until the snapshot is captured."
+      "verificationNote": "The public site exposes the Verified view and defines % Resolved over 500 tasks; no frozen article-date row snapshot or entry-specific harness was captured."
     },
     {
       "id": "livecodebench-methodology",

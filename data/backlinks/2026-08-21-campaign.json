@@ -4,6 +4,17 @@
   "site": "https://tolearn.blog",
   "policy": "No signup, no captcha, topical fit only; website-field backlink preferred.",
   "status": "ready_for_action_confirmation",
+  "gscSnapshot": {
+    "checkedAt": "2026-08-21",
+    "externalLinks": 9,
+    "referringDomains": 4,
+    "topDomains": [
+      {"domain": "ycombinator.com", "links": 4},
+      {"domain": "syncedreview.com", "links": 3},
+      {"domain": "agentboss.co", "links": 1},
+      {"domain": "algolia.com", "links": 1}
+    ]
+  },
   "targets": [
     {
       "id": "synced-microsoft-fpdt",

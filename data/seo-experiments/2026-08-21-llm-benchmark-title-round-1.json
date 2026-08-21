@@ -8,15 +8,16 @@
   "minimumRuntimeDays": 21,
   "sequence": ["title", "intro", "table", "internal-links", "ctr-review"],
   "baseline": {
-    "source": "2026-08-21 supplied AI-search report",
-    "period": "approximately three months",
-    "aiSearchImpressions": 795,
-    "gscClicks": null,
-    "gscImpressions": null,
-    "gscCtr": null,
-    "gscPosition": null,
+    "source": "2026-08-21 GSC manual UI snapshot",
+    "period": "2026-07-22 through 2026-08-18",
+    "aiSearchImpressions": 253,
+    "aiSearchImpressionsThreeMonths": 797,
+    "gscClicks": 10,
+    "gscImpressions": 13041,
+    "gscCtr": 0.08,
+    "gscPosition": 14.7,
     "corePageConversions": null,
-    "note": "Import the 7/14/28-day GSC snapshot before making a final lift decision."
+    "note": "The 7/14/28-day GSC and AI-search snapshot is now recorded; keep the experiment running until 2026-09-11 before deciding the next sequence step."
   },
   "control": {
     "title": "LLM Benchmark Scores 2026: Coding, Math & Reasoning",

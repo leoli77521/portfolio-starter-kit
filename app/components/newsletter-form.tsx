@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ArrowUpRight, Mail } from 'lucide-react'
+import { trackAnalyticsEvent } from 'app/lib/analytics-events'
 
 export default function NewsletterForm() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -42,6 +43,10 @@ export default function NewsletterForm() {
 
       setSuccess(true)
       setLoading(false)
+      trackAnalyticsEvent('newsletter_signup', {
+        form_location: 'footer',
+        page_path: window.location.pathname,
+      })
     } catch {
       setError(true)
       setLoading(false)

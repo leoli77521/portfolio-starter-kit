@@ -39,6 +39,11 @@ zeroes. The original supplied baseline was 955 AI-search impressions over roughl
 including 795 for the benchmark page. The authenticated GSC UI snapshot now records 7/14/28-day
 AI-search impressions of 49/120/310, with 41/103/253 for the benchmark page.
 
+Conversion instrumentation is now present for `newsletter_signup`, `guide_start`, and
+`directory_entry_click` in both the Google Analytics and Plausible client hooks. These events will
+remain absent from the dashboard until the corresponding analytics export is connected; the
+instrumentation change does not retroactively populate historical conversions.
+
 ## 14-day check: query and content signals
 
 In GSC, compare the previous 14 days with the preceding 14 days for the three directory pages and their linked pillar articles:
@@ -67,7 +72,8 @@ After deployment, use an authenticated GSC session for the remaining external ch
 2. Inspect the final destinations for the exported redirect rows and request validation.
 3. Monitor the 106 “Crawled — currently not indexed” URLs; the repository decision register now resolves all 21 former review URLs.
 4. Check AI-search visibility and citation mentions separately; GSC does not expose a complete generative-AI click report.
-5. Record conversion events for directory clicks, newsletter signups, and guide starts alongside CTR.
+5. Import conversion events for directory clicks, newsletter signups, and guide starts alongside CTR;
+   the site now emits those events, but the analytics export is not connected yet.
 
 As of 2026-08-21, the 16 redirect-error URLs are in GSC validation with 16 pending and 0 failed;
 do not restart validation unless the current run fails. All six submitted sitemaps were also

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { TrackedLink } from 'app/components/tracked-link'
 import { calculateReadingTime, getBlogPosts } from 'app/blog/utils'
 import { PostCard } from 'app/components/post-card'
 import type { AiDirectoryConfig } from 'app/lib/ai-directories'
@@ -149,7 +150,16 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
 
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {config.entryLinks.map((entry) => (
-            <Link key={entry.href} href={entry.href} className="surface-card group block px-5 py-5">
+            <TrackedLink
+              key={entry.href}
+              href={entry.href}
+              className="surface-card group block px-5 py-5"
+              eventName="directory_entry_click"
+              eventParams={{
+                directory: config.slug,
+                destination: entry.href,
+              }}
+            >
               <div className="flex items-start justify-between gap-3">
                 <h3 className="text-xl font-semibold tracking-[-0.03em] text-slate-950 transition-colors group-hover:text-indigo-700 theme-dark:text-white theme-dark:group-hover:text-indigo-300">
                   {entry.label}
@@ -159,7 +169,7 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
               <p className="mt-3 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
                 {entry.description}
               </p>
-            </Link>
+            </TrackedLink>
           ))}
         </div>
       </section>

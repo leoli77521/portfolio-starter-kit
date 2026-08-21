@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Mail, CheckCircle, Loader2 } from 'lucide-react'
+import { trackAnalyticsEvent } from 'app/lib/analytics-events'
 
 export function NewsletterCTA() {
   const [email, setEmail] = useState('')
@@ -36,6 +37,10 @@ export function NewsletterCTA() {
 
       setStatus('success')
       setEmail('')
+      trackAnalyticsEvent('newsletter_signup', {
+        form_location: 'page_cta',
+        page_path: window.location.pathname,
+      })
       window.setTimeout(() => setStatus('idle'), 3000)
     } catch {
       setStatus('error')

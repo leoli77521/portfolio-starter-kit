@@ -105,6 +105,7 @@
     "The original supplied AI-search baseline was 955 impressions overall and 795 for the benchmark page over three months; the current GSC UI shows 958 overall and 797 for the same three-month view.",
     "The latest manual GSC snapshot covers 2026-08-12 through 2026-08-18 for 7d, 2026-08-05 through 2026-08-18 for 14d, and 2026-07-22 through 2026-08-18 for 28d.",
     "The current repository policy resolves all 21 review URLs; GSC's 106 crawled-not-indexed count is an independent Google coverage signal.",
-    "On 2026-08-21, GSC showed redirect validation started for 16 URLs with 0 failed, and all six submitted sitemaps were Success."
+    "On 2026-08-21, GSC showed redirect validation started for 16 URLs with 0 failed, and all six submitted sitemaps were Success.",
+    "Conversion events for newsletter signups, guide starts, and directory entry clicks are now instrumented in the site; analytics export remains unconnected."
   ]
 }

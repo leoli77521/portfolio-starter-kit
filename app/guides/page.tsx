@@ -2,6 +2,7 @@ import { guides } from 'app/lib/guides'
 import type { Metadata } from 'next'
 import { baseUrl } from 'app/sitemap'
 import Link from 'next/link'
+import { TrackedLink } from 'app/components/tracked-link'
 import {
   generateCollectionPageSchema,
   generateItemListSchema,
@@ -181,10 +182,15 @@ function GuideSection({
 
       <div className="grid gap-5 md:grid-cols-2">
         {guides.map((guide) => (
-          <Link
+          <TrackedLink
             key={guide.slug}
             href={`/guides/${guide.slug}`}
             className="surface-card group block px-6 py-6"
+            eventName="guide_start"
+            eventParams={{
+              guide_slug: guide.slug,
+              entry_point: 'guides_directory',
+            }}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -218,7 +224,7 @@ function GuideSection({
             </div>
 
             <div className="mt-6 editorial-link">Open guide</div>
-          </Link>
+          </TrackedLink>
         ))}
       </div>
     </div>

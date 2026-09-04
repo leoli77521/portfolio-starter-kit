@@ -1,4 +1,4 @@
-import type { ReactNode, AnchorHTMLAttributes, ImgHTMLAttributes } from 'react'
+import type { ReactNode, AnchorHTMLAttributes, HTMLAttributes, ImgHTMLAttributes } from 'react'
 
 // Blog metadata types
 export type FAQItem = {
@@ -91,9 +91,8 @@ export interface RoundedImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   height?: number
 }
 
-export interface CodeProps {
+export interface CodeProps extends HTMLAttributes<HTMLElement> {
   children?: ReactNode
-  className?: string
 }
 
 export interface HeadingProps {

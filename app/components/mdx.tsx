@@ -126,19 +126,35 @@ function RoundedImage({ alt, src, className, loading, decoding, ...props }: Roun
   )
 }
 
-function Code({ children, className, ...props }: CodeProps) {
-  const codeString = typeof children === 'string' ? children : String(children ?? '')
+function Pre({ children }: React.HTMLAttributes<HTMLPreElement>) {
+  const codeElement = React.Children.toArray(children).find(
+    (child): child is React.ReactElement<CodeProps> => React.isValidElement<CodeProps>(child)
+  )
+
+  if (!codeElement) {
+    return <pre>{children}</pre>
+  }
+
+  const codeString = typeof codeElement.props.children === 'string'
+    ? codeElement.props.children
+    : String(codeElement.props.children ?? '')
   const codeHTML = highlight(codeString)
-  // Extract language from className (e.g. language-js)
-  const language = className?.replace(/language-/, '') || 'text'
-  
+  const language = codeElement.props.className?.replace(/language-/, '') || 'text'
+
   return (
-    <CodeBlock 
-      codeHTML={codeHTML} 
-      rawCode={codeString} 
+    <CodeBlock
+      codeHTML={codeHTML}
+      rawCode={codeString}
       language={language}
-      {...props} 
     />
+  )
+}
+
+function Code({ children, className, ...props }: CodeProps) {
+  return (
+    <code className={className} {...props}>
+      {children}
+    </code>
   )
 }
 
@@ -174,6 +190,7 @@ const baseComponents = {
   h5: createHeading(6),
   h6: createHeading(6),
   Image: RoundedImage,
+  pre: Pre,
   code: Code,
   img: ({ alt, src, loading, decoding, ...props }: any) => (
     // eslint-disable-next-line @next/next/no-img-element

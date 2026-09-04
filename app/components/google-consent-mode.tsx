@@ -26,16 +26,6 @@ const consentBootstrap = String.raw`
   function handleTcfUpdate(tcData, success) {
     if (!success || !tcData) return;
 
-    if (tcData.gdprApplies === false) {
-      publishConsent({
-        analytics_storage: 'granted',
-        ad_storage: 'granted',
-        ad_user_data: 'granted',
-        ad_personalization: 'granted'
-      });
-      return;
-    }
-
     if (tcData.gdprApplies !== true) return;
     if (tcData.eventStatus !== 'tcloaded' && tcData.eventStatus !== 'useractioncomplete') return;
 

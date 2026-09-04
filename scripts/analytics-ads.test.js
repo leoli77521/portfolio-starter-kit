@@ -49,6 +49,11 @@ test('Google integrations use environment configuration and Consent Mode v2 defa
   }
 
   assert.match(consent, /window\.gtag\('consent', 'update'/)
+  assert.doesNotMatch(
+    consent,
+    /gdprApplies === false/,
+    'non-GDPR traffic must not be treated as explicit consent'
+  )
 })
 
 test('AdSense is limited to English articles and the ad request waits for consent', () => {

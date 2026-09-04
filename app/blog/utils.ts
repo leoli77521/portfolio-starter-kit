@@ -130,6 +130,7 @@ const translatableMetadataKeys: Array<keyof Metadata> = [
   'howto',
   'sourceUpdatedAt',
   'translatedAt',
+  'reviewStatus',
 ]
 
 const postsDirectory = path.join(process.cwd(), 'app', 'blog', 'posts')

@@ -1,24 +1,30 @@
 'use client'
 
-import Script from 'next/script'
+import { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
+import { GoogleAnalytics as NextGoogleAnalytics, sendGAEvent } from '@next/third-parties/google'
 
-const GoogleAnalytics = () => {
-  return (
-    <>
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-K3J29WZHLX"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-K3J29WZHLX');
-        `}
-      </Script>
-    </>
-  )
+const GA_MEASUREMENT_ID_PATTERN = /^G-[A-Z0-9]+$/
+
+export default function GoogleAnalytics() {
+  const pathname = usePathname()
+  const previousPathname = useRef(pathname)
+  const measurementId = process.env.NEXT_PUBLIC_GA_ID?.trim() || ''
+  const isConfigured = GA_MEASUREMENT_ID_PATTERN.test(measurementId)
+
+  useEffect(() => {
+    if (!isConfigured || previousPathname.current === pathname) {
+      previousPathname.current = pathname
+      return
+    }
+
+    sendGAEvent('event', 'page_view', {
+      page_location: window.location.href,
+      page_path: pathname,
+      page_title: document.title,
+    })
+    previousPathname.current = pathname
+  }, [isConfigured, pathname])
+
+  return isConfigured ? <NextGoogleAnalytics gaId={measurementId} /> : null
 }
-
-export default GoogleAnalytics

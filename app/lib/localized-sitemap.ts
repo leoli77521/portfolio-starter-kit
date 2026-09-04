@@ -1,5 +1,5 @@
 import { localizePath } from 'app/lib/i18n-paths'
-import { getArticlePath } from 'app/lib/blog-i18n'
+import { getArticlePath, isPostTranslationReviewed } from 'app/lib/blog-i18n'
 import { getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/lib/constants'
 
@@ -18,6 +18,8 @@ const localizedStaticPaths = [
   '/terms',
 ]
 
+const STATIC_LAST_MODIFIED = '2026-09-04T00:00:00.000Z'
+
 function escapeXml(value: string) {
   return value
     .replaceAll('&', '&amp;')
@@ -34,7 +36,7 @@ function safeIsoDate(value: string | undefined) {
 
 export function buildLocalizedSitemap(locale: string) {
   const posts = getBlogPosts(locale)
-    .filter((post) => post.isTranslated)
+    .filter((post) => post.isTranslated && isPostTranslationReviewed(post.slug, locale))
     .sort(
       (left, right) =>
         new Date(right.metadata.updatedAt || right.metadata.publishedAt).getTime() -
@@ -43,7 +45,7 @@ export function buildLocalizedSitemap(locale: string) {
 
   const staticEntries = localizedStaticPaths.map((pathname) => ({
     loc: `${baseUrl}${localizePath(pathname, locale) === '/' ? '' : localizePath(pathname, locale)}`,
-    lastmod: new Date().toISOString(),
+    lastmod: STATIC_LAST_MODIFIED,
   }))
   const articleEntries = posts.map((post) => ({
     loc: `${baseUrl}${getArticlePath(post.slug, locale)}`,

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BlogArticle, generateArticleMetadata } from 'app/blog/[slug]/page'
+import BlogArticle, { generateMetadata as generateArticleMetadata } from 'app/blog/[slug]/page'
 import { defaultLocale, locales } from 'app/lib/i18n-paths'
 import { getTranslatedPostSlugsForLocale } from 'app/lib/blog-i18n'
 

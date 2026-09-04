@@ -365,8 +365,6 @@ input[type='email'] {
   a,
   button {
     min-height: 44px;
-    display: flex;
-    align-items: center;
   }
 
   /* 正文行内链接例外：强制 flex 会破坏段落排版，行内链接不受 44px 触控目标约束 */

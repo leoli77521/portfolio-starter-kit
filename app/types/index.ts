@@ -30,6 +30,7 @@ export type BlogMetadata = {
   howto?: HowToStep[] | string
   sourceUpdatedAt?: string
   translatedAt?: string
+  reviewStatus?: 'pending' | 'human-reviewed'
   rating?: ArticleRating | number  // Article rating for schema.org (number = value, defaults count)
 }
 

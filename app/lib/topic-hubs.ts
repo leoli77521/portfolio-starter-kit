@@ -69,11 +69,11 @@ export const topicHubs: TopicHub[] = [
   {
     slug: 'seo-fundamentals',
     title: 'SEO Fundamentals',
-    seoTitle: 'SEO Fundamentals: Google SEO Basics & Checklist',
+    seoTitle: 'SEO Fundamentals: Google SEO Basics Checklist (2026)',
     seoDescription:
-      'Learn SEO fundamentals for 2026 with a Google SEO basics checklist: crawlability, intent, on-page SEO, internal links, schema, mobile performance, and measurement.',
+      'Learn the SEO fundamentals Google needs in 2026 with a practical checklist for crawlability, intent, on-page SEO, links, schema, performance, and measurement.',
     description:
-      'Learn SEO fundamentals for 2026: search intent, technical SEO, on-page optimization, internal links, schema, mobile performance, and measurement.',
+      'SEO fundamentals are the essential steps that help Google crawl, understand, index, and rank a page. Use this 2026 checklist to audit each one.',
     longDescription: `SEO fundamentals are not tricks for gaming Google. They are the basic signals that help search engines discover your pages, understand what each page covers, and decide whether the result is useful enough to show to searchers. Start with crawlability, search intent, helpful content, clean page structure, internal links, mobile performance, and Search Console measurement before chasing advanced tactics.`,
     relatedTags: ['SEO Optimization', 'Keyword Research', 'Technical SEO', 'Content Marketing', 'Analytics'],
     relatedCategories: ['SEO & Marketing', 'Web Development'],

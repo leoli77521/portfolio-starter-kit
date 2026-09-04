@@ -2,24 +2,27 @@
 
 import Link, { type LinkProps } from 'next/link'
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from 'react'
-import { trackAnalyticsEvent, type AnalyticsEventParams } from 'app/lib/analytics-events'
+import {
+  trackAnalyticsEvent,
+  type AnalyticsEvent,
+  type AnalyticsEventParams,
+} from 'app/lib/analytics-events'
 
-interface TrackedLinkProps
-  extends LinkProps,
-    Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'> {
-  eventName: string
-  eventParams?: AnalyticsEventParams
+type TrackedLinkProps<EventName extends AnalyticsEvent> = LinkProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'> & {
+  eventName: EventName
+  eventParams: AnalyticsEventParams<EventName>
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void
   children: ReactNode
 }
 
-export function TrackedLink({
+export function TrackedLink<EventName extends AnalyticsEvent>({
   eventName,
   eventParams,
   onClick,
   children,
   ...props
-}: TrackedLinkProps) {
+}: TrackedLinkProps<EventName>) {
   return (
     <Link
       {...props}

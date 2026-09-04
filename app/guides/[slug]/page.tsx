@@ -106,7 +106,7 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     educationalLevel: guide.difficulty,
     duration: guide.estimatedTime,
     topics: guide.relatedTags,
-    dateModified: new Date().toISOString(),
+    dateModified: guide.updatedAt || '2026-08-20',
   })
 
   const howToSchema = {
@@ -174,6 +174,11 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             <p className="mt-4 text-base leading-8 text-slate-600 theme-dark:text-slate-300 md:text-lg">
               {guide.description}
             </p>
+            {guide.updatedAt ? (
+              <p className="mt-3 text-sm text-slate-500 theme-dark:text-slate-400">
+                Updated {guide.updatedAt}
+              </p>
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-3">
@@ -223,6 +228,99 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
             </p>
           </div>
 
+          {guide.performanceTargets ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">Performance budget</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                Targets to verify
+              </h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                {guide.performanceTargets.map((target) => (
+                  <div
+                    key={target.metric}
+                    className="rounded-[1.5rem] border border-slate-200/80 bg-white/85 px-5 py-5 theme-dark:border-slate-800 theme-dark:bg-slate-950/80"
+                  >
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="font-semibold text-slate-950 theme-dark:text-slate-100">
+                        {target.metric}
+                      </h3>
+                      <span className="text-sm font-semibold text-indigo-700 theme-dark:text-indigo-300">
+                        {target.target}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                      {target.explanation}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {guide.caseStudy ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">Measured example</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                {guide.caseStudy.title}
+              </h2>
+              <p className="mt-4 text-sm leading-8 text-slate-600 theme-dark:text-slate-300 md:text-base">
+                {guide.caseStudy.summary}
+              </p>
+              <div className="mt-6 grid gap-5 md:grid-cols-2">
+                <div>
+                  <h3 className="font-semibold text-slate-950 theme-dark:text-slate-100">
+                    Audit baseline
+                  </h3>
+                  <ul className="mt-3 space-y-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                    {guide.caseStudy.baseline.map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <span aria-hidden="true">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-950 theme-dark:text-slate-100">
+                    Ordered actions
+                  </h3>
+                  <ol className="mt-3 space-y-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
+                    {guide.caseStudy.actions.map((item, index) => (
+                      <li key={item} className="flex gap-3">
+                        <span className="font-semibold text-indigo-700 theme-dark:text-indigo-300">
+                          {index + 1}.
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
+          {guide.checklist ? (
+            <div className="surface-panel px-6 py-6 md:px-8">
+              <p className="section-kicker">Checklist</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-slate-950 theme-dark:text-white">
+                Next.js performance audit
+              </h2>
+              <ul className="mt-6 grid gap-3">
+                {guide.checklist.map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-3 rounded-[1.25rem] border border-slate-200/80 bg-white/85 px-4 py-4 text-sm leading-7 text-slate-700 theme-dark:border-slate-800 theme-dark:bg-slate-950/80 theme-dark:text-slate-300"
+                  >
+                    <span aria-hidden="true" className="font-semibold text-emerald-600 theme-dark:text-emerald-300">
+                      ✓
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           <div className="surface-panel px-6 py-6 md:px-8">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
@@ -254,6 +352,14 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
                       <p className="mt-2 text-sm leading-7 text-slate-600 theme-dark:text-slate-300">
                         {step.description}
                       </p>
+                      {step.relatedPostSlug ? (
+                        <Link
+                          href={`/blog/${step.relatedPostSlug}`}
+                          className="mt-3 inline-flex text-sm font-semibold text-indigo-700 hover:text-indigo-900 theme-dark:text-indigo-300 theme-dark:hover:text-indigo-200"
+                        >
+                          Read the supporting article →
+                        </Link>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -383,4 +489,3 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     </section>
   )
 }
-

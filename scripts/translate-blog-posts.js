@@ -374,6 +374,7 @@ async function translateMetadata(sourceMetadata, locale) {
     howto,
     sourceUpdatedAt,
     translatedAt,
+    reviewStatus: 'pending',
   }
 }
 
@@ -559,6 +560,7 @@ function writeTranslationFile(slug, locale, metadata, content) {
     `howto: ${stringifyFrontmatterValue(metadata.howto)}`,
     `sourceUpdatedAt: ${stringifyFrontmatterValue(metadata.sourceUpdatedAt)}`,
     `translatedAt: ${stringifyFrontmatterValue(metadata.translatedAt)}`,
+    `reviewStatus: ${stringifyFrontmatterValue(metadata.reviewStatus)}`,
     '---',
     '',
   ].join('\n')

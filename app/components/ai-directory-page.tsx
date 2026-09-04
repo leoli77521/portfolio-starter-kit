@@ -157,6 +157,8 @@ export function AiDirectoryPage({ config }: { config: AiDirectoryConfig }) {
               eventName="directory_entry_click"
               eventParams={{
                 directory: config.slug,
+                entry_slug: entry.href.split('/').filter(Boolean).at(-1) || config.slug,
+                category: config.slug,
                 destination: entry.href,
               }}
             >

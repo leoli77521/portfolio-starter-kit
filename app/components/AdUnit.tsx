@@ -1,6 +1,15 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+type GoogleConsentState = {
+  ad_storage?: 'granted' | 'denied'
+}
+
+type AdSenseWindow = Window & {
+  adsbygoogle?: Record<string, never>[]
+  __tolearnGoogleConsent?: GoogleConsentState
+}
 
 interface AdUnitProps {
   slot: string
@@ -10,12 +19,11 @@ interface AdUnitProps {
   className?: string
 }
 
-/**
- * Google AdSense 骞垮憡鍗曞厓缁勪欢
- *
- * 浣跨敤鏂规硶:
- * <AdUnit slot="浣犵殑骞垮憡浣岻D" format="auto" responsive />
- */
+function getAdSenseClient() {
+  const configuredClient = process.env.NEXT_PUBLIC_ADSENSE_ID?.trim() || ''
+  return configuredClient.startsWith('ca-') ? configuredClient : `ca-${configuredClient}`
+}
+
 export function AdUnit({
   slot,
   format = 'auto',
@@ -23,22 +31,68 @@ export function AdUnit({
   style = { display: 'block' },
   className = ''
 }: AdUnitProps) {
+  const client = getAdSenseClient()
+  const [hasAdStorageConsent, setHasAdStorageConsent] = useState(false)
+  const requestedRef = useRef(false)
+
   useEffect(() => {
-    try {
-      // 鎺ㄩ€佸箍鍛婂埌 AdSense
-      if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({})
-      }
-    } catch (err) {
-      console.error('AdSense 鍔犺浇閿欒:', err)
+    const syncConsent = () => {
+      const adsenseWindow = window as AdSenseWindow
+      setHasAdStorageConsent(adsenseWindow.__tolearnGoogleConsent?.ad_storage === 'granted')
+    }
+
+    syncConsent()
+    window.addEventListener('tolearn:google-consent-update', syncConsent)
+
+    return () => {
+      window.removeEventListener('tolearn:google-consent-update', syncConsent)
     }
   }, [])
+
+  useEffect(() => {
+    if (!hasAdStorageConsent) {
+      return
+    }
+
+    const requestAd = () => {
+      const adsenseWindow = window as AdSenseWindow
+      if (
+        requestedRef.current ||
+        adsenseWindow.__tolearnGoogleConsent?.ad_storage !== 'granted' ||
+        !adsenseWindow.adsbygoogle
+      ) {
+        return
+      }
+
+      try {
+        adsenseWindow.adsbygoogle.push({})
+        requestedRef.current = true
+      } catch (error) {
+        console.error('Unable to request the AdSense unit:', error)
+      }
+    }
+
+    requestAd()
+    window.addEventListener('tolearn:adsense-ready', requestAd)
+
+    return () => {
+      window.removeEventListener('tolearn:adsense-ready', requestAd)
+    }
+  }, [hasAdStorageConsent])
+
+  if (!/^ca-pub-\d+$/.test(client) || !/^\d+$/.test(slot)) {
+    return null
+  }
+
+  if (!hasAdStorageConsent) {
+    return <div aria-hidden="true" className={className} style={style} />
+  }
 
   return (
     <ins
       className={`adsbygoogle ${className}`}
       style={style}
-      data-ad-client="ca-pub-8944496077703633"
+      data-ad-client={client}
       data-ad-slot={slot}
       data-ad-format={format}
       data-full-width-responsive={responsive ? 'true' : 'false'}
@@ -46,25 +100,24 @@ export function AdUnit({
   )
 }
 
-/**
- * 鏂囩珷鍐呭箍鍛?(閫傚悎鏂囩珷鍐呭涓棿)
- */
+/** A single, reserved-space placement inside long-form English articles. */
 export function InArticleAd({ slot }: { slot: string }) {
   return (
-    <div className="my-8 flex justify-center">
+    <aside className="my-10" aria-label="Sponsored content">
+      <p className="mb-3 text-center text-xs uppercase tracking-[0.18em] text-slate-500 theme-dark:text-slate-400">
+        Advertisement
+      </p>
       <AdUnit
         slot={slot}
         format="fluid"
         style={{ display: 'block', textAlign: 'center', minHeight: '250px' }}
         className="in-article-ad"
       />
-    </div>
+    </aside>
   )
 }
 
-/**
- * 渚ц竟鏍忓箍鍛?
- */
+/** Optional sidebar format. Not used in the current SEO-first layout. */
 export function SidebarAd({ slot }: { slot: string }) {
   return (
     <div className="sticky top-4 mb-8">
@@ -78,9 +131,7 @@ export function SidebarAd({ slot }: { slot: string }) {
   )
 }
 
-/**
- * 妯箙骞垮憡 (閫傚悎椤甸潰椤堕儴/搴曢儴)
- */
+/** Optional horizontal format. Not used in the current SEO-first layout. */
 export function BannerAd({ slot }: { slot: string }) {
   return (
     <div className="w-full my-4">
@@ -94,9 +145,7 @@ export function BannerAd({ slot }: { slot: string }) {
   )
 }
 
-/**
- * 灞曠ず骞垮憡 (閫氱敤鐭╁舰骞垮憡)
- */
+/** Optional fixed display format. Not used in the current SEO-first layout. */
 export function DisplayAd({ slot }: { slot: string }) {
   return (
     <div className="my-6 flex justify-center">

@@ -1,5 +1,3 @@
-import fs from 'node:fs'
-import path from 'node:path'
 import pseoData from '@/data/pseo_data.json'
 import { aiDirectories } from 'app/lib/ai-directories'
 import { getBlogPosts } from 'app/blog/utils'
@@ -15,8 +13,10 @@ import { shouldIndexTemplate } from 'app/lib/seo-indexing-policy'
 
 export { baseUrl } from 'app/lib/constants'
 
-const PROJECT_ROOT = process.cwd()
 const DEFAULT_LAST_MODIFIED = '2026-01-01T00:00:00.000Z'
+const SITE_CONTENT_LAST_MODIFIED = '2026-08-20T00:00:00.000Z'
+const TOPIC_CONTENT_LAST_MODIFIED = '2026-09-04T00:00:00.000Z'
+const GUIDE_CONTENT_LAST_MODIFIED = '2026-09-04T00:00:00.000Z'
 const MIN_POSTS_FOR_YEAR_PAGE = 3
 // GSC shows that most URLs waiting for indexing are automatically generated
 // locale variants. Until a translated page is reviewed and earns demand in
@@ -25,6 +25,7 @@ const MIN_POSTS_FOR_YEAR_PAGE = 3
 // back deliberately after a quality review.
 const INDEXABLE_SITEMAP_LOCALES = [defaultLocale]
 const INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP = false
+const REDIRECTED_TOPIC_HUB_SLUGS = new Set(['ai-model-comparisons'])
 const LOCALIZED_SITEMAP_PATHS = new Set([
   '/',
   '/blog',
@@ -51,14 +52,6 @@ function formatDateForSitemap(dateString: string): string {
   }
 
   return date.toISOString()
-}
-
-function getFileLastModified(relativePath: string, fallback = DEFAULT_LAST_MODIFIED): string {
-  try {
-    return fs.statSync(path.join(PROJECT_ROOT, relativePath)).mtime.toISOString()
-  } catch {
-    return fallback
-  }
 }
 
 function getLatestTimestamp(...values: Array<string | undefined>): string {
@@ -95,55 +88,24 @@ function localizeSitemapRoutes<T extends { url: string }>(routes: T[]): T[] {
 export default async function sitemap() {
   const posts = getBlogPosts()
   const latestPostLastModified = getLatestTimestamp(...posts.map(getPostLastModified))
-  const categorySourceLastModified = getLatestTimestamp(
-    getFileLastModified('app/categories/page.tsx'),
-    getFileLastModified('app/categories/[slug]/page.tsx'),
-    getFileLastModified('app/categories/[slug]/[year]/page.tsx'),
-    getFileLastModified('app/lib/categories.ts'),
-    getFileLastModified('app/lib/category-descriptions.ts')
-  )
-  const tagSourceLastModified = getLatestTimestamp(
-    getFileLastModified('app/tags/page.tsx'),
-    getFileLastModified('app/tags/[tag]/page.tsx'),
-    getFileLastModified('app/lib/tag-descriptions.ts')
-  )
-  const topicSourceLastModified = getLatestTimestamp(
-    getFileLastModified('app/topics/page.tsx'),
-    getFileLastModified('app/topics/[slug]/page.tsx'),
-    getFileLastModified('app/lib/topic-hubs.ts')
-  )
-  const guideSourceLastModified = getLatestTimestamp(
-    getFileLastModified('app/guides/page.tsx'),
-    getFileLastModified('app/guides/[slug]/page.tsx'),
-    getFileLastModified('app/lib/guides.ts')
-  )
-  const aiDirectorySourceLastModified = getLatestTimestamp(
-    getFileLastModified('app/ai-coding-agents/page.tsx'),
-    getFileLastModified('app/ai-tools/page.tsx'),
-    getFileLastModified('app/ai-models/page.tsx'),
-    getFileLastModified('app/components/ai-directory-page.tsx'),
-    getFileLastModified('app/lib/ai-directories.ts'),
-    getFileLastModified('data/ai-topic-clusters.json')
-  )
-  const pseoSourceLastModified = getLatestTimestamp(
-    getFileLastModified('data/pseo_data.json'),
-    getFileLastModified('app/templates/page.tsx'),
-    getFileLastModified('app/templates/[tech]/[role]/page.tsx'),
-    getFileLastModified('app/solutions/page.tsx'),
-    getFileLastModified('app/solutions/[feature]/page.tsx')
-  )
+  const categorySourceLastModified = SITE_CONTENT_LAST_MODIFIED
+  const tagSourceLastModified = SITE_CONTENT_LAST_MODIFIED
+  const topicSourceLastModified = TOPIC_CONTENT_LAST_MODIFIED
+  const guideSourceLastModified = GUIDE_CONTENT_LAST_MODIFIED
+  const aiDirectorySourceLastModified = SITE_CONTENT_LAST_MODIFIED
+  const pseoSourceLastModified = SITE_CONTENT_LAST_MODIFIED
 
   const staticRoutes = [
     {
       url: `${baseUrl}`,
-      lastModified: getLatestTimestamp(getFileLastModified('app/page.tsx'), latestPostLastModified),
+      lastModified: getLatestTimestamp(SITE_CONTENT_LAST_MODIFIED, latestPostLastModified),
       changeFrequency: 'daily' as const,
       priority: 1.0,
     },
     {
       url: `${baseUrl}/blog`,
       lastModified: getLatestTimestamp(
-        getFileLastModified('app/blog/page.tsx'),
+        SITE_CONTENT_LAST_MODIFIED,
         latestPostLastModified
       ),
       changeFrequency: 'daily' as const,
@@ -181,25 +143,25 @@ export default async function sitemap() {
     })),
     {
       url: `${baseUrl}/about`,
-      lastModified: getFileLastModified('app/about/page.tsx'),
+      lastModified: SITE_CONTENT_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: getFileLastModified('app/contact/page.tsx'),
+      lastModified: SITE_CONTENT_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: getFileLastModified('app/privacy/page.tsx'),
+      lastModified: SITE_CONTENT_LAST_MODIFIED,
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: getFileLastModified('app/terms/page.tsx'),
+      lastModified: SITE_CONTENT_LAST_MODIFIED,
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     },
@@ -294,7 +256,7 @@ export default async function sitemap() {
         categoryYearRoutes.push({
           url: `${baseUrl}/categories/${encodeURIComponent(slug)}/${year}`,
           lastModified: getLatestTimestamp(
-            getFileLastModified('app/categories/[slug]/[year]/page.tsx'),
+            categorySourceLastModified,
             ...matchingPosts.map(getPostLastModified)
           ),
           changeFrequency: 'weekly' as const,
@@ -328,7 +290,7 @@ export default async function sitemap() {
   >((routes, topic) => {
     const matchingPosts = posts.filter((post) => postBelongsToTopicHub(post, topic))
 
-    if (matchingPosts.length === 0) {
+    if (matchingPosts.length === 0 || REDIRECTED_TOPIC_HUB_SLUGS.has(topic.slug)) {
       return routes
     }
 
@@ -347,7 +309,9 @@ export default async function sitemap() {
 
   const guideRoutes = guides.map((guide) => ({
     url: `${baseUrl}/guides/${guide.slug}`,
-    lastModified: guideSourceLastModified,
+    lastModified: guide.updatedAt
+      ? formatDateForSitemap(guide.updatedAt)
+      : guideSourceLastModified,
     changeFrequency: 'weekly' as const,
     priority: 0.85,
   }))

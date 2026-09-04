@@ -13,6 +13,7 @@ import {
 import { hasKnownPostTranslation } from './app/lib/blog-translation-manifest'
 
 const intlMiddleware = createMiddleware(routing)
+const NEXT_INTL_LOCALE_HEADER = 'X-NEXT-INTL-LOCALE'
 
 function logRedirect(from: string, to: string, statusCode: number) {
   if (process.env.NODE_ENV === 'development') {
@@ -60,7 +61,7 @@ function localizedRedirectPath(pathname: string, locale: string) {
   return getContentPath(pathname, locale)
 }
 
-function redirectTo(url: URL, from: string, to: string, reasons: string[], status = 301) {
+function redirectTo(url: URL, from: string, to: string, reasons: string[], status = 308) {
   url.pathname = to
   logRedirect(from, to, status)
 
@@ -271,6 +272,11 @@ export function middleware(request: NextRequest) {
   }
 
   const canonicalPath = stripLocaleFromPath(pathname).pathname
+  const hasDefaultLocalePrefix = pathname === `/${defaultLocale}` || pathname.startsWith(`/${defaultLocale}/`)
+
+  if (hasDefaultLocalePrefix && shouldUseLocaleRouting(canonicalPath)) {
+    return redirectTo(url, pathname, canonicalPath, ['default-locale-prefix-removal'])
+  }
 
   if (canonicalPath !== pathname && !shouldUseLocaleRouting(canonicalPath)) {
     url.pathname = canonicalPath
@@ -283,6 +289,19 @@ export function middleware(request: NextRequest) {
 
   if (!shouldUseLocaleRouting(canonicalPath)) {
     const response = NextResponse.next()
+    response.headers.set('X-Canonical-Path', canonicalPath)
+    response.headers.set('X-SEO-Processed', 'true')
+    return response
+  }
+
+  if (pathname === canonicalPath) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set(NEXT_INTL_LOCALE_HEADER, defaultLocale)
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
     response.headers.set('X-Canonical-Path', canonicalPath)
     response.headers.set('X-SEO-Processed', 'true')
     return response

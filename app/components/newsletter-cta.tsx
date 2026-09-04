@@ -38,8 +38,7 @@ export function NewsletterCTA() {
       setStatus('success')
       setEmail('')
       trackAnalyticsEvent('newsletter_signup', {
-        form_location: 'page_cta',
-        page_path: window.location.pathname,
+        placement: 'page_cta',
       })
       window.setTimeout(() => setStatus('idle'), 3000)
     } catch {

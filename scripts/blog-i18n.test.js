@@ -13,9 +13,11 @@ const {
   getArticleAlternates,
   getArticlePath,
   getAvailablePostLocales,
+  getPostTranslationReviewStatus,
   getTranslatedPostSlugsForLocale,
   hasPostTranslation,
   isPostTranslationFresh,
+  isPostTranslationReviewed,
   validatePostTranslations,
 } = require('../app/lib/blog-i18n')
 const {
@@ -28,6 +30,10 @@ const missingSlug = 'not-a-real-post'
 const nonDefaultLocales = locales.filter((locale) => locale !== defaultLocale)
 const allPostSlugs = require('../public/search-index.en.json').map((post) => post.slug).sort()
 const sitemapSource = fs.readFileSync(path.join(process.cwd(), 'app', 'sitemap.ts'), 'utf8')
+const localizedSitemapSource = fs.readFileSync(
+  path.join(process.cwd(), 'app', 'lib', 'localized-sitemap.ts'),
+  'utf8'
+)
 const translatedArticlesAreInSitemap = /const INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP = true/.test(sitemapSource)
 const firstBatchSlugs = [
   '2026-04-02-claw-code-ai-coding-agent-architecture',
@@ -93,6 +99,16 @@ test('translation freshness is required before translated articles are returned 
   } else {
     assert.ok(Array.isArray(report.stale))
   }
+})
+
+test('translations remain pending until a human review is explicitly recorded', () => {
+  for (const locale of nonDefaultLocales) {
+    assert.equal(getPostTranslationReviewStatus(translatedSlug, locale), 'pending')
+    assert.equal(isPostTranslationReviewed(translatedSlug, locale), false)
+  }
+
+  assert.match(localizedSitemapSource, /isPostTranslationReviewed/)
+  assert.match(localizedSitemapSource, /post\.isTranslated && isPostTranslationReviewed/)
 })
 
 test('translation manifests match available files while English-first pages may await translation', () => {

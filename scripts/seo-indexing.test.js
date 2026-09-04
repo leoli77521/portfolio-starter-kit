@@ -38,9 +38,12 @@ test('language sitemap and freshness policy are wired into the production surfac
 
   assert.match(route, /getBlogPosts\(locale\)/)
   assert.match(route, /post\.isTranslated/)
+  assert.match(route, /isPostTranslationReviewed/)
+  assert.doesNotMatch(route, /new Date\(\)\.toISOString\(\)/)
   assert.ok(fs.existsSync(path.join(root, 'app', 'sitemap', 'zh.xml', 'route.ts')))
   assert.match(robots, /sitemap\/\$\{locale\}\.xml/)
   assert.match(i18n, /isPostTranslationFresh/)
+  assert.match(i18n, /isPostTranslationReviewed/)
 })
 
 test('AI authority audit is closed for images, tags, body links, and hub assignments', () => {
@@ -67,4 +70,17 @@ test('GSC review URLs are backed by deterministic decisions and sitemap exclusio
   assert.match(sitemap, /shouldIndexTemplate/)
   assert.match(template, /getTemplateSeoDecision/)
   assert.match(rss, /X-Robots-Tag.*noindex/)
+  assert.match(sitemap, /REDIRECTED_TOPIC_HUB_SLUGS/)
+  assert.match(sitemap, /formatDateForSitemap\(guide\.updatedAt\)/)
+  assert.doesNotMatch(sitemap, /statSync/)
+})
+
+test('indexing audit requires real GSC URL exports and reports their sources', () => {
+  const audit = fs.readFileSync(path.join(root, 'scripts', 'audit-indexing-candidates.js'), 'utf8')
+
+  assert.match(audit, /gsc-crawled-2026-08-21\.json/)
+  assert.match(audit, /gsc-redirect-errors-2026-08-21\.json/)
+  assert.match(audit, /empty indexing audits are not accepted/)
+  assert.match(audit, /inputSources/)
+  assert.doesNotMatch(audit, /if \(!inputPath\) return \[\]/)
 })

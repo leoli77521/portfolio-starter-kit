@@ -7,6 +7,7 @@ const {getLegacyBlogRedirects, legacyBlogRedirects} = require('../app/lib/legacy
 const {
   getTranslatedPostSlugsForLocale,
   isPostTranslationFresh,
+  isPostTranslationReviewed,
 } = require('../app/lib/blog-i18n')
 const {locales, defaultLocale} = require('../app/lib/i18n-paths')
 const auditAiSeo = require('./audit-ai-seo')
@@ -58,12 +59,37 @@ function readPosts() {
 }
 
 function readInputUrls() {
-  const inputPath = process.argv[2]
-  if (!inputPath) return []
-  const parsed = JSON.parse(fs.readFileSync(path.resolve(inputPath), 'utf8'))
-  const urls = Array.isArray(parsed) ? parsed : parsed.urls
-  if (!Array.isArray(urls)) throw new Error('GSC input must be an array or an object with a urls array')
-  return urls.map((value) => (typeof value === 'string' ? value : value.url)).filter(Boolean)
+  const defaultInputPaths = [
+    path.join(rootDir, '.local', 'gsc-crawled-2026-08-21.json'),
+    path.join(rootDir, '.local', 'gsc-redirect-errors-2026-08-21.json'),
+  ].filter((inputPath) => fs.existsSync(inputPath))
+  const inputPaths = process.argv.slice(2).map((inputPath) => path.resolve(inputPath))
+  const resolvedInputPaths = inputPaths.length > 0 ? inputPaths : defaultInputPaths
+
+  if (resolvedInputPaths.length === 0) {
+    throw new Error(
+      'No GSC URL export found. Pass one or more JSON files; empty indexing audits are not accepted.'
+    )
+  }
+
+  const urls = resolvedInputPaths.flatMap((inputPath) => {
+    if (!fs.existsSync(inputPath)) {
+      throw new Error(`GSC input file does not exist: ${inputPath}`)
+    }
+
+    const parsed = JSON.parse(fs.readFileSync(inputPath, 'utf8'))
+    const values = Array.isArray(parsed) ? parsed : parsed.urls
+    if (!Array.isArray(values)) {
+      throw new Error(`GSC input must be an array or an object with a urls array: ${inputPath}`)
+    }
+
+    return values.map((value) => (typeof value === 'string' ? value : value.url)).filter(Boolean)
+  })
+
+  return {
+    sources: resolvedInputPaths.map((inputPath) => path.relative(rootDir, inputPath)),
+    urls: [...new Set(urls)],
+  }
 }
 
 const posts = readPosts()
@@ -123,12 +149,15 @@ function classify(rawUrl) {
   if (localizedArticleMatch) {
     const [, locale, slug] = localizedArticleMatch
     const fresh = isPostTranslationFresh(slug, locale)
+    const reviewed = isPostTranslationReviewed(slug, locale)
     return {
       url: rawUrl,
-      decision: fresh ? 'index' : 'noindex',
+      decision: fresh && reviewed ? 'index' : fresh ? 'review' : 'noindex',
       target: fresh ? pathname : `/blog/${slug}`,
-      reason: fresh
-        ? 'Translation is present and sourceUpdatedAt matches the English source.'
+      reason: fresh && reviewed
+        ? 'Translation is current and has completed human review.'
+        : fresh
+          ? 'Translation is current but remains out of localized sitemaps until human review is recorded.'
         : 'Translation is missing or stale; keep the page accessible but out of the index until reviewed.',
     }
   }
@@ -174,7 +203,8 @@ function classify(rawUrl) {
   return {url: rawUrl, decision: 'review', target: pathname, reason: 'URL is not covered by a deterministic repository policy.'}
 }
 
-const inputUrls = readInputUrls()
+const input = readInputUrls()
+const inputUrls = input.urls
 const classified = inputUrls.map(classify)
 const counts = classified.reduce((acc, item) => {
   acc[item.decision] = (acc[item.decision] || 0) + 1
@@ -183,6 +213,7 @@ const counts = classified.reduce((acc, item) => {
 
 const report = {
   generatedAt: new Date().toISOString(),
+  inputSources: input.sources,
   inputUrlCount: inputUrls.length,
   counts,
   translationCoverage: translatedCounts,
@@ -194,6 +225,13 @@ const report = {
       .flatMap((locale) =>
         getTranslatedPostSlugsForLocale(locale)
           .filter((slug) => !isPostTranslationFresh(slug, locale))
+          .map((slug) => `/${locale}/blog/${slug}`)
+      ).length,
+    pendingLocalizedArticles: locales
+      .filter((locale) => locale !== defaultLocale)
+      .flatMap((locale) =>
+        getTranslatedPostSlugsForLocale(locale)
+          .filter((slug) => !isPostTranslationReviewed(slug, locale))
           .map((slug) => `/${locale}/blog/${slug}`)
       ).length,
     reviewedDecisionCount: indexingPolicy.decisions.length,

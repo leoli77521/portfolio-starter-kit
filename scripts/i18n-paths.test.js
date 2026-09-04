@@ -1,4 +1,6 @@
 const assert = require('node:assert/strict')
+const fs = require('node:fs')
+const path = require('node:path')
 const {test} = require('node:test')
 
 const {
@@ -83,4 +85,13 @@ test('localized alternates include all UI locales for localizable pages', () => 
     'en-US': '/topics/ai-coding-agent-stack',
     'x-default': '/topics/ai-coding-agent-stack',
   })
+})
+
+test('middleware serves default-locale canonicals directly and removes an explicit en prefix', () => {
+  const middleware = fs.readFileSync(path.join(process.cwd(), 'middleware.ts'), 'utf8')
+
+  assert.match(middleware, /NEXT_INTL_LOCALE_HEADER/)
+  assert.match(middleware, /pathname === canonicalPath/)
+  assert.match(middleware, /default-locale-prefix-removal/)
+  assert.match(middleware, /NextResponse\.next\(\{/)
 })

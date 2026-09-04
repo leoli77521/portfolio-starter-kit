@@ -44,8 +44,7 @@ export default function NewsletterForm() {
       setSuccess(true)
       setLoading(false)
       trackAnalyticsEvent('newsletter_signup', {
-        form_location: 'footer',
-        page_path: window.location.pathname,
+        placement: 'footer',
       })
     } catch {
       setError(true)

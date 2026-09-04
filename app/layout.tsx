@@ -9,6 +9,9 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 import Footer from './components/footer'
 import GoogleAnalytics from './components/google-analytics'
 import GoogleAdSense from './components/google-adsense'
+import GoogleConsentMode from './components/google-consent-mode'
+import GooglePrivacyMessage from './components/google-privacy-message'
+import WebVitals from './components/web-vitals'
 import { baseUrl } from './sitemap'
 import {
   getAbsoluteLocalizedAlternates,
@@ -119,6 +122,7 @@ export default async function RootLayout({
       )}
     >
       <head>
+        <GoogleConsentMode />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -146,7 +150,9 @@ export default async function RootLayout({
           {t('skipToContent')}
         </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <GooglePrivacyMessage />
           <GoogleAnalytics />
+          <WebVitals />
           <main id="main-content" className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0" role="main">
             <Navbar />
             {children}

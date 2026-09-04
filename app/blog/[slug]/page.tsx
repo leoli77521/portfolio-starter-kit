@@ -137,11 +137,7 @@ export async function generateStaticParams() {
   }))
 }
 
-interface PageProps {
-  params: { slug: string }
-}
-
-export interface ArticlePageProps {
+interface ArticlePageProps {
   params: {
     slug: string
     locale?: string
@@ -150,6 +146,39 @@ export interface ArticlePageProps {
 
 function getArticleLocale(params: ArticlePageProps['params']) {
   return params.locale && isLocale(params.locale) ? params.locale : defaultLocale
+}
+
+function insertInArticleAd(source: string) {
+  const headingPositions: number[] = []
+  const linePattern = /^(.*)$/gm
+  let inCodeFence = false
+  let match: RegExpExecArray | null
+
+  while ((match = linePattern.exec(source)) !== null) {
+    const line = match[1]
+    if (/^\s*(```|~~~)/.test(line)) {
+      inCodeFence = !inCodeFence
+    } else if (!inCodeFence && /^##\s+\S/.test(line)) {
+      headingPositions.push(match.index)
+    }
+
+    if (linePattern.lastIndex === match.index) {
+      linePattern.lastIndex += 1
+    }
+  }
+
+  if (headingPositions.length < 2) {
+    return source
+  }
+
+  const targetPosition = source.length * 0.4
+  const insertionPosition =
+    headingPositions.find((position) => position >= targetPosition) ||
+    headingPositions[Math.floor(headingPositions.length / 2)]
+
+  return `${source.slice(0, insertionPosition).trimEnd()}\n\n<InArticleAdPlacement />\n\n${source
+    .slice(insertionPosition)
+    .trimStart()}`
 }
 
 function buildDescription(
@@ -203,7 +232,7 @@ function buildDescription(
   return `${prefix}${optimizedSummary}${suffix}`
 }
 
-export function generateArticleMetadata({ params }: ArticlePageProps): Metadata {
+function generateArticleMetadata({ params }: ArticlePageProps): Metadata {
   const requestedSlug = params.slug
   const locale = getArticleLocale(params)
   const post = getBlogPost(requestedSlug, locale, {
@@ -295,16 +324,11 @@ export function generateArticleMetadata({ params }: ArticlePageProps): Metadata 
   }
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  return generateArticleMetadata({
-    params: {
-      ...params,
-      locale: defaultLocale,
-    },
-  })
+export function generateMetadata({ params }: ArticlePageProps): Metadata {
+  return generateArticleMetadata({ params })
 }
 
-export function BlogArticle({ params }: ArticlePageProps) {
+export default function BlogArticle({ params }: ArticlePageProps) {
   const requestedSlug = params.slug
   const locale = getArticleLocale(params)
   const post = getBlogPost(requestedSlug, locale, {
@@ -391,7 +415,13 @@ export function BlogArticle({ params }: ArticlePageProps) {
   const primaryTopicHub = assignedPrimaryTopicHub || featuredSeriesContext?.hub || relatedTopicHubs[0] || null
   const clusterSiblingPosts = getSiblingPostsForPost(cleanSlug, allPosts, 3)
   const inArticleAdSlot = process.env.NEXT_PUBLIC_IN_ARTICLE_AD_SLOT?.trim() || ''
-  const shouldRenderInArticleAd = /^\d+$/.test(inArticleAdSlot)
+  const shouldRenderInArticleAd = locale === defaultLocale && /^\d+$/.test(inArticleAdSlot)
+  const articleContent = shouldRenderInArticleAd ? insertInArticleAd(post.content) : post.content
+  const articleMdxComponents = shouldRenderInArticleAd
+    ? {
+        InArticleAdPlacement: () => <InArticleAd slot={inArticleAdSlot} />,
+      }
+    : undefined
   let nextStepCard = {
     label: 'Archive',
     title: 'Keep reading in the journal',
@@ -691,7 +721,6 @@ export function BlogArticle({ params }: ArticlePageProps) {
                 alt={post.metadata.title}
                 width={1024}
                 height={1024}
-                priority
                 unoptimized
                 sizes="(max-width: 1280px) 100vw, 900px"
                 className="h-auto w-full rounded-[1.6rem] border border-slate-200/70 object-cover theme-dark:border-slate-800/80"
@@ -701,7 +730,11 @@ export function BlogArticle({ params }: ArticlePageProps) {
 
           <article className="surface-panel px-6 py-8 md:px-10 md:py-10">
             <div className="prose max-w-none">
-              <CustomMDX source={post.content} locale={locale} />
+              <CustomMDX
+                source={articleContent}
+                locale={locale}
+                components={articleMdxComponents}
+              />
             </div>
           </article>
 
@@ -928,18 +961,6 @@ export function BlogArticle({ params }: ArticlePageProps) {
             </div>
           </section>
 
-          {shouldRenderInArticleAd ? (
-            <div className="surface-card px-6 py-6">
-              <p className="section-kicker">Support</p>
-              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-slate-950 theme-dark:text-white">
-                Sponsored placement
-              </h2>
-              <div className="mt-5">
-                <InArticleAd slot={inArticleAdSlot} />
-              </div>
-            </div>
-          ) : null}
-
           <SocialShare
             title={post.metadata.title}
             url={articleUrl}
@@ -1018,8 +1039,4 @@ export function BlogArticle({ params }: ArticlePageProps) {
       </div>
     </section>
   )
-}
-
-export default function Blog({ params }: PageProps) {
-  return <BlogArticle params={{ ...params, locale: defaultLocale }} />
 }

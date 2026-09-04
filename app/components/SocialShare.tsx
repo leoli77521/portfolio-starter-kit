@@ -33,8 +33,13 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
   const [showQR, setShowQR] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [isSharing, setIsSharing] = useState(false)
+  const [nativeShareAvailable, setNativeShareAvailable] = useState(false)
 
   const shareData: ShareData = { title, url, summary }
+
+  useEffect(() => {
+    setNativeShareAvailable(canUseNativeShare())
+  }, [])
 
   // Generate QR code for WeChat sharing
   useEffect(() => {
@@ -124,7 +129,7 @@ export function SocialShare({ title, url, summary }: SocialShareProps) {
           </h3>
           
           {/* Native Share Button (Mobile) */}
-          {canUseNativeShare() && (
+          {nativeShareAvailable && (
             <button
               onClick={handleNativeShare}
               disabled={isSharing}

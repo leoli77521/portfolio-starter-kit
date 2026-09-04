@@ -1,80 +1,110 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 const ADSENSE_SRC = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-const ADSENSE_CLIENT = 'ca-pub-8944496077703633'
-const USER_INTERACTION_EVENTS: Array<[keyof DocumentEventMap, AddEventListenerOptions]> = [
-  ['pointerdown', { once: true }],
-  ['keydown', { once: true }],
-  ['scroll', { once: true, passive: true }],
-]
-const LOAD_TIMEOUT_MS = 5000
+const ADSENSE_CLIENT_PATTERN = /^ca-pub-\d+$/
+const LOAD_TIMEOUT_MS = 8000
 
-const injectScript = () => {
+type AdSenseConsentWindow = Window & {
+  __tolearnGoogleConsent?: {
+    ad_storage?: 'granted' | 'denied'
+  }
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+  cancelIdleCallback?: (id: number) => void
+}
+
+function getAdSenseClient() {
+  const configuredClient = process.env.NEXT_PUBLIC_ADSENSE_ID?.trim() || ''
+  return configuredClient.startsWith('ca-') ? configuredClient : `ca-${configuredClient}`
+}
+
+function isEnglishArticlePath(pathname: string) {
+  return /^\/blog\/[^/]+$/.test(pathname)
+}
+
+const injectScript = (client: string) => {
   if (typeof document === 'undefined') {
     return
   }
 
   const existingScript = document.querySelector<HTMLScriptElement>(
-    `script[data-ad-client="${ADSENSE_CLIENT}"]`
+    `script[data-ad-client="${client}"]`
   )
 
   if (existingScript) {
+    if (existingScript.dataset.loaded === 'true') {
+      window.dispatchEvent(new Event('tolearn:adsense-ready'))
+    }
     return
   }
 
   const script = document.createElement('script')
-  script.src = `${ADSENSE_SRC}?client=${ADSENSE_CLIENT}`
+  script.src = `${ADSENSE_SRC}?client=${client}`
   script.async = true
   script.crossOrigin = 'anonymous'
-  script.setAttribute('data-ad-client', ADSENSE_CLIENT)
+  script.setAttribute('data-ad-client', client)
+  script.addEventListener('load', () => {
+    script.dataset.loaded = 'true'
+    window.dispatchEvent(new Event('tolearn:adsense-ready'))
+  }, { once: true })
   document.head.appendChild(script)
 }
 
 const GoogleAdSense = () => {
+  const pathname = usePathname()
+
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    const client = getAdSenseClient()
+    if (
+      typeof window === 'undefined' ||
+      !ADSENSE_CLIENT_PATTERN.test(client) ||
+      !isEnglishArticlePath(pathname)
+    ) {
       return
     }
 
-    let loaded = false
+    let cancelScheduledLoad: (() => void) | null = null
 
-    const loadOnce = () => {
-      if (loaded) {
+    const cancelLoad = () => {
+      cancelScheduledLoad?.()
+      cancelScheduledLoad = null
+    }
+
+    const syncConsent = () => {
+      const consentWindow = window as AdSenseConsentWindow
+      if (consentWindow.__tolearnGoogleConsent?.ad_storage !== 'granted') {
+        cancelLoad()
         return
       }
-      loaded = true
-      injectScript()
-    }
 
-    const cancelIdle = 'requestIdleCallback' in window
-      ? (() => {
-        const idleId = (window as Window & typeof globalThis & { requestIdleCallback?: any; cancelIdleCallback?: any }).requestIdleCallback?.(loadOnce, {
+      if (cancelScheduledLoad || document.querySelector(`script[data-ad-client="${client}"]`)) {
+        return
+      }
+
+      const idleWindow = window as AdSenseConsentWindow
+      if (typeof idleWindow.requestIdleCallback === 'function') {
+        const idleId = idleWindow.requestIdleCallback(() => injectScript(client), {
           timeout: LOAD_TIMEOUT_MS,
         })
-        return () => {
-          if (idleId && (window as any).cancelIdleCallback) {
-            (window as any).cancelIdleCallback(idleId)
-          }
+        cancelScheduledLoad = () => {
+          idleWindow.cancelIdleCallback?.(idleId)
         }
-      })()
-      : null
+      } else {
+        const timeoutId = globalThis.setTimeout(() => injectScript(client), LOAD_TIMEOUT_MS)
+        cancelScheduledLoad = () => globalThis.clearTimeout(timeoutId)
+      }
+    }
 
-    const timeoutId = window.setTimeout(loadOnce, LOAD_TIMEOUT_MS)
-
-    const listeners = USER_INTERACTION_EVENTS.map(([event, options]) => {
-      const handler = () => loadOnce()
-      window.addEventListener(event, handler, options)
-      return () => window.removeEventListener(event, handler)
-    })
+    syncConsent()
+    window.addEventListener('tolearn:google-consent-update', syncConsent)
 
     return () => {
-      cancelIdle?.()
-      window.clearTimeout(timeoutId)
-      listeners.forEach((cleanup) => cleanup())
+      window.removeEventListener('tolearn:google-consent-update', syncConsent)
+      cancelLoad()
     }
-  }, [])
+  }, [pathname])
 
   return null
 }

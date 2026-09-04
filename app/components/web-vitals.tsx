@@ -1,24 +1,44 @@
 'use client'
 
 import { useReportWebVitals } from 'next/web-vitals'
+import { trackAnalyticsEvent } from 'app/lib/analytics-events'
+
+type VitalsMetric = {
+  id: string
+  name: string
+  value: number
+}
+
+export type VitalsScore = 'good' | 'needs-improvement' | 'poor' | 'unknown'
 
 export function WebVitals() {
   useReportWebVitals((metric) => {
-    // 开发环境下在控制台输出
+    const rating = getVitalsScore(metric)
+
     if (process.env.NODE_ENV === 'development') {
       console.log(metric)
     }
-    
-    // 生产环境发送到分析服务
+
+    trackAnalyticsEvent('web_vital', {
+      metric_id: metric.id,
+      metric_name: metric.name,
+      metric_value: Number(metric.value.toFixed(metric.name === 'CLS' ? 4 : 0)),
+      metric_rating: rating,
+    })
+
     if (process.env.NODE_ENV === 'production') {
       const body = JSON.stringify(metric)
       const url = '/api/vitals'
-      
-      // 使用sendBeacon发送（如果可用），否则使用fetch
+
       if (navigator.sendBeacon) {
         navigator.sendBeacon(url, body)
       } else {
-        fetch(url, { body, method: 'POST' }).catch(console.error)
+        fetch(url, {
+          body,
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+        }).catch(console.error)
       }
     }
   })
@@ -26,10 +46,9 @@ export function WebVitals() {
   return null
 }
 
-// 辅助函数：性能评分
-export function getVitalsScore(metric: any) {
+export function getVitalsScore(metric: Pick<VitalsMetric, 'name' | 'value'>): VitalsScore {
   const { name, value } = metric
-  
+
   switch (name) {
     case 'FCP':
       return value <= 1800 ? 'good' : value <= 3000 ? 'needs-improvement' : 'poor'
@@ -46,36 +65,6 @@ export function getVitalsScore(metric: any) {
     default:
       return 'unknown'
   }
-}
-
-// 性能监控钩子
-export function usePerformanceMonitoring() {
-  const reportWebVital = (metric: any) => {
-    const score = getVitalsScore(metric)
-    
-    // 记录到Google Analytics（如果设置了GA）
-    if (typeof window !== 'undefined' && 'gtag' in window) {
-      ;(window as any).gtag('event', metric.name, {
-        event_category: 'Web Vitals',
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        event_label: metric.id,
-        non_interaction: true,
-        custom_map: {
-          score: score
-        }
-      })
-    }
-    
-    // 记录到Vercel Analytics（如果设置了）
-    if (typeof window !== 'undefined' && 'va' in window) {
-      ;(window as any).va('track', metric.name, {
-        value: metric.value,
-        score: score
-      })
-    }
-  }
-
-  return { reportWebVital }
 }
 
 export default WebVitals

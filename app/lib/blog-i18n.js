@@ -91,6 +91,19 @@ function isPostTranslationFresh(slug, locale) {
   return !sourceUpdatedAt || !translationSourceUpdatedAt || sourceUpdatedAt === translationSourceUpdatedAt
 }
 
+function getPostTranslationReviewStatus(slug, locale) {
+  if (!hasPostTranslation(slug, locale)) {
+    return 'pending'
+  }
+
+  const translationMetadata = readMetadata(getPostTranslationPath(slug, locale))
+  return translationMetadata.reviewStatus === 'human-reviewed' ? 'human-reviewed' : 'pending'
+}
+
+function isPostTranslationReviewed(slug, locale) {
+  return getPostTranslationReviewStatus(slug, locale) === 'human-reviewed'
+}
+
 function getTranslatedPostSlugsForLocale(locale) {
   if (!isLocale(locale) || locale === defaultLocale) {
     return []
@@ -228,8 +241,10 @@ module.exports = {
   getAvailablePostLocales,
   getPostSourcePath,
   getPostTranslationPath,
+  getPostTranslationReviewStatus,
   getTranslatedPostSlugsForLocale,
   hasPostTranslation,
   isPostTranslationFresh,
+  isPostTranslationReviewed,
   validatePostTranslations,
 }

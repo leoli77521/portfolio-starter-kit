@@ -95,3 +95,20 @@ test('sitemap prioritizes English editorial canonicals while translations are re
   assert.match(sitemap, /const INCLUDE_TRANSLATED_ARTICLES_IN_SITEMAP = false/)
   assert.match(sitemap, /return INDEXABLE_SITEMAP_LOCALES\.map/)
 })
+
+test('high-opportunity SEO pages use the planned title and actionable performance evidence', () => {
+  const topicHubs = fs.readFileSync(path.join(root, 'app/lib/topic-hubs.ts'), 'utf8')
+  const guides = fs.readFileSync(path.join(root, 'app/lib/guides.ts'), 'utf8')
+  const guidePage = fs.readFileSync(path.join(root, 'app/guides/[slug]/page.tsx'), 'utf8')
+
+  assert.match(
+    topicHubs,
+    /seoTitle: 'SEO Fundamentals: Google SEO Basics Checklist \(2026\)'/
+  )
+  assert.match(guides, /metric: 'LCP'[\s\S]*target: '≤ 2\.5 seconds'/)
+  assert.match(guides, /metric: 'INP'[\s\S]*target: '≤ 200 milliseconds'/)
+  assert.match(guides, /Total Blocking Time: 1\.78 seconds/)
+  assert.match(guides, /NEXT_PUBLIC_IN_ARTICLE_AD_SLOT|Load one reserved in-article ad/)
+  assert.match(guidePage, /guide\.updatedAt \|\| '2026-08-20'/)
+  assert.doesNotMatch(guidePage, /dateModified: new Date\(\)\.toISOString\(\)/)
+})

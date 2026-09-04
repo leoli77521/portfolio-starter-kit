@@ -6,6 +6,12 @@ export interface GuideStep {
   relatedPostSlug?: string
 }
 
+export interface GuidePerformanceTarget {
+  metric: string
+  target: string
+  explanation: string
+}
+
 export interface Guide {
   slug: string
   title: string
@@ -19,6 +25,15 @@ export interface Guide {
   targetKeywords: string[]
   steps: GuideStep[]
   icon: string
+  updatedAt?: string
+  checklist?: string[]
+  performanceTargets?: GuidePerformanceTarget[]
+  caseStudy?: {
+    title: string
+    summary: string
+    baseline: string[]
+    actions: string[]
+  }
 }
 
 /**
@@ -150,14 +165,64 @@ export const guides: Guide[] = [
   {
     slug: 'nextjs-performance-optimization',
     title: 'Next.js Performance Optimization',
-    description: 'Optimize your Next.js application for speed, SEO, and user experience.',
-    longDescription: `Learn advanced techniques to make your Next.js application lightning fast. This guide covers everything from Core Web Vitals optimization to efficient data fetching strategies, image optimization, and caching best practices. You'll understand how to measure performance, identify bottlenecks, and implement solutions that significantly improve load times and user experience.`,
+    description: 'A practical 2026 checklist for improving Next.js Core Web Vitals, JavaScript cost, caching, images, and third-party scripts.',
+    longDescription: `Use this guide to measure a Next.js application, isolate the largest bottleneck, and verify each change against explicit performance budgets. It covers Core Web Vitals, lab metrics, images, data fetching, caching, bundle size, and third-party scripts. The examples include a real mobile audit so you can see how raw Lighthouse findings become an ordered implementation plan rather than a list of generic optimizations.`,
     difficulty: 'Intermediate',
     estimatedTime: '6-8 hours',
     prerequisites: ['Next.js development experience', 'Understanding of React', 'Basic knowledge of web performance metrics'],
     relatedTags: ['Next.js', 'Performance', 'Web Development', 'React', 'Technical SEO'],
     relatedCategories: ['Web Development', 'Technology'],
     targetKeywords: ['Next.js性能优化', 'Next.js performance', 'optimize Next.js', 'web vitals Next.js', 'fast Next.js'],
+    updatedAt: '2026-09-04',
+    performanceTargets: [
+      {
+        metric: 'LCP',
+        target: '≤ 2.5 seconds',
+        explanation: 'Keep the largest visible element fast for at least 75% of visits.',
+      },
+      {
+        metric: 'INP',
+        target: '≤ 200 milliseconds',
+        explanation: 'Keep interactions responsive by reducing long main-thread tasks.',
+      },
+      {
+        metric: 'CLS',
+        target: '≤ 0.1',
+        explanation: 'Reserve layout space for images, embeds, ads, and async UI.',
+      },
+      {
+        metric: 'TBT (lab)',
+        target: '< 300 milliseconds',
+        explanation: 'Use Lighthouse TBT to diagnose blocking JavaScript before field INP arrives.',
+      },
+    ],
+    caseStudy: {
+      title: 'Example: turning a mobile audit into priorities',
+      summary:
+        'A ToLearn Blog mobile Lighthouse run showed that the page was visually usable before its JavaScript work was under control. That made third-party script cost the first optimization target.',
+      baseline: [
+        'Performance score: 66',
+        'Largest Contentful Paint: 2.3 seconds',
+        'Total Blocking Time: 1.78 seconds',
+        'Google advertising and analytics scripts: about 621 KiB and 1.46 seconds of main-thread work',
+      ],
+      actions: [
+        'Disable automatic, anchor, and interstitial ads while the site is traffic-constrained.',
+        'Load one reserved in-article ad only on English long-form articles after consent and browser idle time.',
+        'Send Web Vitals to analytics so regressions can be attributed to a route and release.',
+        'Repeat mobile tests three times and compare the median instead of accepting one favorable run.',
+      ],
+    },
+    checklist: [
+      'Record three mobile Lighthouse runs for the same production URL and use the median.',
+      'Check field LCP, INP, and CLS separately from Lighthouse lab diagnostics.',
+      'Inspect the LCP element, image dimensions, preload behavior, and font dependency chain.',
+      'Use the bundle analyzer to find client code that can remain in a Server Component.',
+      'Start independent data requests together and cache stable server-side work.',
+      'Defer analytics, ads, chat, and embeds until they are needed; remove scripts with no decision value.',
+      'Reserve dimensions for images and ads before their resources load.',
+      'Re-run the same measurements after each major change and log the release date.',
+    ],
     steps: [
       {
         title: 'Understanding Web Performance Metrics',
@@ -169,7 +234,8 @@ export const guides: Guide[] = [
       },
       {
         title: 'Data Fetching Optimization',
-        description: 'Choose the right data fetching strategy for each page.',
+        description: 'Choose the right server or client strategy, start independent requests together, and cache stable work.',
+        relatedPostSlug: 'ai-javascript-seo-blog',
       },
       {
         title: 'Bundle Size Optimization',
@@ -181,7 +247,8 @@ export const guides: Guide[] = [
       },
       {
         title: 'Monitoring and Continuous Improvement',
-        description: 'Set up monitoring to track performance over time.',
+        description: 'Capture field Web Vitals by route and compare three-run Lighthouse medians after each release.',
+        relatedPostSlug: 'seo-optimization-guide',
       },
     ],
     icon: '⚡',

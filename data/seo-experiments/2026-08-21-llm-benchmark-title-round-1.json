@@ -29,5 +29,16 @@
     "table": "Task-first benchmark map remains above the score table.",
     "internalLinks": ["/topics/ai-model-comparisons", "/blog/ai-benchmark-methodology", "/blog/ai-agent-tools-comparison-2026"]
   },
+  "interim": {
+    "observedAt": "2026-09-04",
+    "comparison": "Latest 28 days versus previous 28 days in the GSC UI",
+    "pageImpressions": 4711,
+    "previousPageImpressions": 12212,
+    "pageClicks": 1,
+    "previousPageClicks": 2,
+    "aiSearchImpressions": 146,
+    "previousAiSearchImpressions": 325,
+    "decision": "No change before the scheduled 2026-09-11 review; preserve one-variable attribution."
+  },
   "decisionRule": "Ship the next step only when the completed window has a meaningful CTR lift and no material loss in average position or core-page conversions."
 }
